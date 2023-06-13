@@ -6,7 +6,10 @@
     "British-Kingdom": {
       "projectType": "application",
       "schematics": {
-        "$schema": "./node_modules/@angular/cli/lib/config/schema.json"
+        "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+        "@schematics/angular:component": {
+          "style": "css"
+        }
       },
       "root": "",
       "sourceRoot": "src",
