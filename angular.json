@@ -5,7 +5,9 @@
   "projects": {
     "British-Kingdom": {
       "projectType": "application",
-      "schematics": {},
+      "schematics": {
+        "$schema": "./node_modules/@angular/cli/lib/config/schema.json"
+      },
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -25,7 +27,9 @@
             "styles": [
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/jquery/dist/jquery.min.js"
+            ]
           },
           "configurations": {
             "production": {
