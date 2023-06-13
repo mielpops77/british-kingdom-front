@@ -1,24 +1,78 @@
-<div class="carousel">
-    <div class="carousel-slide" [class.active]="currentSlide === 0">
-      <img src="assets/fripouille.jpg" alt="Image 1" class="carousel-image">
+<ngb-carousel class="center-carousel" style="width: 80%;">
+    <ng-template ngbSlide>
+        <div class="picsum-img-wrapper">
+            <img class="carousel-img" src="assets/fripouille.jpg" alt="Random first slide" />
+        </div>
+        <div class="carousel-caption">
+            <!-- <h3>Fripouille  mal</h3>
+			<p>Adorable british longhair</p> -->
+        </div>
+    </ng-template>
+    <ng-template ngbSlide>
+        <div class="picsum-img-wrapper">
+            <img class="carousel-img" src="assets/eden.jpg" alt="Random first slide" />
+        </div>
+        <div class="carousel-caption">
+            <!-- <h3>Fripouille  mal</h3>
+			<p>Adorable british longhair</p> -->
+        </div>
+    </ng-template>
+    <ng-template ngbSlide>
+        <div class="picsum-img-wrapper">
+            <img class="carousel-img" src="assets/Fripouille3.jpg" alt="Random first slide" />
+        </div>
+        <div class="carousel-caption">
+            <!-- <h3>Fripouille  mal</h3>
+			<p>Adorable british longhair</p> -->
+        </div>
+    </ng-template>
+    <ng-template ngbSlide>
+        <div class="picsum-img-wrapper">
+            <img class="carousel-img"
+                src="assets/Fripouille4.jpg"
+                alt="Random second slide" />
+        </div>
+        <div class="carousel-caption">
+            <h3>Second slide label</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        </div>
+    </ng-template>
+    <ng-template ngbSlide>
+        <div class="picsum-img-wrapper">
+            <img class="carousel-img"
+                src="https://static.wixstatic.com/media/9a208d_53d5211b70c8408f87a7ba4c93d19573~mv2.jpg/v1/fill/w_1200,h_477,al_c,q_85,enc_auto/9a208d_53d5211b70c8408f87a7ba4c93d19573~mv2.jpg"
+                alt="Random third slide" />
+        </div>
+        <div class="carousel-caption">
+            <h3>Third slide label</h3>
+            <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
+        </div>
+    </ng-template>
+</ngb-carousel>
+
+
+<h4 class="text-center">Région Seine et Marne à Othis</h4>
+
+<div class="card-container">
+    <div class="card">
+      <h4>Card 1</h4>
+      <img src="chemin/vers/image1.jpg" alt="Image 1">
+      <p>Description de la card 1.</p>
+      <button>Plus d'infos</button>
     </div>
-    <div class="carousel-slide" [class.active]="currentSlide === 1">
-      <img src="https://static.wixstatic.com/media/9a208d_670e0453db4d4ac98baf6a32d07eba82~mv2.jpg/v1/fill/w_2537,h_1008,al_c,q_90,usm_0.66_1.00_0.01,enc_auto/9a208d_670e0453db4d4ac98baf6a32d07eba82~mv2.jpg" alt="Image 2" class="carousel-image">
+    
+    <div class="card">
+      <h4>Card 2</h4>
+      <img src="chemin/vers/image2.jpg" alt="Image 2">
+      <p>Description de la card 2.</p>
+      <button>Plus d'infos</button>
     </div>
-    <div class="carousel-slide" [class.active]="currentSlide === 2">
-      <img src="https://static.wixstatic.com/media/9a208d_53d5211b70c8408f87a7ba4c93d19573~mv2.jpg/v1/fill/w_1200,h_477,al_c,q_85,enc_auto/9a208d_53d5211b70c8408f87a7ba4c93d19573~mv2.jpg" alt="Image 3" class="carousel-image">
-    </div>
-  
-    <!-- <div class="carousel-navigation"> -->
-      <button class="carousel-button-lef" (click)="prevSlide()">&#8249;</button>
-      <button class="carousel-button-right" (click)="nextSlide()">&#8250;</button>
-    <!-- </div> -->
-  
-    <div class="carousel-indicators">
-      <span class="indicator" [class.active]="currentSlide === 0" (click)="goToSlide(0)"></span>
-      <span class="indicator" [class.active]="currentSlide === 1" (click)="goToSlide(1)"></span>
-      <span class="indicator" [class.active]="currentSlide === 2" (click)="goToSlide(2)"></span>
+    
+    <div class="card">
+      <h4>Card 3</h4>
+      <img src="chemin/vers/image3.jpg" alt="Image 3">
+      <p>Description de la card 3.</p>
+      <button>Plus d'infos</button>
     </div>
   </div>
   
-

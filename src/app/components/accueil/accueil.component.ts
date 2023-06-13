@@ -1,44 +1,19 @@
-import { Component, OnInit, AfterViewInit  } from '@angular/core';
-// import 'slick-carousel/slick/slick';
+import { Component, OnInit} from '@angular/core';
+
 
 declare var $: any;
 
 @Component({
   selector: 'app-accueil',
   templateUrl: './accueil.component.html',
-  styleUrls: ['./accueil.component.css']
+  styleUrls: ['./accueil.component.css'],
 })
-export class AccueilComponent implements OnInit,AfterViewInit  {
+export class AccueilComponent implements OnInit  {
 
   constructor() { }
 
   ngOnInit(): void {
-    console.log('hello amiel');
-  }
-  currentSlide = 0;
 
-  ngAfterViewInit() {
-    $('.carousel').slick();
-    
   }
-
-  prevSlide() {
-    if (this.currentSlide === 0) {
-      this.currentSlide = 2;
-    } else {
-      this.currentSlide--;
-    }
-  }
-  
-  nextSlide() {
-    if (this.currentSlide === 2) {
-      this.currentSlide = 0;
-    } else {
-      this.currentSlide++;
-    }
-  }
-  
-  goToSlide(slideIndex: number) {
-    this.currentSlide = slideIndex;
-  }
+	images = [944, 1011, 984].map((n) => `https://picsum.photos/id/${n}/900/500`)
 }

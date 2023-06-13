@@ -1,9 +1,9 @@
 import { AccueilComponent } from './components/accueil/accueil.component';
-import { MatCarouselModule } from '@angular/material/carousel';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NgModule } from '@angular/core';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 @NgModule({
@@ -14,7 +14,7 @@ import { NgModule } from '@angular/core';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    MatCarouselModule
+    NgbModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
