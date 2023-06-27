@@ -1,7 +1,16 @@
 <ngb-carousel class="center-carousel" style="width: 80%;">
     <ng-template ngbSlide>
         <div class="picsum-img-wrapper">
-            <img class="carousel-img" src="assets/fripouille.jpg" alt="Random first slide" />
+            <img class="carousel-img" src="assets/carousselProsper.png" alt="Random second slide" />
+        </div>
+        <div class="carousel-caption">
+           <!--  <h3>Prosper Mysterious</h3>
+            <p>Couleur: seal chinchilla point</p> -->
+        </div>
+    </ng-template>
+    <ng-template ngbSlide>
+        <div class="picsum-img-wrapper">
+            <img class="carousel-img" src="assets/carousselFripouille.jpg" alt="Random first slide" />
         </div>
         <div class="carousel-caption">
             <!-- <h3>Fripouille  mal</h3>
@@ -10,7 +19,7 @@
     </ng-template>
     <ng-template ngbSlide>
         <div class="picsum-img-wrapper">
-            <img class="carousel-img" src="assets/eden.jpg" alt="Random first slide" />
+            <img class="carousel-img" src="assets/carousselFripouilleEden.png" alt="Random first slide" />
         </div>
         <div class="carousel-caption">
             <!-- <h3>Fripouille  mal</h3>
@@ -19,69 +28,69 @@
     </ng-template>
     <ng-template ngbSlide>
         <div class="picsum-img-wrapper">
-            <img class="carousel-img" src="assets/Fripouille3.jpg" alt="Random first slide" />
+            <img class="carousel-img" src="assets/carousselEden.png" alt="Random first slide" />
         </div>
         <div class="carousel-caption">
             <!-- <h3>Fripouille  mal</h3>
 			<p>Adorable british longhair</p> -->
         </div>
     </ng-template>
-    <ng-template ngbSlide>
-        <div class="picsum-img-wrapper">
-            <img class="carousel-img"
-                src="assets/Fripouille4.jpg"
-                alt="Random second slide" />
-        </div>
-        <div class="carousel-caption">
-            <h3>Second slide label</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        </div>
-    </ng-template>
-    <ng-template ngbSlide>
-        <div class="picsum-img-wrapper">
-            <img class="carousel-img"
-                src="https://static.wixstatic.com/media/9a208d_53d5211b70c8408f87a7ba4c93d19573~mv2.jpg/v1/fill/w_1200,h_477,al_c,q_85,enc_auto/9a208d_53d5211b70c8408f87a7ba4c93d19573~mv2.jpg"
-                alt="Random third slide" />
-        </div>
-        <div class="carousel-caption">
-            <h3>Third slide label</h3>
-            <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
-        </div>
-    </ng-template>
+
+
 </ngb-carousel>
 
 
 <h4 class="text-center">Région Seine et Marne à Othis</h4>
 
 <div class="card-container">
-    <div class="card">
-      <h4>Card 1</h4>
-      <img src="chemin/vers/image1.jpg" alt="Image 1">
-      <p>Description de la card 1.</p>
-      <button>Plus d'infos</button>
-    </div>
-    
-    <div class="card">
-      <h4>Card 2</h4>
-      <img src="chemin/vers/image2.jpg" alt="Image 2">
-      <p>Description de la card 2.</p>
-      <button>Plus d'infos</button>
-    </div>
-    
-    <div class="card">
-      <h4>Card 3</h4>
-      <img src="chemin/vers/image3.jpg" alt="Image 3">
-      <p>Description de la card 3.</p>
-      <button>Plus d'infos</button>
-    </div>
-  </div>
-  
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>Nos mâles</mat-card-title>
+        </mat-card-header>
+        <img mat-card-image src="assets/prosperProfil.jpg" alt="Card 1 Image">
+        <mat-card-content>
+            <p>Le British shorthair un chat tout en rondeur, calme et câlin, leur fourrure est magnifique, et leur
+                formidable caractère parfais pour une vie de famille.</p>
+        </mat-card-content>
+        <mat-card-actions>
+            <button routerLink="/males" mat-raised-button color="primary" class="info-button">+ d'infos</button>
+        </mat-card-actions>
+    </mat-card>
 
-  <div class="example-button-row">
-    <button mat-button>Basic</button>
-    <button mat-button color="primary">Primary</button>
-    <button mat-button color="accent">Accent</button>
-    <button mat-button color="warn">Warn</button>
-    <button mat-button disabled>Disabled</button>
-    <a mat-button routerLink=".">Link</a>
-  </div>
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>Nos chatons</mat-card-title>
+        </mat-card-header>
+        <img mat-card-image src="assets/EdenProfil.jpg" alt="Card 2 Image">
+        <mat-card-content>
+            <p>
+                Le British shorthair, même chaton, est une boule de douceur et de tendresse. Son tempérament équilibré
+                et calme en fait un compagnon idéal pour toute la famille. </p>
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-raised-button color="primary" class="info-button">+ d'infos</button>
+        </mat-card-actions>
+    </mat-card>
+
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>Nos femelles</mat-card-title>
+        </mat-card-header>
+        <img mat-card-image src="assets/EdenProfil.jpg" alt="Card 3 Image">
+        <mat-card-content>
+            <p>Son caractère équilibré et calme
+
+                en fait le chat de compagnie idéal,
+
+                ce bon gros nounours
+
+                est un chat sociable et équilibré, curieux et intelligent.</p>
+        </mat-card-content>
+        <mat-card-actions>
+            <button routerLink="/femelles" mat-raised-button color="primary" class="info-button">+ d'infos</button>
+        </mat-card-actions>
+    </mat-card>
+</div>
+
+<br>
+<br>

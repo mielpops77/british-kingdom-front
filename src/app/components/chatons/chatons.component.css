@@ -1,0 +1,88 @@
+.title {
+    margin: 50px;
+    /* color: rgb(41, 41, 41); */
+    font-family: corben, serif;
+    text-align: center;
+    font-size: 40px;
+    color: #A56D18;
+    font-weight: 500;
+}
+
+.box {
+    display: flex;
+    flex-direction: column; /* Empiler les éléments verticalement */
+    align-items: center; /* Centrer horizontalement */
+    justify-content: center; /* Centrer verticalement */
+    width: 70%;
+    height: 115px;
+    background-color: #D4AE7D;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .name {
+    color: rgb(41, 41, 41);
+    font-family: corben, serif;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .description {
+    text-align: center;
+    color: rgb(41, 41, 41);
+    font-family: corben, serif;
+    font-size: 25px;
+    margin: 0;
+    padding: 0;
+  }
+  
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+  
+  .photo {
+    margin: 0 10px;
+  }
+  
+  .image {
+    width: 450px;
+    height: 450px;
+    padding-top: 50px;
+
+  }
+  
+  
+  .heart {
+    width: 150px;
+    height: 150px;
+    background-image: url("../../../assets/coeur.jpg");
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+  
+
+
+
+  .button-row {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 50px; /* Facultatif : Ajouter un espacement vertical entre les boutons */
+  }
+  
+  .custom-button {
+    background-color: #54869C !important;
+    color: white !important;
+    font-size: 16px;
+    padding: 10px 20px;
+    transition: transform 0.2s;
+    margin: 10px;
+  }
+  
+  .custom-button:hover {
+    transform: scale(1.1);
+  }
+  

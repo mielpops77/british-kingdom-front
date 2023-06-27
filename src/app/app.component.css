@@ -1,9 +1,18 @@
+.titlePage {
+  background-color: #58879B;
+  padding: 30px;
+}
+
 h1 {
-  margin-top: 40px;
+  font-family: playfair display;
+  font-size: 60px;
+  color: white;
   text-align: center;
 }
 
 h2 {
+  font-family: playfair display;
+  color: white;
   text-align: center;
 }
 
@@ -15,6 +24,8 @@ header {
 }
 
 nav ul {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  color: #B3D7FF;
   list-style: none;
   display: flex;
   justify-content: center;
@@ -31,13 +42,16 @@ nav ul li:last-child {
 }
 
 nav ul li a {
+  font-family: Georgia, 'Times New Roman', Times, serif;
   text-decoration: none;
-  color: #000;
-  padding: 10px 15px;
+  color: #5f5E61;
+  padding: 5px 10px;
   border-radius: 5px;
-  background-color: #ddd;
+  font-size: 22px;
+  background-color: white;
   transition: background-color 0.3s ease;
-  display: block; /* Ajout d'un affichage en bloc pour faciliter la manipulation */
+  display: block;
+  /* Ajout d'un affichage en bloc pour faciliter la manipulation */
 }
 
 nav ul li a:hover {
@@ -47,24 +61,26 @@ nav ul li a:hover {
 /* Styles pour les écrans de petite taille */
 @media (max-width: 767px) {
   h1 {
-      margin-top: 20px;
+    margin-top: 20px;
   }
 
   h2 {
-      margin-top: 10px;
+    margin-top: 10px;
   }
 
   nav ul {
-      flex-direction: column; /* Affichage en colonne pour les petites tailles */
-      align-items: center; /* Centrer les éléments */
+    flex-direction: column;
+    /* Affichage en colonne pour les petites tailles */
+    align-items: center;
+    /* Centrer les éléments */
   }
 
   nav ul li {
-      margin-right: 0;
-      margin-bottom: 10px;
+    margin-right: 0;
+    margin-bottom: 10px;
   }
 
   nav ul li:last-child {
-      margin-bottom: 0;
+    margin-bottom: 0;
   }
 }

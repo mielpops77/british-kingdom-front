@@ -1,18 +1,91 @@
 .center-carousel {
-    margin: 0 auto; /* Centre horizontalement le carrousel */
+    margin: 0 auto;
+    /* Centre horizontalement le carrousel */
 }
+
 .carousel-img {
     max-width: 100%;
     max-height: 100%;
-    object-fit: contain; /* Ajuste l'image pour s'adapter sans être coupée */
+    object-fit: contain;
+    /* Ajuste l'image pour s'adapter sans être coupée */
     height: 600px;
 }
 
 .text-center {
     text-align: center;
-    margin-top: 20px;
-  }
+    margin-top: 40px;
+    margin-bottom: 30px;
+    font-family: cursive;
+    font-size: 30px;
+    color: #233943;
+    /* color: #A56D18; */
+}
 
 
 
+.card-container {
+    padding-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+}
 
+
+mat-card {
+    background-color: #e6e6e6;
+    padding-bottom: 20px;
+    flex-basis: 20%;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+mat-card:hover {
+    transform: scale(1.1);
+    /* Applique une échelle de 1.1 (10% plus grand) */
+    transition: transform 0.3s ease-in-out;
+    /* Ajoute une transition fluide */
+}
+
+mat-card:last-child {
+    margin-right: 0;
+}
+
+mat-card img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+mat-card-title {
+    color: rgb(43, 42, 40);
+    font-size: 30px !important;
+    font-family: cursive;
+}
+
+mat-card-content {
+    flex-grow: 1;
+    font-size: 17px;
+    /* font-family: Helvetica,Arial,sans-serif; */
+    font-family: futura-lt-w01-light, sans-serif;
+
+}
+
+
+
+.info-button {
+    background-color: #444;
+    color: #fff;
+}
+
+
+.info-button:hover {
+    background-color: #666;
+    /* Couleur de fond différente au survol */
+    transform: scale(1.05);
+    /* Applique une légère échelle */
+    transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+    /* Ajoute une transition fluide */
+}

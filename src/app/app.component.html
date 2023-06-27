@@ -301,21 +301,27 @@
     }
   }
 </style> -->
+<div class="titlePage">
 <h1>CHATTERIE BRITISH KINGDOM</h1>
 <h2>Elevage familial de British Shorthair & British Longhair</h2>
+</div>
 <header>
   <nav>
     <ul>
       <li><a routerLink="/">ACCUEIL</a></li>
-      <li><a routerLink="/actualites">ACTUALITÉS</a></li>
       <li><a routerLink="/males">MÂLES</a></li>
       <li><a routerLink="/femelles">FEMELLES</a></li>
       <li><a routerLink="/chatons">CHATONS</a></li>
       <li><a routerLink="/tarifs">TARIFS & CONDITIONS</a></li>
       <li><a routerLink="/contact">CONTACT</a></li>
+      <li *ngIf="isAllowed"><a routerLink="/admin">ADMIN  </a></li>
+
+      
     </ul>
   </nav>
 </header>
+
+
 
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * * The content above * * * * * * * * * * * -->
@@ -326,3 +332,5 @@
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 
 <router-outlet></router-outlet>
+
+<app-footer></app-footer>
