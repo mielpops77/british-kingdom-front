@@ -1,0 +1,84 @@
+.container {
+    margin: 0;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    width: 100% !important; /* Utiliser 100% de la largeur disponible */
+
+  }
+
+
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+  
+  h1 {
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  /* Bouton */
+  button {
+    margin-bottom: 20px;
+  }
+  
+  /* Tableau */
+  mat-table {
+    width: 100% !important; /* Mettre la largeur à 100% */
+    border-collapse: collapse;
+  }
+  
+  
+  mat-header-cell, mat-cell {
+    padding: 16px;
+    text-align: left;
+    border-bottom: 1px #ccc;
+    word-wrap: break-word;  /* Ajustement du texte si nécessaire */
+    vertical-align: middle;
+
+  }
+  
+  mat-header-cell {
+    background-color: #f1f1f1;
+  }
+  
+  mat-row:hover {
+    background-color: #f5f5f5;
+  }
+  
+  /* Icones */
+  mat-icon {
+    cursor: pointer;
+  }
+  
+  /* Boutons d'actions */
+  mat-icon-button {
+    margin-left: 10px;
+  }
+  
+  /* Photo de profil */
+  img {
+    border-radius: 50%;
+    width: 130px;  /* Ajustez la taille comme vous le souhaitez */
+    height: 130px; /* Ajustez la taille comme vous le souhaitez */
+  }
+
+  img:hover {
+    transform: scale(1.1);
+    transition: transform .2s ease-in-out;
+  }
+  
+  
+  /* Bouton 'Nouveau chat' */
+  button.mat-raised-button {
+    background-color: #4CAF50;
+    color: white;
+  }
+
+
+  .mat-column-photo {
+    width: 1500px;  /* Vous pouvez ajuster cette valeur */
+  }

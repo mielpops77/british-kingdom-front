@@ -1,0 +1,56 @@
+.conditions-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  h1 {
+    font-size: 36px;
+    font-weight: bold;
+    color: #A56D18;
+    text-align: center;
+  }
+  
+  h2 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #A56D18;
+    margin-top: 20px;
+  }
+  
+  p {
+    font-size: 16px;
+    color: #233943;
+    margin: 10px 0;
+    line-height: 1.4;
+  }
+  
+  .questions-section,
+  .visites-section,
+  .depart-section,
+  .autres-conditions-section,
+  .conditions-section {
+    border-bottom: 2px solid #A56D18;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+  }
+  
+  /* Add more styles for sections as needed */
+  
+  /* Media queries for responsive design */
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 24px;
+    }
+  
+    h2 {
+      font-size: 20px;
+    }
+  
+    p {
+      font-size: 14px;
+    }
+  }
+  
+
+  

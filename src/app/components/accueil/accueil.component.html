@@ -1,56 +1,18 @@
-<ngb-carousel class="center-carousel" style="width: 80%;">
-    <ng-template ngbSlide>
-        <div class="picsum-img-wrapper">
-            <img class="carousel-img" src="assets/carousselProsper.png" alt="Random second slide" />
-        </div>
-        <div class="carousel-caption">
-           <!--  <h3>Prosper Mysterious</h3>
-            <p>Couleur: seal chinchilla point</p> -->
-        </div>
-    </ng-template>
-    <ng-template ngbSlide>
-        <div class="picsum-img-wrapper">
-            <img class="carousel-img" src="assets/carousselFripouille.jpg" alt="Random first slide" />
-        </div>
-        <div class="carousel-caption">
-            <!-- <h3>Fripouille  mal</h3>
-			<p>Adorable british longhair</p> -->
-        </div>
-    </ng-template>
-    <ng-template ngbSlide>
-        <div class="picsum-img-wrapper">
-            <img class="carousel-img" src="assets/carousselFripouilleEden.png" alt="Random first slide" />
-        </div>
-        <div class="carousel-caption">
-            <!-- <h3>Fripouille  mal</h3>
-			<p>Adorable british longhair</p> -->
-        </div>
-    </ng-template>
-    <ng-template ngbSlide>
-        <div class="picsum-img-wrapper">
-            <img class="carousel-img" src="assets/carousselEden.png" alt="Random first slide" />
-        </div>
-        <div class="carousel-caption">
-            <!-- <h3>Fripouille  mal</h3>
-			<p>Adorable british longhair</p> -->
-        </div>
-    </ng-template>
 
+<div class="parent-container"><app-caroussel [bannerSection]="bannerSection"></app-caroussel>
 
-</ngb-carousel>
-
+<br><br><br>
 
 <h4 class="text-center">Région Seine et Marne à Othis</h4>
 
 <div class="card-container">
     <mat-card>
         <mat-card-header>
-            <mat-card-title>Nos mâles</mat-card-title>
+            <mat-card-title>{{bannerSection?.titleCard1}}</mat-card-title>
         </mat-card-header>
-        <img mat-card-image src="assets/prosperProfil.jpg" alt="Card 1 Image">
-        <mat-card-content>
-            <p>Le British shorthair un chat tout en rondeur, calme et câlin, leur fourrure est magnifique, et leur
-                formidable caractère parfais pour une vie de famille.</p>
+        <img mat-card-image [src]="'http://localhost:3000/assets/Profil/'+bannerSection?.maleImg" alt="Card 1 Image">
+        <mat-card-content>{{bannerSection?.maleDescription}}
+            <!-- <p></p> -->
         </mat-card-content>
         <mat-card-actions>
             <button routerLink="/males" mat-raised-button color="primary" class="info-button">+ d'infos</button>
@@ -59,38 +21,33 @@
 
     <mat-card>
         <mat-card-header>
-            <mat-card-title>Nos chatons</mat-card-title>
+            <mat-card-title>{{bannerSection?.titleCard2}}</mat-card-title>
         </mat-card-header>
-        <img mat-card-image src="assets/EdenProfil.jpg" alt="Card 2 Image">
+        <img mat-card-image [src]="'http://localhost:3000/assets/Profil/'+bannerSection?.kittenImg" alt="Card 2 Image">
         <mat-card-content>
-            <p>
-                Le British shorthair, même chaton, est une boule de douceur et de tendresse. Son tempérament équilibré
-                et calme en fait un compagnon idéal pour toute la famille. </p>
+            {{bannerSection?.kittenDescription}}
         </mat-card-content>
         <mat-card-actions>
-            <button mat-raised-button color="primary" class="info-button">+ d'infos</button>
+            <button routerLink="/chatons" mat-raised-button color="primary" class="info-button">+ d'infos</button>
         </mat-card-actions>
     </mat-card>
 
     <mat-card>
         <mat-card-header>
-            <mat-card-title>Nos femelles</mat-card-title>
+            <mat-card-title>{{bannerSection?.titleCard3}}</mat-card-title>
         </mat-card-header>
-        <img mat-card-image src="assets/EdenProfil.jpg" alt="Card 3 Image">
+        <img mat-card-image [src]="'http://localhost:3000/assets/Profil/'+bannerSection?.femaleImg" alt="Card 3 Image">
         <mat-card-content>
-            <p>Son caractère équilibré et calme
-
-                en fait le chat de compagnie idéal,
-
-                ce bon gros nounours
-
-                est un chat sociable et équilibré, curieux et intelligent.</p>
+            {{bannerSection?.femaleDescription}}
         </mat-card-content>
         <mat-card-actions>
             <button routerLink="/femelles" mat-raised-button color="primary" class="info-button">+ d'infos</button>
         </mat-card-actions>
     </mat-card>
 </div>
+</div>
+<br>
+<br>
 
-<br>
-<br>
+
+<!-- <iframe src="https://couscousamdav.azurewebsites.net/" width="600" height="400"></iframe> -->

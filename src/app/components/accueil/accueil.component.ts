@@ -1,19 +1,35 @@
-import { Component, OnInit} from '@angular/core';
-
+import { CatService } from '../Services/catService';
+import { BannerSection } from '../../models/bannerSection.banner';
+import { Component, OnInit,OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 declare var $: any;
 
 @Component({
   selector: 'app-accueil',
   templateUrl: './accueil.component.html',
   styleUrls: ['./accueil.component.css'],
-
 })
-export class AccueilComponent implements OnInit  {
+export class AccueilComponent implements OnInit, OnDestroy {
+  bannerSection: BannerSection | null = null;
+  private bannerSubscription: Subscription | undefined;
 
-  constructor() { }
+  constructor(private catService: CatService) { }
 
   ngOnInit(): void {
 
+    this.bannerSubscription = this.catService.banner$.subscribe((banner) => {
+      if (banner !== null) {
+        this.bannerSection = banner[0];
+        console.log('bannerSection', this.bannerSection);
+      }
+    });
+
+
   }
-	images = [944, 1011, 984].map((n) => `https://picsum.photos/id/${n}/900/500`)
+
+  ngOnDestroy(): void {
+    if (this.bannerSubscription) {
+      this.bannerSubscription?.unsubscribe();
+    }
+  }
 }

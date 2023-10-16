@@ -1,5 +1,11 @@
+
 import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { Cat } from '../../models/cats';
+import { Subscription } from 'rxjs';
+import { CatService } from '../Services/catService';
+
 @Component({
   selector: 'app-males',
   templateUrl: './males.component.html',
@@ -7,12 +13,21 @@ import { Router } from '@angular/router';
 })
 export class MalesComponent implements OnInit {
 
-  constructor(private router: Router) { }
+  cats: Cat[] = [];  // Initialisez un tableau vide
+  catSubscription: Subscription | undefined;
+
+
+  constructor(private router: Router, private http: HttpClient, private catService: CatService) { }
 
   ngOnInit(): void {
+    this.catSubscription = this.catService.cat$.subscribe(cats => {
+      if (cats)
+        this.cats = cats.filter((cat: Cat) => cat.sex === "male")
+    });
   }
-  redirectToNewUrl(name : string): void {
-    this.router.navigateByUrl('/males/'+ name);
+  redirectToNewUrl(id: number, cat: Cat): void {
+    console.log('name', name);
+    localStorage.setItem('selectedCat', JSON.stringify(cat));
+    this.router.navigateByUrl('/males/' + id);
   }
-
 }

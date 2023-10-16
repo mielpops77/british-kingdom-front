@@ -1,22 +1,24 @@
+
+
 <br>
 <br>
+
+
 <div class="image-container">
     <div class="image-grid">
-        <div>
-            <p class="name">Prosper</p>
-            <p class="name">Couleur: seal chinchilla point</p>
-            <img src="assets/prosperProfil.jpg" class="rounded-image" (click)="redirectToNewUrl('prosper')">
-          </div>
-        <div>
-            <p class=" name">Fripouille</p>
-            <p class="name">Couleur: black silver shaded</p>
-            <img src="assets/fripouilleProfil.jpg" class="rounded-image" (click)="redirectToNewUrl('fripouille')">
+        <div *ngFor="let cat of cats">
+            <p class="name">{{ cat.name }}</p>
+            <p class="name">Couleur: {{ cat.robe }}</p>
+            <img [src]="'http://localhost:3000/assets/CatsProfil/'+ cat.urlProfil" class="rounded-image"
+                (click)="redirectToNewUrl(cat.id,cat)">
         </div>
     </div>
-
 </div>
+
+
 <br>
 <br>
+
 
 
 <hr class="gray-line">

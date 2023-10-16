@@ -1,0 +1,12 @@
+
+    <ngb-carousel class="center-carousel" style="width: 80%;">
+        <ng-template ngbSlide *ngFor="let image of bannerSection?.bannerImages">
+          <div class="picsum-img-wrapper" *ngIf="bannerSection">
+            <img class="carousel-img" [src]="'http://localhost:3000/assets/banner/' + image" alt="Slide image" />
+          </div>
+          <div class="carousel-caption">
+            <!-- Ajoutez du contenu pour la légende si nécessaire -->
+          </div>
+        </ng-template>
+      </ngb-carousel>
+      

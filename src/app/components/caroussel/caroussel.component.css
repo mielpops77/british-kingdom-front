@@ -1,0 +1,16 @@
+.center-carousel {
+    margin: 0 auto;
+    display: flex;
+
+    /* Centre horizontalement le carrousel */
+}
+
+.carousel-img {
+    max-width: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    /* height: 600px; */
+    margin: 0 auto;
+}
+

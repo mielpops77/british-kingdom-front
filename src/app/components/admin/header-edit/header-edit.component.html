@@ -1,0 +1,73 @@
+<div class="admin-container">
+    <div class="banner-settings">
+        <h1>Configuration du header </h1>
+
+        <h2>Header Settings</h2>
+        <form *ngIf="dataUpdate !== undefined">
+            <label for="bannerColor">Header Color:</label>
+            <input type="color" id="bannerColor" name="bannerColor" [(ngModel)]="dataUpdate.colorHeader"
+                (ngModelChange)="onFieldChange('colorHeader', $event)">
+
+            <label for="bannerTitle">Banner Title:</label>
+            <input type="text" id="bannerTitle" name="bannerTitle" [(ngModel)]="dataUpdate.title"
+                (ngModelChange)="onFieldChange('title', $event)">
+            <label for="titleColor">Title Color:</label>
+            <input type="color" id="titleColor" name="titleColor" [(ngModel)]="dataUpdate.titleColor"
+                (ngModelChange)="onFieldChange('titleColor', $event)">
+
+            <label for="titleFontSize">Title Font Size:</label>
+            <input type="number" id="titleFontSize" name="titleFontSize" [(ngModel)]="dataUpdate.titleFontSize"
+                (ngModelChange)="onFieldChange('titleFontSize', $event)">
+
+            <label for="titleFontStyle">Title Font Style:</label>
+            <select id="titleFontStyle" name="titleFontStyle" [(ngModel)]="dataUpdate.titleFontStyle"
+                (ngModelChange)="onFieldChange('titleFontStyle', $event)">
+                <option value="normal">Normal</option>
+                <option value="italic">Italic</option>
+            </select>
+
+            <label for="titleFontFamily">Title Font Family:</label>
+            <select id="titleFontFamily" name="titleFontFamily" [(ngModel)]="dataUpdate.titleFontFamily"
+                (ngModelChange)="onFieldChange('titleFontFamily', $event)">
+                <option value="Arial">Arial</option>
+                <option value="Helvetica">Helvetica</option>
+                <!-- Add more font options here -->
+            </select>
+
+            <label for="bannerSubtitle">Banner Subtitle:</label>
+            <input type="text" id="bannerSubtitle" name="bannerSubtitle" [(ngModel)]="dataUpdate.subtitle"
+                (ngModelChange)="onFieldChange('subtitle', $event)">
+            <label for="subtitleColor">Subtitle Color:</label>
+            <input type="color" id="subtitleColor" name="subtitleColor" [(ngModel)]="dataUpdate.subtitleColor"
+                (ngModelChange)="onFieldChange('subtitleColor', $event)">
+
+            <label for="subtitleFontSize">Subtitle Font Size:</label>
+            <input type="number" id="subtitleFontSize" name="subtitleFontSize" [(ngModel)]="dataUpdate.subtitleFontSize"
+                (ngModelChange)="onFieldChange('subtitleFontSize', $event)">
+
+            <label for="subtitleFontStyle">Subtitle Font Style:</label>
+            <select id="subtitleFontStyle" name="subtitleFontStyle" [(ngModel)]="dataUpdate.subtitleFontStyle"
+                (ngModelChange)="onFieldChange('subtitleFontStyle', $event)">
+                <option value="normal">Normal</option>
+                <option value="italic">Italic</option>
+            </select>
+
+            <label for="subtitleFontFamily">Subtitle Font Family:</label>
+            <select id="subtitleFontFamily" name="subtitleFontFamily" [(ngModel)]="dataUpdate.subtitleFontFamily"
+                (ngModelChange)="onFieldChange('subtitleFontFamily', $event)">
+                <option value="Arial">Arial</option>
+                <option value="Helvetica">Helvetica</option>
+                <!-- Add more font options here -->
+            </select>
+
+            <!--
+            <button type="button" (click)="applyChanges()">Apply Changes</button>
+            -->
+
+            <div class="save-button-container">
+                <button class="save-button" (click)="applyChanges()"
+                    [ngClass]="{'disabled-button': !hasChanges}">Sauvegarder les modifications</button>
+            </div>
+        </form>
+    </div>
+</div>

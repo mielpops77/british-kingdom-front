@@ -1,0 +1,140 @@
+
+.card-container {
+    padding-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    gap: 60px;
+    flex-wrap: wrap;
+    margin: 0 auto;
+}
+
+
+mat-card {
+    padding: 20px;
+    background-color: #e6e6e6;
+    padding-bottom: 20px;
+    flex-basis: 28%;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+mat-card:hover {
+    transform: scale(1.1);
+    /* Applique une échelle de 1.1 (10% plus grand) */
+    transition: transform 0.3s ease-in-out;
+    /* Ajoute une transition fluide */
+}
+
+mat-card:last-child {
+    margin-right: 0;
+}
+
+mat-card img {
+
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+mat-card-title {
+    color: rgb(43, 42, 40);
+    font-size: 30px !important;
+    font-family: cursive;
+}
+
+mat-card-content {
+    width: 100%;
+    flex-grow: 1;
+    font-size: 17px;
+    font-family: futura-lt-w01-light, sans-serif;
+    margin-top: 10px;
+    /* Ajout d'un espacement entre l'image et le texte */
+}
+
+.custom-textarea {
+    width: 100%;
+    /* Ajustez la largeur selon vos besoins */
+    height: 200px;
+    /* Ajustez la hauteur selon vos besoins */
+    /* background-color: #e6e6e6; */
+}
+
+.custom-textarea-title {
+
+    width: 100%;
+    text-align: center;
+
+}
+
+.info-button {
+    background-color: #444;
+    color: #fff;
+}
+
+
+.info-button:hover {
+    background-color: #666;
+    /* Couleur de fond différente au survol */
+    transform: scale(1.05);
+    /* Applique une légère échelle */
+    transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+    /* Ajoute une transition fluide */
+}
+
+
+
+
+
+.add-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+  }
+  .save-button-container {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .save-button {
+    background-color: #3498db;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .save-button:hover {
+    background-color: #2980b9;
+  }
+  
+
+  .add-image-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .add-image-button:hover {
+    background-color: #45a049;
+  }
+
+  .disabled-button {
+    opacity: 0.6; /* Opacité réduite pour indiquer que le bouton est désactivé */
+    pointer-events: none; /* Désactiver les interactions utilisateur */
+    cursor: not-allowed; /* Curseur indiquant que le bouton n'est pas cliquable */
+  }
+  

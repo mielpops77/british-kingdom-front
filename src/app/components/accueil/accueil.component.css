@@ -1,15 +1,9 @@
-.center-carousel {
-    margin: 0 auto;
-    /* Centre horizontalement le carrousel */
+
+.parent-container {
+    text-align: center; /* Centrer le contenu horizontalement */
 }
 
-.carousel-img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-    /* Ajuste l'image pour s'adapter sans être coupée */
-    height: 600px;
-}
+
 
 .text-center {
     text-align: center;
@@ -21,13 +15,25 @@
     /* color: #A56D18; */
 }
 
-
-
 .card-container {
     padding-top: 20px;
     display: flex;
     justify-content: center;
     gap: 60px;
+    flex-wrap: wrap; /* Ajout pour gérer le wrapping des cartes */
+    margin: 0 auto; /* Centrer horizontalement */
+}
+
+/* Media Query pour les appareils mobiles */
+@media (max-width: 1000px) {
+    .card-container {
+        flex-direction: column; /* Les cartes seront empilées les unes au-dessus des autres */
+        align-items: center; /* Centrage horizontal des cartes */
+    }
+    .mat-card {
+        width: 80%; /* Vous pouvez ajuster cette valeur selon vos préférences */
+        max-width: 300px; /* Limite maximale de largeur pour les cartes */
+    }
 }
 
 
