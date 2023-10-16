@@ -59,7 +59,7 @@
   .heart {
     width: 150px;
     height: 150px;
-    background-image: url("../../../assets/coeur.jpg");
+    /* background-image: url("../../../assets/coeur.jpg"); */
     background-repeat: no-repeat;
     background-size: contain;
   }
