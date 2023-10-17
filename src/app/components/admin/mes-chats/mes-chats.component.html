@@ -9,7 +9,7 @@
     <ng-container matColumnDef="photo">
       <mat-header-cell *matHeaderCellDef> </mat-header-cell>
       <mat-cell *matCellDef="let cats">
-        <img [src]="'http://localhost:3000/assets/catsProfil/' + cats.urlProfil" alt="Photo de profil" width="50">
+        <img [src]="url.apiUrlImgProfilCat+ cats.urlProfil" alt="Photo de profil" width="50">
       </mat-cell>
 
     </ng-container>

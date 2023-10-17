@@ -1,11 +1,13 @@
 
 import { ImageUploadDialogComponent } from '../../image-upload-dialog/image-upload-dialog.component';
 import { BannerSection } from '../../../models/bannerSection.banner';
+import { environment } from 'src/environments/environment';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CatService } from '../../Services/catService';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+
 
 @Component({
   selector: 'app-accueilEdit',
@@ -33,7 +35,7 @@ export class AccueilEditComponent implements OnInit {
       if (banner !== null) {
         this.bannerSection = banner[0];
         this.bannerImages = this.bannerSection?.bannerImages.map(
-          image => `http://localhost:3000/assets/banner/${image}`
+          image => environment.apiUrlBanner+image
         );
         this.bannerImagesUpdate = banner[0].bannerImages.slice();
         this.bannerImagesOrigine = banner[0].bannerImages.slice();
@@ -160,7 +162,7 @@ export class AccueilEditComponent implements OnInit {
     this.selectedImages = [];
     if (this.bannerSection !== null) {
       this.bannerImages = this.bannerSection?.bannerImages.map(
-        image => `http://localhost:3000/assets/banner/${image}`
+        image => environment.apiUrlBanner+image
       );
     }
   }

@@ -5,7 +5,7 @@ import { Cat } from '../../../models/cats';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { CatService } from '../../Services/catService';
-
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-mes-chats',
@@ -17,6 +17,7 @@ export class MesChatsComponent implements OnInit {
   displayedColumns: string[] = ['photo', 'nom', 'dateOfBirth', 'sex', 'robe', 'breed', 'couleursYeux', 'actions'];
   cats: Cat[] = [];
   catSubscription: Subscription | undefined;
+  url = environment;
 
   constructor(private http: HttpClient, private router: Router, private catService: CatService) { }
 
@@ -37,7 +38,7 @@ export class MesChatsComponent implements OnInit {
     // Logique pour supprimer le chat
     console.log('this.cats', this.cats);
 
-    this.http.delete(`http://localhost:3000/api/cats/${id}`).subscribe(
+    this.http.delete(environment.apiUrlCats + id).subscribe(
       () => {
         // Suppression réussie, mettre à jour la liste de chats
 

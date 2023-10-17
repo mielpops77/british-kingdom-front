@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { Cat } from '../../models/cats';
 import { Subscription } from 'rxjs';
 import { CatService } from '../Services/catService';
-
+import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-males',
   templateUrl: './males.component.html',
@@ -15,7 +15,7 @@ export class MalesComponent implements OnInit {
 
   cats: Cat[] = [];  // Initialisez un tableau vide
   catSubscription: Subscription | undefined;
-
+  url = environment;
 
   constructor(private router: Router, private http: HttpClient, private catService: CatService) { }
 

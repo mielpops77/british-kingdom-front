@@ -10,7 +10,7 @@
         <mat-card-header>
             <mat-card-title>{{bannerSection?.titleCard1}}</mat-card-title>
         </mat-card-header>
-        <img mat-card-image [src]="'http://localhost:3000/assets/Profil/'+bannerSection?.maleImg" alt="Card 1 Image">
+        <img mat-card-image [src]="url.apiUrlProfil+bannerSection?.maleImg" alt="Card 1 Image">
         <mat-card-content>{{bannerSection?.maleDescription}}
             <!-- <p></p> -->
         </mat-card-content>
@@ -23,7 +23,7 @@
         <mat-card-header>
             <mat-card-title>{{bannerSection?.titleCard2}}</mat-card-title>
         </mat-card-header>
-        <img mat-card-image [src]="'http://localhost:3000/assets/Profil/'+bannerSection?.kittenImg" alt="Card 2 Image">
+        <img mat-card-image [src]="url.apiUrlProfil+bannerSection?.kittenImg" alt="Card 2 Image">
         <mat-card-content>
             {{bannerSection?.kittenDescription}}
         </mat-card-content>
@@ -36,7 +36,7 @@
         <mat-card-header>
             <mat-card-title>{{bannerSection?.titleCard3}}</mat-card-title>
         </mat-card-header>
-        <img mat-card-image [src]="'http://localhost:3000/assets/Profil/'+bannerSection?.femaleImg" alt="Card 3 Image">
+        <img mat-card-image [src]="url.apiUrlProfil+bannerSection?.femaleImg" alt="Card 3 Image">
         <mat-card-content>
             {{bannerSection?.femaleDescription}}
         </mat-card-content>

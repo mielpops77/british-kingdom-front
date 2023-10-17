@@ -1,6 +1,7 @@
 import { ImageUploadDialogComponent } from '../../image-upload-dialog/image-upload-dialog.component';
 import { BannerSection } from '../../../models/bannerSection.banner';
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { environment } from 'src/environments/environment';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CatService } from '../../Services/catService';
 import { MatDialog } from '@angular/material/dialog';
@@ -39,18 +40,15 @@ export class CardEditComponent implements OnInit, OnDestroy {
       if (banner !== null) {
         this.data = banner[0];
         this.dataUpdate = { ...banner[0] };
-        this.cards[0].profilImgs = `http://localhost:3000/assets/profil/${banner[0].maleImg}`;
-        this.cards[1].profilImgs = `http://localhost:3000/assets/profil/${banner[0].kittenImg}`;
-        this.cards[2].profilImgs = `http://localhost:3000/assets/profil/${banner[0].femaleImg}`;
-
-
+        this.cards[0].profilImgs = environment.apiUrlProfil + banner[0].maleImg;
+        this.cards[1].profilImgs = environment.apiUrlProfil + banner[0].kittenImg;
+        this.cards[2].profilImgs = environment.apiUrlProfil + banner[0].femaleImg;
         this.cards[0].originalDescription = this.dataUpdate.maleDescription;
         this.cards[0].originalTitle = this.dataUpdate.titleCard1;
         this.cards[1].originalDescription = this.dataUpdate.kittenDescription;
         this.cards[1].originalTitle = this.dataUpdate.titleCard2;
         this.cards[2].originalDescription = this.dataUpdate.femaleDescription;
         this.cards[2].originalTitle = this.dataUpdate.titleCard3;
-
       }
     });
   }

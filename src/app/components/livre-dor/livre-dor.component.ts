@@ -13,7 +13,6 @@ export class LivreDorComponent implements OnInit {
   temoignages: Temoignage[] = [];
 
   ajouterTemoignage() {
-    console.log('???????????');
     // Ajouter la date actuelle au témoignage
     this.nouveauTemoignage.date = new Date().toLocaleDateString();
     // Ajouter le témoignage à la liste

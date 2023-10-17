@@ -8,7 +8,13 @@ export const environment = {
   apiUrl: 'http://localhost:3000/api/',
   apiUrlImgProfilCat: 'http://localhost:3000/assets/CatsProfil/',
   apiUrlImgParentsCat: 'http://localhost:3000/assets/CatsParents/',
-  apiUrlImgCat: 'http://localhost:3000/assets/CatsImages/'
+  apiUrlImgCat: 'http://localhost:3000/assets/CatsImages/',
+
+  apiUrlProfil: 'http://localhost:3000/assets/Profil/',
+  apiUrlBanner: 'http://localhost:3000/assets/banner/',
+
+  apiUrlCats: 'http://localhost:3000/api/cats/'
+
 };
 /*
  * For easier debugging in development mode, you can import the following file

@@ -9,6 +9,9 @@ import { Observable, Subscription } from 'rxjs';
 import { Cat } from '../../../../models/cats';
 import { Router } from '@angular/router';
 import { CatService } from 'src/app/components/Services/catService';
+import { environment } from 'src/environments/environment';
+
+
 
 @Component({
   selector: 'app-nouveau-chat',
@@ -201,7 +204,7 @@ export class NouveauChatComponent implements OnInit {
       chatData.urlProfilMother = fileName3;
       chatData.images = fileName4.filter(Boolean);
 
-      this.http.post<Cat>('http://localhost:3000/api/cats', chatData).subscribe(
+      this.http.post<Cat>(environment.apiUrlCats, chatData).subscribe(
         (response) => {
           chatData.id = response.id;
           this.cats.push(chatData);
