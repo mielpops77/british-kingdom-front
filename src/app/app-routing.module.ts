@@ -11,7 +11,7 @@ import { MesChatsComponent } from './components/admin/mes-chats/mes-chats.compon
 import { NouveauChatComponent } from './components/admin/mes-chats/nouveau-chat/nouveau-chat.component';
 import { EditionChatComponent } from './components/admin/mes-chats/edition-chat/edition-chat.component';
 import { ConditionsComponent } from './components/conditions/conditions.component';
-
+import { LivreDorComponent } from './components/livre-dor/livre-dor.component';
 
 
 
@@ -30,12 +30,13 @@ const routes: Routes = [
   { path: 'chatons', component: ChatonsComponent },
   { path: 'contact', component: ContactComponent },
   { path: 'conditions', component: ConditionsComponent },
+  { path: 'livre-dor', component: LivreDorComponent },
   { path: 'admin', component: AdminComponent },
   { path: 'admin/accueil-edit', component: AccueilEditComponent },
   { path: 'admin/meschats', component: MesChatsComponent },
   { path: 'admin/meschats/nouveauChat', component: NouveauChatComponent },
   { path: 'admin/meschats/edition/:id', component: EditionChatComponent },
-
+  
 
 
 

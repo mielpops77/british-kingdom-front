@@ -1,0 +1,97 @@
+/* livre-dor.component.css */
+
+.livre-dor {
+    text-align: center;
+    padding: 20px;
+}
+
+.titre {
+    font-size: 28px;
+    font-weight: bold;
+    color: #A56D18;
+    margin-bottom: 20px;
+}
+
+.formulaire {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.formulaire input[type="text"],
+.formulaire textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid black;
+    border-radius: 6px;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+.large-textarea {
+    width: 100%;
+    height: 200px;
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 6px;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+.formulaire button {
+    background-color: #d38816;
+    color: #fff;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.formulaire button:hover {
+    background-color: #A56D18;
+}
+
+.temoignages {
+    text-align: left;
+    margin-top: 30px;
+}
+
+.temoignage {
+    border: 1px solid black;
+    padding: 20px;
+    margin-bottom: 30px;
+    background-color: #f9f9f9;
+    border-radius: 6px;
+    text-align: center;
+}
+
+.auteur {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.nom, .date {
+    font-weight: bold;
+    font-size: 18px;
+    color: black;
+}
+
+.date {
+    margin-left: 10px;
+    font-size: 18px;
+    color: black;
+}
+
+.message {
+    font-size: 16px;
+    color: black;
+}
+
+.temoignage + .temoignage {
+    margin-top: 40px;
+}

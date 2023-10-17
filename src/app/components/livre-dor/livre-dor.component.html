@@ -1,0 +1,30 @@
+<!-- livre-dor.component.html -->
+<div class="livre-dor">
+    <!-- <h2 class="titre">Vous avez adopter un chaton dans notre Chatterie</h2> -->
+    <h2 class="titre">Vous pouvez nous laisser un commentaire, un témoignage….  </h2>
+<br><br>
+  
+    <div class="formulaire">
+      <form (submit)="ajouterTemoignage()">
+        <div>
+          <label for="nom"></label>
+          <input type="text" id="nom" name="nom" placeholder="Votre nom" [(ngModel)]="nouveauTemoignage.nom" required>
+        </div>
+        <div>
+          <label for="message"></label>
+          <textarea id="message" name="message" placeholder="Votre message" [(ngModel)]="nouveauTemoignage.message" required class="large-textarea"></textarea>
+        </div>
+        <button type="submit">Envoyer</button>
+      </form>
+    </div>
+  
+    <div class="temoignages">
+      <div class="temoignage" *ngFor="let temoignage of temoignages">
+        <div class="auteur">
+          <div class="nom">{{ temoignage.nom }}</div>
+          <div class="date">{{ temoignage.date | date: 'dd/MM/yyyy' }}</div>
+        </div>
+        <div class="message">{{ temoignage.message }}</div>
+      </div>
+    </div>
+</div>

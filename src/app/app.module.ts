@@ -31,6 +31,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { EditionChatComponent } from './components/admin/mes-chats/edition-chat/edition-chat.component';
 import { ConditionsComponent } from './components/conditions/conditions.component';
+import { LivreDorComponent } from './components/livre-dor/livre-dor.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -55,6 +56,7 @@ import { ConditionsComponent } from './components/conditions/conditions.componen
     NouveauChatComponent,
     EditionChatComponent,
     ConditionsComponent,
+    LivreDorComponent,
     
   ],
   imports: [
