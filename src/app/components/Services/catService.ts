@@ -154,4 +154,8 @@ export class CatService {
   getCatById(id: string) {
     return this.http.get(`${environment.apiUrl}cats/${id}`);
   }
+
+  getAllCat() {
+    return this.http.get(`${environment.apiUrl}cats/`);
+  }
 }

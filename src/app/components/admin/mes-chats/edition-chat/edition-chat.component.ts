@@ -1,15 +1,15 @@
 import { ImageUploadDialogComponent } from '../../../image-upload-dialog/image-upload-dialog.component';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { CatService } from 'src/app/components/Services/catService';
 import { environment } from '../../../../../environments/environment';
+import { CatService } from 'src/app/components/Services/catService';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { HttpClient } from '@angular/common/http';
 import { startWith, map } from 'rxjs/operators';
 import { Observable, Subscription } from 'rxjs';
 import { Cat } from '../../../../models/cats';
-import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-edition-chat',
@@ -19,9 +19,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class EditionChatComponent implements OnInit, OnDestroy {
   selectedCat: Cat | null = null;
 
-
-
-  chatForm: FormGroup;
+  chatForm!: FormGroup;
   profilePhoto: string | ArrayBuffer | null = null;
   fatherPhoto: string | ArrayBuffer | null = null;
   motherPhoto: string | ArrayBuffer | null = null;
@@ -48,19 +46,13 @@ export class EditionChatComponent implements OnInit, OnDestroy {
   fatherPhotoFile: any | null = null;
   motherPhotoFile: any | null = null;
   imgPhotoFile: any | null = null;
-
-
   imagesFiles: File[] = [];
-
   images: string[] = [];
   allCats: Cat[] = []
 
-
-
-
   catSubscription: Subscription | undefined;
 
-  filteredRaces: Observable<string[]>;
+  public filteredRaces: Observable<string[]> = new Observable<string[]>();
   otherPhotos: (string | ArrayBuffer | File)[] = [];  // Stocke les URLs des autres photos
 
 
@@ -68,83 +60,93 @@ export class EditionChatComponent implements OnInit, OnDestroy {
 
 
 
-  constructor(private fb: FormBuilder, private http: HttpClient, private catService: CatService, private router: Router, private dialog: MatDialog, private route: ActivatedRoute,) {
+  constructor(
+    private fb: FormBuilder,
+    // private http: HttpClient,
+    private catService: CatService,
+    private router: Router,
+    private dialog: MatDialog,
+    private route: ActivatedRoute
+  ) {
 
 
-
-    this.initData()
-    // Initialisation du formulaire
     this.chatForm = this.fb.group({
-      name: [this.selectedCat?.name, Validators.required],
-      dateOfBirth: [this.selectedCat?.dateOfBirth, Validators.required],
-      robe: [this.selectedCat?.robe, Validators.required],
-      eyeColor: [this.selectedCat?.eyeColor, Validators.required],
-      breed: [this.selectedCat?.breed, Validators.required],
-      sex: [this.selectedCat?.sex, Validators.required],
-      sailliesExterieures: [this.selectedCat?.sailliesExterieures, Validators.required],
+      name: ['', Validators.required],
+      dateOfBirth: ['', Validators.required],
+      robe: ['', Validators.required],
+      eyeColor: ['', Validators.required],
+      breed: ['', Validators.required],
+      sex: ['', Validators.required],
+      sailliesExterieures: ['', Validators.required],
       urlProfil: ['', Validators.required],
       images: ['', Validators.required],
       urlProfilFather: ['', Validators.required],
       urlProfilMother: ['', Validators.required],
-
-      // pattern: ['', Validators.required],
-
-
-      // ... (Ajoutez d'autres champs ici, en fonction de vos besoins)
     });
-    this.filteredRaces = this.chatForm.get('breed')!.valueChanges
-      .pipe(
-        startWith(''),
-        map(value => this._filter(value))
-      );
+    this.initData();
+
+
+
   }
 
   private async initData() {
     this.races = this.catService.races;
     const selectedCatEditString = localStorage.getItem('selectedCatEdit');
     const allCatsString = localStorage.getItem('allCats');
-  
+
     if (selectedCatEditString) {
       this.selectedCat = JSON.parse(selectedCatEditString);
     }
-  
+
     if (allCatsString) {
       this.allCats = JSON.parse(allCatsString);
     }
-  
+
     if (this.selectedCat) {
       this.loadCatData(this.selectedCat);
+      this.initForm();
     } else {
       const catId = this.route.snapshot.paramMap.get('id');
       if (catId) {
         const data = await this.catService.getCatById(catId).toPromise();
-        if (data) {  // Vérifiez si data est défini
-          this.selectedCat = data as Cat; // Effectuez une conversion de type explicite
+        if (data) {
+          this.selectedCat = data as Cat;
+          this.initForm();
           this.loadCatData(this.selectedCat);
-          this.chatForm = this.fb.group({
-            name: [this.selectedCat?.name, Validators.required],
-            dateOfBirth: [this.selectedCat?.dateOfBirth, Validators.required],
-            robe: [this.selectedCat?.robe, Validators.required],
-            eyeColor: [this.selectedCat?.eyeColor, Validators.required],
-            breed: [this.selectedCat?.breed, Validators.required],
-            sex: [this.selectedCat?.sex, Validators.required],
-            sailliesExterieures: [this.selectedCat?.sailliesExterieures, Validators.required],
-            urlProfil: ['', Validators.required],
-            images: ['', Validators.required],
-            urlProfilFather: ['', Validators.required],
-            urlProfilMother: ['', Validators.required],
-      
-            // pattern: ['', Validators.required],
-      
-      
-            // ... (Ajoutez d'autres champs ici, en fonction de vos besoins)
-          });
-          
+        }
+        const allData = await this.catService.getAllCat().toPromise() as Cat[];
+        if (allData) {
+          this.allCats = allData;
         }
       }
     }
+
   }
-  
+
+  private initForm() {
+    this.chatForm = this.fb.group({
+      name: [this.selectedCat?.name || '', Validators.required],
+      dateOfBirth: [this.selectedCat?.dateOfBirth || '', Validators.required],
+      robe: [this.selectedCat?.robe || '', Validators.required],
+      eyeColor: [this.selectedCat?.eyeColor || '', Validators.required],
+      breed: [this.selectedCat?.breed || '', Validators.required],
+      sex: [this.selectedCat?.sex || '', Validators.required],
+      sailliesExterieures: [this.selectedCat?.sailliesExterieures || '', Validators.required],
+      urlProfil: ['', Validators.required],
+      images: ['', Validators.required],
+      urlProfilFather: ['', Validators.required],
+      urlProfilMother: ['', Validators.required],
+      // Ajoutez d'autres champs ici, en fonction de vos besoins
+    });
+    this.formChange();
+
+    this.filteredRaces = this.chatForm.get('breed')!.valueChanges.pipe(
+      startWith(''),
+      map(value => this._filter(value), this.formChange())
+
+    );
+  }
+
   private loadCatData(cat: Cat) {
     this.profilePhoto = environment.apiUrlImgProfilCat + cat.urlProfil;
     this.fatherPhoto = environment.apiUrlImgParentsCat + cat.urlProfilFather;
@@ -153,56 +155,29 @@ export class EditionChatComponent implements OnInit, OnDestroy {
     // Assurez-vous que cat.images est un tableau d'images
     this.otherPhotos = cat.images ? cat.images.map(image => environment.apiUrlImgCat + image) : [];
   }
-  
+
 
 
   ngOnInit(): void {
-    this.formChange()
+    // this.formChange()
   }
 
   formChange(): void {
-    this.chatForm?.get('name')?.valueChanges.subscribe(newValue => {
-      this.catsVerif.name = newValue !== this.selectedCat?.name;
+    this.chatForm?.valueChanges.subscribe((newValue) => {
+      const selectedCat = this.selectedCat;
+      this.catsVerif.name = newValue.name !== selectedCat?.name;
+      this.catsVerif.dateOfBirth = newValue.dateOfBirth !== selectedCat?.dateOfBirth;
+      this.catsVerif.breed = newValue.breed !== selectedCat?.breed;
+      this.catsVerif.sex = newValue.sex !== selectedCat?.sex;
+      this.catsVerif.robe = newValue.robe !== selectedCat?.robe;
+      this.catsVerif.sailliesExterieures = newValue.sailliesExterieures !== selectedCat?.sailliesExterieures;
+      this.catsVerif.eyeColor = newValue.eyeColor !== selectedCat?.eyeColor;
       this.updateValid = this.isAnyTrue(this.catsVerif);
-      if (newValue == "") { this.updateValid = false };
-    });
-    this.chatForm?.get('dateOfBirth')?.valueChanges.subscribe(newValue => {
-      this.catsVerif.dateOfBirth = newValue !== this.selectedCat?.dateOfBirth;
-      this.updateValid = this.isAnyTrue(this.catsVerif);
-      if (newValue == "") { this.updateValid = false };
-    });
 
-    this.chatForm?.get('breed')?.valueChanges.subscribe(newValue => {
-      this.catsVerif.breed = newValue !== this.selectedCat?.breed;
-      this.updateValid = this.isAnyTrue(this.catsVerif);
-      if (newValue == "") { this.updateValid = false };
-
-    });
-
-    this.chatForm?.get('sex')?.valueChanges.subscribe(newValue => {
-      this.catsVerif.sex = newValue !== this.selectedCat?.sex;
-      this.updateValid = this.isAnyTrue(this.catsVerif);
-      if (newValue == "") { this.updateValid = false };
-
-    });
-
-    this.chatForm?.get('robe')?.valueChanges.subscribe(newValue => {
-      this.catsVerif.robe = newValue !== this.selectedCat?.robe;
-      this.updateValid = this.isAnyTrue(this.catsVerif);
-      if (newValue == "") { this.updateValid = false };
-
-    });
-
-    this.chatForm?.get('sailliesExterieures')?.valueChanges.subscribe(newValue => {
-      this.catsVerif.sailliesExterieures = newValue !== this.selectedCat?.sailliesExterieures;
-      this.updateValid = this.isAnyTrue(this.catsVerif);
-      if (newValue == "") { this.updateValid = false };
-    });
-
-    this.chatForm?.get('eyeColor')?.valueChanges.subscribe(newValue => {
-      this.catsVerif.eyeColor = newValue !== this.selectedCat?.eyeColor;
-      this.updateValid = this.isAnyTrue(this.catsVerif);
-      if (newValue == "") { this.updateValid = false };
+      // Réinitialiser la valeur si elle est vide
+      if (newValue.name === "") {
+        this.updateValid = false;
+      }
     });
   }
 
@@ -252,51 +227,43 @@ export class EditionChatComponent implements OnInit, OnDestroy {
   }
 
 
-
   onFileChange(event: Event, imageType: string) {
     const input = event.target as HTMLInputElement;
     const files = input.files;
 
-
-    // Vérifiez que input.files n'est pas null
-    if (input.files !== null && input.files.length > 0) {
+    if (files && files.length > 0) {
+      const file: File = files[0];
 
       const reader = new FileReader();
       reader.onload = (e: any) => {
-        if (input.files !== null && input.files.length > 0) {
-          const file: File = input.files[0]; // Get the file object
-          // const fileName: string = file.name; 
+        if (e.target && e.target.result) {
+          const imageResult = e.target.result as string;
 
-
-          if (e.target && e.target.result && files) {
-            if (imageType === 'profile') {
-              this.profilePhoto = e.target.result as string;
+          switch (imageType) {
+            case 'profile':
+              this.profilePhoto = imageResult;
               this.profilePhotoFile = file;
-
-              this.openImageUploadDialog(e.target.result, files[0], 500, 500, imageType); // Passer 1 pour la première carte
-            }
-            if (imageType === 'father') {
-              this.fatherPhoto = e.target.result as string;
+              this.openImageUploadDialog(imageResult, file, 500, 500, imageType);
+              break;
+            case 'father':
+              this.fatherPhoto = imageResult;
               this.fatherPhotoFile = file;
-              this.openImageUploadDialog(e.target.result, files[0], 750, 550, imageType); // Passer 1 pour la première carte
-
-
-            }
-
-            if (imageType === 'mother') {
-              this.motherPhoto = e.target.result as string;
+              this.openImageUploadDialog(imageResult, file, 750, 550, imageType);
+              break;
+            case 'mother':
+              this.motherPhoto = imageResult;
               this.motherPhotoFile = file;
-              this.openImageUploadDialog(e.target.result, files[0], 750, 550, imageType); // Passer 1 pour la première carte
-            }
-
+              this.openImageUploadDialog(imageResult, file, 750, 550, imageType);
+              break;
             // Ajoutez des cas supplémentaires pour d'autres types d'images, si nécessaire
           }
-        };
-      }
+        }
+      };
 
-      reader.readAsDataURL(input.files[0]);
+      reader.readAsDataURL(file);
     }
   }
+
 
 
 
@@ -334,6 +301,8 @@ export class EditionChatComponent implements OnInit, OnDestroy {
     return this.races.filter(race => race.toLowerCase().includes(filterValue));
   }
 
+
+
   async onSubmit() {
     const uploadPromises: Promise<any>[] = [];
 
@@ -367,7 +336,7 @@ export class EditionChatComponent implements OnInit, OnDestroy {
     }
 
     const [fileName1, fileName2, fileName3] = await Promise.all(uploadPromises);
-    const chatData = this.chatForm.value;
+    const chatData = this.chatForm!.value;
     if (fileName1) { chatData.urlProfil = fileName1; }
     else { chatData.urlProfil = this.selectedCat?.urlProfil }
     if (fileName2) { chatData.urlProfilFather = fileName2; }
@@ -380,6 +349,11 @@ export class EditionChatComponent implements OnInit, OnDestroy {
 
 
     const selectedCatId = this.selectedCat?.id;
+
+
+    //vérification images à delete
+
+
     if (selectedCatId) {
       this.catService.editCat(selectedCatId, chatData).subscribe(
         (response) => {
@@ -398,10 +372,30 @@ export class EditionChatComponent implements OnInit, OnDestroy {
             }
           });
 
-          console.log('updatedCats', updatedCats);
+          //Partie suppresion d'images 
+          const deletions: { fileName: string, folder: string }[] = [];
+          if (fileName1 && this.selectedCat) {
+            deletions.push({ fileName: this.selectedCat.urlProfil, folder: 'CatsProfil' });
+          }
 
-          // console.log('updatedCats',updatedCats);
-          // this.catService.refreshCatDataWithUpdatedCat(response);
+          if (fileName2 && this.selectedCat) {
+            deletions.push({ fileName: this.selectedCat.urlProfilFather, folder: 'CatsParents' });
+          }
+          if (fileName3 && this.selectedCat) {
+            deletions.push({ fileName: this.selectedCat.urlProfilMother, folder: 'CatsParents' });
+          }
+
+          const missingElements = this.selectedCat?.images.filter(
+            element => !this.images.includes(element)
+          );
+
+          if (missingElements && missingElements.length > 0) {
+            deletions.push(...missingElements.map(fileName => ({ fileName, folder: 'CatsImages' })));
+          }
+
+          deletions.forEach(deletion => this.deleteMissingImages([deletion.fileName], deletion.folder));
+
+          //Fin partie supression
 
           this.catService.refreshCatData(updatedCats);
           this.router.navigate(['/admin/meschats']);
@@ -467,6 +461,28 @@ export class EditionChatComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+
+
+  deleteMissingImages(elementsToDelete: string[], directory: string): void {
+    this.catService.deleteMissingImages(elementsToDelete, directory).subscribe(
+      response => {
+        if (response.status === 200) {
+          console.log('Images deleted successfully', response);
+        } else {
+          console.error('Error deleting images - Invalid response status', response);
+        }
+      },
+      error => {
+        if (error.status !== 200) {
+          console.error('Error deleting images', error.status);
+        } else {
+          console.log('Images deleted successfully');
+        }
+      }
+    );
+  }
+
 
   ngOnDestroy(): void {
     localStorage.removeItem('selectedCatEdit');

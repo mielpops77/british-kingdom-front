@@ -90,7 +90,6 @@ export class AccueilEditComponent implements OnInit {
     this.bannerImages.splice(index, 1);
     this.bannerImagesUpdate.splice(index, 1);
     this.hasChanges = true;
-
   }
 
   onFileSelected(event: Event): void {
