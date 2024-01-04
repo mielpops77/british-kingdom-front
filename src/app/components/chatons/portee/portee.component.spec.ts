@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HeaderEditComponent } from './header-edit.component';
+import { PorteeComponent } from './portee.component';
 
-describe('HeaderEditComponent', () => {
-  let component: HeaderEditComponent;
-  let fixture: ComponentFixture<HeaderEditComponent>;
+describe('PorteeComponent', () => {
+  let component: PorteeComponent;
+  let fixture: ComponentFixture<PorteeComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ HeaderEditComponent ]
+      declarations: [ PorteeComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(HeaderEditComponent);
+    fixture = TestBed.createComponent(PorteeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

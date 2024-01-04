@@ -13,7 +13,6 @@ export class IpService {
       .toPromise()
       .then((response: any) => {
         const ipAddress = response.ip;
-        console.log('Adresse IP :', ipAddress); // Ajout du console.log
         return ipAddress;
       })
       .catch(() => '');

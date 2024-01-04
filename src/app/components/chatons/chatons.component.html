@@ -1,46 +1,101 @@
-<h3 class="title">Nous avons des chatons disponible à la reservation !</h3>
-<div class="box">
-  <h3 class="name">Luna et Prosper</h3>
-  <h2 class="description">3 chatons mâle et 2 femelle née le 29/04/2023 - poils shorthair - color bleu - reservation
-    ouverte </h2>
-</div>
+<h3 class="title" *ngIf="porteeDisponible">Nous avons des chatons disponible !</h3>
+<h3 class="title" *ngIf="!porteeDisponible">Pas de portee disponible pour le moment.</h3>
 
 
+<div *ngFor="let info of porteInfo; let i = index">
+  <div class="box">
+    <h3 class="name">Portée de {{info?.nameFemale}} et {{info.nameMale}}</h3>
 
-<div class="container">
-  <div class="photo">
-    <!-- <img src="assets\LunaProfil.jpg" alt="Photo 1" class="image"> -->
+    <h2 *ngIf="info?.nbrMale>0 && info.nbrFemale>0" class="description">{{info?.nbrMale}} mâle et {{info.nbrFemale}}
+      femelle née le {{info.dateOfBirth}} </h2>
+    <h2 *ngIf="info?.nbrMale==0 && info.nbrFemale>0" class="description">{{info.nbrFemale}}
+      femelle née le {{info.dateOfBirth}} </h2>
+    <h2 *ngIf="info?.nbrFemale==0 && info.nbrMale" class="description">{{info.nbrMale}}
+      mâle née le {{info.dateOfBirth}} </h2>
+    <!-- <h2 class="description">{{info?.nbrMale}} chatons mâle et {{info.nbrFemale}} femelle née le {{info.dateOfBirth}}</h2> -->
+
   </div>
-  <div class="heart"></div>
-  <div class="photo">
-    <!-- <img src="assets\prosperProfil.jpg" alt="Photo 2" class="image"> -->
+
+
+  <br>
+  <div class="couple-images-container">
+    <img [src]="info?.urlFemale" (click)="redirectToNewUrl(info?.idMaman,'femelles')" alt="Maman"
+      class="oval-image first-image">
+    <img [src]="env.apiUrlImgDivers + '/coeur-transparent.png'" alt="Cœur" class="heart-image">
+    <img [src]="info?.urlMale" alt="Photo 2" class="image" alt="Papa" (click)="redirectToNewUrl(info?.idPapa,'males')"
+      class="oval-image second-image">
   </div>
 
-</div>
-<div class="button-row">
-  <button mat-raised-button color="primary" class="custom-button">Voir la portée</button>
-  <button mat-raised-button color="primary" class="custom-button" (click)="redirigerVersConditions()">Conditions de
-    vente</button>
-  <button mat-raised-button color="primary" class="custom-button" (click)="faireDefilerVersBas()">Préparer son
-    arrivée</button>
+  <br>
+
+  <!--   <div class="container-chatons">
+    <div class="photo-parents">
+      <img [src]="info?.urlFemale" alt="Photo 1" class="image" (click)="redirectToNewUrl(info?.idMaman,'femelles')">
+    </div>
+    <div class="heart"></div>
+    <div class="photo-parents">
+      <img [src]="info?.urlMale" alt="Photo 2" class="image" (click)="redirectToNewUrl(info?.idPapa,'males')">
+    </div>
+
+  </div> -->
+  <div class="button-row">
+    <button mat-raised-button color="primary" class="custom-button" (click)="redirigerVersPortee(info)">Voir la
+      portée</button>
+    <button mat-raised-button color="primary" class="custom-button2" (click)="redirigerVersConditions()">Conditions de
+      vente</button>
+    <button mat-raised-button color="primary" class="custom-button2" (click)="faireDefilerVersBas()">Préparer son
+      arrivée</button>
+  </div>
+
+
 </div>
 
+
+
+
+<!-- <div *ngFor="let info of porteInfo; let i = index" class="box">
+  <h3 class="name">Portée de {{info?.nameFemale}} et {{info?.nameMale}}</h3>
+  <h2 class="description">{{info?.nbrMale}} chatons mâle et {{info?.nbrFemale}} femelle née le {{info?.dateOfBirth}}</h2>
+
+  <div class="container">
+    <div class="photo">
+      <img [src]="info?.urlFemale" alt="Photo 1" class="image">
+    </div>
+    <div class="heart"></div>
+    <div class="photo">
+      <img [src]="info?.urlMale" alt="Photo 2" class="image">
+    </div>
+  </div>
+
+  <div class="button-row">
+    <button mat-raised-button color="primary" class="custom-button">Voir la portée</button>
+    <button mat-raised-button color="primary" class="custom-button" (click)="redirigerVersConditions()">Conditions de vente</button>
+    <button mat-raised-button color="primary" class="custom-button" (click)="faireDefilerVersBas()">Préparer son arrivée</button>
+  </div>
+</div> -->
+
+
+
+
+
+
+<!-- 
 
 <div class="box">
-  <h3 class="name">Eden et Prosper</h3>
+  <h3 class="name">{{porteInfo[0]?.nameFemale}} et Prosper</h3>
   <h2 class="description">2 chatons mâle et 1 femelle née le 01/06/2023 - poils shorthair - color black silver shaded -
     reservation ouverte </h2>
 </div>
 
 
 
-<div class="container">
-  <div class="photo">
-    <!-- <img src="assets\EdenProfil.jpg" alt="Photo 1" class="image"> -->
+<div class="container-chatons">
+  <div class="photo-parents">
+    <img src="assets\EdenProfil.jpg" alt="Photo 1" class="image">
   </div>
   <div class="heart"></div>
-  <div class="photo">
-    <!-- <img src="assets\prosperProfil.jpg" alt="Photo 2" class="image"> -->
+  <div class="photo-parents">
+    <img src="assets\prosperProfil.jpg" alt="Photo 2" class="image">
   </div>
 </div>
 
@@ -50,4 +105,4 @@
     vente</button>
   <button mat-raised-button color="primary" class="custom-button" >Préparer son
     arrivée</button>
-</div>
+</div> -->

@@ -1,35 +1,28 @@
 <br>
 <br>
+
 <div class="image-container">
-    <div class="image-grid">
-        <div>
-            <p class="name">Luna</p>
-            <p class="name">Couleur: Bleu</p>
-            <img src="assets/LunaProfil.jpg" class="rounded-image">
-        </div>
-        <div>
-            <p class="name">Eden</p>
-            <p class="name">Couleur: black silver shaded</p>
-            <img src="assets/EdenProfil.jpg" class="rounded-image">
-        </div>
-        <div>
-            <p class="name">Tina</p>
-            <p class="name">Couleur: black silver shaded</p>
-            <img src="assets/TinaProfil.jpg" class="rounded-image">
+    <div [ngClass]="getGridClass(cats.length)">
+        <div *ngFor="let cat of cats">
+            <p class="name">{{ cat.name }}</p>
+            <p class="name">Couleur: {{ cat.robe }}</p>
+            <img [src]="url.apiUrlImgProfilCat + cat.urlProfil" class="rounded-image"
+                (click)="redirectToNewUrl(cat.id, cat)">
         </div>
     </div>
-
 </div>
-<br>
+
+
+
 <br>
 <br>
 
-
-<hr class="gray-line">
+<hr class="gray-line" [ngStyle]="getDynamicStyles('borderColor')">
 
 <div class="description">
-    <h3>À propos de nos femelles reproductrices</h3>
-    <p>Importées ou nées à la maison, vous pouvez découvrir leurs caractéristiques détaillées en cliquant sur l'image de
+    <h3 [ngStyle]="getDynamicStyles('title')">{{banner.titlePageFemelles}}</h3>
+    <p [ngStyle]="getDynamicStyles('text')">{{banner.textPageFemelles}}</p>
+    <!--       <p>Importées ou nées à la maison, vous pouvez découvrir leurs caractéristiques détaillées en cliquant sur l'image de
         chacune</p>
     <p>d'entre elles et découvrir : leurs origines, caractéristiques, pedigree.</p>
     <p>C'est un chat gentil et doux, qui s'adapte en appartement comme en maison. Attention aux sorties en extérieur,
@@ -38,12 +31,9 @@
         dangers</p>
     <p>humains et animaux de l'extérieur.</p>
     <p>Une femelle British adulte fera entre 3 et 5 kg. Entretenir ce chat ne pose aucune difficulté particulière.</p>
-    <p>Lien vers la rubrique entretien.</p>
-
-</div>
-
-<hr class="gray-line">
-
-<br>
-<br>
-<br>
+    <p>Lien vers la rubrique entretien.</p> -->
+    </div>
+    <hr class="gray-line" [ngStyle]="getDynamicStyles('borderColor')">
+    <br>
+    <br>
+    <br>

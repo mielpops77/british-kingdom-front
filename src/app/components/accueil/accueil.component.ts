@@ -23,7 +23,6 @@ export class AccueilComponent implements OnInit, OnDestroy {
     this.bannerSubscription = this.catService.banner$.subscribe((banner) => {
       if (banner !== null) {
         this.bannerSection = banner[0];
-        console.log('bannerSection', this.bannerSection);
       }
     });
 

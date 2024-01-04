@@ -1,10 +1,10 @@
-import { ImageDialogComponent } from '../../image-dialog/image-dialog.component';
 import { Component, OnInit, ElementRef, OnDestroy, HostListener } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { Cat } from '../../../models/cats';
+import { ImageDialogComponent } from '../../image-dialog/image-dialog.component';
 import { environment } from 'src/environments/environment';
-import { ActivatedRoute } from '@angular/router';
 import { CatService } from '../../Services/catService';
+import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute } from '@angular/router';
+import { Cat } from '../../../models/cats';
 
 
 @Component({
@@ -51,7 +51,6 @@ export class ProsperComponent implements OnInit, OnDestroy {
     else {
       /*   this.route.params.subscribe(params => {
           const id = +params['id']; 
-          console.log('ID de l\'URL :', id);
         }); */
       const catId = this.route.snapshot.paramMap.get('id');
       if (catId) {
@@ -64,7 +63,6 @@ export class ProsperComponent implements OnInit, OnDestroy {
   }
 
   openImageDialog(imageUrl: string): void {
-    console.log('ookokokoko');
     this.dialog.open(ImageDialogComponent, {
       data: { imageUrl },
       panelClass: 'custom-dialog-container'
@@ -89,7 +87,6 @@ export class ProsperComponent implements OnInit, OnDestroy {
 
 
   ngOnDestroy(): void {
-    console.log('ookokkkdestroy');
     localStorage.removeItem('selectedCat');
   }
 

@@ -9,12 +9,27 @@ export const environment = {
   apiUrlImgProfilCat: 'http://localhost:3000/assets/CatsProfil/',
   apiUrlImgParentsCat: 'http://localhost:3000/assets/CatsParents/',
   apiUrlImgCat: 'http://localhost:3000/assets/CatsImages/',
+  apiUrlImgChaton: 'http://localhost:3000/assets/Chatons/',
+  apiUrlImgDivers: 'http://localhost:3000/assets/imgDivers/',
+
+
 
   apiUrlProfil: 'http://localhost:3000/assets/Profil/',
   apiUrlBanner: 'http://localhost:3000/assets/banner/',
 
-  apiUrlCats: 'http://localhost:3000/api/cats/'
+  apiUrlCats: 'http://localhost:3000/api/cats/',
+  apiUrlPorte: 'http://localhost:3000/api/portee/',
+  apiUrlChaton: 'http://localhost:3000/api/chaton/',
 
+  apiUrlLivreOr: 'http://localhost:3000/api/livreOr/',
+  apiUrlContact: 'http://localhost:3000/api/contact/',
+
+  apiUrlFavicon: 'http://localhost:3000/assets/favicon/',
+
+
+  id: 1
+
+  //Elevage British Kingdom
 };
 /*
  * For easier debugging in development mode, you can import the following file

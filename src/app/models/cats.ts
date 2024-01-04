@@ -11,4 +11,6 @@ export interface Cat {
     images: string[];
     eyeColor:string;
     sex: string;
+    profilId: number;
+
   }

@@ -1,8 +1,9 @@
-<div class="conditions-container" >
-    <h1>Conditions d'Adoption</h1>
+<div class="conditions-container">
+    <h1>{{banner.titlePageConditions}}</h1>
 
     <section class="questions-section" id="conditions">
-        <h2>Les questions à se poser avant d'adopter un chat</h2>
+        <h2 *ngIf="banner?.sousTitlePageConditions">{{banner?.sousTitlePageConditions[0]}}</h2>
+    <div>
         <p>
             Avant d'adopter un chat, il est essentiel de se poser certaines questions. Vous devez prendre en compte
             votre style de vie,
@@ -40,26 +41,32 @@
         </ul>
         <p>Prendre le temps de réfléchir à ces questions vous aidera à prendre la meilleure décision pour vous et votre
             futur compagnon félin.</p>
+        </div>
+
     </section>
 
     <section class="visites-section">
-        <h2>Les visites</h2>
-        <p>
-            Pour garantir le bien-être de nos chatons, nous encourageons les visites pré-adoptions.
-            Cela vous permettra de rencontrer les chatons, de poser des questions et de voir où ils ont grandi.
-            Nous serons heureux de vous montrer nos installations et de discuter de nos pratiques d'élevage.
-        </p>
-        <p>
-            - Les visites sont sur rendez-vous uniquement.
-            - Posez toutes les questions que vous avez en tête concernant le chaton.
-            - Si vous décidez d'adopter, nous vous guiderons à travers le processus d'adoption.
-        </p>
+        <h2 *ngIf="banner?.sousTitlePageConditions">{{banner.sousTitlePageConditions[1]}}</h2>
+        <div>
+            <p>
+                Pour garantir le bien-être de nos chatons, nous encourageons les visites pré-adoptions.
+                Cela vous permettra de rencontrer les chatons, de poser des questions et de voir où ils ont grandi.
+                Nous serons heureux de vous montrer nos installations et de discuter de nos pratiques d'élevage.
+            </p>
+            <p>
+                - Les visites sont sur rendez-vous uniquement.
+                - Posez toutes les questions que vous avez en tête concernant le chaton.
+                - Si vous décidez d'adopter, nous vous guiderons à travers le processus d'adoption.
+            </p>
+        </div>
     </section>
     <section class="depart-section">
-        <h2>Le départ du chaton</h2>
+        <h2 *ngIf="banner?.sousTitlePageConditions">{{banner.sousTitlePageConditions[2]}}</h2>
+
         <p>
             Lorsque vous adoptez l'un de nos chatons, il partira avec tout ce dont il a besoin pour un bon départ dans
-            sa nouvelle maison. Nos chatons sont LOOF (Livre Officiel des Origines Félines) et sont livrés avec le certificat correspondant.
+            sa nouvelle maison. Nos chatons sont LOOF (Livre Officiel des Origines Félines) et sont livrés avec le
+            certificat correspondant.
             Cela comprend une puce d'identification, des vaccinations à jour, un carnet de santé, de la nourriture,
             et même un peu de litière pour les premiers jours. Nous nous assurons que le processus d'adoption est aussi
             simple que possible.
@@ -72,10 +79,11 @@
             - Nous vous fournirons de la nourriture pour la première semaine.
         </p>
     </section>
-    
-    
+
+
     <section class="conditions-section">
-        <h2>Autres Conditions d'Adoption</h2>
+        <h2 *ngIf="banner?.sousTitlePageConditions">{{banner.sousTitlePageConditions[3]}}</h2>
+
         <p>Nous proposons des chatons à des propriétaires aimants et responsables. Voici nos conditions d'adoption :</p>
         <ul>
             <li>Nous préférons que les chatons vivent en tant qu'animaux de compagnie à l'intérieur.</li>
@@ -87,19 +95,26 @@
             <li>En cas de problème ou de questions, n'hésitez pas à nous contacter.</li>
         </ul>
     </section>
-    
+
 
     <section class="preparation-section" id="preparer-son-arrivee">
-        <h2>Préparer son Arrivée</h2>
-        <p>Accueillir un chaton dans votre maison est une expérience excitante. Avant son arrivée, assurez-vous de créer un environnement sûr et confortable pour votre nouveau compagnon. Voici quelques étapes à suivre :</p>
+        <h2 *ngIf="banner?.sousTitlePageConditions">{{banner.sousTitlePageConditions[4]}}</h2>
+        <p>Accueillir un chaton dans votre maison est une expérience excitante. Avant son arrivée, assurez-vous de créer
+            un environnement sûr et confortable pour votre nouveau compagnon. Voici quelques étapes à suivre :</p>
         <ol>
-            <li><strong>Mettez en place une litière :</strong> Préparez une litière propre et assurez-vous qu'elle est facilement accessible pour le chaton. Les chatons ont besoin de litière dès leur arrivée.</li>
-            <li><strong>Préparez de la nourriture :</strong> Procurez-vous de la nourriture de haute qualité adaptée à l'âge du chaton. Demandez-nous des recommandations si nécessaire.</li>
-            <li><strong>Créez un espace sûr :</strong> Éliminez les dangers potentiels de la maison. Assurez-vous que les produits chimiques, les fils électriques et les objets dangereux sont hors de portée du chaton.</li>
-            <li><strong>Offrez de l'amour et de l'attention :</strong> Les chatons ont besoin d'affection et d'interaction. Préparez-vous à passer du temps à jouer et à câliner votre nouveau chaton.</li>
-            <li><strong>Consultez un vétérinaire :</strong> Planifiez une visite chez le vétérinaire pour un examen de santé initial et discutez du calendrier de vaccination recommandé.</li>
+            <li><strong>Mettez en place une litière :</strong> Préparez une litière propre et assurez-vous qu'elle est
+                facilement accessible pour le chaton. Les chatons ont besoin de litière dès leur arrivée.</li>
+            <li><strong>Préparez de la nourriture :</strong> Procurez-vous de la nourriture de haute qualité adaptée à
+                l'âge du chaton. Demandez-nous des recommandations si nécessaire.</li>
+            <li><strong>Créez un espace sûr :</strong> Éliminez les dangers potentiels de la maison. Assurez-vous que
+                les produits chimiques, les fils électriques et les objets dangereux sont hors de portée du chaton.</li>
+            <li><strong>Offrez de l'amour et de l'attention :</strong> Les chatons ont besoin d'affection et
+                d'interaction. Préparez-vous à passer du temps à jouer et à câliner votre nouveau chaton.</li>
+            <li><strong>Consultez un vétérinaire :</strong> Planifiez une visite chez le vétérinaire pour un examen de
+                santé initial et discutez du calendrier de vaccination recommandé.</li>
         </ol>
-        <p>Préparer son arrivée garantit une transition en douceur pour votre chaton et une relation heureuse pour vous deux.</p>
+        <p>Préparer son arrivée garantit une transition en douceur pour votre chaton et une relation heureuse pour vous
+            deux.</p>
     </section>
-    
+
 </div>

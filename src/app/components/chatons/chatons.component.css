@@ -1,88 +1,201 @@
 .title {
-    margin: 50px;
-    /* color: rgb(41, 41, 41); */
-    font-family: corben, serif;
-    text-align: center;
-    font-size: 40px;
-    color: #A56D18;
-    font-weight: 500;
+  margin: 50px;
+  /* color: rgb(41, 41, 41); */
+  font-family: corben, serif;
+  text-align: center;
+  font-size: 40px;
+  color: #A56D18;
+  font-weight: 500;
 }
 
 .box {
-    display: flex;
-    flex-direction: column; /* Empiler les éléments verticalement */
-    align-items: center; /* Centrer horizontalement */
-    justify-content: center; /* Centrer verticalement */
-    width: 70%;
-    height: 115px;
-    background-color: #D4AE7D;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  
-  .name {
-    color: rgb(41, 41, 41);
-    font-family: corben, serif;
-    text-align: center;
-    margin: 0;
-    padding: 0;
-  }
-  
-  .description {
-    text-align: center;
-    color: rgb(41, 41, 41);
-    font-family: corben, serif;
-    font-size: 25px;
-    margin: 0;
-    padding: 0;
-  }
-  
-.container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 30px;
-  }
-  
-  .photo {
-    margin: 0 10px;
-  }
-  
-  .image {
-    width: 450px;
-    height: 450px;
-    padding-top: 50px;
+  display: flex;
+  flex-direction: column;
+  /* Empiler les éléments verticalement */
+  align-items: center;
+  /* Centrer horizontalement */
+  justify-content: center;
+  /* Centrer verticalement */
+  width: 70%;
+  height: 115px;
+  background-color: #D4AE7D;
+  margin-left: auto;
+  margin-right: auto;
+}
 
-  }
-  
-  
+.name {
+  color: rgb(41, 41, 41);
+  font-family: corben, serif;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+
+.description {
+  text-align: center;
+  color: rgb(41, 41, 41);
+  font-family: corben, serif;
+  font-size: 25px;
+  margin: 0;
+  padding: 0;
+}
+
+/* .container-chatons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 30px;
+  text-align: center;
+} */
+
+/* 
+.photo-parents {
+  margin: 0 10px;
+}
+
+.photo-parents:hover .image {
+  transform: scale(1.1);
+}
+ */
+/* .image {
+  width: 80%;
+  border-radius: 50%;
+  mask-size: contain;
+  transition: transform 0.2s;
+  cursor: pointer;
+}
+ */
+
+/* .heart {
+  width: 150px;
+  height: 150px;
+  background-image: url("../../../assets/coeur.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+} */
+
+
+
+
+.button-row {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 50px;
+  /* Facultatif : Ajouter un espacement vertical entre les boutons */
+}
+
+.custom-button {
+  background-color: #54869C !important;
+  color: white !important;
+  font-size: 16px;
+  padding: 10px 20px;
+  transition: transform 0.2s;
+  margin: 10px;
+}
+
+
+.custom-button2 {
+  background-color: #54869C !important;
+  color: white !important;
+  font-size: 16px;
+  padding: 10px 20px;
+  transition: transform 0.2s;
+  margin: 10px;
+}
+.custom-button:hover {
+  transform: scale(1.1);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.couple-images-container {
+  display: flex;
+  justify-content: center;
+  /* Centre les images horizontalement */
+  align-items: center;
+  /* Centre les images verticalement */
+}
+
+.oval-image {
+  border-radius: 50%;
+  width: 18%;
+  /* width: 300px; */
+  /* height: 300px;  */
+  object-fit: cover;
+  transition: transform 0.3s ease-in-out;
+  /* Ajout de l'effet de transition */
+}
+
+.first-image {
+  margin-right: 0px;
+}
+
+
+
+.heart-image {
+  /* width: 140px;  */
+  width: 10%;
+
+  /* height: 140px; */
+  object-fit: cover;
+  margin: 0 15px;
+  /* Ajustez la marge du cœur selon vos besoins */
+  transition: transform 0.3s ease-in-out;
+  /* Ajout de l'effet de transition */
+}
+
+/* Effet hover sur les images */
+.oval-image:hover, .heart-image:hover {
+  transform: scale(1.1);
+  /* Ajustez la valeur de l'échelle selon vos besoins */
+  cursor: pointer;
+}
+
+
+/* 
+
+@media (max-width: 1650px) {
+
+
   .heart {
-    width: 150px;
-    height: 150px;
-    /* background-image: url("../../../assets/coeur.jpg"); */
-    background-repeat: no-repeat;
-    background-size: contain;
+    margin-top: 50px;
   }
-  
 
 
+}
+@media (max-width: 1100px) {
+  .heart {
+    margin-top: 80px;
+  }
 
-  .button-row {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 50px; /* Facultatif : Ajouter un espacement vertical entre les boutons */
+}
+
+@media (max-width: 750px) {
+  .heart {
+    margin-top: 110px;
   }
-  
-  .custom-button {
-    background-color: #54869C !important;
-    color: white !important;
-    font-size: 16px;
-    padding: 10px 20px;
-    transition: transform 0.2s;
-    margin: 10px;
+
+} */
+
+
+@media (max-width: 550px) {
+  .custom-button2 {
+    display: none;
   }
-  
-  .custom-button:hover {
-    transform: scale(1.1);
+
+}
+/* @media (max-width: 500px) {
+  .heart {
+    margin-top: 130px;
   }
-  
+
+} */

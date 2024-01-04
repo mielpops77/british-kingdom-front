@@ -1,4 +1,4 @@
-<div *ngIf="!isAdminRoute" class="titlePage" [ngStyle]="getDynamicStyles('colorHeader')">
+<!-- <div *ngIf="!isAdminRoute" class="titlePage" [ngStyle]="getDynamicStyles('colorHeader')">
   <h1 [ngStyle]="getDynamicStyles('title')">{{data?.title}}</h1>
   <h2 [ngStyle]="getDynamicStyles('subtitle')">{{data?.subtitle}}</h2>
 </div>
@@ -12,26 +12,35 @@
 
 
 
-<div class="container" *ngIf="isAdminRoute">
-
+<div class="container" *ngIf="isAdminRoute"> -->
+<!-- 
 <header [ngStyle]="{'margin-top.px': isAdminRoute ? 0 : 20, 'margin-bottom.px': isAdminRoute ? 0 : 20}">
 
     
 
   <app-header-admin *ngIf="isAdminRoute && showHeader"></app-header-admin>
 
-</header>
+</header> -->
 
 <div class="content-container">
+  <div class="titlePage" [ngStyle]="getDynamicStyles('colorHeader')">
+  <h1 [ngStyle]="getDynamicStyles('title')">{{data?.title}}</h1>
+  <h2 [ngStyle]="getDynamicStyles('subtitle')">{{data?.subtitle}}</h2>
+</div>
+  <header [ngStyle]="{'margin-top.px':  20, 'margin-bottom.px':  20}">
+    <app-header-user></app-header-user>
+    </header>
   <router-outlet></router-outlet>
-
+  <div class="content-container">
+    <router-outlet></router-outlet>
+<app-footer></app-footer>
 </div>
 
-</div>
+<!-- </div> -->
 
 
 
-
+<!-- 
 
 <div  *ngIf="!isAdminRoute">
 
@@ -53,3 +62,4 @@
   </div>
   
 
+ -->

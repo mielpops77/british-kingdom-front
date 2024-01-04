@@ -16,7 +16,6 @@ export class FripouilleComponent implements OnInit {
   }
 
   openImageDialog(imageUrl: string): void {
-    console.log('ookokokoko');
     this.dialog.open(ImageDialogComponent, {
       data: { imageUrl },
       panelClass: 'image-dialog'

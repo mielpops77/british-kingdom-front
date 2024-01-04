@@ -1,0 +1,56 @@
+<br>
+
+<p class="title">Les chatons de {{selectedPortee.nameFemale}} et {{selectedPortee.nameMale}} </p>
+<p class="title">Née le {{selectedPortee.dateOfBirth}} </p>
+
+<br>
+
+<div class="couple-images-container" *ngIf="selectedPortee?.portee">
+    <img [src]="selectedPortee.portee.urlProfilMother" (click)="redirectToNewUrl(selectedPortee?.idMaman,'femelles')"
+        alt="Maman" class="oval-image first-image">
+    <img src="assets/coeur.png" alt="Cœur" class="heart-image">
+    <img [src]="selectedPortee.portee.urlProfilFather" alt="Papa"
+        (click)="redirectToNewUrl(selectedPortee?.idPapa,'males')" class="oval-image second-image">
+</div>
+<br><br>
+<div class="text">
+
+    <p>Les chatons
+        <!-- <span *ngIf="selectedPortee?.portee ? selectedPortee.portee.loof : selectedPortee.loof"> tous enregistrés
+            LOOF,</span> -->
+        seront prêts à rejoindre leur nouvelle famille à partir du {{dateOfSell}}.
+    </p>
+
+    <p>Toutes les informations utiles et à connaître pour l'achat d'un de nos chatons british sont disponibles sur notre
+        page
+        <a [routerLink]="['/conditions']" fragment="preparer-son-arrivee"> Préparer son arrivée</a>.
+    </p>
+</div>
+
+<div class="container-images" *ngIf="selectedPortee?.portee">
+    <div class="carousel-container" *ngFor="let chaton of (selectedPortee.portee?.chatons ) || []; let i = index">
+
+        <div class="carousel-arrow-left" (click)="prevImages(i)">&#10094;</div>
+
+        <div class="carousel-images">
+
+            <div class="carousel-title">
+                <p class="chaton-info">
+                    <span class="left-value">{{ selectedPortee.portee.chatons[i].status}}</span>
+                    <span class="grp">
+                        <span class="chaton-sex">{{selectedPortee.portee.chatons[i].sex}}</span>
+                        <span class="chaton-status">-{{selectedPortee.portee.chatons[i].breed}}-</span>
+                        <span class="chaton-status">{{selectedPortee.portee.chatons[i].robe}}</span>
+                    </span>
+                    <span class="right-value">{{selectedPortee.portee.chatons[i].name}}</span>
+                </p>
+            </div>
+
+            <img *ngFor="let image of displayedImages[i]" [src]="image"
+                (click)="isChatonImage(image) ? null : openImageDialog(image)" class="square-image">
+        </div>
+        <div class="carousel-arrow-right" (click)="nextImages(i)">&#10095;</div>
+
+
+    </div>
+</div>

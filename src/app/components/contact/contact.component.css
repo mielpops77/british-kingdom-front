@@ -1,5 +1,7 @@
 /* contact.component.css */
 
+
+
 .contact-container {
     text-align: center;
     padding: 40px;
@@ -45,6 +47,11 @@
     border-radius: 5px;
   }
   
+  .contact-form input.invalid-field,
+  .contact-form textarea.invalid-field {
+    margin-bottom: 0;
+  }
+
   .contact-form textarea {
     resize: vertical;
   }
@@ -59,12 +66,22 @@
   .contact-form .name-email-group input {
     width: 48%; /* Adjust width as needed */
   }
+
+
   
   /* Subject spans the full width */
   .contact-form .subject-input {
     width: 100%;
   }
   
+  .error-message {
+    color: red;
+    font-size: 18px;
+    /* margin-top: 5px; */
+    margin-bottom: 10px;
+  }
+
+
   /* Responsive design */
   @media screen and (max-width: 600px) {
     .contact-form {

@@ -5,6 +5,8 @@ import { Router, NavigationEnd } from '@angular/router';
 import { BannerSection } from './models/bannerSection.banner';
 import { Subscription } from 'rxjs';
 import { CatService } from './components/Services/catService';
+import { environment } from 'src/environments/environment';
+
 
 @Component({
   selector: 'app-root',
@@ -37,8 +39,12 @@ export class AppComponent implements OnDestroy {
     this.bannerSubscription = this.catService.banner$.subscribe((banner) => {
       if (banner !== null) {
         this.data = banner[0];
+        if (this.data.favicon !== 'favicon.ico') {
+          this.updateFavicon(environment.apiUrlFavicon + this.data?.favicon);
+        }
       }
     });
+
   }
 
 
@@ -93,14 +99,17 @@ export class AppComponent implements OnDestroy {
 
   }
 
-
+  private updateFavicon(faviconUrl: string): void {
+    const link: HTMLLinkElement = document.querySelector("link[rel*='icon']") || document.createElement('link');
+    link.type = 'image/x-icon';
+    link.rel = 'icon';
+    link.href = faviconUrl;
+    document.getElementsByTagName('head')[0].appendChild(link);
+  }
   ngOnDestroy(): void {
 
-    console.log('?????');
 
     if (this.bannerSubscription) {
-      console.log('bannerSubscription');
-
       this.bannerSubscription.unsubscribe();
     }
   }

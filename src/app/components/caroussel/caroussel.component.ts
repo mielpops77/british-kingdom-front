@@ -13,7 +13,6 @@ export class CarousselComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    console.log('ijrjijijijijijij', this.bannerSection);
   }
 
 }

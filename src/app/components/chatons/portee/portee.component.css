@@ -1,0 +1,414 @@
+.title {
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    color: rgb(60, 100, 117);
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.container-images {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    /* background-color: #e4c8a3; */
+}
+
+
+
+.couple-images-container {
+    display: flex;
+    justify-content: center;
+    /* Centre les images horizontalement */
+    align-items: center;
+    /* Centre les images verticalement */
+}
+
+.oval-image {
+    border-radius: 50%;
+    width: 18%;
+    /* width: 300px; */
+    /* height: 300px;  */
+    object-fit: cover;
+    transition: transform 0.3s ease-in-out;
+    /* Ajout de l'effet de transition */
+}
+
+.first-image {
+    margin-right: 0px;
+}
+
+.second-image {
+    margin-left: 0px;
+}
+
+.heart-image {
+    /* width: 140px;  */
+    width: 10%;
+
+    /* height: 140px; */
+    object-fit: cover;
+    margin: 0 15px;
+    /* Ajustez la marge du cœur selon vos besoins */
+    transition: transform 0.3s ease-in-out;
+    /* Ajout de l'effet de transition */
+}
+
+/* Effet hover sur les images */
+.oval-image:hover, .heart-image:hover {
+    transform: scale(1.1);
+    /* Ajustez la valeur de l'échelle selon vos besoins */
+    cursor: pointer;
+}
+
+.text {
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    color: rgb(60, 100, 117);
+    font-weight: bold;
+}
+
+.square-image:not([src*="chaton.png"]):hover {
+    transform: scale(1.02);
+    cursor: pointer;
+}
+
+a {
+    text-decoration: underline;
+    /* Souligner le lien */
+    color: inherit;
+    /* Utiliser la couleur par défaut du texte parent (peut-être noir ou autre) */
+}
+
+a:hover {
+    text-decoration: none;
+    /* Supprimer le soulignement au survol */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Ajout du style pour la nouvelle section du carousel */
+.carousel-container {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    margin: 40px;
+    position: relative;
+    /* Ajoutez position relative */
+}
+
+.carousel-container::before {
+    content: "";
+    position: absolute;
+    top: 103%;
+    /* left: 0; */
+    /* right: 0; */
+    width: 50%;
+    /* Définissez la largeur du trait à 60% */
+    border-bottom: 5px solid #d8d7d7;
+    /* padding: 30px; */
+    /* Ajoutez une bordure inférieure de 1px solide */
+}
+
+.carousel-container::after {
+    content: "";
+    position: absolute;
+    top: 105.5%;
+    /* left: 0; */
+    /* right: 0; */
+    width: 50%;
+    /* Définissez la largeur du trait à 60% */
+    border-top: 1px solid #d8d7d7;
+    /* padding: 30px; */
+    /* Ajoutez une bordure inférieure de 1px solide */
+}
+
+
+.carousel-container:first-child {
+    border-bottom: none;
+}
+
+.carousel-arrow-left {
+    align-items: center;
+
+    /* margin-left: 300px; */
+    cursor: pointer;
+
+    font-size: 24px;
+    /* margin: 0 10px;  */
+    margin-top: 70px;
+}
+
+.carousel-arrow-right {
+    /* margin-right: 300px; */
+    margin-top: 70px;
+
+    cursor: pointer;
+    font-size: 24px;
+    /* margin: 0 10px;  */
+}
+
+.carousel-arrow-left:hover {
+    transform: scale(1.2);
+}
+
+.carousel-arrow-right:hover {
+    transform: scale(1.2);
+}
+
+.carousel-images {
+    /* margin: 0 auto;  */
+    /* display: flex; */
+    align-items: center;
+}
+
+.square-image {
+
+    width: 320px;
+    height: 270px;
+    /*   width: 320px;
+    height: 500px; */
+
+    /*     
+    width: 316.67px;
+    height: 289px; */
+    /* width: 300px; */
+    /* Ajustez la largeur selon vos besoins */
+    /* height: 300px; */
+    /* Ajustez la hauteur selon vos besoins */
+    margin: 0 10px;
+    /* Ajustez la marge entre les images selon vos besoins */
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+/* Ajout d'une transition pour l'effet d'animation */
+.carousel-images {
+    transition: transform 0.5s ease-in-out;
+}
+
+
+
+.grp {
+    background-color: rgb(60, 100, 117);
+    padding: 10px;
+    border-radius: 20px;
+    width: 50%;
+}
+
+.grp:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+}
+
+.carousel-title {
+    /*    background-color:rgb(60, 100, 117); 
+    padding: 10px;
+    border-radius: 20px; */
+    /* text-align: center; */
+    bottom: 0;
+    /* left: 50%; */
+    margin-bottom: 20px;
+    color: #EEF0F1;
+    font-family: 'Fraunces', sans-serif;
+    font-weight: 700;
+    /* Utilisez 700 pour "bold" */
+    font-size: 25px;
+
+    /* margin: 0; */
+}
+
+/* .chaton-info {
+    margin: 0;
+    text-align: center;
+
+} */
+
+.chaton-info {
+    margin: 0;
+    text-align: center;
+}
+
+.chaton-info>* {
+    margin: 0;
+}
+
+.chaton-info>span {
+    display: inline-block;
+    margin: 0 5px;
+    /* Ajustez la marge selon vos besoins */
+}
+
+/* .left-value {
+    float: left;
+    color: #E9920D;
+    font-family: 'Oswald', sans-serif;
+    margin-left: 20px !important;
+}
+ */
+.left-value {
+    float: left;
+    color: #E9920D;
+    content: "";
+    font-family: 'Oswald', sans-serif;
+    margin-left: 20px !important;
+    padding-bottom: 14px;
+  
+    width: 20%;
+    border-bottom: 2px solid #494949;
+
+}
+
+.right-value {
+    margin-right: 20px !important;
+    float: right;
+    color: #E9920D;
+    font-family: 'Oswald', sans-serif;
+    padding-bottom: 14px;
+    width: 20%;
+    border-bottom: 2px solid #494949;
+}
+
+.carousel-arrow-right.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+    /* ou toute autre style pour indiquer que le bouton est désactivé */
+}
+
+
+/* Ajoutez des styles supplémentaires selon vos préférences */
+
+
+
+
+
+
+
+
+@media (max-width: 1200px) {
+
+    .oval-image {
+        width: 20%;
+    }
+
+    .heart-image {
+        width: 12%;
+    }
+
+
+}
+
+@media (max-width: 1100px) {
+
+
+    .carousel-title {
+        font-size: 20px;
+    }
+
+    .left-value {
+        margin-top: 25px !important;
+    }
+
+    .right-value {
+        margin-top: 25px !important;
+    }
+
+    .heart-image {
+        width: 13%;
+    }
+}
+
+
+@media (max-width: 1000px) {
+
+    .oval-image {
+        width: 22%;
+    }
+
+    .heart-image {
+        width: 14%;
+    }
+}
+
+@media (max-width: 800px) {
+    .oval-image {
+        width: 25%;
+    }
+
+    .heart-image {
+        width: 18%;
+    }
+
+    .first-image {
+        margin-right: -10px;
+    }
+
+    .second-image {
+        margin-left: -10px;
+    }
+}
+
+@media (max-width: 700px) {
+
+    .oval-image {
+        width: 28%;
+    }
+
+    .heart-image {
+        width: 20%;
+    }
+}
+
+@media (max-width: 650px) {
+
+    .oval-image {
+        width: 30%;
+    }
+
+    .heart-image {
+        width: 22%;
+    }
+
+
+}
+
+@media (max-width: 600px) {
+
+    .oval-image {
+        width: 32%;
+    }
+
+    .heart-image {
+        width: 24%;
+    }
+
+
+
+}
+
+@media (max-width: 510px) {
+
+    .carousel-title {
+        font-size: 15px;
+    }
+
+    .left-value {
+        margin-top: 17px !important;
+    }
+
+    .right-value {
+        margin-top: 17px !important;
+    }
+
+
+
+}

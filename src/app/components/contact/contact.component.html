@@ -3,10 +3,11 @@
 <div class="contact-container">
     <h1>Contactez-nous</h1>
     <p class="description">
-        Notre petit élevage de British Shorthair est situé en seine et marne à 20 minutes de l'Aéroport de Paris-Charles de Gaulle,
+        Notre petit élevage de British Shorthair est situé en seine et marne à 20 minutes de l'Aéroport de Paris-Charles
+        de Gaulle,
         <br>
         Si vous désirez venir en transport pour faciliter les correspondances, nous pouvons vous apporter
-        le chaton à la gare de roissy ou de saint mard. 
+        le chaton à la gare de roissy ou de saint mard.
         <br>
         Il existe aussi des taxis animaliers si vous habitez trop loin.
     </p>
@@ -17,33 +18,44 @@
         <p>Email : <a href="mailto:chatterie.british.kingdom@gmail.com">chatterie.british.kingdom@gmail.com</a></p>
     </div>
 
-    <form class="contact-form">
-        <input type="text" id="name" name="name" placeholder="Nom" required>
+    <!-- contact.component.html -->
 
-        <input type="email" id="email" name="email" placeholder="Email" required>
+    <form class="contact-form" #contactForm="ngForm" (ngSubmit)="sendContactForm(contactForm)">
+        <!-- Utilisez [(ngModel)] pour lier les valeurs des champs à votre modèle -->
+        <input type="text" id="name" name="name" placeholder="Nom" required [(ngModel)]="contactModel.name">
 
+        <input type="email" id="email" name="email" placeholder="Email" required [(ngModel)]="contactModel.email"
+            [class.invalid-field]="isEmailInvalid">
+        <div *ngIf="isEmailInvalid" class="error-message">L'e-mail n'est pas dans le bon format.</div>
 
-        <input type="text" id="subject" name="subject" placeholder="Sujet" required>
+        <input type="text" id="num" name="num" placeholder="Téléphone" required [(ngModel)]="contactModel.num"
+            [class.invalid-field]="isNumInvalid">
+        <div *ngIf="isNumInvalid" class="error-message">Le numéro de téléphone n'est pas dans le bon format.</div>
 
-        <textarea id="message" name="message" rows="4" placeholder="Message" required></textarea>
+        <input type="text" id="subject" name="subject" placeholder="Sujet" required [(ngModel)]="contactModel.subject">
 
+        <textarea id="message" name="message" rows="4" placeholder="Message" required
+            [(ngModel)]="contactModel.message"></textarea>
 
-        <button mat-raised-button color="primary">Envoyer</button>
-
+        <button mat-raised-button color="primary" type="submit" [disabled]="contactForm.invalid">Envoyer</button>
     </form>
+
+
 </div>
 
 <div class="address-container">
     <h2>Où sommes-nous ?</h2>
     <p>
-      Distances :
-      Paris : 30min en voiture
+        Distances :
+        Paris : 30min en voiture
     </p>
     <p>12 bis rue des Suisses, 77280 Othis</p>
     <!-- Insérer la carte Google Maps ici -->
     <div class="map-container">
-    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d10467.245783906744!2d2.701150215406666!3d48.98682065977611!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e6141bf147c4c5%3A0x2496fcb3909e04e!2s12%20Bis%20Rue%20des%20Suisses%2C%2077280%20Othis!5e0!3m2!1sen!2sfr!4v1628507761411!5m2!1sen!2sfr" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-</div>  
-<br>
-<br>
+        <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d10467.245783906744!2d2.701150215406666!3d48.98682065977611!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e6141bf147c4c5%3A0x2496fcb3909e04e!2s12%20Bis%20Rue%20des%20Suisses%2C%2077280%20Othis!5e0!3m2!1sen!2sfr!4v1628507761411!5m2!1sen!2sfr"
+            width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+    </div>
+    <br>
+    <br>
 </div>

@@ -39,7 +39,7 @@
     color: #333;
 }
 
-.formulaire button {
+.sendValide {
     background-color: #d38816;
     color: #fff;
     padding: 12px 24px;
@@ -50,9 +50,21 @@
     transition: background-color 0.3s;
 }
 
-.formulaire button:hover {
+.sendValide:hover {
     background-color: #A56D18;
 }
+
+.sendNoValide {
+    background-color: #A56D18;
+    color: #fff;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    cursor: not-allowed;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
 
 .temoignages {
     text-align: left;
@@ -92,6 +104,6 @@
     color: black;
 }
 
-.temoignage + .temoignage {
+.temoignage+.temoignage {
     margin-top: 40px;
 }

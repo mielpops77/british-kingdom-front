@@ -1,15 +1,35 @@
+<nav class="navUser" [ngStyle]="getDynamicStyles()">
+  <div class="mobile-menu-button" (click)="toggleMobileMenu()" style="text-align: center">
+    <mat-icon style="font-size: 30px;">menu</mat-icon>
 
-<nav *ngIf="!isAdminRoute" class="navUser">
-    <ul>
-      <li><a routerLink="/">ACCUEIL</a></li>
-      <li><a routerLink="/males">MÂLES</a></li>
-      <li><a routerLink="/femelles">FEMELLES</a></li>
-      <li><a routerLink="/chatons">CHATONS</a></li>
-      <li><a routerLink="/conditions">TARIFS & CONDITIONS</a></li>
-      <li><a routerLink="/livre-dor">LIVRE D'OR</a></li>
+  </div>
 
-     
-      <li><a  routerLink="/contact">CONTACT</a></li>
-      <li *ngIf="isAllowed"><a routerLink="/admin">ADMIN </a></li>
+  <ul *ngIf="!isMobile">
+    <li *ngFor="let menuItem of menu; let i = index">
+      <a [routerLink]="['/', 'males', 'femelles', 'chatons', 'conditions', 'livre-dor', 'contact'][i]"
+        [style.color]="colorMenu">
+        {{ menuItem }}
+      </a>
+    </li>
+  </ul>
+</nav>
+
+
+<!-- Dans votre template -->
+
+<!-- <nav class="navUser" [ngStyle]="getDynamicStyles()">
+  <div class="mobile-menu-button" (click)="toggleMobileMenu()">
+    <span *ngIf="isMobile"></span>
+    <span *ngIf="isMobile"></span>
+    <span *ngIf="isMobile"></span>
+  </div>
+  <ul *ngIf="!isMobile">
+      <li *ngFor="let menuItem of menu; let i = index">
+        <a [routerLink]="['/', 'males', 'femelles', 'chatons', 'conditions', 'livre-dor', 'contact'][i]"
+          [style.color]="colorMenu" >
+          {{ menuItem }}
+        </a>
+      </li>
     </ul>
-  </nav>
+
+</nav> -->

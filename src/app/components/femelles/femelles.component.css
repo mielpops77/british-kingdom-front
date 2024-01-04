@@ -3,28 +3,40 @@
     justify-content: center;
     width: 100%;
     /* Définissez la largeur souhaitée pour le conteneur */
-
-
 }
 
-.image-container .image-grid {
-    display: flex;
-    align-items: center;
 
+
+.image-container .image-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    /* Crée une grille avec 3 colonnes égales */
+    gap: 20px;
+}
+
+.image-container .two-columns {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    /* Crée une grille avec 3 colonnes égales */
+    gap: 60px;
+}
+
+.image-container .one-columns {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    /* Crée une grille avec 3 colonnes égales */
+    gap: 60px;
 }
 
 .image-container .image-grid>div {
     text-align: center;
-    margin: 0 20px;
-    /* Espace de 10 pixels à gauche et à droite des images */
+    margin: 0 40px;
 }
 
 .image-container .rounded-image {
     border-radius: 50%;
     width: 300px;
-    /* Définissez la largeur souhaitée pour les images */
     height: 300px;
-    /* Définissez la hauteur souhaitée pour les images */
     margin-top: 20px;
     transition: transform 0.3s ease;
     /* Ajoute une transition fluide */
@@ -32,39 +44,159 @@
 
 .image-container .rounded-image:hover {
     transform: scale(1.1);
-    /* Applique un effet d'échelle sur survol */
     cursor: pointer;
 }
 
 .name {
-    font-size: 20px;
     margin: -5px;
     font-weight: 400;
     font-family: cursive;
     font-size: 20px;
     color: #233943;
+    text-align: center;
+   /*  padding-left: 20%; */
+}
+
+
+
+
+
+@media (max-width: 1150px) {
+    .image-container .rounded-image {
+        width: 250px;
+        height: 250px;
+    }
+
+    .image-container .image-grid>div {
+        margin: 0 20px;
+    }
+
+
+}
+
+
+@media (max-width: 950px) {
+    .image-container .rounded-image {
+        width: 230px;
+        height: 230px;
+    }
+
+    .image-container .image-grid>div {
+        margin: 0 20px;
+    }
+
+
+}
+
+
+@media (max-width: 880px) {
+    .image-container .rounded-image {
+        width: 200px;
+        height: 200px;
+    }
+
+    .image-container .image-grid>div {
+        margin: 0 15px;
+    }
+
+
+}
+
+
+@media (max-width: 750px) {
+    .image-container .rounded-image {
+        width: 170px;
+        height: 170px;
+    }
+
+    .image-container .image-grid>div {
+        margin: 0 10px;
+    }
+
+
+}
+
+
+@media (max-width: 680px) {
+    .image-container .rounded-image {
+        width: 150px;
+        height: 150px;
+    }
+
+    .image-container .image-grid>div {
+        margin: 0 8px;
+    }
+
+    .name {
+        font-size: 15px;
+    }
+
+
+}
+
+
+@media (max-width: 580px) {
+    .image-container .rounded-image {
+        width: 200px;
+        height: 200px;
+    }
+
+    .image-container .image-grid>div {
+        margin: 0 6px;
+    }
+
+    .name {
+        font-size: 15px;
+    }
+
+    .image-container .image-grid {
+        grid-template-columns: repeat(2, 1fr);
+        /* Crée une grille avec 3 colonnes égales */
+    }
+}
+
+
+@media (max-width: 570px) {
+    .image-container .rounded-image {
+        width: 200px;
+        height: 200px;
+    }
+
+    .image-container .image-grid>div {
+        margin: 0 6px;
+    }
+
+    .name {
+        font-size: 15px;
+    }
+
+    .image-container .image-grid {
+        grid-template-columns: repeat(1, 1fr);
+        /* Crée une grille avec 3 colonnes égales */
+    }
 }
 
 
 
 .gray-line {
-    border: 2px solid #454141;
+    /* border: 2px solid #454141; */
     margin: 20px auto;
-    /* Centre le trait horizontalement */
     width: 40%;
-    /* Définir la largeur souhaitée */
 }
+
 .description {
-    text-align: center; /* Centre horizontalement le texte */
-    margin: 40px auto; /* Centre verticalement la description */
+    text-align: center;
+    margin: 35px auto;
     width: 50%;
-  }
-  .description h3 {
-    margin-bottom: 20px;
-    color: rgb(41, 41, 41);
-    font-family: corben,serif;
-  }
+}
+
+.description h3 {
+    margin-bottom: 30px;
+    /* color: rgb(41, 41, 41); */
+    /* font-family: corben, serif; */
+}
+
 .description p {
     margin: -5px;
-    text-align: left; /* Aligne le texte préformaté à gauche */
-  }
+    text-align: left;
+}

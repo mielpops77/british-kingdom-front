@@ -1,116 +1,156 @@
 .navUser ul {
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    color: #B3D7FF;
-    list-style: none;
-    display: flex;
-    justify-content: center;
-    margin: 0;
-    padding: 0;
-  }
-  
-  .navUser ul li {
-    margin-right: 10px;
-  }
-  
-  .navUser ul li:last-child {
-    margin-right: 0;
-  }
-  
+  /* font-family: Georgia, 'Times New Roman', Times, serif; */
+  /* color: #B3D7FF; */
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+}
+
+.navUser ul li {
+  margin-right: 10px;
+}
+
+.navUser ul li:last-child {
+  margin-right: 0;
+}
+
+.navUser ul li a {
+  /* font-family: Georgia, 'Times New Roman', Times, serif; */
+  text-decoration: none;
+  /* color: #5f5E61; */
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 22px;
+  /* background-color: white; */
+  transition: background-color 0.3s ease;
+  display: block;
+}
+
+.navUser ul li a:hover {
+  background-color: var(--hover-color-menu);
+}
+
+
+
+/* 
+.mobile-menu-button {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+  align-items: center; 
+  justify-content: center;
+  height: 100%; 
+} */
+
+/* .mobile-menu-button span {
+  height: 3px;
+  width: 25px;
+  background-color: #333;
+  margin: 6px 0;
+  display: block;
+} */
+
+
+
+.mobile-menu-button {
+  cursor: pointer;
+  align-items: center !important;
+  justify-content: center;
+  height: 100%;
+  margin-right: 10px; /* Ajoutez cette ligne pour espacer l'icône du reste du contenu */
+}
+
+
+
+
+@media (max-width: 1190px) {
   .navUser ul li a {
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    text-decoration: none;
-    color: #5f5E61;
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 22px;
-    background-color: white;
-    transition: background-color 0.3s ease;
-    display: block;
-  }
-  
-  .navUser ul li a:hover {
-    background-color: #bbb;
+    padding: 5px 5px;
   }
 
-  @media (max-width: 1190px) {
-    .navUser ul li a {
-      padding: 5px 5px;
-    }
-    
-  
+
 }
 
 @media (max-width: 1110px) {
   .navUser ul li a {
     padding: 5px 0px;
   }
-  
+
 
 }
 
-  @media screen and (min-width: 960px) and (max-width: 1036px) {
-    .navUser ul li a 
-    {
-      font-size: 20px;
-    }
+@media screen and (min-width: 960px) and (max-width: 1036px) {
+  .navUser ul li a {
+    font-size: 20px;
   }
+}
+
+@media screen and (min-width: 886px) and (max-width: 960px) {
+  .navUser ul li a {
+    font-size: 18px;
+  }
+}
+
+@media screen and (min-width: 849px) and (max-width: 886px) {
+  .navUser ul li a {
+    font-size: 17px;
+  }
+}
+
+@media screen and (min-width: 811px) and (max-width: 849px) {
+  .navUser ul li a {
+    font-size: 16px;
+  }
+}
+
+@media screen and (min-width: 775px) and (max-width: 811px) {
+  .navUser ul li a {
+    font-size: 15px;
+  }
+}
+
+@media screen and (min-width: 767px) and (max-width: 775px) {
+  .navUser ul li a {
+    font-size: 14px;
+  }
+}
+
+/* Styles pour les écrans de petite taille */
+
+
+@media (max-width: 767px) {
   
-  @media screen and (min-width: 886px) and (max-width: 960px) {
-    .navUser ul li a 
-    {
-      font-size: 18px;
-    }
+  h1 {
+    margin-top: 20px;
   }
 
-  @media screen and (min-width: 849px) and (max-width: 886px) {
-    .navUser ul li a 
-    {
-      font-size: 17px;
-    }
+  h2 {
+    margin-top: 10px;
   }
 
-  @media screen and (min-width: 811px) and (max-width: 849px) {
-    .navUser ul li a 
-    {
-      font-size: 16px;
-    }
+  .navUser ul {
+    flex-direction: column;
+    align-items: center;
   }
 
-  @media screen and (min-width: 775px) and (max-width: 811px) {
-    .navUser ul li a 
-    {
-      font-size: 15px;
-    }
+  .navUser ul li {
+    margin-right: 0;
+    margin-bottom: 10px;
   }
 
-  @media screen and (min-width: 767px) and (max-width: 775px) {
-    .navUser ul li a 
-    {
-      font-size: 14px;
-    }
+  .navUser ul li:last-child {
+    margin-bottom: 0;
   }
-  /* Styles pour les écrans de petite taille */
-  @media (max-width: 767px) {
-    h1 {
-      margin-top: 20px;
-    }
+}
+
+
+
+@media (min-width: 767px) {
+.mobile-menu-button {
+  display: none;
+
+}
   
-    h2 {
-      margin-top: 10px;
-    }
-  
-    .navUser ul {
-      flex-direction: column;
-      align-items: center;
-    }
-  
-    .navUser ul li {
-      margin-right: 0;
-      margin-bottom: 10px;
-    }
-  
-    .navUser ul li:last-child {
-      margin-bottom: 0;
-    }
-  }
-  
+}

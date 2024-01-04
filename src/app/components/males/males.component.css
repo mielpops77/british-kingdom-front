@@ -5,10 +5,27 @@
     /* Définissez la largeur souhaitée pour le conteneur */
 }
 
+
+
 .image-container .image-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* Crée une grille avec 3 colonnes égales */
+    grid-template-columns: repeat(3, 1fr);
+    /* Crée une grille avec 3 colonnes égales */
     gap: 20px;
+}
+
+.image-container .two-columns {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    /* Crée une grille avec 3 colonnes égales */
+    gap: 60px;
+}
+
+.image-container .one-columns {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    /* Crée une grille avec 3 colonnes égales */
+    gap: 60px;
 }
 
 .image-container .image-grid>div {
@@ -36,6 +53,8 @@
     font-family: cursive;
     font-size: 20px;
     color: #233943;
+    text-align: center;
+   /*  padding-left: 20%; */
 }
 
 
@@ -51,7 +70,7 @@
     .image-container .image-grid>div {
         margin: 0 20px;
     }
-    
+
 
 }
 
@@ -65,7 +84,7 @@
     .image-container .image-grid>div {
         margin: 0 20px;
     }
-    
+
 
 }
 
@@ -79,7 +98,7 @@
     .image-container .image-grid>div {
         margin: 0 15px;
     }
-    
+
 
 }
 
@@ -93,7 +112,7 @@
     .image-container .image-grid>div {
         margin: 0 10px;
     }
-    
+
 
 }
 
@@ -107,11 +126,11 @@
     .image-container .image-grid>div {
         margin: 0 8px;
     }
-    
+
     .name {
         font-size: 15px;
     }
-    
+
 
 }
 
@@ -125,13 +144,14 @@
     .image-container .image-grid>div {
         margin: 0 6px;
     }
-    
+
     .name {
         font-size: 15px;
     }
 
     .image-container .image-grid {
-        grid-template-columns: repeat(2, 1fr); /* Crée une grille avec 3 colonnes égales */
+        grid-template-columns: repeat(2, 1fr);
+        /* Crée une grille avec 3 colonnes égales */
     }
 }
 
@@ -145,20 +165,21 @@
     .image-container .image-grid>div {
         margin: 0 6px;
     }
-    
+
     .name {
         font-size: 15px;
     }
 
     .image-container .image-grid {
-        grid-template-columns: repeat(1, 1fr); /* Crée une grille avec 3 colonnes égales */
+        grid-template-columns: repeat(1, 1fr);
+        /* Crée une grille avec 3 colonnes égales */
     }
 }
 
 
 
 .gray-line {
-    border: 2px solid #454141;
+    /* border: 2px solid #454141; */
     margin: 20px auto;
     width: 40%;
 }
@@ -171,8 +192,8 @@
 
 .description h3 {
     margin-bottom: 30px;
-    color: rgb(41, 41, 41);
-    font-family: corben,serif;
+    /* color: rgb(41, 41, 41); */
+    /* font-family: corben, serif; */
 }
 
 .description p {
