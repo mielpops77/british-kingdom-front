@@ -1,17 +1,17 @@
 
 <div class="parent-container"><app-caroussel [bannerSection]="bannerSection"></app-caroussel>
 
-<br><br><br>
+<br><br>
 
 <h4 class="text-center">Région Seine et Marne à Othis</h4>
-
+ <br>
 <div class="card-container">
-    <mat-card>
+    <mat-card [ngStyle]="getDynamicStyles('background')">
         <mat-card-header>
-            <mat-card-title>{{bannerSection?.titleCard1}}</mat-card-title>
+            <mat-card-title [ngStyle]="getDynamicStyles('title')">{{bannerSection?.titleCard1}}</mat-card-title>
         </mat-card-header>
         <img mat-card-image [src]="url.apiUrlProfil+bannerSection?.maleImg" alt="Card 1 Image">
-        <mat-card-content>{{bannerSection?.maleDescription}}
+        <mat-card-content [ngStyle]="getDynamicStyles('text')">{{bannerSection?.maleDescription}}
             <!-- <p></p> -->
         </mat-card-content>
         <mat-card-actions>
@@ -19,12 +19,12 @@
         </mat-card-actions>
     </mat-card>
 
-    <mat-card>
+    <mat-card [ngStyle]="getDynamicStyles('background')">
         <mat-card-header>
-            <mat-card-title>{{bannerSection?.titleCard2}}</mat-card-title>
+            <mat-card-title [ngStyle]="getDynamicStyles('title')">{{bannerSection?.titleCard2}}</mat-card-title>
         </mat-card-header>
         <img mat-card-image [src]="url.apiUrlProfil+bannerSection?.kittenImg" alt="Card 2 Image">
-        <mat-card-content>
+        <mat-card-content [ngStyle]="getDynamicStyles('text')">
             {{bannerSection?.kittenDescription}}
         </mat-card-content>
         <mat-card-actions>
@@ -32,12 +32,12 @@
         </mat-card-actions>
     </mat-card>
 
-    <mat-card>
+    <mat-card [ngStyle]="getDynamicStyles('background')">
         <mat-card-header>
-            <mat-card-title>{{bannerSection?.titleCard3}}</mat-card-title>
-        </mat-card-header>
+            <mat-card-title [ngStyle]="getDynamicStyles('title')">{{bannerSection?.titleCard3}}</mat-card-title>
+        </mat-card-header >
         <img mat-card-image [src]="url.apiUrlProfil+bannerSection?.femaleImg" alt="Card 3 Image">
-        <mat-card-content>
+        <mat-card-content [ngStyle]="getDynamicStyles('text')">
             {{bannerSection?.femaleDescription}}
         </mat-card-content>
         <mat-card-actions>

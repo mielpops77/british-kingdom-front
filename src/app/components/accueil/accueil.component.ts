@@ -29,6 +29,34 @@ export class AccueilComponent implements OnInit, OnDestroy {
 
   }
 
+  getDynamicStyles(value: string): any {
+    const styles: any = {};
+
+    if(this.bannerSection){
+    switch (value) {
+
+      case 'title':
+        styles['font-family'] = this.bannerSection.titleFontStyleCard;
+        styles['color'] = this.bannerSection.titleColorCard;
+        break;
+      case 'text':
+        styles['font-family'] = this.bannerSection.textFontStyleCard;
+        styles['color'] = this.bannerSection.textColorCard;
+        break;
+      case 'background':
+        styles['background-color'] = this.bannerSection.backgroundColorCard;
+        break;
+  
+      default:
+        break;
+    }}
+
+    return styles;
+  }
+
+
+
+
   ngOnDestroy(): void {
     if (this.bannerSubscription) {
       this.bannerSubscription?.unsubscribe();

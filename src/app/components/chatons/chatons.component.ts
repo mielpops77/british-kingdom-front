@@ -16,8 +16,11 @@ import { Subscription } from 'rxjs';
 })
 export class ChatonsComponent implements OnInit, OnDestroy {
 
+  private bannerSubscription: Subscription | undefined;
   porteeSubscription: Subscription | undefined;
   catSubscription: Subscription | undefined;
+
+  banner: any = [];
 
   allPortee: Portee[] = [];
   allCats: Cat[] = [];
@@ -103,10 +106,58 @@ export class ChatonsComponent implements OnInit, OnDestroy {
       }
     });
 
+    this.bannerSubscription = this.catService.banner$.subscribe(banner => {
+      if (banner) {
+        this.banner = banner[0];
+      }
+    });
+  }
 
 
 
+  getDynamicStyles(value: string): any {
+    const styles: any = {};
+    switch (value) {
 
+      case 'title':
+        styles['font-family'] = this.banner.titleFontStylePageChatons;
+        styles['color'] = this.banner.titleColorPageChatons;
+        break;
+      case 'info1':
+        styles['font-family'] = this.banner.info1FontStylePageChatons;
+        styles['color'] = this.banner.info1ColorPageChatons;
+        break;
+      case 'info2':
+        styles['font-family'] = this.banner.info2FontStylePageChatons;
+        styles['color'] = this.banner.info2ColorPageChatons;
+        break;
+
+      case 'info3':
+        styles['font-family'] = this.banner.info3FontStylePageChatons;
+        styles['color'] = this.banner.info3ColorPageChatons;
+        break;
+
+      case 'bordure':
+        styles['color'] = this.banner.bordureColorPageChatons;
+        break;
+
+      case 'button':
+        styles['background-color'] = this.banner.buttonColorPageChatons;
+        styles['color'] = this.banner.buttonTextColorPageChatons;
+        styles['font-family'] = this.banner.buttonTextFontStylePageChatons;
+        break;
+      /*  case 'borderColor':
+         styles['border'] = "2px solid" + this.banner.bordureColorPageFemelles;
+         break;
+       case 'text':
+         styles['font-family'] = this.banner.textFontStylePageFemelles;
+         styles['color'] = this.banner.textColorPageFemelles;
+         break; */
+      default:
+        break;
+    }
+
+    return styles;
   }
 
   formaterDate(inputDate: string): string {
@@ -157,6 +208,9 @@ export class ChatonsComponent implements OnInit, OnDestroy {
     }
     if (this.catSubscription) {
       this.catSubscription.unsubscribe();
+    }
+    if (this.bannerSubscription) {
+      this.bannerSubscription.unsubscribe();
     }
   }
 

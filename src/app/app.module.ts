@@ -1,5 +1,4 @@
 import { ImageUploadDialogComponent } from './components/image-upload-dialog/image-upload-dialog.component';
-import { FripouilleComponent } from './components/males/fripouille/fripouille.component';
 import { ImageDialogComponent } from './components/image-dialog/image-dialog.component';
 import { HeaderUserComponent } from './components/header-user/header-user.component';
 import { ConditionsComponent } from './components/conditions/conditions.component';
@@ -27,6 +26,7 @@ import { FormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { NgModule } from '@angular/core';
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -35,7 +35,6 @@ import { NgModule } from '@angular/core';
     FooterComponent,
     FemellesComponent,
     ProsperComponent,
-    FripouilleComponent,
     ImageDialogComponent,
     ChatonsComponent,
     ContactComponent,

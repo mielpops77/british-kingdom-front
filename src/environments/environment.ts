@@ -11,7 +11,7 @@ export const environment = {
   apiUrlImgCat: 'http://localhost:3000/assets/CatsImages/',
   apiUrlImgChaton: 'http://localhost:3000/assets/Chatons/',
   apiUrlImgDivers: 'http://localhost:3000/assets/imgDivers/',
-
+  apiUrlImgPedigree: 'http://localhost:3000/assets/Pedigree/',
 
 
   apiUrlProfil: 'http://localhost:3000/assets/Profil/',

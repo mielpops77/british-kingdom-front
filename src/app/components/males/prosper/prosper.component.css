@@ -3,8 +3,8 @@
   /* font-weight: bold; */
   text-align: center;
   padding-bottom: 20px;
-  font-family: playfair display;
-  color: #A56D18;
+  /* font-family: playfair display; */
+  /* color: #A56D18; */
   font-weight: 500;
 
 
@@ -19,6 +19,7 @@
 
 
 .left-block {
+  position: relative;
   /* background-color: green; */
   width: 50%;
   height: 100%;
@@ -40,14 +41,31 @@
 }
 
 .photoProfil {
-  /* width: 100%; */
+  width: 50px;
+  /* Taille initiale de l'image */
+  height: auto;
+  transition: width 1s ease;
   border-radius: 10px;
   cursor: pointer;
+  top: 50%;
+  left: 50%;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  /* transition: transform 0.3s ease;  */
+
+}
+
+.photoProfil.loaded {
+  width: 500px;
+  /* Taille normale de l'image après chargement */
 }
 
 .photoProfil:hover {
-  transform: scale(1.05);
+  transform: translate(-50%, -50%) scale(1.05);
+  /* Appliquez la transformation au survol */
 }
+
+
 
 .photo {
   width: 300px;
@@ -71,17 +89,18 @@
 }
  */
 .text {
+  font-weight: bolder;
   margin-bottom: 10px;
-  font-family: futura-lt-w01-light, sans-serif;
-  color: #233943;
+  font-size: 20px;
+  /* font-family: futura-lt-w01-light, sans-serif; */
+  /* color: #233943; */
 
 }
 
 .text-title {
-  color: #162b34;
-
-  font-weight: 400;
-  font-size: 18px;
+  /* color: #162b34; */
+  font-weight: bolder;
+  font-size: 20px;
 }
 
 .buttons {
@@ -89,9 +108,9 @@
 }
 
 .gray-button {
-  background-color: #D4AE7D;
+  /* background-color: #D4AE7D; */
   border: none;
-  color: #fff;
+  /* color: #fff; */
   padding: 10px 60px;
   margin-right: 5px;
   transition: transform 0.3s ease, background-color 0.3s ease;
@@ -100,30 +119,32 @@
 
 
 .gray-button:hover {
-  background-color: #58879B;
+  /* background-color: #58879B; */
   transform: scale(1.05);
 }
 
 .divider {
-  background-color: #D4AE7D;
+  /* background-color: #D4AE7D; */
   width: 60%;
   height: 2px;
   margin: 20px auto;
 }
 
 .section-title {
-  font-family: playfair display;
-  color: #162b34;
+  /* font-family: playfair display; */
+  /* color: #162b34; */
+  font-size: 28px;
   font-weight: 400;
-  font-size: 20px;
   margin-bottom: 0px;
-
 }
 
+.parent-photos {
+  position: relative;
+}
 
 .small-photo {
-  width: 195px;
-  height: 210px;
+  width: 50px;
+  height: auto;
   object-fit: cover;
   border-radius: 10px;
   margin-right: 20px;
@@ -131,20 +152,59 @@
   transition: transform 0.3s;
 }
 
+.small-photo2 {
+  width: 50px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-right: 20px;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.small-photo.loaded {
+  width: 195px;
+  height: 210px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-right: 20px;
+  cursor: pointer;
+  transition: width 1s ease;
+  cursor: pointer;
+}
+
+
+
+.small-photo2.loaded {
+  width: 195px;
+  height: 210px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-right: 20px;
+  cursor: pointer;
+  transition: width 1s ease;
+  cursor: pointer;
+}
+
 .small-photo:hover {
   transform: scale(1.05);
 }
 
+.small-photo2:hover {
+  transform: scale(1.05);
+}
+
+
 .photo-list {
   padding-bottom: 20px;
-  background-color: #e4c8a3;
+  /* background-color: #e4c8a3; */
   margin-top: 50px;
 }
 
-.row {
+.rowImg {
   justify-content: center;
   margin-bottom: 50px;
-
+  display: flex;
 }
 
 .photo-item {
@@ -164,10 +224,10 @@
   .container {
     width: 70%;
   }
-  
-.photo-item {
-  width: 23%;
-}
+
+  .photo-item {
+    width: 23%;
+  }
 }
 
 @media (max-width: 1600px) {
@@ -195,6 +255,7 @@
   .container {
     width: 77.5%;
   }
+
   .photo-item {
     width: 25%;
   }
@@ -205,6 +266,7 @@
   .container {
     width: 80%;
   }
+
   .photo-item {
     width: 25.5%;
   }
@@ -230,6 +292,7 @@
   .container {
     width: 82.5%;
   }
+
   .photo-item {
     width: 28%;
     height: 190px;
@@ -250,6 +313,7 @@
   .container {
     width: 100%;
   }
+
   .photo-item {
     width: 31%;
   }
@@ -257,13 +321,18 @@
 
 
 @media (max-width: 1200px) {
-  .small-photo {
+  .small-photo.loaded {
+    width: 175px;
+    height: 190px;
+  }
+
+  .small-photo2.loaded {
     width: 175px;
     height: 190px;
   }
 
 
-  .photoProfil {
+  .photoProfil.loaded {
     width: 102.9%;
 
   }
@@ -271,14 +340,19 @@
 }
 
 @media (max-width: 991px) {
-  .small-photo {
+  .small-photo.loaded {
     width: 135px;
     height: 150px;
   }
 
-  .photoProfil {
+  .small-photo2.loaded {
+    width: 135px;
+    height: 150px;
+  }
+
+  .photoProfil.loaded {
     /* padding-top: 0px; */
-    width: 108%;
+    width: 90%;
   }
 
   .gray-button {
@@ -303,7 +377,7 @@
     width: 28%;
     height: 140px;
   }
-  
+
 }
 
 
@@ -312,9 +386,12 @@
   .photo {
     width: 230px;
   }
+
   .photo-item {
     height: 130px;
   }
+
+
 }
 
 @media (max-width: 839px) {
@@ -322,6 +399,7 @@
   .photo {
     width: 210px;
   }
+
   .photo-item {
     height: 120px;
     width: 30%;
@@ -356,9 +434,8 @@
 
   .section-title {
     text-align: center;
-    color: #A56D18;
+    /* color: #A56D18; */
     margin-bottom: 5px;
-    font-size: 25px;
   }
 
   .parent-photos {
@@ -366,7 +443,12 @@
   }
 
 
-  .small-photo {
+  .small-photo.loaded {
+    width: 165px;
+    height: 180px;
+  }
+
+  .small-photo2.loaded {
     width: 165px;
     height: 180px;
   }
@@ -386,6 +468,16 @@
   .divider {
     width: 72%;
   }
+
+  .small-photo.loaded {
+    width: 165px;
+    height: 180px;
+  }
+
+  .small-photo2.loaded {
+    width: 165px;
+    height: 180px;
+  }
 }
 
 @media (max-width: 740px) {
@@ -396,6 +488,7 @@
   .photo {
     width: 200px;
   }
+
   .photo-item {
     height: 110px;
     width: 29%;
@@ -424,9 +517,11 @@
   .divider {
     width: 77%;
   }
+
   .photo-item {
     width: 31%;
   }
+
   .photo {
     width: 190px;
   }
@@ -448,6 +543,7 @@
   .divider {
     width: 80%;
   }
+
   .photo-item {
     width: 31%;
     height: 100px;
@@ -519,6 +615,7 @@
   .divider {
     width: 89%;
   }
+
   .photo-item {
     width: 28%;
   }
@@ -548,7 +645,7 @@
     width: 91%;
   }
 
-  .photoProfil {
+  .photoProfil.loaded {
     /* padding-top: 0px; */
     width: 100%;
     margin-left: 20px;
@@ -562,6 +659,7 @@
   .photo {
     width: 200px;
   }
+
   .photo-item {
     width: 40%;
     height: 120px;
@@ -571,38 +669,39 @@
 
 
 @media (max-width: 560px) {
- 
-  .photoProfil {
+
+  .photoProfil.loaded {
     width: 105%;
   }
 
- 
+
 }
 
 
 @media (max-width: 530px) {
- 
-  .photoProfil {
+
+  .photoProfil.loaded {
     width: 108%;
     margin-left: 10px;
   }
+
   .divider {
     width: 95%;
   }
- 
+
 }
 
 
 @media (max-width: 520px) {
- 
-  .photoProfil {
+
+  .photoProfil.loaded {
     width: 110%;
   }
 }
 
 
 @media (max-width: 520px) {
- 
+
   .gray-button {
     margin-bottom: 10px;
     margin-top: 15px;
@@ -611,13 +710,13 @@
 
 
 @media (max-width: 500px) {
- 
+
   .gray-button {
     margin-bottom: 10px;
     margin-top: 10px;
   }
 
-  .photoProfil {
+  .photoProfil.loaded {
     margin-left: 5px;
   }
 
@@ -632,13 +731,13 @@
 
 
 @media (max-width: 480px) {
- 
+
   .gray-button {
     margin-bottom: 5px;
     margin-top: 5px;
   }
 
-  .photoProfil {
+  .photoProfil.loaded {
     width: 108%;
     margin-left: 7px;
 
@@ -648,9 +747,9 @@
 @media (max-width: 450px) {
 
 
-.photo-item {
-  width: 50%;
-}
+  .photo-item {
+    width: 50%;
+  }
 
 }
 
@@ -661,23 +760,26 @@
   .photo-item {
     width: 60%;
   }
+
   .photo {
     width: 230px;
   }
-  
-  }
+
+}
+
 @media (max-width: 413px) {
-  .container{
+  .container {
     height: 230px;
   }
+
   .buttons {
-   text-align: center;
+    text-align: center;
   }
 }
 
 
 @media (max-width: 390px) {
-  .container{
+  .container {
     height: 220px;
   }
 
@@ -688,14 +790,20 @@
 
 
 @media (max-width: 369px) {
-  .container{
+  .container {
     height: 215px;
   }
 
-  .small-photo {
+  .small-photo.loaded {
     width: 145px;
     height: 160px;
   }
+
+  .small-photo2.loaded {
+    width: 145px;
+    height: 160px;
+  }
+
 
 }
 
@@ -705,13 +813,15 @@
   .photo-item {
     width: 75%;
   }
-  .container{
+
+  .container {
     height: 240px;
   }
 
   .right-block {
     text-align: initial;
   }
+
   .text-title {
     font-size: 15px;
   }
@@ -742,7 +852,7 @@
     font-size: 14px;
   }
 
-  .container{
+  .container {
     height: 200px;
   }
 
@@ -751,7 +861,12 @@
 
 
 @media (max-width: 329px) {
-  .small-photo {
+  .small-photo.loaded {
+    width: 135px;
+    height: 150px;
+  }
+
+  .small-photo2.loaded {
     width: 135px;
     height: 150px;
   }
@@ -762,9 +877,9 @@
 
 @media (max-width: 323px) {
 
-  .container{
+  .container {
     height: 180px;
-  } 
+  }
 
   .text-title {
     font-size: 13px;
@@ -778,7 +893,12 @@
 
 
 @media (max-width: 309px) {
-  .small-photo {
+  .small-photo.loaded {
+    width: 125px;
+    height: 140px;
+  }
+
+  .small-photo2.loaded {
     width: 125px;
     height: 140px;
   }
@@ -798,7 +918,12 @@
 
 
 @media (max-width: 289px) {
-  .small-photo {
+  .small-photo.loaded {
+    width: 115px;
+    height: 130px;
+  }
+
+  .small-photo2.loaded {
     width: 115px;
     height: 130px;
   }
@@ -818,26 +943,34 @@
   .photo-item {
     width: 95%;
   }
+
   .gray-button {
     padding: 6px 36px;
   }
+
   .text-title {
     font-size: 11px;
 
   }
+
   .text {
     font-size: 11px;
   }
 
-  .container{
+  .container {
     height: 160px;
-  } 
+  }
 
 }
 
 
 @media (max-width: 269px) {
-  .small-photo {
+  .small-photo.loaded {
+    width: 105px;
+    height: 120px;
+  }
+
+  .small-photo2.loaded {
     width: 105px;
     height: 120px;
   }
@@ -848,6 +981,7 @@
   .gray-button {
     padding: 5px 30px;
   }
+
   .photo-item {
     width: 100%;
   }
@@ -855,7 +989,12 @@
 
 
 @media (max-width: 249px) {
-  .small-photo {
+  .small-photo.loaded {
+    width: 95px;
+    height: 110px;
+  }
+
+  .small-photo2.loaded {
     width: 95px;
     height: 110px;
   }
@@ -864,6 +1003,7 @@
     font-size: 10px;
 
   }
+
   .text {
     font-size: 10px;
   }
@@ -875,14 +1015,20 @@
   .gray-button {
     padding: 4px 24px;
   }
-  .container{
+
+  .container {
     height: 140px;
-  } 
+  }
 }
 
 
 @media (max-width: 229px) {
-  .small-photo {
+  .small-photo.loaded {
+    width: 85px;
+    height: 100px;
+  }
+
+  .small-photo2.loaded {
     width: 85px;
     height: 100px;
   }

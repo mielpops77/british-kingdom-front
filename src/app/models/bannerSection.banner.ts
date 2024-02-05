@@ -8,6 +8,14 @@ export interface BannerSection {
   maleImg: string;
   kittenImg: string;
   femaleImg: string;
+  titleFontStyleCard?: string;
+  titleColorCard?: string;
+  textFontStyleCard?: string;
+  textColorCard?: string;
+  backgroundColorCard?: string;
+
+
+
   titleFontSize: number;
   titleFontStyle: string;
   titleFontFamily: string;
@@ -23,8 +31,8 @@ export interface BannerSection {
   menu: string[],
   colorMenu: string,
   hoverColorMenu: string,
-  fontStyleMenu : string,
-  colorFooter : string,
+  fontStyleMenu: string,
+  colorFooter: string,
   favicon: string,
 
 
@@ -49,17 +57,64 @@ export interface BannerSection {
   TextColorPageFemelles: string,
   BordureColorPageFemelles: string,
 
-    //page conditions
-    titlePageConditions: string,
-    titleFontStylePageConditions: string,
-    titleColorPageConditions: string,
-    sousTitlePageConditions: any[];
-    sousTitleFontStylePageConditions: string,
-    sousTitleColorPageConditions: string,
-    textPageConditions: any[];
-    textFontStylePageConditions: string,
-    textColorPageConditions: string,
-    bordureColorPageConditions: string
+  //page conditions
 
+  textPageCondition: string,
+
+  //page chatons
+
+  titleFontStylePageChatons?: string;
+  titleColorPageChatons?: string;
+
+  info1FontStylePageChatons?: string;
+  info1ColorPageChatons?: string;
+
+  info2FontStylePageChatons?: string;
+  info2ColorPageChatons?: string;
+
+  info3FontStylePageChatons?: string;
+  info3ColorPageChatons?: string;
+
+  bordureColorPageChatons?: string;
+
+  buttonColorPageChatons?: string;
+  buttonTextColorPageChatons?: string;
+  buttonTextFontStylePageChatons?: string;
+
+  //page Contact
+
+  textPageContact?: string;
+
+  // Page Livre d'Or
+  titlePagelivreDor?: string;
+  titleFontStylePagelivreDor?: string;
+  titleColorPagelivreDor?: string;
+  buttonColorPagelivreDor?: string;
+  buttonTextColorPagelivreDor?: string;
+  buttonTextFontStylePagelivreDor?: string;
+
+
+
+  // Page chat profil
+  titleFontStylePagechatProfil?: string;
+  titleColorPagechatProfil?: string;
+  textFontStylePagechatProfil?: string;
+  textColorPagechatProfil?: string;
+  buttonColorPagechatProfil?: string;
+  buttonTextColorPagechatProfil?: string;
+  buttonTextFontStylePagechatProfil?: string;
+  bordureColorPagechatProfil?: string;
+  bagroundColorPagechatProfil?: string;
+
+  // Page chaton profil
+  titleFontStylePagechatonProfil?: string;
+  titleColorPagechatonProfil?: string;
+  textFontStylePagechatonProfil?: string;
+  textColorPagechatonProfil?: string;
+  statusNameFontStylePagechatonProfil?: string;
+  statusNameColorPagechatonProfil?: string;
+  breedFontStylePagechatonProfil?: string;
+  breedColorPagechatonProfil?: string;
+  bagroundColorBreedPagechatonProfil?: string;
 }
 

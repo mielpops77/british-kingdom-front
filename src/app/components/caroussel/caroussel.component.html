@@ -1,4 +1,4 @@
-<ngb-carousel class="center-carousel" style="width: 80%;">
+<ngb-carousel class="center-carousel" style="width: 100%;">
   <ng-template ngbSlide *ngFor="let image of bannerSection?.bannerImages">
     <div class="picsum-img-wrapper" *ngIf="bannerSection">
       <img class="carousel-img" [src]=" url.apiUrlBanner + image" alt="Slide image" />
@@ -8,3 +8,6 @@
     </div>
   </ng-template>
 </ngb-carousel>
+
+
+

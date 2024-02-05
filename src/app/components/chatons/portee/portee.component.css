@@ -1,7 +1,7 @@
 .title {
     text-align: center;
-    font-family: Arial, Helvetica, sans-serif;
-    color: rgb(60, 100, 117);
+    /* font-family: Arial, Helvetica, sans-serif; */
+    /* color: rgb(60, 100, 117); */
     font-size: 30px;
     font-weight: bold;
 }
@@ -61,8 +61,8 @@
 
 .text {
     text-align: center;
-    font-family: Arial, Helvetica, sans-serif;
-    color: rgb(60, 100, 117);
+    /* font-family: Arial, Helvetica, sans-serif; */
+    /* color: rgb(60, 100, 117); */
     font-weight: bold;
 }
 
@@ -199,7 +199,7 @@ a:hover {
 
 
 .grp {
-    background-color: rgb(60, 100, 117);
+    /* background-color: rgb(60, 100, 117); */
     padding: 10px;
     border-radius: 20px;
     width: 50%;
@@ -218,8 +218,8 @@ a:hover {
     bottom: 0;
     /* left: 50%; */
     margin-bottom: 20px;
-    color: #EEF0F1;
-    font-family: 'Fraunces', sans-serif;
+    /* color: #EEF0F1; */
+    /* font-family: 'Fraunces', sans-serif; */
     font-weight: 700;
     /* Utilisez 700 pour "bold" */
     font-size: 25px;
@@ -257,9 +257,9 @@ a:hover {
  */
 .left-value {
     float: left;
-    color: #E9920D;
+    /* color: #E9920D; */
     content: "";
-    font-family: 'Oswald', sans-serif;
+    /* font-family: 'Oswald', sans-serif; */
     margin-left: 20px !important;
     padding-bottom: 14px;
   
@@ -271,8 +271,8 @@ a:hover {
 .right-value {
     margin-right: 20px !important;
     float: right;
-    color: #E9920D;
-    font-family: 'Oswald', sans-serif;
+    /* color: #E9920D; */
+    /* font-family: 'Oswald', sans-serif; */
     padding-bottom: 14px;
     width: 20%;
     border-bottom: 2px solid #494949;

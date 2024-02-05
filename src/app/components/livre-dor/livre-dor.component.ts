@@ -3,6 +3,8 @@ import { LivreOrService } from '../Services/livre-or.service';
 import { Component, OnInit } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Subscription } from 'rxjs';
+import { CatService } from '../Services/catService';
 
 
 
@@ -14,8 +16,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class LivreDorComponent implements OnInit {
 
 
-  constructor(private livreOrService: LivreOrService, private snackBar: MatSnackBar) {
+  constructor(private livreOrService: LivreOrService, private snackBar: MatSnackBar, private catService: CatService) {
   }
+  banner: any = [];
+  private bannerSubscription: Subscription | undefined;
   newAvis: LivreOr = { name: '', profilId: environment.id, id: 0, dateofCrea: '', message: '', validation: false };
   avis: LivreOr[] = [];
   ngOnInit(): void {
@@ -26,6 +30,12 @@ export class LivreDorComponent implements OnInit {
         console.log('this.avis', this.avis);
       }
     )
+
+    this.bannerSubscription = this.catService.banner$.subscribe(banner => {
+      if (banner) {
+        this.banner = banner[0];
+      }
+    });
   }
 
   ajouterTemoignage() {
@@ -57,6 +67,30 @@ export class LivreDorComponent implements OnInit {
     }
   }
 
+
+  getDynamicStyles(value: string): any {
+    const styles: any = {};
+    switch (value) {
+      case 'textButton':
+        styles['font-family'] = this.banner.buttonTextFontStylePagelivreDor;
+        styles['color'] = this.banner.buttonTextColorPagelivreDor;
+        styles['background-color'] = this.banner.buttonColorPagelivreDor;
+
+        break;
+      case 'title':
+        styles['font-family'] = this.banner.titleFontStylePagelivreDor;
+        styles['color'] = this.banner.titleColorPagelivreDor;
+        break;
+      case 'text':
+        styles['font-family'] = this.banner.textFontStylePageFemelles;
+        styles['color'] = this.banner.textColorPageFemelles;
+        break;
+      default:
+        break;
+    }
+
+    return styles;
+  }
 
   showSnackBar(message: string): void {
     this.snackBar.open(message, 'Fermer', {

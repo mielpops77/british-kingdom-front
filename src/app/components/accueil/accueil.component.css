@@ -38,7 +38,11 @@
 
 
 mat-card {
-    background-color: #e6e6e6;
+    /* background-color: #e6e6e6; */
+    /* background-color: #ffffff; */
+
+    /* background-color: #80A6AD91; */
+
     padding-bottom: 20px;
     flex-basis: 20%;
     margin-bottom: 20px;
@@ -62,27 +66,30 @@ mat-card:last-child {
 mat-card img {
     width: 100%;
     height: auto;
-    object-fit: cover;
+    /* object-fit: cover; */
 }
 
 mat-card-title {
-    color: rgb(43, 42, 40);
-    font-size: 30px !important;
-    font-family: cursive;
+    font-size: 38px !important;
+/*     font-family: "Dancing Script", cursive;
+    color:rgb(43, 42, 40); */
+    /* font-family: cursive; */
 }
 
 mat-card-content {
     flex-grow: 1;
-    font-size: 17px;
+    font-size: 18px;
+ /*    color: #000000DE; */
     /* font-family: Helvetica,Arial,sans-serif; */
-    font-family: futura-lt-w01-light, sans-serif;
-
+/*     font-family: "Overlock", sans-serif; */
+    font-weight: 400;
 }
 
 
 
 .info-button {
-    background-color: #444;
+    font-family: "Signika", sans-serif;
+    background-color: #565451;
     color: #fff;
 }
 

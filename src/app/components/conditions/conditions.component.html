@@ -1,7 +1,14 @@
 <div class="conditions-container">
     <h1>{{banner.titlePageConditions}}</h1>
 
-    <section class="questions-section" id="conditions">
+
+      <div [innerHTML]="banner.textPageCondition"></div>
+    <!-- <app-dynamic-html [htmlContent]="banner.textPageCondition"></app-dynamic-html> -->
+
+    <!-- <app-dynamic-html [htmlContent]="banner.textPageCondition"></app-dynamic-html> -->
+
+
+    <!--  <section class="questions-section" id="conditions">
         <h2 *ngIf="banner?.sousTitlePageConditions">{{banner?.sousTitlePageConditions[0]}}</h2>
     <div>
         <p>
@@ -115,6 +122,6 @@
         </ol>
         <p>Préparer son arrivée garantit une transition en douceur pour votre chaton et une relation heureuse pour vous
             deux.</p>
-    </section>
+    </section> -->
 
 </div>

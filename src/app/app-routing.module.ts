@@ -1,4 +1,3 @@
-import { FripouilleComponent } from './components/males/fripouille/fripouille.component';
 import { ConditionsComponent } from './components/conditions/conditions.component';
 import { ProsperComponent } from './components/males/prosper/prosper.component';
 import { PorteeComponent } from './components/chatons/portee/portee.component';
@@ -19,7 +18,6 @@ const routes: Routes = [
   { path: 'males', component: MalesComponent },
   { path: 'males/:id', component: ProsperComponent },
   { path: 'femelles/:id', component: ProsperComponent },
-  { path: 'males/fripouille', component: FripouilleComponent },
   { path: 'femelles', component: FemellesComponent },
   { path: 'chatons', component: ChatonsComponent },
   { path: 'contact', component: ContactComponent },

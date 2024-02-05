@@ -1,7 +1,8 @@
 <br>
 
-<p class="title">Les chatons de {{selectedPortee.nameFemale}} et {{selectedPortee.nameMale}} </p>
-<p class="title">Née le {{selectedPortee.dateOfBirth}} </p>
+<p class="title" [ngStyle]="getDynamicStyles('title')">Les chatons de {{selectedPortee.nameFemale}} et
+    {{selectedPortee.nameMale}} </p>
+<p class="title" [ngStyle]="getDynamicStyles('title')">Née le {{selectedPortee.dateOfBirth}} </p>
 
 <br>
 
@@ -13,7 +14,7 @@
         (click)="redirectToNewUrl(selectedPortee?.idPapa,'males')" class="oval-image second-image">
 </div>
 <br><br>
-<div class="text">
+<div class="text" [ngStyle]="getDynamicStyles('text')">
 
     <p>Les chatons
         <!-- <span *ngIf="selectedPortee?.portee ? selectedPortee.portee.loof : selectedPortee.loof"> tous enregistrés
@@ -36,13 +37,14 @@
 
             <div class="carousel-title">
                 <p class="chaton-info">
-                    <span class="left-value">{{ selectedPortee.portee.chatons[i].status}}</span>
-                    <span class="grp">
+                    <span class="left-value" [ngStyle]="getDynamicStyles('statusName')">{{
+                        selectedPortee.portee.chatons[i].status}}</span>
+                    <span class="grp" [ngStyle]="getDynamicStyles('background')">
                         <span class="chaton-sex">{{selectedPortee.portee.chatons[i].sex}}</span>
                         <span class="chaton-status">-{{selectedPortee.portee.chatons[i].breed}}-</span>
                         <span class="chaton-status">{{selectedPortee.portee.chatons[i].robe}}</span>
                     </span>
-                    <span class="right-value">{{selectedPortee.portee.chatons[i].name}}</span>
+                    <span class="right-value"  [ngStyle]="getDynamicStyles('statusName')">{{selectedPortee.portee.chatons[i].name}}</span>
                 </p>
             </div>
 

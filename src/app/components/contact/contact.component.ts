@@ -1,18 +1,25 @@
 // contact.component.ts
 import { ContactService } from '../Services/contact.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Component, OnInit } from '@angular/core';
 import { Contact } from 'src/app/models/contact';
+import { CatService } from '../Services/catService';
 import { DatePipe } from '@angular/common';
 import { NgForm } from '@angular/forms';
+import { Subscription } from 'rxjs';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-contact',
   templateUrl: './contact.component.html',
   styleUrls: ['./contact.component.css']
 })
-export class ContactComponent implements OnInit {
+export class ContactComponent implements OnInit, OnDestroy {
+
+  private bannerSubscription: Subscription | undefined;
+
   // Initialisez le modèle avec des valeurs par défaut si nécessaire
   contactModel: Contact = {
     id: 0,
@@ -30,11 +37,32 @@ export class ContactComponent implements OnInit {
   // Variable pour suivre l'état de validation de l'e-mail
   isEmailInvalid = false;
   isNumInvalid = false;
+  banner: any = [];
+  googleMapsUrl: SafeResourceUrl | undefined;
+  address: string = '12 Bis Rue des Suisses, 77280 Othis';  // Adresse plus détaillée
 
-  constructor(private contactService: ContactService, private snackBar: MatSnackBar, private datePipe: DatePipe) { }
+  constructor(
+    private contactService: ContactService,
+    private snackBar: MatSnackBar,
+    private datePipe: DatePipe,
+    private catService: CatService,
+    private sanitizer: DomSanitizer  // Ajoutez le sanitizer ici
+
+  ) { }
 
   ngOnInit(): void {
+    this.bannerSubscription = this.catService.banner$.subscribe(banner => {
+      if (banner) {
+        this.banner = banner[0];
+      }
+    });
+
+
+    const dynamicUrl = `https://www.google.com/maps/embed?q=${encodeURIComponent(this.address)}`;
+    this.googleMapsUrl = this.sanitizer.bypassSecurityTrustResourceUrl(dynamicUrl);
+    
   }
+
 
 
   showSnackBar(message: string): void {
@@ -66,7 +94,7 @@ export class ContactComponent implements OnInit {
           this.contactModel.dateofCrea = new Date().toISOString();
           const currentDate = new Date();
           const formattedHour = this.datePipe.transform(currentDate, 'HH:mm');
-          formattedHour !== null ?  this.contactModel.hour = formattedHour :   this.contactModel.hour = '00:00';
+          formattedHour !== null ? this.contactModel.hour = formattedHour : this.contactModel.hour = '00:00';
           // Appelez la fonction du service pour créer un contact
           this.contactService.createContact(this.contactModel).subscribe(
             (response) => {
@@ -111,4 +139,12 @@ export class ContactComponent implements OnInit {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   }
+
+
+  ngOnDestroy(): void {
+    if (this.bannerSubscription) {
+      this.bannerSubscription.unsubscribe();
+    }
+  }
+
 }

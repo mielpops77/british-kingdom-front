@@ -1,21 +1,28 @@
-<h3 class="title" *ngIf="porteeDisponible">Nous avons des chatons disponible !</h3>
-<h3 class="title" *ngIf="!porteeDisponible">Pas de portee disponible pour le moment.</h3>
-
+<h3 class="title"  [ngStyle]="getDynamicStyles('title')" *ngIf="porteeDisponible">Nous avons des chatons disponible !</h3>
+<h3 class="title"  [ngStyle]="getDynamicStyles('title')" *ngIf="!porteeDisponible">Pas de portee disponible pour le moment.</h3>
+<br>
 
 <div *ngFor="let info of porteInfo; let i = index">
   <div class="box">
-    <h3 class="name">Portée de {{info?.nameFemale}} et {{info.nameMale}}</h3>
+    <h3 class="name"  [ngStyle]="getDynamicStyles('info1')">Parents: {{info?.nameFemale}} et {{info.nameMale}}</h3>
+    <h2 class="name"  [ngStyle]="getDynamicStyles('info2')" *ngIf="info?.nbrMale>0 || info.nbrFemale>0">Née le {{info.dateOfBirth}} </h2>
 
-    <h2 *ngIf="info?.nbrMale>0 && info.nbrFemale>0" class="description">{{info?.nbrMale}} mâle et {{info.nbrFemale}}
-      femelle née le {{info.dateOfBirth}} </h2>
-    <h2 *ngIf="info?.nbrMale==0 && info.nbrFemale>0" class="description">{{info.nbrFemale}}
+
+    <div [ngStyle]="getDynamicStyles('bordure')" class="ligne"> </div>
+    <h2 *ngIf="info?.nbrMale>0 || info.nbrFemale>0" [ngStyle]="getDynamicStyles('info3')" class="description" >{{info?.nameFemale}} à mis au monde
+      {{info?.nbrMale + info.nbrFemale}} chatons {{info?.nbrMale}} mâle et {{info.nbrFemale}}
+      femelle</h2>
+    <!-- <h2 *ngIf="info?.nbrMale>0 && info.nbrFemale>0" class="description">{{info?.nbrMale}} mâle et {{info.nbrFemale}}
+      femelle née le {{info.dateOfBirth}} </h2> -->
+    <!--  <h2 *ngIf="info?.nbrMale==0 && info.nbrFemale>0" class="description">{{info.nbrFemale}}
       femelle née le {{info.dateOfBirth}} </h2>
     <h2 *ngIf="info?.nbrFemale==0 && info.nbrMale" class="description">{{info.nbrMale}}
-      mâle née le {{info.dateOfBirth}} </h2>
+      mâle née le {{info.dateOfBirth}} </h2> -->
     <!-- <h2 class="description">{{info?.nbrMale}} chatons mâle et {{info.nbrFemale}} femelle née le {{info.dateOfBirth}}</h2> -->
 
   </div>
 
+  <br>
 
   <br>
   <div class="couple-images-container">
@@ -26,83 +33,27 @@
       class="oval-image second-image">
   </div>
 
+
+
+
   <br>
 
-  <!--   <div class="container-chatons">
-    <div class="photo-parents">
-      <img [src]="info?.urlFemale" alt="Photo 1" class="image" (click)="redirectToNewUrl(info?.idMaman,'femelles')">
-    </div>
-    <div class="heart"></div>
-    <div class="photo-parents">
-      <img [src]="info?.urlMale" alt="Photo 2" class="image" (click)="redirectToNewUrl(info?.idPapa,'males')">
-    </div>
 
-  </div> -->
   <div class="button-row">
-    <button mat-raised-button color="primary" class="custom-button" (click)="redirigerVersPortee(info)">Voir la
+    <button mat-raised-button color="primary" [ngStyle]="getDynamicStyles('button')" class="custom-button" (click)="redirigerVersPortee(info)">Voir la
       portée</button>
-    <button mat-raised-button color="primary" class="custom-button2" (click)="redirigerVersConditions()">Conditions de
+    <button mat-raised-button color="primary" [ngStyle]="getDynamicStyles('button')" class="custom-button2" (click)="redirigerVersConditions()">Conditions de
       vente</button>
-    <button mat-raised-button color="primary" class="custom-button2" (click)="faireDefilerVersBas()">Préparer son
+    <button mat-raised-button color="primary" [ngStyle]="getDynamicStyles('button')" class="custom-button2" (click)="faireDefilerVersBas()">Préparer son
       arrivée</button>
+
+
   </div>
+
+  <div [ngStyle]="getDynamicStyles('bordure')" class="ligne2"> </div>
+
+
+
 
 
 </div>
-
-
-
-
-<!-- <div *ngFor="let info of porteInfo; let i = index" class="box">
-  <h3 class="name">Portée de {{info?.nameFemale}} et {{info?.nameMale}}</h3>
-  <h2 class="description">{{info?.nbrMale}} chatons mâle et {{info?.nbrFemale}} femelle née le {{info?.dateOfBirth}}</h2>
-
-  <div class="container">
-    <div class="photo">
-      <img [src]="info?.urlFemale" alt="Photo 1" class="image">
-    </div>
-    <div class="heart"></div>
-    <div class="photo">
-      <img [src]="info?.urlMale" alt="Photo 2" class="image">
-    </div>
-  </div>
-
-  <div class="button-row">
-    <button mat-raised-button color="primary" class="custom-button">Voir la portée</button>
-    <button mat-raised-button color="primary" class="custom-button" (click)="redirigerVersConditions()">Conditions de vente</button>
-    <button mat-raised-button color="primary" class="custom-button" (click)="faireDefilerVersBas()">Préparer son arrivée</button>
-  </div>
-</div> -->
-
-
-
-
-
-
-<!-- 
-
-<div class="box">
-  <h3 class="name">{{porteInfo[0]?.nameFemale}} et Prosper</h3>
-  <h2 class="description">2 chatons mâle et 1 femelle née le 01/06/2023 - poils shorthair - color black silver shaded -
-    reservation ouverte </h2>
-</div>
-
-
-
-<div class="container-chatons">
-  <div class="photo-parents">
-    <img src="assets\EdenProfil.jpg" alt="Photo 1" class="image">
-  </div>
-  <div class="heart"></div>
-  <div class="photo-parents">
-    <img src="assets\prosperProfil.jpg" alt="Photo 2" class="image">
-  </div>
-</div>
-
-<div class="button-row">
-  <button mat-raised-button color="primary" class="custom-button">Voir la portée</button>
-  <button mat-raised-button color="primary" class="custom-button" (click)="redirigerVersConditions()">Conditions de
-    vente</button>
-  <button mat-raised-button color="primary" class="custom-button" >Préparer son
-    arrivée</button>
-</div> -->

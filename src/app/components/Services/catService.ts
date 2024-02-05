@@ -6,6 +6,7 @@ import { Portee } from 'src/app/models/portee';
 import { Chaton } from 'src/app/models/chaton';
 import { Injectable } from '@angular/core';
 import { Cat } from 'src/app/models/cats';
+import { Profil } from 'src/app/models/profil';
 
 
 
@@ -14,17 +15,18 @@ import { Cat } from 'src/app/models/cats';
 })
 export class CatService {
 
-
   private bannerSubject: BehaviorSubject<BannerSection[] | null> = new BehaviorSubject<BannerSection[] | null>(null);
   private catSubject: BehaviorSubject<Cat[] | null> = new BehaviorSubject<Cat[] | null>(null);
   private porteeSubject: BehaviorSubject<Portee[] | null> = new BehaviorSubject<Portee[] | null>(null);
   private chatonSubject: BehaviorSubject<Chaton[] | null> = new BehaviorSubject<Chaton[] | null>(null);
+  private profilSubject: BehaviorSubject<Profil[] | null> = new BehaviorSubject<Profil[] | null>(null);
 
 
   public banner$: Observable<BannerSection[] | null> = this.bannerSubject.asObservable();
   public cat$: Observable<Cat[] | null> = this.catSubject.asObservable();
   public portee$: Observable<Portee[] | null> = this.porteeSubject.asObservable();
   public chaton$: Observable<Chaton[] | null> = this.chatonSubject.asObservable();
+  public profil$: Observable<Profil[] | null> = this.profilSubject.asObservable();
 
 
 
@@ -100,7 +102,7 @@ export class CatService {
     this.loadCats();
     this.loadPortee();
     this.loadChaton();
-
+    this.loadProfil();
   }
 
 
@@ -149,6 +151,30 @@ export class CatService {
       }
     );
   }
+
+  
+
+
+  private loadProfil(): void {
+    const profilId = environment.id
+
+    const url = `${environment.apiUrl}profil`;
+    const params = { profilId: profilId.toString() }; // Ajoutez le profilId aux paramètres de la requête
+
+    this.http.get<Profil[]>(url, { params }).subscribe(
+      (profil) => {
+        this.profilSubject.next(profil);
+      },
+      (error) => {
+        console.error('Error loading cat section', error);
+      }
+    );
+  }
+
+  refreshProfilData(data: any): void {
+    this.profilSubject.next(data);
+  }
+
 
 
   refreshCatData(data: any): void {

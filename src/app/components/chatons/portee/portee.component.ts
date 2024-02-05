@@ -4,6 +4,7 @@ import { environment } from 'src/environments/environment';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CatService } from '../../Services/catService';
 import { MatDialog } from '@angular/material/dialog';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-portee',
@@ -17,6 +18,8 @@ export class PorteeComponent implements OnInit, OnDestroy {
   allImages: any[] = [];
   displayedImages: any[] = [];
   dateOfSell = '';
+  private bannerSubscription: Subscription | undefined;
+  banner: any = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -31,6 +34,14 @@ export class PorteeComponent implements OnInit, OnDestroy {
     this.processImages();
   }
   ngOnInit(): void {
+
+    this.bannerSubscription = this.catService.banner$.subscribe(banner => {
+      if (banner) {
+        this.banner = banner[0];
+        console.log('?????', this.banner.statusNameFontStylePagechatonProfil);
+
+      }
+    });
     this.initializeSelectedPortee();
     // this.processChatons();
     // this.processDateOfSell();
@@ -86,7 +97,7 @@ export class PorteeComponent implements OnInit, OnDestroy {
             break;
         }
 
-        
+
         if (chatons[i].status == 'Reste à la chatterie' && screenWidth <= 550) {
           chatons[i].status = 'Reste'
         }
@@ -257,9 +268,45 @@ export class PorteeComponent implements OnInit, OnDestroy {
   }
 
 
+  getDynamicStyles(value: string): any {
+    const styles: any = {};
+    switch (value) {
+      case 'borderColor':
+        styles['border'] = "2px solid" + this.banner.bordureColorPageFemelles;
+        break;
+      case 'title':
+        styles['font-family'] = this.banner.titleFontStylePagechatonProfil;
+        styles['color'] = this.banner.titleColorPagechatonProfil;
+        break;
+      case 'text':
+        styles['font-family'] = this.banner.textFontStylePagechatonProfil;
+        styles['color'] = this.banner.textColorPagechatonProfil;
+        break;
+      case 'statusName':
+        styles['font-family'] = this.banner.statusNameFontStylePagechatonProfil;
+        styles['color'] = this.banner.statusNameColorPagechatonProfil;
+        break;
+      case 'background':
+        styles['font-family'] = this.banner.breedFontStylePagechatonProfil;
+        styles['color'] = this.banner.breedColorPagechatonProfil;
+        styles['background-color'] = this.banner.bagroundColorBreedPagechatonProfil;
+        break;
+      case 'fond-photos':
+        styles['background-color'] = this.banner.bagroundColorPagechatProfil;
+        break;
+      default:
+        break;
+    }
+
+    return styles;
+  }
+
 
 
   ngOnDestroy(): void {
     localStorage.removeItem('selectedPortee');
+    if (this.bannerSubscription) {
+      this.bannerSubscription.unsubscribe();
+    }
   }
 }

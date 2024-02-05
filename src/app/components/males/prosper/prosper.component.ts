@@ -5,6 +5,8 @@ import { CatService } from '../../Services/catService';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Cat } from '../../../models/cats';
+import { Subscription } from 'rxjs';
+
 
 
 @Component({
@@ -19,6 +21,12 @@ export class ProsperComponent implements OnInit, OnDestroy {
   imageUrlCatProfil: string = "";
   imageUrlCatImg: string = "";
   screenWidth: number = window.innerWidth;
+  env = environment;
+  imageLoadErrorOccurred: boolean = false; // Variable pour suivre si une erreur de chargement d'image s'est produite
+
+
+  private bannerSubscription: Subscription | undefined;
+  banner: any = [];
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
@@ -30,7 +38,8 @@ export class ProsperComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private elementRef: ElementRef,
     private route: ActivatedRoute,
-    private catService:CatService
+    private catService: CatService,
+
   ) {
     this.imageUrlParentsCat = environment.apiUrlImgParentsCat;
     this.imageUrlCatProfil = environment.apiUrlImgProfilCat;
@@ -40,6 +49,11 @@ export class ProsperComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
+    this.bannerSubscription = this.catService.banner$.subscribe(banner => {
+      if (banner) {
+        this.banner = banner[0];
+      }
+    });
 
     if (localStorage.getItem('selectedCat') !== null) {
       const selectedCatString = localStorage.getItem('selectedCat');
@@ -49,9 +63,7 @@ export class ProsperComponent implements OnInit, OnDestroy {
     }
 
     else {
-      /*   this.route.params.subscribe(params => {
-          const id = +params['id']; 
-        }); */
+
       const catId = this.route.snapshot.paramMap.get('id');
       if (catId) {
         this.catService.getCatById(catId).subscribe((data: any) => {
@@ -60,7 +72,31 @@ export class ProsperComponent implements OnInit, OnDestroy {
       }
 
     }
+
+
   }
+
+
+  openPedigree() {
+    if (this.selectedCat?.pedigree !== "") {
+      window.open(this.env.apiUrlImgPedigree + this.selectedCat?.pedigree, '_blank');
+    }
+  }
+
+
+  handleImageError(): void {
+    if (localStorage.getItem('selectedCat') !== null && !this.imageLoadErrorOccurred) {
+      const catId = this.route.snapshot.paramMap.get('id');
+      if (catId) {
+        this.catService.getCatById(catId).subscribe((data: any) => {
+          this.selectedCat = data;
+          this.imageLoadErrorOccurred = true; // Mettre à jour la variable indiquant qu'une erreur de chargement d'image s'est produite
+        });
+      }
+    }
+  }
+
+
 
   openImageDialog(imageUrl: string): void {
     this.dialog.open(ImageDialogComponent, {
@@ -86,8 +122,54 @@ export class ProsperComponent implements OnInit, OnDestroy {
   }
 
 
+  getDynamicStyles(value: string): any {
+    const styles: any = {};
+    switch (value) {
+      case 'borderColor':
+        styles['border'] = "2px solid" + this.banner.bordureColorPageFemelles;
+        break;
+      case 'title':
+        styles['font-family'] = this.banner.titleFontStylePagechatProfil;
+        styles['color'] = this.banner.titleColorPagechatProfil;
+        break;
+      case 'text-title':
+        styles['font-family'] = this.banner.textFontStylePagechatProfil;
+        styles['color'] = this.banner.textColorPagechatProfil;
+        styles['font-weight'] = "bold";
+
+        break;
+      case 'buttons':
+        styles['background-color'] = this.banner.buttonColorPagechatProfil;
+        styles['font-family'] = this.banner.buttonTextFontStylePagechatProfil;
+        styles['color'] = this.banner.buttonTextColorPagechatProfil;
+        break;
+      case 'border':
+        styles['background-color'] = this.banner.bordureColorPagechatProfil;
+        break;
+      case 'fond-photos':
+        styles['background-color'] = this.banner.bagroundColorPagechatProfil;
+        break;
+      default:
+        break;
+    }
+
+    return styles;
+  }
+
+  onImageLoad(name: string) {
+    // Ajoutez une classe pour déclencher l'animation
+    const photoProfilElement = document.querySelector(name);
+    if (photoProfilElement) {
+      photoProfilElement.classList.add('loaded');
+    }
+  }
+
   ngOnDestroy(): void {
     localStorage.removeItem('selectedCat');
+
+    if (this.bannerSubscription) {
+      this.bannerSubscription.unsubscribe();
+    }
   }
 
 }

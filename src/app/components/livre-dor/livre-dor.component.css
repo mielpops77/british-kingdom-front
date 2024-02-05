@@ -8,8 +8,8 @@
 .titre {
     font-size: 28px;
     font-weight: bold;
-    color: #A56D18;
-    margin-bottom: 20px;
+ /*    color: #A56D18;
+    margin-bottom: 20px; */
 }
 
 .formulaire {
@@ -40,8 +40,8 @@
 }
 
 .sendValide {
-    background-color: #d38816;
-    color: #fff;
+    /* background-color: #d38816; */
+    /* color: #fff; */
     padding: 12px 24px;
     border: none;
     border-radius: 6px;
@@ -51,12 +51,12 @@
 }
 
 .sendValide:hover {
-    background-color: #A56D18;
+    /* background-color: #A56D18; */
 }
 
 .sendNoValide {
-    background-color: #A56D18;
-    color: #fff;
+    /* background-color: #A56D18; */
+    /* color: #fff; */
     padding: 12px 24px;
     border: none;
     border-radius: 6px;
