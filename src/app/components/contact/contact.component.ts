@@ -9,7 +9,7 @@ import { Contact } from 'src/app/models/contact';
 import { DatePipe, NgIf } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { MatButtonModule } from '@angular/material/button';
+import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
 
 
 @Component({

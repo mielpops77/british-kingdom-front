@@ -1,7 +1,7 @@
 import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, OnDestroy, Inject } from '@angular/core';
 import Cropper from 'cropperjs';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog'; // Import MAT_DIALOG_DATA
-import { MatDialogRef } from '@angular/material/dialog'; // Importez MatDialogRef
+import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog'; // Import MAT_DIALOG_DATA
+import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog'; // Importez MatDialogRef
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({

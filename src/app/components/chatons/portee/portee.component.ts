@@ -3,7 +3,7 @@ import { ImageDialogComponent } from '../../image-dialog/image-dialog.component'
 import { environment } from 'src/environments/environment';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CatService } from '../../Services/catService';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { Subscription } from 'rxjs';
 import { NgFor, NgIf, NgStyle } from '@angular/common';
 

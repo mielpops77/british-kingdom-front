@@ -1,9 +1,9 @@
 
 import { BannerSection } from '../../models/bannerSection.banner';
-import { MatButtonModule } from '@angular/material/button';
+import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
 import { environment } from 'src/environments/environment';
 import { Component, Input, OnInit } from '@angular/core';
-import { MatCardModule } from '@angular/material/card';
+import { MatLegacyCardModule as MatCardModule } from '@angular/material/legacy-card';
 import { NgFor, NgStyle } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
