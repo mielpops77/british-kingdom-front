@@ -1,8 +1,7 @@
 import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, OnDestroy, Inject } from '@angular/core';
 import Cropper from 'cropperjs';
-import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog'; // Import MAT_DIALOG_DATA
-import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog'; // Importez MatDialogRef
 import { MatIconModule } from '@angular/material/icon';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-image-upload-dialog',

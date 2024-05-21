@@ -1,7 +1,7 @@
 import { DatePipe, NgFor, NgIf, NgStyle } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
+import { MatButtonModule } from '@angular/material/button';
 import { CatService } from '../Services/catService';
 import { Portee } from 'src/app/models/portee';
 import { Cat } from 'src/app/models/cats';

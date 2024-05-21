@@ -3,7 +3,7 @@ import { Component, OnInit, ElementRef, OnDestroy, HostListener } from '@angular
 import { ImageDialogComponent } from '../../image-dialog/image-dialog.component';
 import { environment } from 'src/environments/environment';
 import { CatService } from '../../Services/catService';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Cat } from '../../../models/cats';
 import { Subscription } from 'rxjs';

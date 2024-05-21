@@ -1,11 +1,11 @@
 import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ImageDialogComponent } from '../../image-dialog/image-dialog.component';
-import { environment } from 'src/environments/environment';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { environment } from 'src/environments/environment';
 import { CatService } from '../../Services/catService';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
-import { Subscription } from 'rxjs';
 import { NgFor, NgIf, NgStyle } from '@angular/common';
+import { MatDialog } from '@angular/material/dialog';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-portee',

@@ -4,7 +4,6 @@ import { environment } from 'src/environments/environment';
 import { NgClass, NgFor, NgStyle } from '@angular/common';
 import { CatService } from '../Services/catService';
 import { HttpClient } from '@angular/common/http';
-
 import { Router } from '@angular/router';
 import { Cat } from '../../models/cats';
 import { Subscription } from 'rxjs';

@@ -1,6 +1,7 @@
 // contact.component.ts
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { SnackBarService } from '../Services/snack-bar.service';
+import { MatButtonModule } from '@angular/material/button';
 import { ContactService } from '../Services/contact.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { environment } from 'src/environments/environment';
@@ -9,7 +10,6 @@ import { Contact } from 'src/app/models/contact';
 import { DatePipe, NgIf } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
 
 
 @Component({
