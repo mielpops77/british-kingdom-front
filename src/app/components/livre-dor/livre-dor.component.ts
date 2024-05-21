@@ -2,21 +2,25 @@ import { LivreOr } from 'src/app/models/livreOr';
 import { LivreOrService } from '../Services/livre-or.service';
 import { Component, OnInit } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 import { CatService } from '../Services/catService';
+import { SnackBarService } from '../Services/snack-bar.service';
+import { NgClass, NgFor, NgStyle, DatePipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 
 
 @Component({
   selector: 'app-livre-dor',
   templateUrl: './livre-dor.component.html',
-  styleUrls: ['./livre-dor.component.css']
+  styleUrls: ['./livre-dor.component.css'],
+  standalone: true,
+  imports: [NgStyle, NgClass, NgFor, FormsModule, DatePipe]
 })
 export class LivreDorComponent implements OnInit {
 
 
-  constructor(private livreOrService: LivreOrService, private snackBar: MatSnackBar, private catService: CatService) {
+  constructor(private livreOrService: LivreOrService, private catService: CatService, private snackBarService: SnackBarService) {
   }
   banner: any = [];
   private bannerSubscription: Subscription | undefined;
@@ -45,7 +49,7 @@ export class LivreDorComponent implements OnInit {
     if (this.validationVerif() == "sendValide") {
       this.livreOrService.createAvis(this.newAvis).subscribe(
         (response) => {
-          this.showSnackBar("Votre avis à bien été envoyé");
+          this.snackBarService.showSnackBar("Votre avis à bien été envoyé");
           this.newAvis = { name: '', profilId: environment.id, id: 0, dateofCrea: '', message: '', validation: false }
         },
         (error) => {
@@ -90,14 +94,6 @@ export class LivreDorComponent implements OnInit {
     }
 
     return styles;
-  }
-
-  showSnackBar(message: string): void {
-    this.snackBar.open(message, 'Fermer', {
-      duration: 3000, // Durée d'affichage en millisecondes (ici 3 secondes)
-      verticalPosition: 'top', // Position verticale (top, bottom)
-      horizontalPosition: 'center', // Position horizontale (start, center, end, left, right)
-    });
   }
 
 

@@ -1,14 +1,15 @@
 .title {
-  margin: 50px;
+  margin-top: 50px;
   /* color: rgb(41, 41, 41); */
   /* font-family: 'Amatic SC', corben, serif; */
   text-align: center;
-  font-size: 61px;
+  font-size: 30px;
   /* color: #D5A11E; */
   /* color: #CC5037; */
   /* font-family: 'Amatic SC', sans-serif; */
   font-weight: 500;
-  margin-bottom: 80px !important;
+  margin-bottom: 20px !important;
+  font-weight: bold;
 
 }
 
@@ -19,10 +20,11 @@
   border-top: 3px dashed;
   /* Couleur de la bordure en noir */
   /* color: black !important; */
-  margin-bottom: 20px !important;
+  margin-bottom: 30px !important;
 
   /* Centrer horizontalement */
 }
+
 .ligne2 {
   width: 80%;
   background-color: transparent;
@@ -34,8 +36,10 @@
   /* color: #CC5037; */
   /* color: #A56D18;*/
   margin-bottom: 100px !important;
-  margin: 0 auto; /* Centrer horizontalement */
+  margin: 0 auto;
+  /* Centrer horizontalement */
 }
+
 
 
 
@@ -50,7 +54,7 @@
   justify-content: center;
   /* Centrer verticalement */
   width: 70%;
-  height: 115px;
+  /* height: 115px; */
   /* background-color: #D4AE7D; */
   margin-left: auto;
   margin-right: auto;
@@ -60,7 +64,7 @@
   /* color: rgb(41, 41, 41); */
   /* color: #CC5037; */
   margin-bottom: 20px !important;
-
+  font-weight: bold;
   /* color: #333333; */
 
   /* color: #704D12; */
@@ -69,7 +73,7 @@
   text-align: center;
   margin: 0;
   padding: 0;
-  font-size: 40px;
+  font-size: 18px;
 
 }
 
@@ -85,11 +89,12 @@
   /* color: #CC7037; */
   /* color: #CC5037; */
 
+  font-weight: bold;
 
 
   /* font-family: 'Amatic SC', sans-serif; */
   /* font-family: corben, serif; */
-  font-size: 40px;
+  font-size: 18px;
   margin: 0;
   padding: 0;
 }
@@ -152,15 +157,6 @@
   /* Centre les images verticalement */
 }
 
-.oval-image {
-  border-radius: 50%;
-  width: 18%;
-  /* width: 300px; */
-  /* height: 300px;  */
-  object-fit: cover;
-  transition: transform 0.3s ease-in-out;
-  /* Ajout de l'effet de transition */
-}
 
 .first-image {
   margin-right: 0px;
@@ -170,15 +166,46 @@
 
 .heart-image {
   /* width: 140px;  */
-  width: 10%;
+  width: 50px;
 
+  /* width: 140px; */
+  height: auto;
   /* height: 140px; */
   object-fit: cover;
   margin: 0 15px;
   /* Ajustez la marge du cœur selon vos besoins */
-  transition: transform 0.3s ease-in-out;
   /* Ajout de l'effet de transition */
 }
+
+
+.heart-image.loaded {
+  width: 140px; 
+  /* width: 140px; */
+  height: auto;
+  /* height: 140px; */
+  object-fit: cover;
+  margin: 0 15px;
+  /* Ajustez la marge du cœur selon vos besoins */
+  transition: width 3s ease;
+  /* Ajout de l'effet de transition */
+}
+
+
+.oval-image {
+  border-radius: 50%;
+  /* width: 18%; */
+  /* width: 250px; */
+  width: 90px;
+  transition: width 2s ease;
+  height: auto;
+  /* width: 300px; */
+  /* height: 300px;  */
+  object-fit: cover;
+  /* Ajout de l'effet de transition */
+}
+
+
+
 
 /* Effet hover sur les images */
 .oval-image:hover, .heart-image:hover {
@@ -189,6 +216,12 @@
 
 
 
+
+.oval-image.loaded {
+  width: 250px;
+  transition: width 3s ease;
+  /* Taille normale de l'image après chargement */
+}
 
 
 
@@ -207,15 +240,47 @@
   width: 50%;
   height: 50%;
   background-size: cover;
-  z-index: -1; /* Pour placer le fond derrière l'image */
+  z-index: -1;
+  /* Pour placer le fond derrière l'image */
 }
 
 
 
+.caroussel-bloc {
+  text-align: center;
+  margin-top: 40px;
+  margin-bottom: 30px;
+}
 
 
 
+@media (max-width: 1000px) {
+  .oval-image.loaded {
+    width: 200px;
+  }
 
+  .heart-image.loaded {
+    width: 120px;
+  }
+
+}
+
+@media (max-width: 700px) {
+  .oval-image.loaded {
+    width: 150px;
+  }
+
+
+
+  .heart-image.loaded  {
+    width: 100px;
+  }
+  .title {
+    margin-bottom: 80px !Important;
+
+  }
+
+}
 
 
 
@@ -223,6 +288,79 @@
   .custom-button2 {
     display: none;
   }
+
+  .oval-image.loaded {
+    width: 120px;
+  }
+
+
+
+  .heart-image.loaded  {
+    width: 80px;
+  }
+
+}
+
+
+@media (max-width: 420px) {
+
+
+  .oval-image {
+    width: 100px;
+  }
+
+
+
+  .heart-image {
+    width: 60px;
+  }
+
+  .title {
+    margin-bottom: 80px !Important;
+
+  }
+
+
+}
+
+
+@media (max-width: 320px) {
+
+
+  .oval-image.loaded {
+    width: 80px;
+  }
+
+
+
+  .heart-image.loaded {
+    width: 50px;
+  }
+
+}
+
+
+@media (max-width: 260px) {
+
+
+  .oval-image.loaded {
+    margin-top: 30px;
+
+    width: 60px;
+  }
+
+
+
+  .heart-image.loaded {
+    margin-top: 30px;
+    width: 50px;
+  }
+
+  .title {
+    margin-bottom: 100px !Important;
+
+  }
+
 
 }
 

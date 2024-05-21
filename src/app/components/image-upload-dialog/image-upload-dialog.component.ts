@@ -6,7 +6,9 @@ import { MatDialogRef } from '@angular/material/dialog'; // Importez MatDialogRe
 @Component({
   selector: 'app-image-upload-dialog',
   templateUrl: './image-upload-dialog.component.html',
-  styleUrls: ['./image-upload-dialog.component.css']
+  styleUrls: ['./image-upload-dialog.component.css'],
+  standalone: true,
+  imports: []
 })
 export class ImageUploadDialogComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('image', { static: false }) imageElement!: ElementRef;
@@ -78,7 +80,7 @@ export class ImageUploadDialogComponent implements OnInit, AfterViewInit, OnDest
       });
     }
   }
-  
+
 
 
   createFile(): Promise<{ url: string, file: File } | undefined> {
@@ -86,13 +88,13 @@ export class ImageUploadDialogComponent implements OnInit, AfterViewInit, OnDest
       const canvas = document.createElement('canvas');
       canvas.width = this.data.aspectRatioWidth;
       canvas.height = this.data.aspectRatioHeight;
-  
+
       const ctx = canvas.getContext('2d');
-  
+
       if (ctx) {
         const img = new Image();
         img.src = this.croppedImage;
-  
+
         return new Promise<{ url: string, file: File }>((resolve, reject) => {
           img.onload = () => {
             ctx.drawImage(img, 0, 0, this.data.aspectRatioWidth, this.data.aspectRatioHeight);
@@ -113,7 +115,7 @@ export class ImageUploadDialogComponent implements OnInit, AfterViewInit, OnDest
     }
     return Promise.resolve(undefined);
   }
-  
+
 
 
 

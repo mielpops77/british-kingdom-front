@@ -1,40 +1,33 @@
-import { IpService } from '../../../ipService/ip-service.service';
-import { Router, NavigationEnd } from '@angular/router';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Location } from '@angular/common';
+import { NgFor, NgIf, NgStyle } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
 import { CatService } from '../Services/catService';
+import { RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @Component({
   selector: 'app-header-user',
   templateUrl: './header-user.component.html',
-  styleUrls: ['./header-user.component.css']
+  styleUrls: ['./header-user.component.css'],
+  standalone: true,
+  imports: [NgStyle, NgIf, NgFor, RouterModule, MatIconModule, BrowserAnimationsModule]
+
 })
 export class HeaderUserComponent implements OnInit, OnDestroy {
   private bannerSubscription: Subscription | undefined;
-  isAllowed: boolean;
   isAdminRoute: boolean = false;
   menu: string[] = [];
   colorMenu: string = '';
   hoverColorMenu: string = '';
   fontStyleMenu: string = '';
-  fontStyle: string = 'Arial';  // Déclaration de la propriété fontStyle
   isMobile: boolean = false;
 
-  constructor(private ipService: IpService, private location: Location, private router: Router, private catService: CatService) {
-    this.isAllowed = false;
-    this.checkAccess();
+  constructor(private catService: CatService) {
   }
 
 
   ngOnInit(): void {
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        this.verifAdmin();
-      }
-
-
-    });
     this.catService.banner$.subscribe(banner => {
       if (banner) {
         this.isMobile = window.innerWidth <= 767;
@@ -47,31 +40,10 @@ export class HeaderUserComponent implements OnInit, OnDestroy {
     })
   }
 
-/*   toggleMobileMenu(): void {
-    const navList = document.querySelector('.navUser ul');
-    console.log('proute',navList);
-
-    if (navList) {
-      navList.classList.toggle('show-mobile-menu');
-    }
-  } */
 
   toggleMobileMenu(): void {
     console.log('ookokok');
     this.isMobile = !this.isMobile;
-  }
-  
-
-  checkAccess(): void {
-    this.ipService.getIpAddress().then((ipAddress: string) => {
-      const myIpAddress = '176.176.241.111';
-      this.isAllowed = (ipAddress === myIpAddress);
-    });
-  }
-
-  verifAdmin(): void {
-    const currentUrl = this.location.path();
-    this.isAdminRoute = currentUrl.includes('admin');
   }
 
 
@@ -82,10 +54,7 @@ export class HeaderUserComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // Se désabonner de l'observable lors de la destruction du composant
-    if (this.bannerSubscription) {
-      this.bannerSubscription.unsubscribe();
-    }
+    this.bannerSubscription?.unsubscribe();
   }
 
 }

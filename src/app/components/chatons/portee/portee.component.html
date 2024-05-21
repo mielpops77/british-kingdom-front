@@ -1,20 +1,17 @@
 <br>
-
-<p class="title" [ngStyle]="getDynamicStyles('title')">Les chatons de {{selectedPortee.nameFemale}} et
+<p class="title" [ngStyle]="dynamicStyles.title">Les chatons de {{selectedPortee.nameFemale}} et
     {{selectedPortee.nameMale}} </p>
-<p class="title" [ngStyle]="getDynamicStyles('title')">Née le {{selectedPortee.dateOfBirth}} </p>
-
+<p class="title" [ngStyle]="dynamicStyles.title">Née le {{selectedPortee.dateOfBirth}} </p>
 <br>
-
 <div class="couple-images-container" *ngIf="selectedPortee?.portee">
     <img [src]="selectedPortee.portee.urlProfilMother" (click)="redirectToNewUrl(selectedPortee?.idMaman,'femelles')"
         alt="Maman" class="oval-image first-image">
-    <img src="assets/coeur.png" alt="Cœur" class="heart-image">
+    <img [src]="env.apiUrlImgDivers + 'coeur-transparent.png'"  alt="Cœur" class="heart-image">
     <img [src]="selectedPortee.portee.urlProfilFather" alt="Papa"
         (click)="redirectToNewUrl(selectedPortee?.idPapa,'males')" class="oval-image second-image">
 </div>
 <br><br>
-<div class="text" [ngStyle]="getDynamicStyles('text')">
+<div class="text" [ngStyle]="dynamicStyles.text">
 
     <p>Les chatons
         <!-- <span *ngIf="selectedPortee?.portee ? selectedPortee.portee.loof : selectedPortee.loof"> tous enregistrés
@@ -37,14 +34,15 @@
 
             <div class="carousel-title">
                 <p class="chaton-info">
-                    <span class="left-value" [ngStyle]="getDynamicStyles('statusName')">{{
+                    <span class="left-value" [ngStyle]="dynamicStyles.statusName">{{
                         selectedPortee.portee.chatons[i].status}}</span>
-                    <span class="grp" [ngStyle]="getDynamicStyles('background')">
+                    <span class="grp" [ngStyle]="dynamicStyles.background">
                         <span class="chaton-sex">{{selectedPortee.portee.chatons[i].sex}}</span>
                         <span class="chaton-status">-{{selectedPortee.portee.chatons[i].breed}}-</span>
                         <span class="chaton-status">{{selectedPortee.portee.chatons[i].robe}}</span>
                     </span>
-                    <span class="right-value"  [ngStyle]="getDynamicStyles('statusName')">{{selectedPortee.portee.chatons[i].name}}</span>
+                    <span class="right-value"
+                    [ngStyle]="dynamicStyles.statusName">{{selectedPortee.portee.chatons[i].name}}</span>
                 </p>
             </div>
 

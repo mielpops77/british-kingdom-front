@@ -1,65 +1,110 @@
-import { CatService } from '../Services/catService';
+import { CarousselComponent } from '../caroussel/caroussel.component';
+import { StatistiqueService } from '../Services/statistique.service';
 import { BannerSection } from '../../models/bannerSection.banner';
-import { Component, OnInit,OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { LoadingComponent } from '../loading/loading.component';
+import { LoadingService } from '../Services/loading.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { environment } from 'src/environments/environment';
+import { CardsComponent } from '../cards/cards.component';
+import { CatService } from '../Services/catService';
+import { Profil } from 'src/app/models/profil';
+import { NgIf } from '@angular/common';
+import { Subscription } from 'rxjs';
 
-declare var $: any;
+
 @Component({
   selector: 'app-accueil',
   templateUrl: './accueil.component.html',
   styleUrls: ['./accueil.component.css'],
+  imports: [LoadingComponent, CarousselComponent, CardsComponent, NgIf
+  ],
+  standalone: true,
 })
-export class AccueilComponent implements OnInit, OnDestroy {
-  bannerSection: BannerSection | null = null;
-  private bannerSubscription: Subscription | undefined;
 
+
+export class AccueilComponent implements OnInit, OnDestroy {
+
+  bannerSection: BannerSection | null = null;
+  profil: Profil | null = null;
 
   url = environment;
-  constructor(private catService: CatService) { }
 
-  ngOnInit(): void {
+  private bannerSubscription: Subscription;
+  isLoading: boolean = false; // Ajout de la variable isLoading
+  private profilSubscription: Subscription;
+
+
+
+  constructor(private catService: CatService, private statistiqueService: StatistiqueService, private loadingService: LoadingService) {
+
+    this.loadingService.getBannerLoading().subscribe((isLoading: boolean) => {
+      this.isLoading = isLoading;
+    });
 
     this.bannerSubscription = this.catService.banner$.subscribe((banner) => {
-      if (banner !== null) {
-        this.bannerSection = banner[0];
+      console.log('testing');
+      this.bannerSection = banner?.[0] || null;
+      if (this.bannerSection == null) {
+        this.loadingService.setBannerLoading(true);
+      }
+
+      if (this.bannerSection !== null) {
+        this.loadingService.setBannerLoading(false);
       }
     });
 
 
+    this.profilSubscription = this.catService.profil$.subscribe((profil) => {
+      this.profil = profil?.[0] || null;
+    });
+
+
+    this.statistiqueService.enregistrerVisite().subscribe();
   }
 
-  getDynamicStyles(value: string): any {
-    const styles: any = {};
+  ngOnInit(): void {
+  }
 
-    if(this.bannerSection){
-    switch (value) {
 
-      case 'title':
-        styles['font-family'] = this.bannerSection.titleFontStyleCard;
-        styles['color'] = this.bannerSection.titleColorCard;
+
+  redirect(platform: string) {
+    let url: string = '';
+    console.log(this.profil);
+    switch (platform) {
+      case 'facebook':
+        if (this.profil?.facebook) {
+          url = this.profil?.facebook;
+        }
         break;
-      case 'text':
-        styles['font-family'] = this.bannerSection.textFontStyleCard;
-        styles['color'] = this.bannerSection.textColorCard;
+      case 'twitter':
+        if (this.profil?.twitter) {
+          url = this.profil?.twitter;
+        }
         break;
-      case 'background':
-        styles['background-color'] = this.bannerSection.backgroundColorCard;
+      case 'instagram':
+        if (this.profil?.instagram) {
+          url = this.profil?.instagram;
+        }
         break;
-  
+
+      case 'tiktok':
+        if (this.profil?.tiktok) {
+          url = this.profil?.tiktok;
+        }
+        break;
+
+      case 'youtube':
+        if (this.profil?.youtube) {
+          url = this.profil?.youtube;
+        }
+        break;
       default:
         break;
-    }}
-
-    return styles;
+    }
+    window.open(url, '_blank');
   }
 
-
-
-
   ngOnDestroy(): void {
-    if (this.bannerSubscription) {
-      this.bannerSubscription?.unsubscribe();
-    }
+    this.bannerSubscription?.unsubscribe();
   }
 }

@@ -6,34 +6,22 @@
         <div *ngFor="let cat of cats">
             <p class="name">{{ cat.name }}</p>
             <p class="name">Couleur: {{ cat.robe }}</p>
-            <img [src]="url.apiUrlImgProfilCat + cat.urlProfil" class="rounded-image"
+            <img [src]="url.apiUrlImgProfilCat + cat.urlProfil"  #roundedImage (load)="onImageLoad()" class="rounded-image"
                 (click)="redirectToNewUrl(cat.id, cat)">
         </div>
     </div>
 </div>
-
-
-
 <br>
 <br>
 
-<hr class="gray-line" [ngStyle]="getDynamicStyles('borderColor')">
+<hr class="gray-line" [ngStyle]="dynamicStyles.borderColor">
 
 <div class="description">
-    <h3 [ngStyle]="getDynamicStyles('title')">{{banner.titlePageFemelles}}</h3>
-    <p [ngStyle]="getDynamicStyles('text')">{{banner.textPageFemelles}}</p>
-    <!--       <p>Importées ou nées à la maison, vous pouvez découvrir leurs caractéristiques détaillées en cliquant sur l'image de
-        chacune</p>
-    <p>d'entre elles et découvrir : leurs origines, caractéristiques, pedigree.</p>
-    <p>C'est un chat gentil et doux, qui s'adapte en appartement comme en maison. Attention aux sorties en extérieur,
-        elles doivent</p>
-    <p>être sécurisées ! Comme le British est un chat profondément gentil, il est très mal armé pour se défendre des
-        dangers</p>
-    <p>humains et animaux de l'extérieur.</p>
-    <p>Une femelle British adulte fera entre 3 et 5 kg. Entretenir ce chat ne pose aucune difficulté particulière.</p>
-    <p>Lien vers la rubrique entretien.</p> -->
+    <h3 [ngStyle]="dynamicStyles.title">{{banner.titlePageFemelles}}</h3>
+    <p [ngStyle]="dynamicStyles.text">{{banner.textPageFemelles}}</p>
+
     </div>
-    <hr class="gray-line" [ngStyle]="getDynamicStyles('borderColor')">
+    <hr class="gray-line" [ngStyle]="dynamicStyles.borderColor">
     <br>
     <br>
     <br>

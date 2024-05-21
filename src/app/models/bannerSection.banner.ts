@@ -1,4 +1,8 @@
 export interface BannerSection {
+
+  //Id
+  profilId: number;
+
   bannerImages: string[];
   maleDescription: string;
   kittenDescription: string;
@@ -17,10 +21,9 @@ export interface BannerSection {
 
 
   titleFontSize: number;
-  titleFontStyle: string;
   titleFontFamily: string;
   subtitleFontSize: number;
-  subtitleFontStyle: string;
+  // subtitleFontStyle: string;
   subtitleFontFamily: string;
   colorHeader: string,
   titleColor: string,
@@ -115,6 +118,16 @@ export interface BannerSection {
   statusNameColorPagechatonProfil?: string;
   breedFontStylePagechatonProfil?: string;
   breedColorPagechatonProfil?: string;
-  bagroundColorBreedPagechatonProfil?: string;
+  backgroundColorBreedPagechatonProfil?: string;
+
+
+  // Page acccueil petit text lieux
+
+  textPageAccueil?: string;
+  textFontStylePageAccueil?: string;
+  textColorPageAccueil?: string;
 }
+
+
+
 

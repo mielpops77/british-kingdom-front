@@ -1,53 +1,34 @@
-
-<div class="parent-container"><app-caroussel [bannerSection]="bannerSection"></app-caroussel>
-
-<br><br>
-
-<h4 class="text-center">Région Seine et Marne à Othis</h4>
- <br>
-<div class="card-container">
-    <mat-card [ngStyle]="getDynamicStyles('background')">
-        <mat-card-header>
-            <mat-card-title [ngStyle]="getDynamicStyles('title')">{{bannerSection?.titleCard1}}</mat-card-title>
-        </mat-card-header>
-        <img mat-card-image [src]="url.apiUrlProfil+bannerSection?.maleImg" alt="Card 1 Image">
-        <mat-card-content [ngStyle]="getDynamicStyles('text')">{{bannerSection?.maleDescription}}
-            <!-- <p></p> -->
-        </mat-card-content>
-        <mat-card-actions>
-            <button routerLink="/males" mat-raised-button color="primary" class="info-button">+ d'infos</button>
-        </mat-card-actions>
-    </mat-card>
-
-    <mat-card [ngStyle]="getDynamicStyles('background')">
-        <mat-card-header>
-            <mat-card-title [ngStyle]="getDynamicStyles('title')">{{bannerSection?.titleCard2}}</mat-card-title>
-        </mat-card-header>
-        <img mat-card-image [src]="url.apiUrlProfil+bannerSection?.kittenImg" alt="Card 2 Image">
-        <mat-card-content [ngStyle]="getDynamicStyles('text')">
-            {{bannerSection?.kittenDescription}}
-        </mat-card-content>
-        <mat-card-actions>
-            <button routerLink="/chatons" mat-raised-button color="primary" class="info-button">+ d'infos</button>
-        </mat-card-actions>
-    </mat-card>
-
-    <mat-card [ngStyle]="getDynamicStyles('background')">
-        <mat-card-header>
-            <mat-card-title [ngStyle]="getDynamicStyles('title')">{{bannerSection?.titleCard3}}</mat-card-title>
-        </mat-card-header >
-        <img mat-card-image [src]="url.apiUrlProfil+bannerSection?.femaleImg" alt="Card 3 Image">
-        <mat-card-content [ngStyle]="getDynamicStyles('text')">
-            {{bannerSection?.femaleDescription}}
-        </mat-card-content>
-        <mat-card-actions>
-            <button routerLink="/femelles" mat-raised-button color="primary" class="info-button">+ d'infos</button>
-        </mat-card-actions>
-    </mat-card>
+<div *ngIf="isLoading" class="loading-container">
+  <app-loading></app-loading>
 </div>
+
+
+<div class="parent-container" *ngIf="!isLoading">
+  <app-caroussel [bannerSection]="bannerSection"></app-caroussel>
+  <br><br>
+  <app-cards [bannerSection]="bannerSection"></app-cards>
+
+
 </div>
-<br>
+
 <br>
 
+<div class="video-container">
+  <video controls class="center-video">
+    <source src="assets/vidos.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+</div>
 
-<!-- <iframe src="https://couscousamdav.azurewebsites.net/" width="600" height="400"></iframe> -->
+
+
+<div class="logo-div">
+  <img src="assets/photo_2023-12-24_21-37-46.jpg" class="logoSrc" alt="Description de l'image">
+</div>
+<div class="social-icons">
+  <i *ngIf="profil?.facebook !== '' " id="facebook" class="fab fa-facebook" (click)="redirect('facebook')"></i>
+  <i *ngIf="profil?.twitter !== '' " id="twitter" class="fab fa-twitter" (click)="redirect('twitter')"></i>
+  <i *ngIf="profil?.instagram !== '' " id="instagram" class="fab fa-instagram" (click)="redirect('instagram')"></i>
+  <i *ngIf="profil?.tiktok !== '' " id="tiktok" class="fab fa-tiktok" (click)="redirect('tiktok')"></i>
+  <i *ngIf="profil?.youtube !== '' " id="youtube" class="fab fa-youtube" (click)="redirect('youtube')"></i>
+</div>

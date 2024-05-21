@@ -1,3 +1,4 @@
+import { DatePipe, NgClass, NgFor, NgIf, NgStyle, UpperCasePipe } from '@angular/common';
 import { Component, OnInit, ElementRef, OnDestroy, HostListener } from '@angular/core';
 import { ImageDialogComponent } from '../../image-dialog/image-dialog.component';
 import { environment } from 'src/environments/environment';
@@ -12,7 +13,9 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-prosper',
   templateUrl: './prosper.component.html',
-  styleUrls: ['./prosper.component.css']
+  styleUrls: ['./prosper.component.css'],
+  standalone: true,
+  imports: [NgStyle, NgClass, DatePipe, UpperCasePipe, NgFor, NgIf]
 })
 export class ProsperComponent implements OnInit, OnDestroy {
 

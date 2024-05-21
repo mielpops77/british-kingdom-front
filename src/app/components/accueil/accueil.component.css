@@ -1,104 +1,101 @@
-
 .parent-container {
-    text-align: center; /* Centrer le contenu horizontalement */
-}
-
-
-
-.text-center {
     text-align: center;
     margin-top: 40px;
-    margin-bottom: 30px;
-    font-family: cursive;
-    font-size: 30px;
-    color: #233943;
-    /* color: #A56D18; */
+    /* margin-bottom: 30px; */
+  }
+  
+
+.logo-div
+{
+  text-align: center;
+  padding-top: 20px;
 }
 
-.card-container {
-    padding-top: 20px;
-    display: flex;
-    justify-content: center;
-    gap: 60px;
-    flex-wrap: wrap; /* Ajout pour gérer le wrapping des cartes */
-    margin: 0 auto; /* Centrer horizontalement */
-}
-
-/* Media Query pour les appareils mobiles */
-@media (max-width: 1000px) {
-    .card-container {
-        flex-direction: column; /* Les cartes seront empilées les unes au-dessus des autres */
-        align-items: center; /* Centrage horizontal des cartes */
-    }
-    .mat-card {
-        width: 80%; /* Vous pouvez ajuster cette valeur selon vos préférences */
-        max-width: 300px; /* Limite maximale de largeur pour les cartes */
-    }
-}
-
-
-mat-card {
-    /* background-color: #e6e6e6; */
-    /* background-color: #ffffff; */
-
-    /* background-color: #80A6AD91; */
-
-    padding-bottom: 20px;
-    flex-basis: 20%;
-    margin-bottom: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-}
-
-mat-card:hover {
-    transform: scale(1.1);
-    /* Applique une échelle de 1.1 (10% plus grand) */
-    transition: transform 0.3s ease-in-out;
-    /* Ajoute une transition fluide */
-}
-
-mat-card:last-child {
-    margin-right: 0;
-}
-
-mat-card img {
-    width: 100%;
-    height: auto;
-    /* object-fit: cover; */
-}
-
-mat-card-title {
-    font-size: 38px !important;
-/*     font-family: "Dancing Script", cursive;
-    color:rgb(43, 42, 40); */
-    /* font-family: cursive; */
-}
-
-mat-card-content {
-    flex-grow: 1;
-    font-size: 18px;
- /*    color: #000000DE; */
-    /* font-family: Helvetica,Arial,sans-serif; */
-/*     font-family: "Overlock", sans-serif; */
-    font-weight: 400;
+.logoSrc
+{
+  width: 150px;
+  height: auto;
+  border-radius: 50%;
 }
 
 
 
-.info-button {
-    font-family: "Signika", sans-serif;
-    background-color: #565451;
-    color: #fff;
+.social-icons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* margin-bottom: 30px; */
+  margin-top: 10px;
+
+}
+
+.social-icons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 5px;
+  padding-bottom: 30px;
+  font-size: 2rem;
+}
+
+i
+{
+  margin: 0 20px; /* Ajustez la marge entre les icônes selon vos besoins */
+
+}
+
+.video-container {
+  text-align: center; /* Alignement horizontal */
+}
+
+.center-video
+{
+  border-radius: 1%;
+  width: 74%;
+
+}
+
+.video-container video {
+  margin: 0 auto; /* Centrer horizontalement */
+}
+#twitter:hover
+{
+  transform: scale(1.2); 
+
+  cursor: pointer;
+}
+
+#instagram:hover
+{
+  transform: scale(1.2); 
+
+  cursor: pointer;
+}
+
+#facebook:hover
+{
+  
+  transform: scale(1.2); 
+
+  cursor: pointer;
+
+}
+
+#tiktok:hover
+{
+  
+  transform: scale(1.2); 
+
+  cursor: pointer;
+
 }
 
 
-.info-button:hover {
-    background-color: #666;
-    /* Couleur de fond différente au survol */
-    transform: scale(1.05);
-    /* Applique une légère échelle */
-    transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
-    /* Ajoute une transition fluide */
+#youtube:hover
+{
+  
+  transform: scale(1.2); 
+
+  cursor: pointer;
+
 }

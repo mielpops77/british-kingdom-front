@@ -1,26 +1,3 @@
-<!-- <div *ngIf="!isAdminRoute" class="titlePage" [ngStyle]="getDynamicStyles('colorHeader')">
-  <h1 [ngStyle]="getDynamicStyles('title')">{{data?.title}}</h1>
-  <h2 [ngStyle]="getDynamicStyles('subtitle')">{{data?.subtitle}}</h2>
-</div>
-
-
-
-<div class="header" *ngIf="isAdminRoute">
-  <mat-icon (click)="showHeaderAdmin()" class="menu-icon">menu</mat-icon>
-  <span class="header-text">Mon Profil</span>
-</div>
-
-
-
-<div class="container" *ngIf="isAdminRoute"> -->
-<!-- 
-<header [ngStyle]="{'margin-top.px': isAdminRoute ? 0 : 20, 'margin-bottom.px': isAdminRoute ? 0 : 20}">
-
-    
-
-  <app-header-admin *ngIf="isAdminRoute && showHeader"></app-header-admin>
-
-</header> -->
 
 <div class="content-container">
   <div class="titlePage" [ngStyle]="getDynamicStyles('colorHeader')">
@@ -35,31 +12,3 @@
     <router-outlet></router-outlet>
 <app-footer></app-footer>
 </div>
-
-<!-- </div> -->
-
-
-
-<!-- 
-
-<div  *ngIf="!isAdminRoute">
-
-  <header [ngStyle]="{'margin-top.px': isAdminRoute ? 0 : 20, 'margin-bottom.px': isAdminRoute ? 0 : 20}">
-    <app-header-user></app-header-user>
-  
-      
-  
-    <app-header-admin *ngIf="isAdminRoute"></app-header-admin>
-  
-  </header>
-  
-  <div class="content-container">
-    <router-outlet></router-outlet>
-<app-footer></app-footer>
-
-  </div>
-
-  </div>
-  
-
- -->

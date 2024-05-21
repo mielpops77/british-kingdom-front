@@ -1,8 +1,10 @@
 
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { environment } from 'src/environments/environment';
+import { NgClass, NgFor, NgStyle } from '@angular/common';
 import { CatService } from '../Services/catService';
 import { HttpClient } from '@angular/common/http';
+
 import { Router } from '@angular/router';
 import { Cat } from '../../models/cats';
 import { Subscription } from 'rxjs';
@@ -10,7 +12,9 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-femelles',
   templateUrl: './femelles.component.html',
-  styleUrls: ['./femelles.component.css']
+  styleUrls: ['./femelles.component.css'],
+  standalone: true,
+  imports: [NgClass, NgStyle, NgFor]
 })
 export class FemellesComponent implements OnInit, OnDestroy {
 
@@ -21,18 +25,21 @@ export class FemellesComponent implements OnInit, OnDestroy {
 
   url = environment;
   banner: any = [];
+  dynamicStyles: any = {};
+
   constructor(private router: Router, private http: HttpClient, private catService: CatService) { }
 
   ngOnInit(): void {
 
     this.catSubscription = this.catService.cat$.subscribe(cats => {
       if (cats)
-        this.cats = cats.filter((cat: Cat) => cat.sex === "female")
+        this.cats = cats.filter((cat: Cat) => cat.sex === "Femelle")
     });
 
     this.bannerSubscription = this.catService.banner$.subscribe(banner => {
       if (banner) {
         this.banner = banner[0];
+        this.getDynamicStyles();
       }
     });
   }
@@ -56,37 +63,37 @@ export class FemellesComponent implements OnInit, OnDestroy {
   }
 
 
-
-  getDynamicStyles(value: string): any {
-    const styles: any = {};
-    switch (value) {
-      case 'borderColor':
-        styles['border'] = "2px solid" + this.banner.bordureColorPageFemelles;
-        break;
-      case 'title':
-        styles['font-family'] = this.banner.titleFontStylePageFemelles;
-        styles['color'] = this.banner.titleColorPageFemelles;
-        break;
-      case 'text':
-        styles['font-family'] = this.banner.textFontStylePageFemelles;
-        styles['color'] = this.banner.textColorPageFemelles;
-        break;
-      default:
-        break;
+  getDynamicStyles(): void {
+    if (this.banner) {
+      this.dynamicStyles = {
+        title: {
+          'font-family': this.banner.titleFontStylePageFemelles,
+          'color': this.banner.titleColorPageFemelles,
+        },
+        borderColor: {
+          'border': "2px solid" + this.banner.bordureColorPageFemelles,
+        },
+        text: {
+          'font-family': this.banner.textFontStylePageFemelles,
+          'color': this.banner.textColorPageFemelles,
+        },
+      };
     }
-
-    return styles;
   }
 
 
+  onImageLoad() {
+    // Ajoutez une classe pour déclencher l'animation
+    const imageElement = event?.target as HTMLElement;
+    if (imageElement) {
+      imageElement.classList.add('loaded');
+    }
+  }
 
   ngOnDestroy(): void {
-    if (this.bannerSubscription) {
-      this.bannerSubscription.unsubscribe();
-    }
-    if (this.catSubscription) {
-      this.catSubscription.unsubscribe();
-    }
+    this.bannerSubscription?.unsubscribe();
+    this.catSubscription?.unsubscribe();
+
   }
 }
 

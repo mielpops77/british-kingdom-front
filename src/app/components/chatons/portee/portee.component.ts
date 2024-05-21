@@ -1,25 +1,33 @@
 import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ImageDialogComponent } from '../../image-dialog/image-dialog.component';
 import { environment } from 'src/environments/environment';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CatService } from '../../Services/catService';
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
+import { NgFor, NgIf, NgStyle } from '@angular/common';
 
 @Component({
   selector: 'app-portee',
   templateUrl: './portee.component.html',
-  styleUrls: ['./portee.component.css']
+  styleUrls: ['./portee.component.css'],
+  standalone: true,
+  imports: [NgIf, NgStyle, NgFor, RouterModule]
+
 })
 export class PorteeComponent implements OnInit, OnDestroy {
-  selectedPortee: any | null = null;
-  env = environment;
+
+
+
   @ViewChild('carouselImages') carouselImages!: ElementRef;
-  allImages: any[] = [];
-  displayedImages: any[] = [];
-  dateOfSell = '';
   private bannerSubscription: Subscription | undefined;
+  selectedPortee: any | null = null;
+  displayedImages: any[] = [];
+  allImages: any[] = [];
+  env = environment;
+  dateOfSell = '';
   banner: any = [];
+  dynamicStyles: any = {};
 
   constructor(
     private route: ActivatedRoute,
@@ -30,22 +38,22 @@ export class PorteeComponent implements OnInit, OnDestroy {
 
 
   @HostListener('window:resize', ['$event'])
+
   onResize(event: Event): void {
     this.processImages();
   }
+
+
   ngOnInit(): void {
 
     this.bannerSubscription = this.catService.banner$.subscribe(banner => {
       if (banner) {
         this.banner = banner[0];
-        console.log('?????', this.banner.statusNameFontStylePagechatonProfil);
+        this.getDynamicStyles();
 
       }
     });
     this.initializeSelectedPortee();
-    // this.processChatons();
-    // this.processDateOfSell();
-    // this.processImages();
   }
 
 
@@ -131,20 +139,11 @@ export class PorteeComponent implements OnInit, OnDestroy {
         console.error('La chaîne de date n\'est pas dans un format valide.');
       }
     } else {
-      // console.error('La propriété dateOfSell ou portee est undefined ou null.');
     }
     this.processImages();
 
   }
-  /* 
-    private processImages(): void {
-      console.log('  this.allImages', this.allImages);
-  
-      for (let i = 0; i < this.allImages.length; i++) {
-        this.displayedImages[i] = this.allImages[i].slice(0, 2);
-      }
-      console.log('  this.displayedImages', this.displayedImages);
-    } */
+
 
   private processImages(): void {
     const screenWidth = window.innerWidth;
@@ -169,15 +168,11 @@ export class PorteeComponent implements OnInit, OnDestroy {
 
 
 
-
-
-
   redirectToNewUrl(id: number, type: string): void {
     this.router.navigateByUrl('/' + type + '/' + id);
   }
 
 
-  // Définir le nombre d'images à afficher en fonction de la largeur de l'écran
   private getMaxImagesToShow(): number {
     const screenWidth = window.innerWidth;
     if (screenWidth <= 1100 && screenWidth > 760) {
@@ -193,37 +188,18 @@ export class PorteeComponent implements OnInit, OnDestroy {
   reachedEnd = false;
 
   nextImages(index: number): void {
-    // Récupère le nombre maximal d'images à afficher
     const maxImagesToShow = this.getMaxImagesToShow();
-
-    // Calcule l'index suivant après le défilement
     const nextIndex = this.startIndex + maxImagesToShow;
-
-    // Récupère toutes les images après le prochain défilement
     const imagesAfterNext = this.allImages[index].slice(nextIndex);
-    console.log('imagesAfterNext', imagesAfterNext);
-
-    console.log(' this.allImages[index]', this.allImages[index]);
-
-
-    // Vérifie si toutes les images après le prochain défilement sont égales à "chaton.png"
     const allImagesAfterNextChaton = imagesAfterNext.every((image: any) => this.isChatonImage(image));
-
-    // Affiche dans la console le résultat de la vérification des images après le prochain défilement
-    console.log('allImagesAfterNextChaton', allImagesAfterNextChaton);
-
-    // Vérifie si aucune image restante, toutes les images suivantes sont "chaton.png" ou le défilement vers l'avant n'est pas autorisé
     if (imagesAfterNext.length === 0 || allImagesAfterNextChaton) {
-      // Revenir au début si l'une des conditions est vraie
       this.startIndex = 0;
       this.reachedEnd = true;
     } else {
-      // Met à jour l'index de départ pour le prochain défilement
       this.startIndex = nextIndex;
       this.reachedEnd = false;
     }
 
-    // Met à jour les images affichées en fonction du nouvel index de départ
     if (!this.reachedEnd) {
       this.displayedImages[index] = this.allImages[index].slice(this.startIndex, this.startIndex + maxImagesToShow);
 
@@ -268,37 +244,37 @@ export class PorteeComponent implements OnInit, OnDestroy {
   }
 
 
-  getDynamicStyles(value: string): any {
-    const styles: any = {};
-    switch (value) {
-      case 'borderColor':
-        styles['border'] = "2px solid" + this.banner.bordureColorPageFemelles;
-        break;
-      case 'title':
-        styles['font-family'] = this.banner.titleFontStylePagechatonProfil;
-        styles['color'] = this.banner.titleColorPagechatonProfil;
-        break;
-      case 'text':
-        styles['font-family'] = this.banner.textFontStylePagechatonProfil;
-        styles['color'] = this.banner.textColorPagechatonProfil;
-        break;
-      case 'statusName':
-        styles['font-family'] = this.banner.statusNameFontStylePagechatonProfil;
-        styles['color'] = this.banner.statusNameColorPagechatonProfil;
-        break;
-      case 'background':
-        styles['font-family'] = this.banner.breedFontStylePagechatonProfil;
-        styles['color'] = this.banner.breedColorPagechatonProfil;
-        styles['background-color'] = this.banner.bagroundColorBreedPagechatonProfil;
-        break;
-      case 'fond-photos':
-        styles['background-color'] = this.banner.bagroundColorPagechatProfil;
-        break;
-      default:
-        break;
-    }
 
-    return styles;
+
+  getDynamicStyles(): void {
+    if (this.banner) {
+      this.dynamicStyles = {
+        title: {
+          'font-family': this.banner.titleFontStylePagechatonProfil,
+          'color': this.banner.titleColorPagechatonProfil,
+        },
+        borderColor: {
+          'border': this.banner.bordureColorPageFemelles,
+        },
+        text: {
+          'font-family': this.banner.textFontStylePagechatonProfil,
+          'color': this.banner.textColorPagechatonProfil,
+        },
+        statusName: {
+          'font-family': this.banner.statusNameFontStylePagechatonProfil,
+          'color': this.banner.statusNameColorPagechatonProfil,
+        },
+        background: {
+          'font-family': this.banner.breedFontStylePagechatonProfil,
+          'color': this.banner.breedColorPagechatonProfil,
+          'background-color': this.banner.backgroundColorBreedPagechatonProfil,
+
+        },
+        fondPhotos: {
+          'background-color': this.banner.bagroundColorPagechatProfil,
+        }
+      };
+    }
   }
 
 

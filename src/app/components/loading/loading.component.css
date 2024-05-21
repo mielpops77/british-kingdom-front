@@ -1,0 +1,38 @@
+.logo-div {
+    position: relative;
+    text-align: center;
+    padding-top: 20px;
+}
+
+.logoSrc {
+    width: 40%;
+    height: auto;
+    border-radius: 50%;
+    position: relative;
+}
+
+.loading-circles {
+    position: absolute;
+    top: 50%;
+    left: 51%;
+    transform: translate(-50%, -50%);
+}
+
+.loading-circle {
+    display: inline-block;
+    width: 1.1vw; /* 3% de la largeur de la fenêtre */
+    height: 1.1vw; /* 3% de la largeur de la fenêtre */
+    margin: 0 0.38vw; /* 1% de la largeur de la fenêtre d'espacement */
+    background-color: #4d4d4d; /* Changez la couleur selon vos besoins */
+    border-radius: 50%;
+    animation: bounce 0.5s ease-in-out infinite alternate; /* Animation de rebond */
+}
+
+@keyframes bounce {
+    from {
+        transform: translateY(-5px);
+    }
+    to {
+        transform: translateY(5px);
+    }
+}

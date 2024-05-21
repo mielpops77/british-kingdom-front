@@ -2,7 +2,14 @@
 <div class="livre-dor">
   <!-- <h2 class="titre">Vous avez adopter un chaton dans notre Chatterie</h2> -->
   <h2 class="titre" [ngStyle]="getDynamicStyles('title')">{{banner.titlePagelivreDor}} </h2>
-  <br><br>
+  <br>
+
+
+  <div class="logo-div">
+    <img src="assets/OIG4.jpeg" class="logoSrc" alt="Description de l'image">
+  </div>
+
+  <br>
 
   <div class="formulaire">
     <form (submit)="ajouterTemoignage()">

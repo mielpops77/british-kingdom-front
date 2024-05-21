@@ -107,7 +107,7 @@ export class CatService {
 
 
   private loadBannerSection(): void {
-    const url = `${environment.apiUrl}banner?id=${environment.id}`;
+    const url = `${environment.apiUrl}banner?profilId=${environment.id}`;
     this.http.get<BannerSection[]>(url).subscribe(
       (banner) => {
         this.bannerSubject.next(banner);
@@ -121,7 +121,7 @@ export class CatService {
 
 
   putBannerData(data: any): Observable<any> {
-    const url = `${environment.apiUrl}banner?id=${environment.id}`;
+    const url = `${environment.apiUrl}banner?profilId=${environment.id}`;
     return this.http.put(url, data);
   }
 

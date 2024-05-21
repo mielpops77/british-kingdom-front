@@ -1,3 +1,4 @@
+import { NgStyle } from '@angular/common';
 import { CatService } from '../components/Services/catService';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
@@ -6,7 +7,9 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-footer',
   templateUrl: './footer.component.html',
-  styleUrls: ['./footer.component.css']
+  styleUrls: ['./footer.component.css'],
+  standalone: true,
+  imports: [NgStyle]
 })
 export class FooterComponent implements OnInit, OnDestroy {
 

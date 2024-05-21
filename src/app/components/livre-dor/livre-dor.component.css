@@ -50,10 +50,10 @@
     transition: background-color 0.3s;
 }
 
-.sendValide:hover {
-    /* background-color: #A56D18; */
+/* .sendValide:hover {
+    background-color: #A56D18;
 }
-
+ */
 .sendNoValide {
     /* background-color: #A56D18; */
     /* color: #fff; */
@@ -107,3 +107,10 @@
 .temoignage+.temoignage {
     margin-top: 40px;
 }
+
+.logoSrc
+{
+  width: 300px;
+  height: auto;
+}
+

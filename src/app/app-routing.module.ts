@@ -11,6 +11,8 @@ import { MalesComponent } from './components/males/males.component';
 
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
+import { MentionsLegalesComponent } from './components/mentions-légales/mentions-legales/mentions-legales.component';
+import { PolitiqueConfidentialiteComponent } from './components/mentions-légales/politique-confidentialite/politique-confidentialite.component';
 
 const routes: Routes = [
   { path: '', component: AccueilComponent },
@@ -24,9 +26,8 @@ const routes: Routes = [
   { path: 'conditions', component: ConditionsComponent },
   { path: 'livre-dor', component: LivreDorComponent },
   { path: 'portee/:id', component: PorteeComponent },
-
-  
-
+  { path: 'mentions-legales', component: MentionsLegalesComponent },
+  { path: 'politique-confidentialite', component: PolitiqueConfidentialiteComponent },
 ];
 
 @NgModule({
