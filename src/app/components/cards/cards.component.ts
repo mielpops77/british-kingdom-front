@@ -13,8 +13,7 @@ import { RouterModule } from '@angular/router';
   templateUrl: './cards.component.html',
   styleUrls: ['./cards.component.css'],
   standalone: true,
-  imports: [MatCardModule, NgStyle, RouterModule, NgFor, MatButtonModule
-  ]
+  imports: [MatCardModule, NgStyle, RouterModule, NgFor, MatButtonModule]
 
 })
 export class CardsComponent implements OnInit {

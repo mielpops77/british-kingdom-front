@@ -2,13 +2,14 @@ import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, OnDestroy, Inj
 import Cropper from 'cropperjs';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog'; // Import MAT_DIALOG_DATA
 import { MatDialogRef } from '@angular/material/dialog'; // Importez MatDialogRef
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-image-upload-dialog',
   templateUrl: './image-upload-dialog.component.html',
   styleUrls: ['./image-upload-dialog.component.css'],
   standalone: true,
-  imports: []
+  imports: [MatIconModule]
 })
 export class ImageUploadDialogComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('image', { static: false }) imageElement!: ElementRef;
