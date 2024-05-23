@@ -1,11 +1,11 @@
 
 import { BannerSection } from '../../models/bannerSection.banner';
 import { environment } from 'src/environments/environment';
+import { MatButtonModule } from '@angular/material/button';
 import { Component, Input, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { NgFor, NgStyle } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-cards',

@@ -1,5 +1,5 @@
 .card-container {
-    padding-top: 20px;
+    /* padding-top: 20px; */
     display: flex;
     justify-content: center;
     gap: 60px;
@@ -29,20 +29,25 @@ mat-card:last-child {
 
 mat-card img {
     width: 100%;
+    padding-left: 15px;
+    padding-right: 15px;
+
     height: auto;
 }
 
 mat-card-title {
+    padding: 20px;
     font-size: 38px !important;
 }
 
 mat-card-content {
+    padding: 15px;
     flex-grow: 1;
     font-size: 18px;
     font-weight: 400;
 }
 
-.info-button {
+/* .info-button {
     font-family: "Signika", sans-serif;
     background-color: #565451;
     color: #fff;
@@ -52,7 +57,21 @@ mat-card-content {
     background-color: #666;
     transform: scale(1.05);
     transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
-}
+} */
+
+
+.custom-button {
+    font-family: "Signika", sans-serif !important;
+    background-color: #565451 !important;
+    color: #fff !important;
+  }
+  
+
+  .custom-button:hover {
+    background-color: #666;
+    transform: scale(1.05);
+    transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+  }
 
 
 

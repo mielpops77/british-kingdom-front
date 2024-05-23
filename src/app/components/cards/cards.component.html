@@ -6,16 +6,17 @@
         <mat-card [ngStyle]="dynamicStylesTitle"
             *ngFor="let card of [bannerSection?.titleCard1, bannerSection?.titleCard2, bannerSection?.titleCard3]; let i = index">
             <mat-card-header>
-                <mat-card-title>{{ card }}</mat-card-title>
+                <mat-card-title [ngStyle]="dynamicStylesTitle">{{ card }}</mat-card-title>
             </mat-card-header>
+            
             <img mat-card-image
                 [src]="url.apiUrlProfil + (i === 0 ? bannerSection?.maleImg : i === 1 ? bannerSection?.kittenImg : bannerSection?.femaleImg)"
                 alt="Card Image">
+                
             <mat-card-content [ngStyle]="dynamicStylesText">{{ i === 0 ? bannerSection?.maleDescription : i === 1 ?
                 bannerSection?.kittenDescription : bannerSection?.femaleDescription }}</mat-card-content>
-            <mat-card-actions>
-                <button [routerLink]="['/males', '/chatons', '/femelles'][i]" mat-raised-button color="primary"
-                    class="info-button">+ d'infos</button>
+            <mat-card-actions >
+                <button [routerLink]="['/males', '/chatons', '/femelles'][i]" mat-raised-button class="custom-button">+ d'infos</button>
             </mat-card-actions>
         </mat-card>
     </div>

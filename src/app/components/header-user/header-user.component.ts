@@ -4,14 +4,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { CatService } from '../Services/catService';
 import { RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+// import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @Component({
   selector: 'app-header-user',
   templateUrl: './header-user.component.html',
   styleUrls: ['./header-user.component.css'],
   standalone: true,
-  imports: [NgStyle, NgIf, NgFor, RouterModule, MatIconModule, BrowserAnimationsModule]
+  imports: [NgStyle, NgIf, NgFor, RouterModule, MatIconModule]
 
 })
 export class HeaderUserComponent implements OnInit, OnDestroy {

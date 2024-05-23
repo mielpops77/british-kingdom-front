@@ -152,7 +152,7 @@ export class CatService {
     );
   }
 
-  
+
 
 
   private loadProfil(): void {

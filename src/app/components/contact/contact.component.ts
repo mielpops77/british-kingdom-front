@@ -8,8 +8,8 @@ import { environment } from 'src/environments/environment';
 import { CatService } from '../Services/catService';
 import { Contact } from 'src/app/models/contact';
 import { DatePipe, NgIf } from '@angular/common';
-import { FormsModule, NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { FormsModule, NgForm } from '@angular/forms';
 
 
 @Component({
