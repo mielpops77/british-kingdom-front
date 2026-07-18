@@ -16,6 +16,8 @@ export class AdminPorteesComponent implements OnInit {
   portees: Portee[] = [];
   url = environment;
   deletingId: number | null = null;
+  archivingId: number | null = null;
+  activeTab: 'actives' | 'anciennes' = 'actives';
 
   constructor(private catService: CatService) { }
 
@@ -25,8 +27,28 @@ export class AdminPorteesComponent implements OnInit {
     });
   }
 
+  get displayedPortees(): Portee[] {
+    return this.portees.filter(p => this.activeTab === 'anciennes' ? p.archivee : !p.archivee);
+  }
+
   hasPhoto(url: string | undefined): boolean {
     return !!url && url.trim() !== '';
+  }
+
+  toggleArchive(portee: Portee): void {
+    const newValue = !portee.archivee;
+    this.archivingId = portee.id;
+    this.catService.setPorteeArchiveStatus(portee.id, newValue).subscribe({
+      next: () => {
+        portee.archivee = newValue;
+        this.catService.refreshPorteData(this.portees);
+        this.archivingId = null;
+      },
+      error: () => {
+        alert("L'opération a échoué.");
+        this.archivingId = null;
+      }
+    });
   }
 
   confirmDelete(portee: Portee): void {

@@ -306,6 +306,11 @@ export class CatService {
     const url = `${environment.apiUrlPorte}${porteeId}`;
     return this.http.delete(url);
   }
+
+  setPorteeArchiveStatus(porteeId: number, archivee: boolean): Observable<any> {
+    const url = `${environment.apiUrlPorte}${porteeId}/archive`;
+    return this.http.patch(url, { archivee });
+  }
   deleteChaton(chatonId: number): Observable<any> {
     const url = `${environment.apiUrlChaton}${chatonId}`;
     return this.http.delete(url);

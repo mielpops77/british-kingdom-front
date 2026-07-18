@@ -7,8 +7,17 @@
     <a routerLink="/admin/portees/new" class="add-btn">+ Ajouter</a>
   </div>
 
+  <div class="tabs">
+    <button class="tab-btn" [class.active]="activeTab === 'actives'" (click)="activeTab = 'actives'">
+      Portées actives
+    </button>
+    <button class="tab-btn" [class.active]="activeTab === 'anciennes'" (click)="activeTab = 'anciennes'">
+      Anciennes portées
+    </button>
+  </div>
+
   <div class="portee-list">
-    <div class="portee-row" *ngFor="let portee of portees">
+    <div class="portee-row" *ngFor="let portee of displayedPortees">
       <a [routerLink]="['/admin/portees', portee.id, 'edit']" class="portee-row-link">
         <img *ngIf="hasPhoto(portee.urlProfilMother)" [src]="url.apiUrlImgProfilCat + portee.urlProfilMother" [alt]="portee.name" class="portee-photo">
         <div *ngIf="!hasPhoto(portee.urlProfilMother)" class="portee-photo-placeholder">
@@ -27,11 +36,18 @@
           </span>
         </div>
       </a>
-      <button class="delete-btn" (click)="confirmDelete(portee)" [disabled]="deletingId === portee.id">
-        {{ deletingId === portee.id ? '...' : 'Supprimer' }}
-      </button>
+      <div class="portee-actions">
+        <button class="archive-btn" (click)="toggleArchive(portee)" [disabled]="archivingId === portee.id">
+          {{ archivingId === portee.id ? '...' : (portee.archivee ? 'Réactiver' : 'Archiver') }}
+        </button>
+        <button class="delete-btn" (click)="confirmDelete(portee)" [disabled]="deletingId === portee.id">
+          {{ deletingId === portee.id ? '...' : 'Supprimer' }}
+        </button>
+      </div>
     </div>
   </div>
 
-  <p *ngIf="!portees.length" class="hint">Aucune portée pour le moment.</p>
+  <p *ngIf="!displayedPortees.length" class="hint">
+    {{ activeTab === 'anciennes' ? 'Aucune ancienne portée archivée.' : 'Aucune portée active pour le moment.' }}
+  </p>
 </div>

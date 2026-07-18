@@ -12,6 +12,7 @@ export interface Portee {
     urlProfilMother: string;
     urlProfilFather: string;
     disponible: boolean;
+    archivee: boolean;
 
   }
   

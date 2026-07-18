@@ -35,6 +35,7 @@ export class PorteeFormComponent implements OnInit {
     urlProfilMother: '',
     urlProfilFather: '',
     disponible: false,
+    archivee: false,
   };
 
   saving = false;
