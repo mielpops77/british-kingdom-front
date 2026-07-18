@@ -25,6 +25,10 @@ export class AdminPorteesComponent implements OnInit {
     });
   }
 
+  hasPhoto(url: string | undefined): boolean {
+    return !!url && url.trim() !== '';
+  }
+
   confirmDelete(portee: Portee): void {
     if (!confirm(`Supprimer la portée "${portee.name}" et tous ses chatons ?`)) return;
 

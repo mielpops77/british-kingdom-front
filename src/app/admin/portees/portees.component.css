@@ -84,6 +84,23 @@ h1 {
   flex-shrink: 0;
 }
 
+.portee-photo-placeholder {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--blush-tint, #F7E1E6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.portee-photo-placeholder .paw-icon {
+  width: 28px;
+  height: 28px;
+  fill: var(--blush-deep, #B8637B);
+}
+
 .portee-info {
   flex: 1;
   display: flex;
