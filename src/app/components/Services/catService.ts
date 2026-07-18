@@ -256,6 +256,10 @@ export class CatService {
     return this.http.delete(`${environment.apiUrlCats}${catId}`);
   }
 
+  setCatArchiveStatus(catId: number, archivee: boolean): Observable<any> {
+    return this.http.patch(`${environment.apiUrlCats}${catId}/archive`, { archivee });
+  }
+
 
   getCatById(catId: string) {
     const profilId = environment.id;

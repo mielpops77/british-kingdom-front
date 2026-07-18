@@ -34,6 +34,7 @@ export class ChatFormComponent implements OnInit {
     sex: 'Mâle',
     pedigree: '',
     profilId: environment.id,
+    archivee: false,
   };
 
   uploadingProfil = false;

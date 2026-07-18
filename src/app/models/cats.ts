@@ -13,4 +13,5 @@ export interface Cat {
     sex: string;
     pedigree: string;
     profilId: number;
+    archivee: boolean;
   }

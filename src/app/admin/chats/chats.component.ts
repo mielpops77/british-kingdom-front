@@ -16,12 +16,34 @@ export class AdminChatsComponent implements OnInit {
   cats: Cat[] = [];
   url = environment;
   deletingId: number | null = null;
+  archivingId: number | null = null;
+  activeTab: 'actifs' | 'anciens' = 'actifs';
 
   constructor(private catService: CatService) { }
 
   ngOnInit(): void {
     this.catService.cat$.subscribe(cats => {
       if (cats) this.cats = cats;
+    });
+  }
+
+  get displayedCats(): Cat[] {
+    return this.cats.filter(c => this.activeTab === 'anciens' ? c.archivee : !c.archivee);
+  }
+
+  toggleArchive(cat: Cat): void {
+    const newValue = !cat.archivee;
+    this.archivingId = cat.id;
+    this.catService.setCatArchiveStatus(cat.id, newValue).subscribe({
+      next: () => {
+        cat.archivee = newValue;
+        this.catService.refreshCatData(this.cats);
+        this.archivingId = null;
+      },
+      error: () => {
+        alert("L'opération a échoué.");
+        this.archivingId = null;
+      }
     });
   }
 

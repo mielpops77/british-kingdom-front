@@ -51,6 +51,30 @@ h1 {
   box-shadow: 0 10px 24px -12px var(--blush-deep, #B8637B);
 }
 
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.tab-btn {
+  font-family: "Work Sans", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ink-soft, #93798D);
+  background: var(--bg-panel, #FFFFFF);
+  border: none;
+  border-radius: 999px;
+  padding: 8px 16px;
+  cursor: pointer;
+  box-shadow: 0 6px 16px -14px rgba(74, 50, 69, 0.3);
+}
+
+.tab-btn.active {
+  color: #fff;
+  background: var(--blush, #D98CA0);
+}
+
 .cat-list {
   display: flex;
   flex-direction: column;
@@ -104,20 +128,35 @@ h1 {
   color: var(--ink-soft, #93798D);
 }
 
-.delete-btn {
+.cat-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.delete-btn, .archive-btn {
   flex-shrink: 0;
   font-family: "Work Sans", sans-serif;
   font-size: 0.76rem;
   font-weight: 600;
-  color: var(--blush-deep, #B8637B);
-  background: var(--blush-tint, #F7E1E6);
   border: none;
   border-radius: 999px;
   padding: 8px 14px;
   cursor: pointer;
 }
 
-.delete-btn:disabled {
+.delete-btn {
+  color: var(--blush-deep, #B8637B);
+  background: var(--blush-tint, #F7E1E6);
+}
+
+.archive-btn {
+  color: var(--ink-soft, #93798D);
+  background: var(--sage-tint, #EAF0E3);
+}
+
+.delete-btn:disabled, .archive-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }

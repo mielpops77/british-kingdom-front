@@ -7,8 +7,17 @@
     <a routerLink="/admin/chats/new" class="add-btn">+ Ajouter</a>
   </div>
 
+  <div class="tabs">
+    <button class="tab-btn" [class.active]="activeTab === 'actifs'" (click)="activeTab = 'actifs'">
+      Chats actifs
+    </button>
+    <button class="tab-btn" [class.active]="activeTab === 'anciens'" (click)="activeTab = 'anciens'">
+      Anciens chats
+    </button>
+  </div>
+
   <div class="cat-list">
-    <div class="cat-row" *ngFor="let cat of cats">
+    <div class="cat-row" *ngFor="let cat of displayedCats">
       <a [routerLink]="['/admin/chats', cat.id, 'edit']" class="cat-row-link">
         <img [src]="url.apiUrlImgProfilCat + cat.urlProfil" [alt]="cat.name" class="cat-photo">
         <div class="cat-info">
@@ -16,11 +25,18 @@
           <span class="cat-meta">{{ cat.sex }} · {{ cat.robe }}</span>
         </div>
       </a>
-      <button class="delete-btn" (click)="confirmDelete(cat)" [disabled]="deletingId === cat.id">
-        {{ deletingId === cat.id ? '...' : 'Supprimer' }}
-      </button>
+      <div class="cat-actions">
+        <button class="archive-btn" (click)="toggleArchive(cat)" [disabled]="archivingId === cat.id">
+          {{ archivingId === cat.id ? '...' : (cat.archivee ? 'Réactiver' : 'Archiver') }}
+        </button>
+        <button class="delete-btn" (click)="confirmDelete(cat)" [disabled]="deletingId === cat.id">
+          {{ deletingId === cat.id ? '...' : 'Supprimer' }}
+        </button>
+      </div>
     </div>
   </div>
 
-  <p *ngIf="!cats.length" class="hint">Aucun chat pour le moment.</p>
+  <p *ngIf="!displayedCats.length" class="hint">
+    {{ activeTab === 'anciens' ? 'Aucun ancien chat archivé.' : 'Aucun chat actif pour le moment.' }}
+  </p>
 </div>

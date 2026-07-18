@@ -36,7 +36,7 @@ export class MalesComponent implements OnInit, OnDestroy {
 
     this.catSubscription = this.catService.cat$.subscribe(cats => {
       if (cats)
-        this.cats = cats.filter((cat: Cat) => cat.sex === "Mâle")
+        this.cats = cats.filter((cat: Cat) => cat.sex === "Mâle" && !cat.archivee)
     });
 
     this.bannerSubscription = this.catService.banner$.subscribe(banner => {
