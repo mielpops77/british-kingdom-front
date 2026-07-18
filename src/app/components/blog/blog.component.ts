@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgFor, NgIf } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { Meta, Title } from '@angular/platform-browser';
 import { BlogService } from '../Services/blogService';
 import { BlogPost } from '../../models/blog-post';
 
@@ -14,9 +15,12 @@ import { BlogPost } from '../../models/blog-post';
 export class BlogComponent implements OnInit {
   posts: BlogPost[] = [];
 
-  constructor(private blogService: BlogService) { }
+  constructor(private blogService: BlogService, private title: Title, private meta: Meta) { }
 
   ngOnInit(): void {
+    this.title.setTitle('Blog | Chatterie British Kingdom');
+    this.meta.updateTag({ name: 'description', content: "Conseils, actualités et vie de la chatterie British Kingdom : tout sur les chats British Shorthair et British Longhair." });
+
     this.blogService.getAllPosts().subscribe({
       next: (posts) => this.posts = posts,
       error: (err) => console.error('Error loading blog posts', err)

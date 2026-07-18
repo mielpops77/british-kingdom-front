@@ -8,6 +8,7 @@ import { CatService } from '../Services/catService';
 import { Profil } from 'src/app/models/profil';
 import { NgIf } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { Meta, Title } from '@angular/platform-browser';
 import { Subscription } from 'rxjs';
 
 
@@ -37,7 +38,10 @@ export class AccueilComponent implements OnInit, OnDestroy {
 
 
 
-  constructor(private catService: CatService, private loadingService: LoadingService) {
+  constructor(private catService: CatService, private loadingService: LoadingService, private title: Title, private meta: Meta) {
+
+    this.title.setTitle('Chatterie British Kingdom - Élevage de chats British Shorthair & Longhair');
+    this.meta.updateTag({ name: 'description', content: "Chatterie familiale British Kingdom, éleveur passionné de chats British Shorthair et British Longhair à Othis, Seine-et-Marne." });
 
     this.loadingService.getBannerLoading().subscribe((isLoading: boolean) => {
       this.isLoading = isLoading;

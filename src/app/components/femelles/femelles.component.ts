@@ -5,6 +5,7 @@ import { NgClass, NgFor, NgStyle } from '@angular/common';
 import { CatService } from '../Services/catService';
 import { HttpClient } from '@angular/common/http';
 import { Router, RouterLink } from '@angular/router';
+import { Meta, Title } from '@angular/platform-browser';
 import { Cat } from '../../models/cats';
 import { Subscription } from 'rxjs';
 
@@ -26,9 +27,11 @@ export class FemellesComponent implements OnInit, OnDestroy {
   banner: any = [];
   dynamicStyles: any = {};
 
-  constructor(private router: Router, private http: HttpClient, private catService: CatService) { }
+  constructor(private router: Router, private http: HttpClient, private catService: CatService, private title: Title, private meta: Meta) { }
 
   ngOnInit(): void {
+    this.title.setTitle('Nos chattes femelles British Shorthair & Longhair | Chatterie British Kingdom');
+    this.meta.updateTag({ name: 'description', content: "Découvrez nos chattes femelles British Shorthair et British Longhair, chatterie familiale à Othis, Seine-et-Marne." });
 
     this.catSubscription = this.catService.cat$.subscribe(cats => {
       if (cats)

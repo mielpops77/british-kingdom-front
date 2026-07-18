@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment';
 import { CatService } from '../../Services/catService';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Meta, Title } from '@angular/platform-browser';
 import { Cat } from '../../../models/cats';
 
 
@@ -32,6 +33,8 @@ export class ProsperComponent implements OnInit, OnDestroy {
     private elementRef: ElementRef,
     private route: ActivatedRoute,
     private catService: CatService,
+    private title: Title,
+    private meta: Meta,
     @Inject(PLATFORM_ID) platformId: Object,
 
   ) {
@@ -47,6 +50,7 @@ export class ProsperComponent implements OnInit, OnDestroy {
     if (selectedCatString !== null) {
       if (selectedCatString) {
         this.selectedCat = JSON.parse(selectedCatString);
+        this.updateMetaForCat();
       }
     }
 
@@ -56,12 +60,20 @@ export class ProsperComponent implements OnInit, OnDestroy {
       if (catId) {
         this.catService.getCatById(catId).subscribe((data: any) => {
           this.selectedCat = data;
+          this.updateMetaForCat();
         });
       }
 
     }
 
 
+  }
+
+  private updateMetaForCat(): void {
+    if (!this.selectedCat) return;
+    const sexLabel = this.selectedCat.sex === 'Mâle' ? 'mâle' : 'femelle';
+    this.title.setTitle(`${this.selectedCat.name} - Chat ${sexLabel} ${this.selectedCat.breed} | Chatterie British Kingdom`);
+    this.meta.updateTag({ name: 'description', content: `Découvrez ${this.selectedCat.name}, chat ${sexLabel} ${this.selectedCat.breed} de la chatterie British Kingdom à Othis, Seine-et-Marne.` });
   }
 
 

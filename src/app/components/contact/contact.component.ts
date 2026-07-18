@@ -7,6 +7,7 @@ import { Contact } from 'src/app/models/contact';
 import { DatePipe, NgIf } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { Meta, Title } from '@angular/platform-browser';
 
 
 @Component({
@@ -39,9 +40,14 @@ export class ContactComponent {
   constructor(
     private contactService: ContactService,
     private datePipe: DatePipe,
-    private snackBarService: SnackBarService
+    private snackBarService: SnackBarService,
+    private title: Title,
+    private meta: Meta
 
-  ) { }
+  ) {
+    this.title.setTitle('Contact | Chatterie British Kingdom');
+    this.meta.updateTag({ name: 'description', content: "Contactez la chatterie British Kingdom à Othis, Seine-et-Marne, pour toute question sur nos chatons British Shorthair et Longhair." });
+  }
 
   sendContactForm(form: NgForm): void {
     if (form.valid) {
