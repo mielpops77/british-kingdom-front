@@ -137,8 +137,12 @@ export class ChatFormComponent implements OnInit {
   }
 
   onSubmit(form: NgForm): void {
-    if (form.invalid || !this.model.urlProfil) {
-      this.error = !this.model.urlProfil ? "Ajoute une photo de profil avant d'enregistrer." : '';
+    if (!this.model.urlProfil) {
+      this.error = "Ajoute une photo de profil avant d'enregistrer.";
+      return;
+    }
+    if (form.invalid) {
+      this.error = 'Remplis tous les champs obligatoires (nom, date de naissance).';
       return;
     }
 
