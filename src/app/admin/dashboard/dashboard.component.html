@@ -16,6 +16,10 @@
   <p *ngIf="loading" class="hint">Chargement...</p>
   <p *ngIf="!loading && !stats" class="hint">Impossible de charger les statistiques.</p>
 
-  <p class="note">Pour l'instant, seules les visites totales et du jour sont suivies. On pourra enrichir le suivi
-    (par page, par appareil...) plus tard si tu en as besoin.</p>
+  <h2>Dernières visites</h2>
+  <p *ngIf="loadingVisits" class="hint">Chargement...</p>
+  <p *ngIf="!loadingVisits && recentVisits.length === 0" class="hint">Aucune visite enregistrée pour l'instant.</p>
+  <ul class="visit-list" *ngIf="!loadingVisits && recentVisits.length > 0">
+    <li *ngFor="let visit of recentVisits">{{ visit | date: 'dd/MM/yyyy à HH:mm' }}</li>
+  </ul>
 </div>
