@@ -137,6 +137,12 @@ export class PorteeFormComponent implements OnInit {
     this.model.urlProfilMother = mother?.urlProfil || this.model.urlProfilMother;
     this.model.chatons.forEach(c => c.porteeName = this.model.name);
 
+    // Archive automatiquement la portée dès qu'il n'y a plus de chaton "disponible"
+    const hasAvailableChaton = this.model.chatons.some(c => c.status === 'disponible');
+    if (!hasAvailableChaton) {
+      this.model.archivee = true;
+    }
+
     this.saving = true;
     this.error = '';
 

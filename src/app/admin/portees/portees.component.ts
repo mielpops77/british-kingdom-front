@@ -3,6 +3,7 @@ import { NgFor, NgIf } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { CatService } from '../../components/Services/catService';
 import { Portee } from '../../models/portee';
+import { Cat } from '../../models/cats';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -18,6 +19,7 @@ export class AdminPorteesComponent implements OnInit {
   deletingId: number | null = null;
   archivingId: number | null = null;
   activeTab: 'actives' | 'anciennes' = 'actives';
+  private catsById = new Map<number, Cat>();
 
   constructor(private catService: CatService) { }
 
@@ -25,10 +27,18 @@ export class AdminPorteesComponent implements OnInit {
     this.catService.portee$.subscribe(portees => {
       if (portees) this.portees = portees;
     });
+
+    this.catService.cat$.subscribe(cats => {
+      if (cats) this.catsById = new Map(cats.map(c => [c.id, c]));
+    });
   }
 
   get displayedPortees(): Portee[] {
     return this.portees.filter(p => this.activeTab === 'anciennes' ? p.archivee : !p.archivee);
+  }
+
+  motherPhoto(portee: Portee): string | undefined {
+    return this.catsById.get(portee.idMaman)?.urlProfil || portee.urlProfilMother;
   }
 
   hasPhoto(url: string | undefined): boolean {

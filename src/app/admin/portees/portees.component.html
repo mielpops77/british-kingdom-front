@@ -19,8 +19,8 @@
   <div class="portee-list">
     <div class="portee-row" *ngFor="let portee of displayedPortees">
       <a [routerLink]="['/admin/portees', portee.id, 'edit']" class="portee-row-link">
-        <img *ngIf="hasPhoto(portee.urlProfilMother)" [src]="url.apiUrlImgProfilCat + portee.urlProfilMother" [alt]="portee.name" class="portee-photo">
-        <div *ngIf="!hasPhoto(portee.urlProfilMother)" class="portee-photo-placeholder">
+        <img *ngIf="hasPhoto(motherPhoto(portee))" [src]="url.apiUrlImgProfilCat + motherPhoto(portee)" [alt]="portee.name" class="portee-photo">
+        <div *ngIf="!hasPhoto(motherPhoto(portee))" class="portee-photo-placeholder">
           <svg class="paw-icon" viewBox="0 0 64 64" aria-hidden="true">
             <ellipse cx="32" cy="42" rx="15" ry="12"/>
             <ellipse cx="14" cy="24" rx="7" ry="8.5"/>
