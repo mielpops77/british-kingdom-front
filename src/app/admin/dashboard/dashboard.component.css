@@ -97,10 +97,22 @@ h2 {
 
 .visit-list li {
   font-family: "Work Sans", sans-serif;
-  font-size: 0.88rem;
-  color: var(--ink, #4A3245);
   padding: 12px 16px;
   border-bottom: 1px solid var(--bg-cream, #FCF3EC);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.visit-date {
+  font-size: 0.88rem;
+  color: var(--ink, #4A3245);
+  font-weight: 500;
+}
+
+.visit-location {
+  font-size: 0.78rem;
+  color: var(--ink-soft, #93798D);
 }
 
 .visit-list li:last-child {

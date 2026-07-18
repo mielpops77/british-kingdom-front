@@ -19,7 +19,7 @@ interface Stats {
 export class DashboardComponent implements OnInit {
   stats: Stats | undefined;
   loading = true;
-  recentVisits: Date[] = [];
+  recentVisits: { visitedAt: Date; location: string | null }[] = [];
   loadingVisits = true;
 
   constructor(private http: HttpClient, private statistiqueService: StatistiqueService) { }
@@ -37,7 +37,7 @@ export class DashboardComponent implements OnInit {
 
     this.statistiqueService.getRecentVisits(environment.id).subscribe({
       next: (visits) => {
-        this.recentVisits = visits.map(v => new Date(v));
+        this.recentVisits = visits.map(v => ({ visitedAt: new Date(v.visitedAt), location: v.location }));
         this.loadingVisits = false;
       },
       error: () => {
