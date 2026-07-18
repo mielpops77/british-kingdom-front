@@ -1,7 +1,9 @@
 .title {
     text-align: center;
     font-size: 30px;
-    font-weight: bold;
+    font-weight: 600;
+    font-family: "Fraunces", serif !important;
+    color: var(--ink, #4A3245) !important;
 }
 
 .container-images {
@@ -19,7 +21,10 @@
     border-radius: 50%;
     width: 250px;
     object-fit: cover;
-    transition: transform 0.3s ease-in-out;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
+    border: 4px solid #fff;
+    outline: 1.5px solid var(--gold-soft, #BE9445);
+    box-shadow: 0 14px 28px -16px rgba(74, 50, 69, 0.35);
 }
 
 .first-image {
@@ -44,7 +49,9 @@
 
 .text {
     text-align: center;
-    font-weight: bold;
+    font-weight: 400;
+    font-family: "Work Sans", sans-serif !important;
+    color: var(--ink-soft, #93798D) !important;
 }
 
 .square-image:not([src*="chaton.png"]):hover {
@@ -126,7 +133,7 @@ a:hover {
 
     margin: 0 10px;
     object-fit: cover;
-    border-radius: 5px;
+    border-radius: 16px;
 }
 
 .carousel-images {
@@ -139,6 +146,9 @@ a:hover {
     padding: 10px;
     border-radius: 20px;
     width: 50%;
+    background-color: var(--blush-tint, #F7E1E6) !important;
+    color: var(--blush-deep, #B8637B) !important;
+    font-family: "Work Sans", sans-serif !important;
 }
 
 .grp:hover {
@@ -175,17 +185,19 @@ a:hover {
     margin-left: 20px !important;
     padding-bottom: 14px;
     width: 20%;
-    border-bottom: 2px solid #494949;
+    border-bottom: 2px solid var(--gold-soft, #BE9445);
+    color: var(--ink, #4A3245) !important;
+    font-family: "Work Sans", sans-serif !important;
 }
 
 .right-value {
     margin-right: 20px !important;
     float: right;
-    /* color: #E9920D; */
-    /* font-family: 'Oswald', sans-serif; */
     padding-bottom: 14px;
     width: 20%;
-    border-bottom: 2px solid #494949;
+    border-bottom: 2px solid var(--gold-soft, #BE9445);
+    color: var(--ink, #4A3245) !important;
+    font-family: "Work Sans", sans-serif !important;
 }
 
 .carousel-arrow-right.disabled {

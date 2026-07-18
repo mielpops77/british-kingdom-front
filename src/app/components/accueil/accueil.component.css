@@ -1,14 +1,147 @@
 .parent-container {
     text-align: center;
     margin-top: 40px;
-    /* margin-bottom: 30px; */
+    padding-bottom: clamp(48px, 7vw, 80px);
   }
+
+.hero {
+  background: linear-gradient(155deg, var(--powder-tint, #E9EFF8) 0%, var(--blush-tint, #F7E1E6) 55%, #fff 100%);
+  padding: clamp(48px, 7vw, 88px) clamp(20px, 4vw, 48px);
+  border-radius: 0 0 32px 32px;
+}
+
+.hero-inner {
+  display: grid;
+  grid-template-columns: minmax(220px, 300px) 1fr;
+  gap: clamp(28px, 5vw, 64px);
+  align-items: center;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.hero-frame {
+  justify-self: center;
+  position: relative;
+  width: min(100%, 300px);
+}
+
+.hero-frame-ring {
+  border: 6px solid #fff;
+  outline: 1.5px solid var(--gold-soft, #BE9445);
+  border-radius: 50%;
+  box-shadow: 0 18px 40px -18px rgba(74, 50, 69, 0.35);
+}
+
+.hero-frame-ring img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.hero-bow {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 46px;
+  height: 30px;
+  z-index: 2;
+}
+
+.hero-text {
+  text-align: left;
+}
+
+.hero-text h1 {
+  font-family: "Fraunces", serif;
+  font-weight: 600;
+  font-size: clamp(2.6rem, 5.2vw, 4.2rem);
+  color: var(--ink, #4A3245);
+  margin: 0;
+  line-height: 1.02;
+}
+
+.hero-sub {
+  font-family: "Dancing Script", cursive;
+  font-weight: 700;
+  font-size: clamp(1.4rem, 2.4vw, 1.8rem);
+  color: var(--blush-deep, #B8637B);
+  margin: 10px 0 0;
+}
+
+.hero-actions {
+  display: flex;
+  justify-content: flex-start;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 22px;
+}
+
+@media (max-width: 700px) {
+  .hero-inner {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .hero-text {
+    text-align: center;
+  }
+
+  .hero-actions {
+    justify-content: center;
+  }
+}
+
+.btn-blush, .btn-blush-ghost {
+  display: inline-flex;
+  align-items: center;
+  font-family: "Signika", sans-serif;
+  font-weight: 600;
+  font-size: 0.85rem;
+  padding: 12px 24px;
+  border-radius: 999px;
+  text-decoration: none;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.btn-blush {
+  background: var(--blush, #D98CA0);
+  color: #fff;
+  box-shadow: 0 10px 24px -12px var(--blush-deep, #B8637B);
+}
+
+.btn-blush:hover {
+  background: var(--blush-deep, #B8637B);
+  transform: scale(1.04);
+}
+
+.btn-blush-ghost {
+  background: var(--bg-panel, #fff);
+  color: var(--blush-deep, #B8637B);
+  border: 1.5px solid var(--blush, #D98CA0);
+}
+
+.btn-blush-ghost:hover {
+  transform: scale(1.04);
+}
+
+.follow-tagline {
+  font-family: "Dancing Script", cursive;
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: var(--blush-deep, #B8637B);
+  text-align: center;
+  margin: 0 0 6px;
+}
   
 
 .logo-div
 {
   text-align: center;
   padding-top: 20px;
+  position: relative;
 }
 
 .logoSrc
@@ -16,6 +149,19 @@
   width: 150px;
   height: auto;
   border-radius: 50%;
+  border: 4px solid #fff;
+  outline: 1.5px solid var(--gold-soft, #BE9445);
+  box-shadow: 0 14px 28px -16px rgba(74, 50, 69, 0.4);
+}
+
+.logo-bow {
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 26px;
+  z-index: 2;
 }
 
 
@@ -35,28 +181,151 @@
   align-items: center;
   padding-top: 5px;
   padding-bottom: 30px;
-  font-size: 2rem;
+  font-size: 1.3rem;
+  gap: 14px;
 }
 
 i
 {
-  margin: 0 20px; /* Ajustez la marge entre les icônes selon vos besoins */
+  margin: 0;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--blush-tint, #F7E1E6);
+  color: var(--blush-deep, #B8637B);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
+.story {
+  background: var(--bg-panel, #fff);
+  border-top: 0.5px solid rgba(74, 50, 69, 0.14);
+  border-bottom: 0.5px solid rgba(74, 50, 69, 0.14);
+  padding: clamp(56px, 8vw, 96px) 0;
+  margin-top: 20px;
+}
+
+.story-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(28px, 5vw, 56px);
+  align-items: center;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.eyebrow-label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.76rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--blush-deep, #B8637B);
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+
+.eyebrow-label::before {
+  content: "♥\FE0E";
+  font-family: "Work Sans", sans-serif;
+  font-size: 0.8rem;
+  color: var(--gold-soft, #BE9445) !important;
+}
+
+.story-text {
+  text-align: left;
+}
+
+.story-text h2 {
+  font-family: "Fraunces", serif;
+  font-weight: 600;
+  font-size: clamp(1.5rem, 2.6vw, 2rem);
+  color: var(--ink, #4A3245);
+  margin: 0 0 14px;
+}
+
+.story-text p:not(.eyebrow-label) {
+  color: var(--ink-soft, #93798D);
+  font-size: 0.98rem;
+  line-height: 1.6;
+  margin: 0;
 }
 
 .video-container {
   text-align: center; /* Alignement horizontal */
 }
 
+.video-frame {
+  position: relative;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px -20px rgba(74, 50, 69, 0.35);
+  cursor: pointer;
+}
+
 .center-video
 {
-  border-radius: 1%;
-  width: 74%;
-
+  border-radius: 22px;
+  width: 100%;
+  display: block;
 }
 
 .video-container video {
   margin: 0 auto; /* Centrer horizontalement */
+}
+
+.play-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, rgba(20,14,20,0.08) 0%, rgba(20,14,20,0.32) 100%);
+  transition: background 0.2s ease;
+  pointer-events: none;
+}
+
+.play-ring {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--blush-deep, #B8637B);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 14px 30px -10px rgba(20,14,20,0.5);
+  transition: transform 0.2s ease;
+}
+
+.video-frame:hover .play-ring {
+  transform: scale(1.08);
+}
+
+.play-ring svg {
+  margin-left: 3px;
+}
+
+.video-frame.started .play-overlay {
+  display: none;
+}
+
+@media (max-width: 760px) {
+  .story-wrap {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .story-text {
+    text-align: center;
+  }
+
+  .eyebrow-label {
+    justify-content: center;
+  }
 }
 #twitter:hover
 {

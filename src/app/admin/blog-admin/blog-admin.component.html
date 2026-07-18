@@ -1,0 +1,26 @@
+<div class="admin-page">
+  <div class="page-header">
+    <div>
+      <p class="eyebrow-label">Gestion</p>
+      <h1>Articles du blog</h1>
+    </div>
+    <a routerLink="/admin/blog/new" class="add-btn">+ Ajouter</a>
+  </div>
+
+  <div class="post-list">
+    <div class="post-row" *ngFor="let post of posts">
+      <a [routerLink]="['/admin/blog', post.slug, 'edit']" class="post-row-link">
+        <img [src]="post.coverImage" [alt]="post.title" class="post-photo">
+        <div class="post-info">
+          <span class="post-title">{{ post.title }}</span>
+          <span class="post-meta">{{ post.category }} · {{ post.date }}</span>
+        </div>
+      </a>
+      <button class="delete-btn" (click)="confirmDelete(post)" [disabled]="deletingId === post.id">
+        {{ deletingId === post.id ? '...' : 'Supprimer' }}
+      </button>
+    </div>
+  </div>
+
+  <p *ngIf="!loading && !posts.length" class="hint">Aucun article pour le moment.</p>
+</div>

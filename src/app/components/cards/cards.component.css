@@ -1,3 +1,24 @@
+.eyebrow-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    font-size: 0.76rem !important;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-top: 30px;
+    color: var(--blush-deep, #B8637B) !important;
+    font-family: "Work Sans", sans-serif !important;
+    font-weight: 600 !important;
+}
+
+.eyebrow-label::before {
+    content: "♥\FE0E";
+    font-family: "Work Sans", sans-serif;
+    font-size: 0.8rem;
+    color: var(--gold-soft, #BE9445) !important;
+}
+
 .card-container {
     /* padding-top: 20px; */
     display: flex;
@@ -16,10 +37,14 @@ mat-card {
     flex-direction: column;
     align-items: center;
     text-align: center;
+    border-radius: 22px !important;
+    box-shadow: 0 18px 36px -22px rgba(74, 50, 69, 0.35) !important;
+    overflow: hidden;
+    cursor: pointer;
 }
 
 mat-card:hover {
-    transform: scale(1.1);
+    transform: scale(1.04);
     transition: transform 0.3s ease-in-out;
 }
 
@@ -28,16 +53,28 @@ mat-card:last-child {
 }
 
 mat-card img {
+    box-sizing: border-box;
     width: 100%;
     padding-left: 15px;
     padding-right: 15px;
-
-    height: auto;
+    padding-top: 15px;
+    border-radius: 16px;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
 }
 
-mat-card-title {
-    padding: 20px;
-    font-size: 38px !important;
+.card-badge {
+    display: inline-flex;
+    margin: 16px auto 0;
+    padding: 7px 20px;
+    border-radius: 999px;
+    background: var(--blush-tint, #F7E1E6) !important;
+    color: var(--blush-deep, #B8637B) !important;
+    font-family: "Work Sans", sans-serif !important;
+    font-size: 0.85rem !important;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
 }
 
 mat-card-content {
@@ -45,6 +82,8 @@ mat-card-content {
     flex-grow: 1;
     font-size: 18px;
     font-weight: 400;
+    color: var(--ink-soft, #93798D) !important;
+    font-family: "Work Sans", sans-serif !important;
 }
 
 /* .info-button {
@@ -60,29 +99,32 @@ mat-card-content {
 } */
 
 
-.custom-button {
-    font-family: "Signika", sans-serif !important;
-    background-color: #565451 !important;
-    color: #fff !important;
+.frame-link {
+    font-family: "Signika", sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--blush-deep, #B8637B);
+    text-decoration: none;
+    border-bottom: 1.5px solid var(--gold-soft, #BE9445);
+    padding-bottom: 2px;
+    margin-bottom: 20px;
+    transition: transform 0.2s ease-in-out;
   }
-  
 
-  .custom-button:hover {
-    background-color: #666;
+  .frame-link:hover {
     transform: scale(1.05);
-    transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
   }
 
 
 
 @media (max-width: 1500px) {
-    .mat-card {
+    mat-card {
         flex-basis: 25%; 
     }
 }
 
 @media (max-width: 1300px) {
-    .mat-card {
+    mat-card {
         flex-basis: 28%; 
     }
 }
@@ -94,7 +136,7 @@ mat-card-content {
         gap: 40px;
     }
 
-    .mat-card {
+    mat-card {
         flex-basis: 29%; 
     }
     
@@ -108,7 +150,7 @@ mat-card-content {
         gap: 20px;
     }
 
-    .mat-card {
+    mat-card {
         flex-basis: 30%; 
     }
 }
@@ -119,7 +161,7 @@ mat-card-content {
         gap: 10px;
     }
 
-    .mat-card {
+    mat-card {
         flex-basis: 31%; 
     }
 }
@@ -127,7 +169,7 @@ mat-card-content {
 @media (max-width: 750px) {
 
 
-    .mat-card {
+    mat-card {
         flex-basis: 32%; 
     }
 }
@@ -140,7 +182,7 @@ mat-card-content {
         align-items: center;
     }
 
-    .mat-card {
+    mat-card {
         width: 80%;
         max-width: 300px;
     }

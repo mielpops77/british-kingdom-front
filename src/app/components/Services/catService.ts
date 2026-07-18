@@ -252,6 +252,10 @@ export class CatService {
     return this.http.post<Cat>(environment.apiUrlCats, catData);
   }
 
+  deleteCat(catId: number): Observable<any> {
+    return this.http.delete(`${environment.apiUrlCats}${catId}`);
+  }
+
 
   getCatById(catId: string) {
     const profilId = environment.id;

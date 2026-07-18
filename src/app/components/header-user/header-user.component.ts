@@ -1,5 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { NgFor, NgIf, NgStyle } from '@angular/common';
+import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser, NgFor, NgIf, NgStyle } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { CatService } from '../Services/catService';
 import { RouterModule } from '@angular/router';
@@ -17,33 +17,46 @@ import { Subscription } from 'rxjs';
 export class HeaderUserComponent implements OnInit, OnDestroy {
   private bannerSubscription: Subscription | undefined;
   isAdminRoute: boolean = false;
-  menu: string[] = [];
+  menuItems = [
+    { label: 'Accueil', path: '/' },
+    { label: 'Mâles', path: '/males' },
+    { label: 'Femelles', path: '/femelles' },
+    { label: 'Chatons', path: '/chatons' },
+    { label: 'Blog', path: '/blog' },
+    { label: 'Liste d\'attente', path: '/liste-attente' },
+    { label: 'Tarifs & conditions', path: '/conditions' },
+    { label: 'Contact', path: '/contact' },
+  ];
   colorMenu: string = '';
   hoverColorMenu: string = '';
   fontStyleMenu: string = '';
-  isMobile: boolean = false;
+  menuOpen: boolean = false;
+  private isBrowser: boolean;
 
-  constructor(private catService: CatService) {
+  constructor(
+    private catService: CatService,
+    @Inject(PLATFORM_ID) platformId: Object,
+  ) {
+    this.isBrowser = isPlatformBrowser(platformId);
   }
-
 
   ngOnInit(): void {
     this.catService.banner$.subscribe(banner => {
       if (banner) {
-        this.isMobile = window.innerWidth <= 767;
-        this.menu = banner[0].menu;
         this.colorMenu = banner[0].colorMenu;
         this.hoverColorMenu = banner[0].hoverColorMenu;
         this.fontStyleMenu = banner[0].fontStyleMenu;
-        document.documentElement.style.setProperty('--hover-color-menu', this.hoverColorMenu);
+
+        if (this.isBrowser) {
+          document.documentElement.style.setProperty('--hover-color-menu', this.hoverColorMenu);
+        }
       }
     })
   }
 
 
   toggleMobileMenu(): void {
-    console.log('ookokok');
-    this.isMobile = !this.isMobile;
+    this.menuOpen = !this.menuOpen;
   }
 
 

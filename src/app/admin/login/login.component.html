@@ -1,0 +1,18 @@
+<div class="login-page">
+  <div class="login-card">
+    <img src="assets/logo.png" alt="British Kingdom" class="logo">
+    <h1>Espace admin</h1>
+    <p class="subtitle">Chatterie British Kingdom</p>
+
+    <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
+      <input type="email" name="email" placeholder="Email" required [(ngModel)]="email">
+      <input type="password" name="password" placeholder="Mot de passe" required [(ngModel)]="password">
+
+      <div *ngIf="error" class="error-message">{{ error }}</div>
+
+      <button type="submit" class="btn-gold" [disabled]="loginForm.invalid || loading">
+        {{ loading ? 'Connexion...' : 'Se connecter' }}
+      </button>
+    </form>
+  </div>
+</div>

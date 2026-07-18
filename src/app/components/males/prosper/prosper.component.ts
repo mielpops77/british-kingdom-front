@@ -1,12 +1,11 @@
-import { DatePipe, NgClass, NgFor, NgIf, NgStyle, UpperCasePipe } from '@angular/common';
-import { Component, OnInit, ElementRef, OnDestroy, HostListener } from '@angular/core';
+import { isPlatformBrowser, NgFor, NgIf, UpperCasePipe } from '@angular/common';
+import { Component, OnInit, ElementRef, OnDestroy, Inject, PLATFORM_ID } from '@angular/core';
 import { ImageDialogComponent } from '../../image-dialog/image-dialog.component';
 import { environment } from 'src/environments/environment';
 import { CatService } from '../../Services/catService';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Cat } from '../../../models/cats';
-import { Subscription } from 'rxjs';
 
 
 
@@ -15,7 +14,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './prosper.component.html',
   styleUrls: ['./prosper.component.css'],
   standalone: true,
-  imports: [NgStyle, NgClass, DatePipe, UpperCasePipe, NgFor, NgIf]
+  imports: [UpperCasePipe, NgFor, NgIf, RouterLink]
 })
 export class ProsperComponent implements OnInit, OnDestroy {
 
@@ -23,43 +22,29 @@ export class ProsperComponent implements OnInit, OnDestroy {
   imageUrlParentsCat: string = "";
   imageUrlCatProfil: string = "";
   imageUrlCatImg: string = "";
-  screenWidth: number = window.innerWidth;
   env = environment;
   imageLoadErrorOccurred: boolean = false; // Variable pour suivre si une erreur de chargement d'image s'est produite
 
-
-  private bannerSubscription: Subscription | undefined;
-  banner: any = [];
-
-  @HostListener('window:resize', ['$event'])
-  onResize(event: any) {
-    this.screenWidth = window.innerWidth;
-  }
-
+  private isBrowser: boolean;
 
   constructor(
     private dialog: MatDialog,
     private elementRef: ElementRef,
     private route: ActivatedRoute,
     private catService: CatService,
+    @Inject(PLATFORM_ID) platformId: Object,
 
   ) {
+    this.isBrowser = isPlatformBrowser(platformId);
     this.imageUrlParentsCat = environment.apiUrlImgParentsCat;
     this.imageUrlCatProfil = environment.apiUrlImgProfilCat;
     this.imageUrlCatImg = environment.apiUrlImgCat;
-
   }
 
   ngOnInit(): void {
 
-    this.bannerSubscription = this.catService.banner$.subscribe(banner => {
-      if (banner) {
-        this.banner = banner[0];
-      }
-    });
-
-    if (localStorage.getItem('selectedCat') !== null) {
-      const selectedCatString = localStorage.getItem('selectedCat');
+    const selectedCatString = this.isBrowser ? localStorage.getItem('selectedCat') : null;
+    if (selectedCatString !== null) {
       if (selectedCatString) {
         this.selectedCat = JSON.parse(selectedCatString);
       }
@@ -88,7 +73,7 @@ export class ProsperComponent implements OnInit, OnDestroy {
 
 
   handleImageError(): void {
-    if (localStorage.getItem('selectedCat') !== null && !this.imageLoadErrorOccurred) {
+    if (this.isBrowser && localStorage.getItem('selectedCat') !== null && !this.imageLoadErrorOccurred) {
       const catId = this.route.snapshot.paramMap.get('id');
       if (catId) {
         this.catService.getCatById(catId).subscribe((data: any) => {
@@ -109,54 +94,22 @@ export class ProsperComponent implements OnInit, OnDestroy {
   }
 
   scrollToBottom() {
-    this.elementRef.nativeElement.ownerDocument.documentElement.scrollTop = this.elementRef.nativeElement.ownerDocument.documentElement.scrollHeight;
+    const gallery = this.elementRef.nativeElement.ownerDocument.getElementById('gallery');
+    if (gallery) {
+      gallery.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
 
-
-  getRows(arr: string[] | undefined, chunkSize: number): string[][] {
-    if (!arr) return [];
-    let i, j, temparray;
-    const newArray = [];
-    for (i = 0, j = arr.length; i < j; i += chunkSize) {
-      temparray = arr.slice(i, i + chunkSize);
-      newArray.push(temparray);
-    }
-    return newArray;
+  formaterDate(dateOfBirth: string | undefined): string {
+    if (!dateOfBirth) return '';
+    const options: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long', year: 'numeric' };
+    return new Date(dateOfBirth).toLocaleDateString('fr-FR', options);
   }
 
-
-  getDynamicStyles(value: string): any {
-    const styles: any = {};
-    switch (value) {
-      case 'borderColor':
-        styles['border'] = "2px solid" + this.banner.bordureColorPageFemelles;
-        break;
-      case 'title':
-        styles['font-family'] = this.banner.titleFontStylePagechatProfil;
-        styles['color'] = this.banner.titleColorPagechatProfil;
-        break;
-      case 'text-title':
-        styles['font-family'] = this.banner.textFontStylePagechatProfil;
-        styles['color'] = this.banner.textColorPagechatProfil;
-        styles['font-weight'] = "bold";
-
-        break;
-      case 'buttons':
-        styles['background-color'] = this.banner.buttonColorPagechatProfil;
-        styles['font-family'] = this.banner.buttonTextFontStylePagechatProfil;
-        styles['color'] = this.banner.buttonTextColorPagechatProfil;
-        break;
-      case 'border':
-        styles['background-color'] = this.banner.bordureColorPagechatProfil;
-        break;
-      case 'fond-photos':
-        styles['background-color'] = this.banner.bagroundColorPagechatProfil;
-        break;
-      default:
-        break;
-    }
-
-    return styles;
+  hasRealParentPhoto(url: string | undefined): boolean {
+    if (!url) return false;
+    const filename = url.trim().toLowerCase();
+    return filename !== '' && filename !== 'mere.jpg' && filename !== 'pere.jpg';
   }
 
   onImageLoad(name: string) {
@@ -168,10 +121,8 @@ export class ProsperComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    localStorage.removeItem('selectedCat');
-
-    if (this.bannerSubscription) {
-      this.bannerSubscription.unsubscribe();
+    if (this.isBrowser) {
+      localStorage.removeItem('selectedCat');
     }
   }
 

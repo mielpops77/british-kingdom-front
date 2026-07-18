@@ -27,6 +27,7 @@ export const environment = {
 
   apiUrlLivreOr: 'https://british-kingdom-back.azurewebsites.net/api/livreOr/',
   apiUrlContact: 'https://british-kingdom-back.azurewebsites.net/api/contact/',
+  apiUrlBlog: 'https://british-kingdom-back.azurewebsites.net/api/blog/',
 
   apiUrlFavicon: 'https://stockagebackkingdom.blob.core.windows.net/conteneurkingdom/favicon/',
 

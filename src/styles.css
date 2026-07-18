@@ -2,8 +2,30 @@
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
 @import "~@fortawesome/fontawesome-free/css/all.css";
 
+:root {
+  --ink: #4A3245;
+  --blush: #D98CA0;
+  --blush-deep: #B8637B;
+  --blush-tint: #F7E1E6;
+  --powder: #A9BEDC;
+  --powder-tint: #E9EFF8;
+  --sage: #9CB08A;
+  --sage-tint: #EAF0E3;
+  --gold-soft: #BE9445;
+  --ink-soft: #93798D;
+  --bg-cream: #FCF3EC;
+  --bg-panel: #FFFFFF;
+}
+
+html, body {
+  background: var(--bg-cream);
+  margin: 0;
+}
+
 .custom-dialog-container .mat-dialog-container {
-    padding: 10px 
+    padding: 0;
+    border-radius: 18px;
+    overflow: hidden;
   }
   
 

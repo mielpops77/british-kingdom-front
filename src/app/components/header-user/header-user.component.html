@@ -1,14 +1,19 @@
 <nav class="navUser" [ngStyle]="getDynamicStyles()">
-  <div class="mobile-menu-button" (click)="toggleMobileMenu()" style="text-align: center">
-    <mat-icon style="font-size: 30px;">menu</mat-icon>
+  <a routerLink="/" class="brand">
+    <img src="assets/logo.png" alt="Logo Chatterie British Kingdom">
+    <span>British Kingdom</span>
+  </a>
 
-  </div>
+  <button type="button" class="mobile-menu-button" (click)="toggleMobileMenu()" [attr.aria-expanded]="menuOpen"
+    aria-label="Ouvrir le menu">
+    <mat-icon style="font-size: 22px;">{{ menuOpen ? 'close' : 'menu' }}</mat-icon>
+    <span>Menu</span>
+  </button>
 
-  <ul *ngIf="!isMobile">
-    <li *ngFor="let menuItem of menu; let i = index">
-      <a [routerLink]="['/', 'males', 'femelles', 'chatons', 'conditions', 'livre-dor', 'contact'][i]"
-        [style.color]="colorMenu">
-        {{ menuItem }}
+  <ul [class.open]="menuOpen">
+    <li *ngFor="let item of menuItems">
+      <a [routerLink]="item.path" [style.color]="colorMenu" (click)="menuOpen = false">
+        {{ item.label }}
       </a>
     </li>
   </ul>

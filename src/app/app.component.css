@@ -1,14 +1,24 @@
 .titlePage {
   padding: 30px;
+  border-radius: 0 0 32px 32px;
+  background: linear-gradient(155deg, var(--powder-tint, #E9EFF8) 0%, var(--blush-tint, #F7E1E6) 100%) !important;
+}
+
+app-header-user {
+  display: block;
 }
 
 h1 {
- 
   text-align: center;
+  font-family: "Fraunces", serif !important;
+  color: var(--ink, #4A3245) !important;
 }
 
 h2 {
   text-align: center;
+  font-family: "Work Sans", sans-serif !important;
+  color: var(--blush-deep, #B8637B) !important;
+  font-weight: 400 !important;
 }
 
 .container {

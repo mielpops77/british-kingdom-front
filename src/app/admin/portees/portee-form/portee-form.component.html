@@ -1,0 +1,79 @@
+<div class="admin-page">
+  <a routerLink="/admin/portees" class="back-link">← Retour</a>
+  <p class="eyebrow-label">{{ isEdit ? 'Modifier' : 'Ajouter' }}</p>
+  <h1>{{ isEdit ? model.name : 'Nouvelle portée' }}</h1>
+
+  <form #porteeForm="ngForm" (ngSubmit)="onSubmit(porteeForm)" class="form">
+
+    <label class="field-label">Nom de la portée</label>
+    <input type="text" name="name" required [(ngModel)]="model.name">
+
+    <label class="field-label">Père</label>
+    <select name="idPapa" required [(ngModel)]="model.idPapa">
+      <option [ngValue]="0" disabled>Choisir un père</option>
+      <option *ngFor="let cat of males" [ngValue]="cat.id">{{ cat.name }}</option>
+    </select>
+
+    <label class="field-label">Mère</label>
+    <select name="idMaman" required [(ngModel)]="model.idMaman">
+      <option [ngValue]="0" disabled>Choisir une mère</option>
+      <option *ngFor="let cat of females" [ngValue]="cat.id">{{ cat.name }}</option>
+    </select>
+
+    <label class="field-label">Date de naissance</label>
+    <input type="date" name="dateOfBirth" [(ngModel)]="model.dateOfBirth">
+
+    <label class="field-label">Date de vente</label>
+    <input type="date" name="dateOfSell" [(ngModel)]="model.dateOfSell">
+
+    <label class="checkbox-label">
+      <input type="checkbox" name="disponible" [(ngModel)]="model.disponible">
+      Portée disponible sur le site
+    </label>
+
+    <div class="section-divider">Chatons ({{ model.chatons.length }})</div>
+
+    <div class="chaton-card" *ngFor="let chaton of model.chatons; let i = index">
+      <div class="chaton-header">
+        <div class="photo-upload">
+          <img *ngIf="chaton.urlProfil" [src]="url.apiUrlImgChaton + chaton.urlProfil" class="preview-round small">
+          <div *ngIf="!chaton.urlProfil" class="preview-placeholder round small">Photo</div>
+          <label class="upload-btn small">
+            {{ uploadingChatonIndex === i ? '...' : 'Photo' }}
+            <input type="file" accept="image/*" (change)="onChatonPhotoSelected($event, i)" [disabled]="uploadingChatonIndex === i">
+          </label>
+        </div>
+        <button type="button" class="remove-chaton-btn" (click)="removeChaton(i)">Retirer</button>
+      </div>
+
+      <input type="text" name="chatonName{{i}}" placeholder="Nom" [(ngModel)]="chaton.name">
+
+      <div class="chaton-row">
+        <select name="chatonSex{{i}}" [(ngModel)]="chaton.sex">
+          <option value="Mâle">Mâle</option>
+          <option value="Femelle">Femelle</option>
+        </select>
+        <select name="chatonStatus{{i}}" [(ngModel)]="chaton.status">
+          <option value="disponible">Disponible</option>
+          <option value="reserve">Réservé</option>
+          <option value="rester">Reste à la chatterie</option>
+        </select>
+      </div>
+
+      <input type="text" name="chatonRobe{{i}}" placeholder="Robe" [(ngModel)]="chaton.robe">
+
+      <label class="checkbox-label small">
+        <input type="checkbox" name="chatonLoof{{i}}" [(ngModel)]="chaton.loof">
+        LOOF
+      </label>
+    </div>
+
+    <button type="button" class="add-chaton-btn" (click)="addChaton()">+ Ajouter un chaton</button>
+
+    <div *ngIf="error" class="error-message">{{ error }}</div>
+
+    <button type="submit" class="btn-gold" [disabled]="saving">
+      {{ saving ? 'Enregistrement...' : (isEdit ? 'Enregistrer' : 'Créer') }}
+    </button>
+  </form>
+</div>

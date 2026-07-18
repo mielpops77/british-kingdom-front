@@ -4,7 +4,7 @@ import { environment } from 'src/environments/environment';
 import { NgClass, NgFor, NgStyle } from '@angular/common';
 import { CatService } from '../Services/catService';
 import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Cat } from '../../models/cats';
 import { Subscription } from 'rxjs';
 
@@ -13,7 +13,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './femelles.component.html',
   styleUrls: ['./femelles.component.css'],
   standalone: true,
-  imports: [NgClass, NgStyle, NgFor]
+  imports: [NgClass, NgStyle, NgFor, RouterLink]
 })
 export class FemellesComponent implements OnInit, OnDestroy {
 
@@ -80,6 +80,24 @@ export class FemellesComponent implements OnInit, OnDestroy {
     }
   }
 
+
+  getAge(dateOfBirth: string): string {
+    if (!dateOfBirth) return '';
+    const birth = new Date(dateOfBirth);
+    const now = new Date();
+    let years = now.getFullYear() - birth.getFullYear();
+    const m = now.getMonth() - birth.getMonth();
+    if (m < 0 || (m === 0 && now.getDate() < birth.getDate())) {
+      years--;
+    }
+    if (years < 1) {
+      let months = (now.getFullYear() - birth.getFullYear()) * 12 + (now.getMonth() - birth.getMonth());
+      if (now.getDate() < birth.getDate()) months--;
+      months = Math.max(months, 1);
+      return months === 1 ? '1 mois' : `${months} mois`;
+    }
+    return years === 1 ? '1 an' : `${years} ans`;
+  }
 
   onImageLoad() {
     // Ajoutez une classe pour déclencher l'animation

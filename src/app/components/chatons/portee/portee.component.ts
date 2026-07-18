@@ -1,9 +1,9 @@
-import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { ImageDialogComponent } from '../../image-dialog/image-dialog.component';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { CatService } from '../../Services/catService';
-import { NgFor, NgIf, NgStyle } from '@angular/common';
+import { isPlatformBrowser, NgFor, NgIf, NgStyle } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 
@@ -28,13 +28,17 @@ export class PorteeComponent implements OnInit, OnDestroy {
   dateOfSell = '';
   banner: any = [];
   dynamicStyles: any = {};
+  private isBrowser: boolean;
 
   constructor(
     private route: ActivatedRoute,
     private catService: CatService,
     private dialog: MatDialog,
-    private router: Router
-  ) { }
+    private router: Router,
+    @Inject(PLATFORM_ID) platformId: Object,
+  ) {
+    this.isBrowser = isPlatformBrowser(platformId);
+  }
 
 
   @HostListener('window:resize', ['$event'])
@@ -58,7 +62,7 @@ export class PorteeComponent implements OnInit, OnDestroy {
 
 
   private initializeSelectedPortee(): void {
-    const localStoragePortee = localStorage.getItem('selectedPortee');
+    const localStoragePortee = this.isBrowser ? localStorage.getItem('selectedPortee') : null;
     if (localStoragePortee) {
       this.selectedPortee = JSON.parse(localStoragePortee);
       this.selectedPortee.portee = this.selectedPortee.portee || this.selectedPortee;
@@ -82,6 +86,10 @@ export class PorteeComponent implements OnInit, OnDestroy {
       }
     }
   }
+  private getScreenWidth(): number {
+    return this.isBrowser ? window.innerWidth : 1920;
+  }
+
   private processChatons(): void {
     const chatons = this.selectedPortee?.portee?.chatons || this.selectedPortee?.chatons;
     console.log('processChatons', this.selectedPortee);
@@ -91,7 +99,7 @@ export class PorteeComponent implements OnInit, OnDestroy {
         chatons[i].sex = chatons[i].sex.charAt(0).toUpperCase() + chatons[i].sex.slice(1);
         chatons[i].name = chatons[i].name.charAt(0).toUpperCase() + chatons[i].name.slice(1);
 
-        const screenWidth = window.innerWidth;
+        const screenWidth = this.getScreenWidth();
 
         switch (chatons[i].status) {
           case 'disponible':
@@ -146,7 +154,7 @@ export class PorteeComponent implements OnInit, OnDestroy {
 
 
   private processImages(): void {
-    const screenWidth = window.innerWidth;
+    const screenWidth = this.getScreenWidth();
     console.log(screenWidth);
 
     for (let i = 0; i < this.allImages.length; i++) {
@@ -174,7 +182,7 @@ export class PorteeComponent implements OnInit, OnDestroy {
 
 
   private getMaxImagesToShow(): number {
-    const screenWidth = window.innerWidth;
+    const screenWidth = this.getScreenWidth();
     if (screenWidth <= 1100 && screenWidth > 760) {
       return 2;
     }
@@ -280,7 +288,9 @@ export class PorteeComponent implements OnInit, OnDestroy {
 
 
   ngOnDestroy(): void {
-    localStorage.removeItem('selectedPortee');
+    if (this.isBrowser) {
+      localStorage.removeItem('selectedPortee');
+    }
     if (this.bannerSubscription) {
       this.bannerSubscription.unsubscribe();
     }

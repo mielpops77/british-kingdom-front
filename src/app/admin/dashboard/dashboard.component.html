@@ -1,0 +1,21 @@
+<div class="dashboard">
+  <p class="eyebrow-label">Tableau de bord</p>
+  <h1>Statistiques du site</h1>
+
+  <div class="stat-grid" *ngIf="stats">
+    <div class="stat-card">
+      <span class="stat-value">{{ stats.nbrVisitesTotal }}</span>
+      <span class="stat-label">Visites totales</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-value">{{ stats.nbrVisitesJour }}</span>
+      <span class="stat-label">Visites aujourd'hui</span>
+    </div>
+  </div>
+
+  <p *ngIf="loading" class="hint">Chargement...</p>
+  <p *ngIf="!loading && !stats" class="hint">Impossible de charger les statistiques.</p>
+
+  <p class="note">Pour l'instant, seules les visites totales et du jour sont suivies. On pourra enrichir le suivi
+    (par page, par appareil...) plus tard si tu en as besoin.</p>
+</div>

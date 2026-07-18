@@ -1,0 +1,29 @@
+<div class="admin-shell">
+  <header class="admin-topbar">
+    <span class="brand">British Kingdom · Admin</span>
+    <button class="logout-btn" (click)="logout()">Déconnexion</button>
+  </header>
+
+  <main class="admin-content">
+    <router-outlet></router-outlet>
+  </main>
+
+  <nav class="admin-bottomnav">
+    <a routerLink="/admin/dashboard" routerLinkActive="active">
+      <span class="icon">📊</span>
+      <span class="label">Stats</span>
+    </a>
+    <a routerLink="/admin/chats" routerLinkActive="active">
+      <span class="icon">🐱</span>
+      <span class="label">Chats</span>
+    </a>
+    <a routerLink="/admin/portees" routerLinkActive="active">
+      <span class="icon">🍼</span>
+      <span class="label">Portées</span>
+    </a>
+    <a routerLink="/admin/blog" routerLinkActive="active">
+      <span class="icon">📝</span>
+      <span class="label">Blog</span>
+    </a>
+  </nav>
+</div>

@@ -1,14 +1,13 @@
-import { CarousselComponent } from '../caroussel/caroussel.component';
-import { StatistiqueService } from '../Services/statistique.service';
 import { BannerSection } from '../../models/bannerSection.banner';
 import { LoadingComponent } from '../loading/loading.component';
 import { LoadingService } from '../Services/loading.service';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { CardsComponent } from '../cards/cards.component';
 import { CatService } from '../Services/catService';
 import { Profil } from 'src/app/models/profil';
 import { NgIf } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 
@@ -16,7 +15,7 @@ import { Subscription } from 'rxjs';
   selector: 'app-accueil',
   templateUrl: './accueil.component.html',
   styleUrls: ['./accueil.component.css'],
-  imports: [LoadingComponent, CarousselComponent, CardsComponent, NgIf
+  imports: [LoadingComponent, CardsComponent, NgIf, RouterModule
   ],
   standalone: true,
 })
@@ -26,6 +25,9 @@ export class AccueilComponent implements OnInit, OnDestroy {
 
   bannerSection: BannerSection | null = null;
   profil: Profil | null = null;
+  videoStarted = false;
+
+  @ViewChild('videoEl') videoEl: ElementRef<HTMLVideoElement> | undefined;
 
   url = environment;
 
@@ -35,7 +37,7 @@ export class AccueilComponent implements OnInit, OnDestroy {
 
 
 
-  constructor(private catService: CatService, private statistiqueService: StatistiqueService, private loadingService: LoadingService) {
+  constructor(private catService: CatService, private loadingService: LoadingService) {
 
     this.loadingService.getBannerLoading().subscribe((isLoading: boolean) => {
       this.isLoading = isLoading;
@@ -57,15 +59,20 @@ export class AccueilComponent implements OnInit, OnDestroy {
     this.profilSubscription = this.catService.profil$.subscribe((profil) => {
       this.profil = profil?.[0] || null;
     });
-
-
-    this.statistiqueService.enregistrerVisite().subscribe();
   }
 
   ngOnInit(): void {
   }
 
 
+
+  playVideo(): void {
+    this.videoStarted = true;
+    const video = this.videoEl?.nativeElement;
+    if (video) {
+      video.play();
+    }
+  }
 
   redirect(platform: string) {
     let url: string = '';

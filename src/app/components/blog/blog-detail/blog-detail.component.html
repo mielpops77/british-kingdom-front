@@ -1,0 +1,31 @@
+<ng-container *ngIf="post">
+  <div class="breadcrumb">
+    <a routerLink="/">Accueil</a><span class="sep">›</span>
+    <a routerLink="/blog">Blog</a><span class="sep">›</span>
+    <span class="current">{{ post.title }}</span>
+  </div>
+
+  <article class="article-hero">
+    <span class="tag">{{ post.category }}</span>
+    <h1>{{ post.title }}</h1>
+    <p class="article-meta">{{ formaterDate(post.date) }} · {{ post.readingTime }} min de lecture</p>
+  </article>
+
+  <div class="article-cover">
+    <img [src]="post.coverImage" [alt]="post.title">
+  </div>
+
+  <div class="article-body">
+    <a class="back-link" routerLink="/blog">← Retour au blog</a>
+
+    <ng-container *ngFor="let block of post.content">
+      <ng-container [ngSwitch]="block.type">
+        <p *ngSwitchCase="'p'">{{ block.text }}</p>
+        <h2 *ngSwitchCase="'h2'">{{ block.text }}</h2>
+        <blockquote *ngSwitchCase="'quote'">{{ block.text }}</blockquote>
+      </ng-container>
+    </ng-container>
+
+    <a class="back-link bottom" routerLink="/blog">← Retour au blog</a>
+  </div>
+</ng-container>

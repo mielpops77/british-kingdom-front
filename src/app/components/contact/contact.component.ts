@@ -1,15 +1,12 @@
 // contact.component.ts
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { SnackBarService } from '../Services/snack-bar.service';
-import { MatButtonModule } from '@angular/material/button';
 import { ContactService } from '../Services/contact.service';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { CatService } from '../Services/catService';
 import { Contact } from 'src/app/models/contact';
 import { DatePipe, NgIf } from '@angular/common';
-import { Subscription } from 'rxjs';
 import { FormsModule, NgForm } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 
 
 @Component({
@@ -17,11 +14,9 @@ import { FormsModule, NgForm } from '@angular/forms';
   templateUrl: './contact.component.html',
   styleUrls: ['./contact.component.css'],
   standalone: true,
-  imports: [FormsModule, NgIf, MatButtonModule]
+  imports: [FormsModule, NgIf, RouterLink]
 })
-export class ContactComponent implements OnInit, OnDestroy {
-
-  private bannerSubscription: Subscription | undefined;
+export class ContactComponent {
 
   // Initialisez le modèle avec des valeurs par défaut si nécessaire
   contactModel: Contact = {
@@ -40,35 +35,13 @@ export class ContactComponent implements OnInit, OnDestroy {
   // Variable pour suivre l'état de validation de l'e-mail
   isEmailInvalid = false;
   isNumInvalid = false;
-  banner: any = [];
-  googleMapsUrl: SafeResourceUrl | undefined;
-  address: string = '12 Bis Rue des Suisses, 77280 Othis';  // Adresse plus détaillée
 
   constructor(
     private contactService: ContactService,
     private datePipe: DatePipe,
-    private catService: CatService,
-    private sanitizer: DomSanitizer,
     private snackBarService: SnackBarService
 
   ) { }
-
-  ngOnInit(): void {
-    this.bannerSubscription = this.catService.banner$.subscribe(banner => {
-      if (banner) {
-        this.banner = banner[0];
-      }
-    });
-
-
-    const dynamicUrl = `https://www.google.com/maps/embed?q=${encodeURIComponent(this.address)}`;
-    this.googleMapsUrl = this.sanitizer.bypassSecurityTrustResourceUrl(dynamicUrl);
-
-  }
-
-
-
-
 
   sendContactForm(form: NgForm): void {
     if (form.valid) {
@@ -118,11 +91,6 @@ export class ContactComponent implements OnInit, OnDestroy {
   isEmailValid(email: string): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
-  }
-
-
-  ngOnDestroy(): void {
-    this.bannerSubscription?.unsubscribe();
   }
 
 }

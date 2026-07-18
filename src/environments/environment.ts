@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  url: 'http://localhost:3000/',
-  apiUrl: 'http://localhost:3000/api/',
+  url: '/',
+  apiUrl: '/api/',
   apiUrlImgProfilCat: 'https://stockagebackkingdom.blob.core.windows.net/conteneurkingdom/CatsProfil/',
   apiUrlImgParentsCat: 'https://stockagebackkingdom.blob.core.windows.net/conteneurkingdom/CatsParents/',
   apiUrlImgCat: 'https://stockagebackkingdom.blob.core.windows.net/conteneurkingdom/CatsImages/',
@@ -17,13 +17,14 @@ export const environment = {
   apiUrlProfil: 'https://stockagebackkingdom.blob.core.windows.net/conteneurkingdom/Profil/',
   apiUrlBanner: 'https://stockagebackkingdom.blob.core.windows.net/conteneurkingdom/Banner/',
 
-  apiUrlStatistique: "http://localhost:3000/api/statistique",
-  apiUrlCats: 'http://localhost:3000/api/cats/',
-  apiUrlPorte: 'http://localhost:3000/api/portee/',
-  apiUrlChaton: 'http://localhost:3000/api/chaton/',
+  apiUrlStatistique: "/api/statistique",
+  apiUrlCats: '/api/cats/',
+  apiUrlPorte: '/api/portee/',
+  apiUrlChaton: '/api/chaton/',
 
-  apiUrlLivreOr: 'http://localhost:3000/api/livreOr/',
-  apiUrlContact: 'http://localhost:3000/api/contact/',
+  apiUrlLivreOr: '/api/livreOr/',
+  apiUrlContact: '/api/contact/',
+  apiUrlBlog: '/api/blog/',
 
   apiUrlFavicon: 'https://stockagebackkingdom.blob.core.windows.net/conteneurkingdom/favicon/',
 

@@ -1,0 +1,28 @@
+<div class="admin-page">
+  <div class="page-header">
+    <div>
+      <p class="eyebrow-label">Gestion</p>
+      <h1>Nos portées</h1>
+    </div>
+    <a routerLink="/admin/portees/new" class="add-btn">+ Ajouter</a>
+  </div>
+
+  <div class="portee-list">
+    <div class="portee-row" *ngFor="let portee of portees">
+      <a [routerLink]="['/admin/portees', portee.id, 'edit']" class="portee-row-link">
+        <img [src]="url.apiUrlImgProfilCat + portee.urlProfilMother" [alt]="portee.name" class="portee-photo">
+        <div class="portee-info">
+          <span class="portee-name">{{ portee.name }}</span>
+          <span class="portee-meta">
+            {{ portee.chatons?.length || 0 }} chaton(s) · {{ portee.disponible ? 'Disponible' : 'Non disponible' }}
+          </span>
+        </div>
+      </a>
+      <button class="delete-btn" (click)="confirmDelete(portee)" [disabled]="deletingId === portee.id">
+        {{ deletingId === portee.id ? '...' : 'Supprimer' }}
+      </button>
+    </div>
+  </div>
+
+  <p *ngIf="!portees.length" class="hint">Aucune portée pour le moment.</p>
+</div>

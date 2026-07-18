@@ -3,28 +3,70 @@
 </div>
 
 
+<section class="hero" *ngIf="!isLoading">
+  <div class="hero-inner">
+    <div class="hero-frame">
+      <svg class="hero-bow" viewBox="0 0 46 30" aria-hidden="true">
+        <path d="M23 14 L4 3 Q0 2 1 8 L4 18 Q5 22 10 19 Z" fill="var(--blush, #D98CA0)"/>
+        <path d="M23 14 L42 3 Q46 2 45 8 L42 18 Q41 22 36 19 Z" fill="var(--blush, #D98CA0)"/>
+        <circle cx="23" cy="14" r="5" fill="var(--gold-soft, #BE9445)"/>
+      </svg>
+      <div class="hero-frame-ring">
+        <img src="assets/logo.png" alt="Portrait de chat British Shorthair couronné">
+      </div>
+    </div>
+    <div class="hero-text">
+      <p class="eyebrow-label">{{ bannerSection?.textPageAccueil }}</p>
+      <h1>{{ bannerSection?.title }}</h1>
+      <p class="hero-sub">élevés à la maison, avec tendresse</p>
+      <div class="hero-actions">
+        <a routerLink="/chatons" class="btn-blush">Voir les chatons disponibles</a>
+        <a routerLink="/contact" class="btn-blush-ghost">Nous écrire</a>
+      </div>
+    </div>
+  </div>
+</section>
+
 <div class="parent-container" *ngIf="!isLoading">
-  <app-caroussel [bannerSection]="bannerSection"></app-caroussel>
-  <br><br>
   <app-cards [bannerSection]="bannerSection"></app-cards>
-
-
 </div>
 
-<br>
-
-<div class="video-container">
-  <video controls class="center-video">
-    <source src="assets/vidos.mp4" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
-</div>
+<section class="story">
+  <div class="story-wrap">
+    <div class="video-container">
+      <div class="video-frame" (click)="playVideo()" [class.started]="videoStarted">
+        <video #videoEl controls preload="none" poster="assets/vidos-poster.jpg" class="center-video">
+          <source src="assets/vidos.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+        <div class="play-overlay" *ngIf="!videoStarted">
+          <span class="play-ring">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+              <path d="M8 5v14l11-7z"/>
+            </svg>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="story-text">
+      <p class="eyebrow-label">Petit moment fun</p>
+      <h2>Une chasse au trésor pas comme les autres</h2>
+      <p>Trois chatons partent à l'aventure sur l'air de Pirates des Caraïbes — une vidéo toute simple, juste pour le plaisir de les voir vivre.</p>
+    </div>
+  </div>
+</section>
 
 
 
 <div class="logo-div">
-  <img src="assets/photo_2023-12-24_21-37-46.jpg" class="logoSrc" alt="Description de l'image">
+  <svg class="logo-bow" viewBox="0 0 46 30" aria-hidden="true">
+    <path d="M23 14 L4 3 Q0 2 1 8 L4 18 Q5 22 10 19 Z" fill="var(--blush, #D98CA0)"/>
+    <path d="M23 14 L42 3 Q46 2 45 8 L42 18 Q41 22 36 19 Z" fill="var(--blush, #D98CA0)"/>
+    <circle cx="23" cy="14" r="5" fill="var(--gold-soft, #BE9445)"/>
+  </svg>
+  <img src="assets/logo.png" class="logoSrc" alt="Logo Chatterie British Kingdom">
 </div>
+<p class="follow-tagline">Suivez la vie de la chatterie</p>
 <div class="social-icons">
   <i *ngIf="profil?.facebook !== '' " id="facebook" class="fab fa-facebook" (click)="redirect('facebook')"></i>
   <i *ngIf="profil?.twitter !== '' " id="twitter" class="fab fa-twitter" (click)="redirect('twitter')"></i>

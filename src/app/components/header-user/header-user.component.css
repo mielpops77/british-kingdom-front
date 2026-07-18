@@ -1,9 +1,46 @@
+.navUser {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 12px 24px;
+  font-family: "Work Sans", sans-serif !important;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--bg-cream, #FCF3EC);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--ink, #4A3245);
+  font-family: "Fraunces", serif;
+  font-weight: 600;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.brand img {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+  outline: 1.5px solid var(--gold-soft, #BE9445);
+}
+
 .navUser ul {
   /* font-family: Georgia, 'Times New Roman', Times, serif; */
   /* color: #B3D7FF; */
   list-style: none;
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
+  flex: 1;
+  flex-wrap: wrap;
   margin: 0;
   padding: 0;
 }
@@ -17,19 +54,20 @@
 }
 
 .navUser ul li a {
-  /* font-family: Georgia, 'Times New Roman', Times, serif; */
+  font-family: "Work Sans", sans-serif !important;
   text-decoration: none;
-  /* color: #5f5E61; */
-  padding: 5px 10px;
-  border-radius: 5px;
+  color: var(--ink, #4A3245) !important;
+  padding: 6px 16px;
+  border-radius: 999px;
   font-size: 22px;
-  /* background-color: white; */
-  transition: background-color 0.3s ease;
+  font-weight: 500;
+  transition: background-color 0.3s ease, color 0.3s ease;
   display: block;
 }
 
 .navUser ul li a:hover {
-  background-color: var(--hover-color-menu);
+  background-color: var(--blush-tint, #F7E1E6) !important;
+  color: var(--blush-deep, #B8637B) !important;
 }
 
 
@@ -56,11 +94,19 @@
 
 .mobile-menu-button {
   cursor: pointer;
-  align-items: center !important;
+  display: flex;
+  align-items: center;
   justify-content: center;
-  /* height: 100%; */
-  margin-bottom: 20px;
-  margin-right: 10px; /* Ajoutez cette ligne pour espacer l'icône du reste du contenu */
+  gap: 6px;
+  margin: 0;
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 1.5px solid var(--blush, #D98CA0);
+  background: var(--blush-tint, #F7E1E6);
+  color: var(--blush-deep, #B8637B);
+  font-family: "Signika", sans-serif;
+  font-weight: 600;
+  font-size: 15px;
 }
 
 
@@ -131,9 +177,20 @@
     margin-top: 10px;
   }
 
+  .navUser {
+    padding: 12px 24px;
+  }
+
   .navUser ul {
+    display: none;
     flex-direction: column;
     align-items: center;
+    width: 100%;
+    margin-top: 16px;
+  }
+
+  .navUser ul.open {
+    display: flex;
   }
 
   .navUser ul li {

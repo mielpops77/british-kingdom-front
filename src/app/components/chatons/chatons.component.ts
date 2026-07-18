@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { CatService } from '../Services/catService';
 import { Portee } from 'src/app/models/portee';
 import { Cat } from 'src/app/models/cats';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -13,7 +13,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './chatons.component.html',
   styleUrls: ['./chatons.component.css'],
   standalone: true,
-  imports: [NgIf, NgStyle, NgFor, MatButtonModule]
+  imports: [NgIf, NgStyle, NgFor, MatButtonModule, RouterLink]
 })
 export class ChatonsComponent implements OnInit, OnDestroy {
 
@@ -26,6 +26,7 @@ export class ChatonsComponent implements OnInit, OnDestroy {
   dynamicStyles: any = {};
   allCats: Cat[] = [];
   porteInfo: any = [];
+  galleryImages: string[] = [];
   env = environment;
   banner: any = [];
 
@@ -79,6 +80,15 @@ export class ChatonsComponent implements OnInit, OnDestroy {
 
             return info;
           });
+
+        this.galleryImages = this.allPortee
+          .slice()
+          .reverse()
+          .flatMap(portee => portee.chatons || [])
+          .flatMap(chaton => (chaton.photos && chaton.photos.length ? [chaton.photos[0]] : chaton.urlProfil ? [chaton.urlProfil] : []))
+          .filter(photo => photo && photo !== 'chaton.png')
+          .map(photo => environment.apiUrlImgChaton + photo)
+          .slice(0, 24);
       }
     });
 

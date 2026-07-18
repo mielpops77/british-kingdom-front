@@ -1,9 +1,10 @@
 import { CatService } from './components/Services/catService';
+import { StatistiqueService } from './components/Services/statistique.service';
 import { BannerSection } from './models/bannerSection.banner';
 import { environment } from 'src/environments/environment';
 import { Router, NavigationEnd, RouterModule } from '@angular/router';
-import { Component, OnDestroy } from '@angular/core';
-import { Location, NgStyle } from '@angular/common';
+import { Component, Inject, OnDestroy, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser, Location, NgIf, NgStyle } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { HeaderUserComponent } from './components/header-user/header-user.component';
 
@@ -16,16 +17,18 @@ import { FooterComponent } from './footer/footer.component';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
   standalone: true,
-  imports: [NgStyle, HeaderUserComponent, RouterModule, FooterComponent]
+  imports: [NgStyle, NgIf, HeaderUserComponent, RouterModule, FooterComponent]
 })
 
 export class AppComponent implements OnDestroy {
 
   isAllowed: boolean;
   isAdminRoute: boolean = false;
+  isHomeRoute: boolean = false;
   data: BannerSection | null = null;
   showHeader: boolean = true;
-  screenWidth: number = window.innerWidth;
+  screenWidth: number = 1920;
+  private isBrowser: boolean;
 
   private bannerSubscription: Subscription | undefined;
 
@@ -34,34 +37,43 @@ export class AppComponent implements OnDestroy {
     private location: Location,
     private router: Router,
     private catService: CatService,
+    private statistiqueService: StatistiqueService,
+    @Inject(PLATFORM_ID) platformId: Object,
   ) {
 
-
+    this.isBrowser = isPlatformBrowser(platformId);
     this.isAllowed = false; // Par défaut, l'accès est refusé
 
-
+    if (this.isBrowser) {
+      this.screenWidth = window.innerWidth;
+    }
   }
 
   ngOnInit(): void {
 
     console.log('oyééé matelot');
-    window.addEventListener('resize', () => {
-      this.screenWidth = window.innerWidth;
-    });
+    if (this.isBrowser) {
+      window.addEventListener('resize', () => {
+        this.screenWidth = window.innerWidth;
+      });
+    }
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         this.verifAdmin();
       }
     });
+    this.verifAdmin();
 
-
+    if (this.isBrowser && !this.isAdminRoute) {
+      this.statistiqueService.enregistrerVisite().subscribe();
+    }
 
     this.bannerSubscription = this.catService.banner$.subscribe((banner) => {
 
       if (banner !== null) {
         this.data = banner[0];
 
-        if (this.data.favicon !== 'favicon.ico') {
+        if (this.isBrowser && this.data.favicon !== 'favicon.ico') {
           this.updateFavicon(environment.apiUrlFavicon + this.data?.favicon);
         }
       }
@@ -73,6 +85,7 @@ export class AppComponent implements OnDestroy {
   verifAdmin(): void {
     const currentUrl = this.location.path();
     this.isAdminRoute = currentUrl.includes('admin');
+    this.isHomeRoute = currentUrl === '' || currentUrl === '/' || currentUrl === '/accueil';
   }
 
   getDynamicStyles(value: string): any {

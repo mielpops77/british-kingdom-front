@@ -1,6 +1,10 @@
 
-<div class="content-container">
-  <div class="titlePage" [ngStyle]="getDynamicStyles('colorHeader')">
+<div class="content-container" *ngIf="isAdminRoute">
+  <router-outlet></router-outlet>
+</div>
+
+<div class="content-container" *ngIf="!isAdminRoute">
+  <div class="titlePage" *ngIf="!isHomeRoute" [ngStyle]="getDynamicStyles('colorHeader')">
   <h1 [ngStyle]="getDynamicStyles('title')">{{data?.title}}</h1>
   <h2 [ngStyle]="getDynamicStyles('subtitle')">{{data?.subtitle}}</h2>
 </div>

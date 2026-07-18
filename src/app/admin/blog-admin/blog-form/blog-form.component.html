@@ -1,0 +1,51 @@
+<div class="admin-page">
+  <a routerLink="/admin/blog" class="back-link">← Retour</a>
+  <p class="eyebrow-label">{{ isEdit ? 'Modifier' : 'Ajouter' }}</p>
+  <h1>{{ isEdit ? title : 'Nouvel article' }}</h1>
+
+  <form #blogForm="ngForm" (ngSubmit)="onSubmit(blogForm)" class="form">
+
+    <div class="cover-upload">
+      <img *ngIf="coverImage" [src]="coverImage" class="preview-cover">
+      <div *ngIf="!coverImage" class="preview-placeholder">Photo de couverture</div>
+      <label class="upload-btn">
+        {{ uploadingCover ? 'Envoi...' : (coverImage ? 'Changer la photo' : 'Ajouter une photo') }}
+        <input type="file" accept="image/*" (change)="onCoverSelected($event)" [disabled]="uploadingCover">
+      </label>
+    </div>
+
+    <label class="field-label">Titre</label>
+    <input type="text" name="title" required [(ngModel)]="title" (ngModelChange)="onTitleChange()">
+
+    <label class="field-label">Lien (slug)</label>
+    <input type="text" name="slug" required [(ngModel)]="slug" (ngModelChange)="onSlugEdited()">
+
+    <label class="field-label">Catégorie</label>
+    <input type="text" name="category" required placeholder="Adoption, Santé, Race..." [(ngModel)]="category">
+
+    <label class="field-label">Extrait (résumé court)</label>
+    <input type="text" name="excerpt" required [(ngModel)]="excerpt">
+
+    <div class="field-row">
+      <div class="field-col">
+        <label class="field-label">Date</label>
+        <input type="date" name="date" [(ngModel)]="date">
+      </div>
+      <div class="field-col">
+        <label class="field-label">Temps de lecture (min)</label>
+        <input type="number" name="readingTime" min="1" [(ngModel)]="readingTime">
+      </div>
+    </div>
+
+    <label class="field-label">Contenu de l'article</label>
+    <p class="help-text">Astuce : une ligne vide sépare les paragraphes. Commence une ligne par
+      <code>## </code> pour un sous-titre, ou par <code>&gt; </code> pour une citation mise en avant.</p>
+    <textarea name="contentText" rows="14" [(ngModel)]="contentText" required></textarea>
+
+    <div *ngIf="error" class="error-message">{{ error }}</div>
+
+    <button type="submit" class="btn-gold" [disabled]="saving">
+      {{ saving ? 'Enregistrement...' : (isEdit ? 'Enregistrer' : 'Publier') }}
+    </button>
+  </form>
+</div>

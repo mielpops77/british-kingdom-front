@@ -1,14 +1,12 @@
 
-<!-- <div class="caroussel-bloc">
-<app-caroussel [bannerSection]="banner"></app-caroussel>
-
+<div class="breadcrumb">
+    <a routerLink="/">Accueil</a><span class="sep">›</span><span class="current">Nos chatons</span>
 </div>
- -->
 
 <h3 class="title"  [ngStyle]="dynamicStyles.title" *ngIf="porteeDisponible">Nous avons des chatons disponible !</h3>
 <h3 class="title"  [ngStyle]="dynamicStyles.title" *ngIf="!porteeDisponible">Pas de portee disponible pour le moment.</h3>
 
-<div *ngFor="let info of porteInfo; let i = index">
+<div class="litter-card" *ngFor="let info of porteInfo; let i = index">
   <div class="box">
     <h3 class="name"  [ngStyle]="dynamicStyles.info1">Parents: {{info?.nameFemale}} et {{info.nameMale}}</h3>
     <h2 class="name"  [ngStyle]="dynamicStyles.info2" *ngIf="info?.nbrMale>0 || info.nbrFemale>0">Née le {{info.dateOfBirth}} </h2>
@@ -25,7 +23,7 @@
   <br>
  -->
   <div class="couple-images-container">
-    <img [src]="info?.urlFemale" (click)="redirectToNewUrl(info?.idMaman,'femelles')" alt="Maman" 
+    <img [src]="info?.urlFemale" (click)="redirectToNewUrl(info?.idMaman,'femelles')" alt="Maman"
       class="oval-image" (load)="onImageLoad()">
     <img [src]="env.apiUrlImgDivers + 'coeur-transparent.png'" alt="Cœur" class="heart-image"  (load)="onImageLoad()">
     <img [src]="info?.urlMale" alt="Photo 2"  alt="Papa" (click)="redirectToNewUrl(info?.idPapa,'males')"
@@ -54,5 +52,12 @@
 
 
 
+</div>
 
+<div class="gallery-section" *ngIf="galleryImages.length">
+  <p class="eyebrow-label">Souvenirs</p>
+  <h2 class="gallery-title">Nos chatons au fil du temps</h2>
+  <div class="gallery-mosaic">
+    <img *ngFor="let photo of galleryImages" [src]="photo" alt="Chaton de la chatterie British Kingdom" loading="lazy">
+  </div>
 </div>

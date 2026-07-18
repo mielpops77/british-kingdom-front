@@ -1,25 +1,26 @@
 /* footer.component.css */
 
 footer {
-    /* background-color: #58879B; */
-    padding: 20px;
+    background: transparent !important;
+    border-top: 0.5px solid rgba(74, 50, 69, 0.14);
+    padding: 28px 20px;
     text-align: center;
     vertical-align:middle;
   }
-  
+
   .footer-container {
     max-width: 800px;
     margin: 0 auto;
-    color: #333;
+    color: var(--ink-soft, #93798D);
     font-size: 14px;
     line-height: 1.5;
   }
-  
+
   .footer-container p {
     margin: 18px 0;
-    color: white;
-    font-size: 16px;
-    font-family: Conforta;
+    color: var(--ink-soft, #93798D) !important;
+    font-size: 14px;
+    font-family: "Work Sans", sans-serif !important;
   }
   
   .social-icons {
@@ -28,18 +29,17 @@ footer {
   
   .link
   {
-    
-    font-family: Conforta;
-    color: #d39542;
-    font-size: 16px;
+    font-family: "Work Sans", sans-serif !important;
+    color: var(--blush-deep, #B8637B) !important;
+    font-size: 14px;
   }
 
 .link-eleveur-connect
 {
   text-decoration: none;
-  font-family: Conforta;
-  color: #f7f7f7;
-  font-size: 16px;
+  font-family: "Work Sans", sans-serif !important;
+  color: var(--ink-soft, #93798D) !important;
+  font-size: 14px;
 }
 
 
@@ -51,11 +51,9 @@ footer {
 
   .tiret
   {
-    font-family: Conforta;
-    color: #d39542;
-    font-size: 16px;
-
-
+    font-family: "Work Sans", sans-serif !important;
+    color: var(--blush-deep, #B8637B) !important;
+    font-size: 14px;
   }
   .social-icons a {
     display: inline-block;

@@ -1,22 +1,17 @@
-<h4 [ngStyle]="dynamicStylesTextLocalisation">{{bannerSection?.textPageAccueil}}
-    <!-- <br> -->
-
+<h4 class="eyebrow-label">La lignée</h4>
 
     <div class="card-container">
-        <mat-card [ngStyle]="dynamicStylesTitle"
+        <mat-card [routerLink]="['/males', '/chatons', '/femelles'][i]"
             *ngFor="let card of [bannerSection?.titleCard1, bannerSection?.titleCard2, bannerSection?.titleCard3]; let i = index">
-            <mat-card-header>
-                <mat-card-title [ngStyle]="dynamicStylesTitle">{{ card }}</mat-card-title>
-            </mat-card-header>
-            
+
             <img mat-card-image
-                [src]="url.apiUrlProfil + (i === 0 ? bannerSection?.maleImg : i === 1 ? bannerSection?.kittenImg : bannerSection?.femaleImg)"
+                [src]="i === 0 ? 'assets/males-card.jpg' : i === 1 ? 'assets/chatons-card.jpg' : 'assets/femelles-card.jpg'"
                 alt="Card Image">
-                
+
+            <span class="card-badge" [ngStyle]="dynamicStylesTitle">{{ card }}</span>
+
             <mat-card-content [ngStyle]="dynamicStylesText">{{ i === 0 ? bannerSection?.maleDescription : i === 1 ?
                 bannerSection?.kittenDescription : bannerSection?.femaleDescription }}</mat-card-content>
-            <mat-card-actions >
-                <button [routerLink]="['/males', '/chatons', '/femelles'][i]" mat-raised-button class="custom-button">+ d'infos</button>
-            </mat-card-actions>
+            <a [routerLink]="['/males', '/chatons', '/femelles'][i]" class="frame-link">+ d'infos →</a>
         </mat-card>
     </div>

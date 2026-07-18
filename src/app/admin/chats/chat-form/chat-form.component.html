@@ -1,0 +1,88 @@
+<div class="admin-page">
+  <a routerLink="/admin/chats" class="back-link">← Retour</a>
+  <p class="eyebrow-label">{{ isEdit ? 'Modifier' : 'Ajouter' }}</p>
+  <h1>{{ isEdit ? model.name : 'Nouveau chat' }}</h1>
+
+  <form #chatForm="ngForm" (ngSubmit)="onSubmit(chatForm)" class="form">
+
+    <div class="photo-upload-row">
+      <div class="photo-upload">
+        <img *ngIf="model.urlProfil" [src]="url.apiUrlImgProfilCat + model.urlProfil" class="preview-round">
+        <div *ngIf="!model.urlProfil" class="preview-placeholder round">Photo</div>
+        <label class="upload-btn">
+          {{ uploadingProfil ? 'Envoi...' : 'Photo de profil' }}
+          <input type="file" accept="image/*" (change)="onProfilPhotoSelected($event)" [disabled]="uploadingProfil">
+        </label>
+      </div>
+    </div>
+
+    <label class="field-label">Nom</label>
+    <input type="text" name="name" required [(ngModel)]="model.name">
+
+    <label class="field-label">Sexe</label>
+    <select name="sex" [(ngModel)]="model.sex">
+      <option value="Mâle">Mâle</option>
+      <option value="Femelle">Femelle</option>
+    </select>
+
+    <label class="field-label">Robe</label>
+    <input type="text" name="robe" [(ngModel)]="model.robe">
+
+    <label class="field-label">Race</label>
+    <select name="breed" [(ngModel)]="model.breed">
+      <option *ngFor="let race of races" [value]="race">{{ race }}</option>
+    </select>
+
+    <label class="field-label">Couleur des yeux</label>
+    <input type="text" name="eyeColor" [(ngModel)]="model.eyeColor">
+
+    <label class="field-label">Date de naissance</label>
+    <input type="date" name="dateOfBirth" [(ngModel)]="model.dateOfBirth">
+
+    <label class="field-label">Saillies extérieures</label>
+    <select name="sailliesExterieures" [(ngModel)]="model.sailliesExterieures">
+      <option value="Oui">Oui</option>
+      <option value="Non">Non</option>
+    </select>
+
+    <div class="section-divider">Les parents (optionnel)</div>
+
+    <div class="parents-upload-row">
+      <div class="photo-upload">
+        <img *ngIf="model.urlProfilMother" [src]="url.apiUrlImgParentsCat + model.urlProfilMother" class="preview-round small">
+        <div *ngIf="!model.urlProfilMother" class="preview-placeholder round small">Mère</div>
+        <label class="upload-btn small">
+          {{ uploadingMother ? 'Envoi...' : 'Photo mère' }}
+          <input type="file" accept="image/*" (change)="onMotherPhotoSelected($event)" [disabled]="uploadingMother">
+        </label>
+      </div>
+      <div class="photo-upload">
+        <img *ngIf="model.urlProfilFather" [src]="url.apiUrlImgParentsCat + model.urlProfilFather" class="preview-round small">
+        <div *ngIf="!model.urlProfilFather" class="preview-placeholder round small">Père</div>
+        <label class="upload-btn small">
+          {{ uploadingFather ? 'Envoi...' : 'Photo père' }}
+          <input type="file" accept="image/*" (change)="onFatherPhotoSelected($event)" [disabled]="uploadingFather">
+        </label>
+      </div>
+    </div>
+
+    <div class="section-divider">Galerie photos</div>
+
+    <div class="gallery-grid">
+      <div class="gallery-item" *ngFor="let img of model.images; let i = index">
+        <img [src]="url.apiUrlImgCat + img">
+        <button type="button" class="remove-btn" (click)="removeGalleryPhoto(i)">×</button>
+      </div>
+    </div>
+    <label class="upload-btn">
+      {{ uploadingGallery ? 'Envoi...' : '+ Ajouter des photos' }}
+      <input type="file" accept="image/*" multiple (change)="onGalleryPhotosSelected($event)" [disabled]="uploadingGallery">
+    </label>
+
+    <div *ngIf="error" class="error-message">{{ error }}</div>
+
+    <button type="submit" class="btn-gold" [disabled]="saving">
+      {{ saving ? 'Enregistrement...' : (isEdit ? 'Enregistrer' : 'Créer') }}
+    </button>
+  </form>
+</div>
