@@ -29,4 +29,12 @@ export class StatistiqueService {
   getRecentVisits(profilId: number, limit = 20) {
     return this.http.get<{ visitedAt: string; location: string | null }[]>(`${this.baseUrl}/recent/${profilId}?limit=${limit}`);
   }
+
+  getDailyStats(profilId: number, days = 14) {
+    return this.http.get<{ date: string; count: number }[]>(`${this.baseUrl}/daily/${profilId}?days=${days}`);
+  }
+
+  getTopLocations(profilId: number, days = 30, limit = 5) {
+    return this.http.get<{ location: string; count: number }[]>(`${this.baseUrl}/locations/${profilId}?days=${days}&limit=${limit}`);
+  }
 }

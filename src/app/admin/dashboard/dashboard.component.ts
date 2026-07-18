@@ -9,6 +9,18 @@ interface Stats {
   nbrVisitesJour: number;
 }
 
+interface DailyBar {
+  date: Date;
+  count: number;
+  heightPercent: number;
+}
+
+interface LocationStat {
+  location: string;
+  count: number;
+  percent: number;
+}
+
 @Component({
   selector: 'app-admin-dashboard',
   templateUrl: './dashboard.component.html',
@@ -21,6 +33,10 @@ export class DashboardComponent implements OnInit {
   loading = true;
   recentVisits: { visitedAt: Date; location: string | null }[] = [];
   loadingVisits = true;
+  dailyBars: DailyBar[] = [];
+  loadingDaily = true;
+  topLocations: LocationStat[] = [];
+  loadingLocations = true;
 
   constructor(private http: HttpClient, private statistiqueService: StatistiqueService) { }
 
@@ -42,6 +58,36 @@ export class DashboardComponent implements OnInit {
       },
       error: () => {
         this.loadingVisits = false;
+      }
+    });
+
+    this.statistiqueService.getDailyStats(environment.id, 14).subscribe({
+      next: (days) => {
+        const maxCount = Math.max(1, ...days.map(d => d.count));
+        this.dailyBars = days.map(d => ({
+          date: new Date(d.date),
+          count: d.count,
+          heightPercent: Math.round((d.count / maxCount) * 100)
+        }));
+        this.loadingDaily = false;
+      },
+      error: () => {
+        this.loadingDaily = false;
+      }
+    });
+
+    this.statistiqueService.getTopLocations(environment.id, 30, 5).subscribe({
+      next: (locations) => {
+        const maxCount = Math.max(1, ...locations.map(l => l.count));
+        this.topLocations = locations.map(l => ({
+          location: l.location,
+          count: l.count,
+          percent: Math.round((l.count / maxCount) * 100)
+        }));
+        this.loadingLocations = false;
+      },
+      error: () => {
+        this.loadingLocations = false;
       }
     });
   }

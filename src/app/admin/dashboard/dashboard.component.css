@@ -118,3 +118,93 @@ h2 {
 .visit-list li:last-child {
   border-bottom: none;
 }
+
+.chart-card {
+  background: var(--bg-panel, #FFFFFF);
+  border-radius: 18px;
+  padding: 18px 12px 10px;
+  box-shadow: 0 14px 30px -22px rgba(74, 50, 69, 0.35);
+}
+
+.bar-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 110px;
+}
+
+.bar-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+
+.bar-track {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+}
+
+.bar-fill {
+  width: 100%;
+  min-height: 3px;
+  background: var(--blush, #D98CA0);
+  border-radius: 4px 4px 0 0;
+  transition: height 0.2s ease;
+}
+
+.bar-label {
+  font-family: "Work Sans", sans-serif;
+  font-size: 0.62rem;
+  color: var(--ink-soft, #93798D);
+  margin-top: 6px;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  white-space: nowrap;
+}
+
+.location-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: var(--bg-panel, #FFFFFF);
+  border-radius: 18px;
+  padding: 16px;
+  box-shadow: 0 14px 30px -22px rgba(74, 50, 69, 0.35);
+}
+
+.location-top {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.location-name {
+  font-family: "Work Sans", sans-serif;
+  font-size: 0.84rem;
+  color: var(--ink, #4A3245);
+  font-weight: 500;
+}
+
+.location-count {
+  font-family: "Work Sans", sans-serif;
+  font-size: 0.84rem;
+  color: var(--blush-deep, #B8637B);
+  font-weight: 600;
+}
+
+.location-bar-track {
+  height: 6px;
+  background: var(--bg-cream, #FCF3EC);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.location-bar-fill {
+  height: 100%;
+  background: var(--sage, #9CB08A);
+  border-radius: 999px;
+}

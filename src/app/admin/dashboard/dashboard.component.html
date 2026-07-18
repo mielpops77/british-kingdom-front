@@ -16,6 +16,34 @@
   <p *ngIf="loading" class="hint">Chargement...</p>
   <p *ngIf="!loading && !stats" class="hint">Impossible de charger les statistiques.</p>
 
+  <h2>Évolution (14 derniers jours)</h2>
+  <p *ngIf="loadingDaily" class="hint">Chargement...</p>
+  <div class="chart-card" *ngIf="!loadingDaily && dailyBars.length">
+    <div class="bar-chart">
+      <div class="bar-col" *ngFor="let bar of dailyBars">
+        <div class="bar-track">
+          <div class="bar-fill" [style.height.%]="bar.heightPercent" [title]="bar.count + ' visite(s)'"></div>
+        </div>
+        <span class="bar-label">{{ bar.date | date: 'dd/MM' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <h2>Provenance (30 derniers jours)</h2>
+  <p *ngIf="loadingLocations" class="hint">Chargement...</p>
+  <p *ngIf="!loadingLocations && topLocations.length === 0" class="hint">Pas encore assez de données.</p>
+  <div class="location-list" *ngIf="!loadingLocations && topLocations.length > 0">
+    <div class="location-row" *ngFor="let loc of topLocations">
+      <div class="location-top">
+        <span class="location-name">{{ loc.location }}</span>
+        <span class="location-count">{{ loc.count }}</span>
+      </div>
+      <div class="location-bar-track">
+        <div class="location-bar-fill" [style.width.%]="loc.percent"></div>
+      </div>
+    </div>
+  </div>
+
   <h2>Dernières visites</h2>
   <p *ngIf="loadingVisits" class="hint">Chargement...</p>
   <p *ngIf="!loadingVisits && recentVisits.length === 0" class="hint">Aucune visite enregistrée pour l'instant.</p>
