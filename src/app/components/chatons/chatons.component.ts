@@ -89,16 +89,12 @@ export class ChatonsComponent implements OnInit, OnDestroy {
             return info;
           });
 
-        this.galleryImages = this.allPortee
-          .slice()
-          .reverse()
-          .flatMap(portee => portee.chatons || [])
-          .flatMap(chaton => (chaton.photos && chaton.photos.length ? [chaton.photos[0]] : chaton.urlProfil ? [chaton.urlProfil] : []))
-          .filter(photo => photo && photo !== 'chaton.png')
-          .map(photo => environment.apiUrlImgChaton + photo)
-          .slice(0, 24);
       }
     });
+
+    this.galleryImages = Array.from({ length: 20 }, (_, i) =>
+      environment.apiUrlImgChaton + 'galerie-' + String(i + 1).padStart(2, '0') + '.jpg'
+    );
 
     this.bannerSubscription = this.catService.banner$.subscribe(banner => {
       // this.setDynamicStyles();
