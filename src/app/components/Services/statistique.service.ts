@@ -27,7 +27,7 @@ export class StatistiqueService {
   }
 
   getRecentVisits(profilId: number, limit = 20) {
-    return this.http.get<{ visitedAt: string; location: string | null }[]>(`${this.baseUrl}/recent/${profilId}?limit=${limit}`);
+    return this.http.get<{ visitedAt: string; location: string | null; device: string; isBot: boolean }[]>(`${this.baseUrl}/recent/${profilId}?limit=${limit}`);
   }
 
   getDailyStats(profilId: number, days = 14) {

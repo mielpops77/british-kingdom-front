@@ -48,9 +48,12 @@
   <p *ngIf="loadingVisits" class="hint">Chargement...</p>
   <p *ngIf="!loadingVisits && recentVisits.length === 0" class="hint">Aucune visite enregistrée pour l'instant.</p>
   <ul class="visit-list" *ngIf="!loadingVisits && recentVisits.length > 0">
-    <li *ngFor="let visit of recentVisits">
-      <span class="visit-date">{{ visit.visitedAt | date: 'dd/MM/yyyy à HH:mm':'Europe/Paris' }}</span>
-      <span class="visit-location">{{ visit.location || 'Localisation inconnue' }}</span>
+    <li *ngFor="let visit of recentVisits" [class.is-bot]="visit.isBot">
+      <div class="visit-top">
+        <span class="visit-date">{{ visit.visitedAt | date: 'dd/MM/yyyy à HH:mm':'Europe/Paris' }}</span>
+        <span class="visit-badge" *ngIf="visit.isBot">Robot</span>
+      </div>
+      <span class="visit-location">{{ visit.device }} · {{ visit.location || 'Localisation inconnue' }}</span>
     </li>
   </ul>
 </div>

@@ -31,7 +31,7 @@ interface LocationStat {
 export class DashboardComponent implements OnInit {
   stats: Stats | undefined;
   loading = true;
-  recentVisits: { visitedAt: Date; location: string | null }[] = [];
+  recentVisits: { visitedAt: Date; location: string | null; device: string; isBot: boolean }[] = [];
   loadingVisits = true;
   dailyBars: DailyBar[] = [];
   loadingDaily = true;
@@ -53,7 +53,7 @@ export class DashboardComponent implements OnInit {
 
     this.statistiqueService.getRecentVisits(environment.id).subscribe({
       next: (visits) => {
-        this.recentVisits = visits.map(v => ({ visitedAt: new Date(v.visitedAt), location: v.location }));
+        this.recentVisits = visits.map(v => ({ visitedAt: new Date(v.visitedAt), location: v.location, device: v.device, isBot: v.isBot }));
         this.loadingVisits = false;
       },
       error: () => {

@@ -104,6 +104,12 @@ h2 {
   gap: 2px;
 }
 
+.visit-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .visit-date {
   font-size: 0.88rem;
   color: var(--ink, #4A3245);
@@ -113,6 +119,22 @@ h2 {
 .visit-location {
   font-size: 0.78rem;
   color: var(--ink-soft, #93798D);
+}
+
+.visit-badge {
+  font-family: "Work Sans", sans-serif;
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft, #93798D);
+  background: var(--bg-cream, #FCF3EC);
+  border-radius: 999px;
+  padding: 2px 8px;
+}
+
+.visit-list li.is-bot {
+  opacity: 0.55;
 }
 
 .visit-list li:last-child {
