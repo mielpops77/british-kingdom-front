@@ -1,0 +1,36 @@
+<div class="admin-page">
+  <div class="page-header">
+    <div>
+      <p class="eyebrow-label">Gestion</p>
+      <h1>Messages</h1>
+    </div>
+    <span class="unread-badge" *ngIf="unreadCount">{{ unreadCount }} non lu(s)</span>
+  </div>
+
+  <p *ngIf="loading" class="hint">Chargement...</p>
+  <p *ngIf="!loading && !contacts.length" class="hint">Aucun message reçu pour l'instant.</p>
+
+  <div class="message-list" *ngIf="!loading && contacts.length">
+    <div class="message-row" *ngFor="let contact of contacts" [class.unread]="!contact.vue" (click)="toggleExpand(contact)">
+      <div class="message-top">
+        <div class="message-who">
+          <span class="unread-dot" *ngIf="!contact.vue"></span>
+          <span class="message-name">{{ contact.name }}</span>
+        </div>
+        <span class="message-date">{{ contact.dateofCrea | date: 'dd/MM/yyyy à HH:mm':'Europe/Paris' }}</span>
+      </div>
+      <span class="message-subject">{{ contact.subject }}</span>
+
+      <div class="message-details" *ngIf="expandedId === contact.id">
+        <p class="message-body">{{ contact.message }}</p>
+        <div class="message-contact-info">
+          <a [href]="'mailto:' + contact.email">{{ contact.email }}</a>
+          <a [href]="'tel:' + contact.num">{{ contact.num }}</a>
+        </div>
+        <button class="delete-btn" (click)="confirmDelete(contact, $event)" [disabled]="deletingId === contact.id">
+          {{ deletingId === contact.id ? '...' : 'Supprimer' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

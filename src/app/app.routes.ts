@@ -16,6 +16,7 @@ export const routes: Routes = [
       { path: 'portees', loadComponent: () => import('./admin/portees/portees.component').then(m => m.AdminPorteesComponent) },
       { path: 'portees/new', loadComponent: () => import('./admin/portees/portee-form/portee-form.component').then(m => m.PorteeFormComponent) },
       { path: 'portees/:id/edit', loadComponent: () => import('./admin/portees/portee-form/portee-form.component').then(m => m.PorteeFormComponent) },
+      { path: 'messages', loadComponent: () => import('./admin/messages/messages.component').then(m => m.AdminMessagesComponent) },
       { path: 'blog', loadComponent: () => import('./admin/blog-admin/blog-admin.component').then(m => m.BlogAdminComponent) },
       { path: 'blog/new', loadComponent: () => import('./admin/blog-admin/blog-form/blog-form.component').then(m => m.BlogFormComponent) },
       { path: 'blog/:slug/edit', loadComponent: () => import('./admin/blog-admin/blog-form/blog-form.component').then(m => m.BlogFormComponent) },

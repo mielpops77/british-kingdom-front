@@ -1,0 +1,174 @@
+.admin-page {
+  padding: 24px 20px 40px;
+}
+
+.eyebrow-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: "Work Sans", sans-serif;
+  font-size: 0.76rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--blush-deep, #B8637B);
+  margin: 0 0 6px;
+  font-weight: 600;
+}
+
+.eyebrow-label::before {
+  content: "♥\FE0E";
+  font-family: "Work Sans", sans-serif;
+  font-size: 0.78rem;
+  color: var(--gold-soft, #BE9445) !important;
+}
+
+h1 {
+  font-family: "Fraunces", serif;
+  color: var(--ink, #4A3245);
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.unread-badge {
+  flex-shrink: 0;
+  font-family: "Work Sans", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--blush, #D98CA0);
+  border-radius: 999px;
+  padding: 6px 14px;
+  box-shadow: 0 10px 24px -12px var(--blush-deep, #B8637B);
+}
+
+.message-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.message-row {
+  background: var(--bg-panel, #FFFFFF);
+  border-radius: 16px;
+  padding: 12px 14px;
+  box-shadow: 0 10px 22px -18px rgba(74, 50, 69, 0.3);
+  cursor: pointer;
+}
+
+.message-row.unread {
+  box-shadow: 0 10px 22px -16px rgba(74, 50, 69, 0.45);
+  border: 1px solid var(--blush-tint, #F7E1E6);
+}
+
+.message-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.message-who {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.unread-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--blush-deep, #B8637B);
+  flex-shrink: 0;
+}
+
+.message-name {
+  font-family: "Fraunces", serif;
+  font-weight: 600;
+  color: var(--ink, #4A3245);
+  font-size: 1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.message-date {
+  font-family: "Work Sans", sans-serif;
+  font-size: 0.72rem;
+  color: var(--ink-soft, #93798D);
+  flex-shrink: 0;
+}
+
+.message-subject {
+  display: block;
+  font-family: "Work Sans", sans-serif;
+  font-size: 0.82rem;
+  color: var(--ink-soft, #93798D);
+  margin-top: 3px;
+}
+
+.message-details {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--bg-cream, #FCF3EC);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.message-body {
+  font-family: "Work Sans", sans-serif;
+  font-size: 0.86rem;
+  color: var(--ink, #4A3245);
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.message-contact-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-family: "Work Sans", sans-serif;
+  font-size: 0.8rem;
+}
+
+.message-contact-info a {
+  color: var(--blush-deep, #B8637B);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.delete-btn {
+  align-self: flex-start;
+  font-family: "Work Sans", sans-serif;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--blush-deep, #B8637B);
+  background: var(--blush-tint, #F7E1E6);
+  border: none;
+  border-radius: 999px;
+  padding: 8px 14px;
+  cursor: pointer;
+}
+
+.delete-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.hint {
+  font-family: "Work Sans", sans-serif;
+  color: var(--ink-soft, #93798D);
+  text-align: center;
+  margin-top: 20px;
+  font-size: 0.85rem;
+}
