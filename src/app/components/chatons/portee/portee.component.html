@@ -6,7 +6,7 @@
 <div class="couple-images-container" *ngIf="selectedPortee?.portee">
     <img [src]="selectedPortee.portee.urlProfilMother" (click)="redirectToNewUrl(selectedPortee?.idMaman,'femelles')"
         alt="Maman" class="oval-image first-image">
-    <img [src]="env.apiUrlImgDivers + 'coeur-transparent.png'"  alt="Cœur" class="heart-image">
+    <span class="heart-icon" aria-hidden="true">♥</span>
     <img [src]="selectedPortee.portee.urlProfilFather" alt="Papa"
         (click)="redirectToNewUrl(selectedPortee?.idPapa,'males')" class="oval-image second-image">
 </div>

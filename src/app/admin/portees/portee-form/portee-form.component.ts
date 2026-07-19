@@ -40,7 +40,8 @@ export class PorteeFormComponent implements OnInit {
 
   saving = false;
   error = '';
-  uploadingChatonIndex: number | null = null;
+  uploadingChatonGalleryIndex: number | null = null;
+  private uploadedChatonFileSignatures = new Map<number, Set<string>>();
 
   constructor(
     private route: ActivatedRoute,
@@ -106,23 +107,71 @@ export class PorteeFormComponent implements OnInit {
     return parts[parts.length - 1];
   }
 
-  onChatonPhotoSelected(event: Event, index: number): void {
-    const file = (event.target as HTMLInputElement).files?.[0];
-    if (!file) return;
+  private fileSignature(file: File): string {
+    return `${file.name}_${file.size}_${file.lastModified}`;
+  }
 
-    this.uploadingChatonIndex = index;
-    this.catService.uploadImages('Chatons', [file]).subscribe({
+  onChatonGalleryPhotosSelected(event: Event, chatonIndex: number): void {
+    const input = event.target as HTMLInputElement;
+    const files = input.files;
+    if (!files || !files.length) return;
+
+    if (!this.uploadedChatonFileSignatures.has(chatonIndex)) {
+      this.uploadedChatonFileSignatures.set(chatonIndex, new Set<string>());
+    }
+    const seen = this.uploadedChatonFileSignatures.get(chatonIndex)!;
+
+    const uniqueFiles: File[] = [];
+    let duplicatesSkipped = 0;
+    for (const file of Array.from(files)) {
+      const signature = this.fileSignature(file);
+      if (seen.has(signature)) {
+        duplicatesSkipped++;
+      } else {
+        seen.add(signature);
+        uniqueFiles.push(file);
+      }
+    }
+
+    input.value = '';
+
+    if (uniqueFiles.length === 0) {
+      this.error = 'Cette/ces photo(s) a/ont déjà été ajoutée(s).';
+      return;
+    }
+
+    this.uploadingChatonGalleryIndex = chatonIndex;
+    this.catService.uploadImages('Chatons', uniqueFiles).subscribe({
       next: (res) => {
-        const filename = this.extractFilename(res.uploadedFilePaths[0]);
-        this.model.chatons[index].urlProfil = filename;
-        this.model.chatons[index].photos = [...(this.model.chatons[index].photos || []), filename];
-        this.uploadingChatonIndex = null;
+        const newFilenames = res.uploadedFilePaths.map((p: string) => this.extractFilename(p));
+        const chaton = this.model.chatons[chatonIndex];
+        chaton.photos = [...(chaton.photos || []), ...newFilenames];
+        chaton.urlProfil = chaton.photos[0];
+        this.uploadingChatonGalleryIndex = null;
+        this.error = duplicatesSkipped > 0 ? `${duplicatesSkipped} photo(s) déjà ajoutée(s) ont été ignorée(s).` : '';
       },
       error: () => {
-        this.error = "L'upload de la photo a échoué.";
-        this.uploadingChatonIndex = null;
+        this.error = "L'upload des photos a échoué.";
+        this.uploadingChatonGalleryIndex = null;
       }
     });
+  }
+
+  removeChatonGalleryPhoto(chatonIndex: number, photoIndex: number): void {
+    const chaton = this.model.chatons[chatonIndex];
+    chaton.photos = (chaton.photos || []).filter((_, i) => i !== photoIndex);
+    chaton.urlProfil = chaton.photos[0] || '';
+  }
+
+  moveChatonGalleryPhoto(chatonIndex: number, photoIndex: number, direction: -1 | 1): void {
+    const chaton = this.model.chatons[chatonIndex];
+    const photos = [...(chaton.photos || [])];
+    const newIndex = photoIndex + direction;
+    if (newIndex < 0 || newIndex >= photos.length) return;
+
+    [photos[photoIndex], photos[newIndex]] = [photos[newIndex], photos[photoIndex]];
+    chaton.photos = photos;
+    chaton.urlProfil = photos[0];
   }
 
   onSubmit(form: NgForm): void {

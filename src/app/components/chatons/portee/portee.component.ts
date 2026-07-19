@@ -80,7 +80,15 @@ export class PorteeComponent implements OnInit, OnDestroy {
           this.selectedPortee.urlProfilMother = this.env.apiUrlImgProfilCat + this.selectedPortee.urlProfilMother;
           this.selectedPortee.urlProfilFather = this.env.apiUrlImgProfilCat + this.selectedPortee.urlProfilFather;
 
-          console.log('bonbnonbon', this.selectedPortee);
+          this.catService.cat$.subscribe(cats => {
+            if (cats && this.selectedPortee) {
+              const mother = cats.find(cat => cat.id === this.selectedPortee.idMaman);
+              const father = cats.find(cat => cat.id === this.selectedPortee.idPapa);
+              this.selectedPortee.nameFemale = mother?.name || '';
+              this.selectedPortee.nameMale = father?.name || '';
+            }
+          });
+
           this.processChatons();
         });
       }
