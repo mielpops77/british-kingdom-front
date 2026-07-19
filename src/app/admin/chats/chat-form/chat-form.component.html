@@ -72,6 +72,10 @@
       <div class="gallery-item" *ngFor="let img of model.images; let i = index">
         <img [src]="url.apiUrlImgCat + img">
         <button type="button" class="remove-btn" (click)="removeGalleryPhoto(i)">×</button>
+        <div class="reorder-btns">
+          <button type="button" class="reorder-btn" (click)="moveGalleryPhoto(i, -1)" [disabled]="i === 0">‹</button>
+          <button type="button" class="reorder-btn" (click)="moveGalleryPhoto(i, 1)" [disabled]="i === model.images.length - 1">›</button>
+        </div>
       </div>
     </div>
     <label class="upload-btn">

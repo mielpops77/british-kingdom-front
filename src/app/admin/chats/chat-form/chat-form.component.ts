@@ -44,6 +44,8 @@ export class ChatFormComponent implements OnInit {
   saving = false;
   error = '';
 
+  private uploadedFileSignatures = new Set<string>();
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -117,16 +119,41 @@ export class ChatFormComponent implements OnInit {
     });
   }
 
+  private fileSignature(file: File): string {
+    return `${file.name}_${file.size}_${file.lastModified}`;
+  }
+
   onGalleryPhotosSelected(event: Event): void {
-    const files = (event.target as HTMLInputElement).files;
+    const input = event.target as HTMLInputElement;
+    const files = input.files;
     if (!files || !files.length) return;
 
+    const uniqueFiles: File[] = [];
+    let duplicatesSkipped = 0;
+    for (const file of Array.from(files)) {
+      const signature = this.fileSignature(file);
+      if (this.uploadedFileSignatures.has(signature)) {
+        duplicatesSkipped++;
+      } else {
+        this.uploadedFileSignatures.add(signature);
+        uniqueFiles.push(file);
+      }
+    }
+
+    input.value = '';
+
+    if (uniqueFiles.length === 0) {
+      this.error = 'Cette/ces photo(s) a/ont déjà été ajoutée(s).';
+      return;
+    }
+
     this.uploadingGallery = true;
-    this.catService.uploadImages('CatsImages', Array.from(files)).subscribe({
+    this.catService.uploadImages('CatsImages', uniqueFiles).subscribe({
       next: (res) => {
         const newFilenames = res.uploadedFilePaths.map((p: string) => this.extractFilename(p));
         this.model.images = [...(this.model.images || []), ...newFilenames];
         this.uploadingGallery = false;
+        this.error = duplicatesSkipped > 0 ? `${duplicatesSkipped} photo(s) déjà ajoutée(s) ont été ignorée(s).` : '';
       },
       error: () => { this.error = "L'upload des photos a échoué."; this.uploadingGallery = false; }
     });
@@ -134,6 +161,15 @@ export class ChatFormComponent implements OnInit {
 
   removeGalleryPhoto(index: number): void {
     this.model.images = (this.model.images || []).filter((_, i) => i !== index);
+  }
+
+  moveGalleryPhoto(index: number, direction: -1 | 1): void {
+    const images = [...(this.model.images || [])];
+    const newIndex = index + direction;
+    if (newIndex < 0 || newIndex >= images.length) return;
+
+    [images[index], images[newIndex]] = [images[newIndex], images[index]];
+    this.model.images = images;
   }
 
   onSubmit(form: NgForm): void {

@@ -188,6 +188,34 @@ input:focus, select:focus {
   font-size: 0.9rem;
   line-height: 1;
   cursor: pointer;
+  z-index: 1;
+}
+
+.reorder-btns {
+  position: absolute;
+  bottom: 4px;
+  left: 4px;
+  right: 4px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.reorder-btn {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(74, 50, 69, 0.75);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.reorder-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
 }
 
 .error-message {
