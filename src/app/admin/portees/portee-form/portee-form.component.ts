@@ -36,7 +36,12 @@ export class PorteeFormComponent implements OnInit {
     urlProfilFather: '',
     disponible: false,
     archivee: false,
+    externalFatherName: '',
+    externalFatherPhoto: '',
   };
+
+  fatherIsExternal = false;
+  uploadingExternalFather = false;
 
   saving = false;
   error = '';
@@ -73,6 +78,7 @@ export class PorteeFormComponent implements OnInit {
               photos: c.photos || [],
             })),
           };
+          this.fatherIsExternal = !this.model.idPapa && !!this.model.externalFatherName;
         },
         error: () => this.error = 'Impossible de charger cette portée.'
       });
@@ -100,6 +106,36 @@ export class PorteeFormComponent implements OnInit {
 
   removeChaton(index: number): void {
     this.model.chatons = this.model.chatons.filter((_, i) => i !== index);
+  }
+
+  toggleFatherMode(isExternal: boolean): void {
+    this.fatherIsExternal = isExternal;
+    if (isExternal) {
+      this.model.idPapa = 0;
+    } else {
+      this.model.externalFatherName = '';
+      this.model.externalFatherPhoto = '';
+      this.model.urlProfilFather = '';
+    }
+  }
+
+  onExternalFatherPhotoSelected(event: Event): void {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+
+    this.uploadingExternalFather = true;
+    this.catService.uploadImages('CatsParents', [file]).subscribe({
+      next: (res) => {
+        const filename = this.extractFilename(res.uploadedFilePaths[0]);
+        this.model.externalFatherPhoto = filename;
+        this.model.urlProfilFather = filename;
+        this.uploadingExternalFather = false;
+      },
+      error: () => {
+        this.error = "L'upload de la photo a échoué.";
+        this.uploadingExternalFather = false;
+      }
+    });
   }
 
   private extractFilename(url: string): string {
@@ -175,15 +211,25 @@ export class PorteeFormComponent implements OnInit {
   }
 
   onSubmit(form: NgForm): void {
-    if (form.invalid || !this.model.idPapa || !this.model.idMaman) {
-      this.error = (!this.model.idPapa || !this.model.idMaman) ? 'Choisis le père et la mère.' : '';
+    const hasFather = this.fatherIsExternal ? !!this.model.externalFatherName.trim() : !!this.model.idPapa;
+
+    if (form.invalid || !hasFather || !this.model.idMaman) {
+      this.error = (!hasFather || !this.model.idMaman) ? 'Choisis le père et la mère.' : '';
       return;
     }
 
-    const father = this.males.find(m => m.id === Number(this.model.idPapa));
     const mother = this.females.find(f => f.id === Number(this.model.idMaman));
-    this.model.urlProfilFather = father?.urlProfil || this.model.urlProfilFather;
     this.model.urlProfilMother = mother?.urlProfil || this.model.urlProfilMother;
+
+    if (this.fatherIsExternal) {
+      this.model.urlProfilFather = this.model.externalFatherPhoto || this.model.urlProfilFather;
+    } else {
+      const father = this.males.find(m => m.id === Number(this.model.idPapa));
+      this.model.urlProfilFather = father?.urlProfil || this.model.urlProfilFather;
+      this.model.externalFatherName = '';
+      this.model.externalFatherPhoto = '';
+    }
+
     this.model.chatons.forEach(c => c.porteeName = this.model.name);
 
     // Archive automatiquement la portée dès qu'il n'y a plus de chaton "disponible"

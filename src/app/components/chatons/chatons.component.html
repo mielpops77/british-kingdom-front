@@ -26,8 +26,8 @@
     <img [src]="info?.urlFemale" (click)="redirectToNewUrl(info?.idMaman,'femelles')" alt="Maman"
       class="oval-image" (load)="onImageLoad()">
     <img [src]="env.apiUrlImgDivers + 'coeur-transparent.png'" alt="Cœur" class="heart-image"  (load)="onImageLoad()">
-    <img [src]="info?.urlMale" alt="Photo 2"  alt="Papa" (click)="redirectToNewUrl(info?.idPapa,'males')"
-      class="oval-image second-image" (load)="onImageLoad()">
+    <img [src]="info?.urlMale" alt="Papa" (click)="!info?.fatherIsExternal && redirectToNewUrl(info?.idPapa,'males')"
+      class="oval-image second-image" [class.no-link]="info?.fatherIsExternal" (load)="onImageLoad()">
   </div>
 
 

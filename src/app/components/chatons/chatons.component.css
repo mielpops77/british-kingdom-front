@@ -277,6 +277,14 @@
   cursor: pointer;
 }
 
+.oval-image.no-link {
+  cursor: default;
+}
+
+.oval-image.no-link:hover {
+  transform: none;
+}
+
 
 
 

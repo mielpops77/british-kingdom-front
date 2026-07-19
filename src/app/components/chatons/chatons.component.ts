@@ -61,6 +61,7 @@ export class ChatonsComponent implements OnInit, OnDestroy {
         this.porteInfo = this.allPortee
           .filter(p => p.disponible)
           .map(portee => {
+            const fatherIsExternal = !portee.idPapa;
             const info = {
               nameFemale: '',
               nameMale: '',
@@ -68,9 +69,12 @@ export class ChatonsComponent implements OnInit, OnDestroy {
               nbrMale: 0,
               nbrFemale: 0,
               urlFemale: environment.apiUrlImgProfilCat + portee.urlProfilMother,
-              urlMale: environment.apiUrlImgProfilCat + portee.urlProfilFather,
+              urlMale: fatherIsExternal
+                ? environment.apiUrlImgParentsCat + portee.externalFatherPhoto
+                : environment.apiUrlImgProfilCat + portee.urlProfilFather,
               idMaman: portee.idMaman,
               idPapa: portee.idPapa,
+              fatherIsExternal: fatherIsExternal,
               portee: portee
             };
 
@@ -84,7 +88,7 @@ export class ChatonsComponent implements OnInit, OnDestroy {
             const mamanCat = this.allCats.find(cat => cat.id === portee.idMaman);
             const papaCat = this.allCats.find(cat => cat.id === portee.idPapa);
             info.nameFemale = mamanCat ? mamanCat.name : '';
-            info.nameMale = papaCat ? papaCat.name : '';
+            info.nameMale = fatherIsExternal ? portee.externalFatherName : (papaCat ? papaCat.name : '');
 
             return info;
           });

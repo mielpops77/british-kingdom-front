@@ -10,7 +10,8 @@
         alt="Maman" class="oval-image first-image">
     <span class="heart-icon" aria-hidden="true">♥</span>
     <img [src]="selectedPortee.portee.urlProfilFather" alt="Papa"
-        (click)="redirectToNewUrl(selectedPortee?.idPapa,'males')" class="oval-image second-image">
+        (click)="!selectedPortee?.fatherIsExternal && redirectToNewUrl(selectedPortee?.idPapa,'males')"
+        class="oval-image second-image" [class.no-link]="selectedPortee?.fatherIsExternal">
 </div>
 <br><br>
 <div class="text" [ngStyle]="dynamicStyles.text">

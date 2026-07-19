@@ -13,6 +13,8 @@ export interface Portee {
     urlProfilFather: string;
     disponible: boolean;
     archivee: boolean;
+    externalFatherName: string;
+    externalFatherPhoto: string;
 
   }
   

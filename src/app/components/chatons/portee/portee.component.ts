@@ -68,8 +68,12 @@ export class PorteeComponent implements OnInit, OnDestroy {
       this.selectedPortee.portee = this.selectedPortee.portee || this.selectedPortee;
 
       console.log('this.selectedPortee', this.selectedPortee);
+      const fatherIsExternal = !this.selectedPortee.portee.idPapa;
+      this.selectedPortee.fatherIsExternal = fatherIsExternal;
       this.selectedPortee.portee.urlProfilMother = this.env.apiUrlImgProfilCat + this.selectedPortee.portee.urlProfilMother;
-      this.selectedPortee.portee.urlProfilFather = this.env.apiUrlImgProfilCat + this.selectedPortee.portee.urlProfilFather;
+      this.selectedPortee.portee.urlProfilFather = fatherIsExternal
+        ? this.env.apiUrlImgParentsCat + this.selectedPortee.portee.externalFatherPhoto
+        : this.env.apiUrlImgProfilCat + this.selectedPortee.portee.urlProfilFather;
       this.processChatons();
     } else {
       const porteId = this.route.snapshot.paramMap.get('id');
@@ -77,15 +81,19 @@ export class PorteeComponent implements OnInit, OnDestroy {
         this.catService.getPorteeById(porteId).subscribe((data: any) => {
           this.selectedPortee = data;
           this.selectedPortee.portee = this.selectedPortee;
+          const fatherIsExternal = !this.selectedPortee.idPapa;
+          this.selectedPortee.fatherIsExternal = fatherIsExternal;
           this.selectedPortee.urlProfilMother = this.env.apiUrlImgProfilCat + this.selectedPortee.urlProfilMother;
-          this.selectedPortee.urlProfilFather = this.env.apiUrlImgProfilCat + this.selectedPortee.urlProfilFather;
+          this.selectedPortee.urlProfilFather = fatherIsExternal
+            ? this.env.apiUrlImgParentsCat + this.selectedPortee.externalFatherPhoto
+            : this.env.apiUrlImgProfilCat + this.selectedPortee.urlProfilFather;
 
           this.catService.cat$.subscribe(cats => {
             if (cats && this.selectedPortee) {
               const mother = cats.find(cat => cat.id === this.selectedPortee.idMaman);
               const father = cats.find(cat => cat.id === this.selectedPortee.idPapa);
               this.selectedPortee.nameFemale = mother?.name || '';
-              this.selectedPortee.nameMale = father?.name || '';
+              this.selectedPortee.nameMale = fatherIsExternal ? (this.selectedPortee.externalFatherName || '') : (father?.name || '');
             }
           });
 
