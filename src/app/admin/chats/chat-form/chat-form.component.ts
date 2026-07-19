@@ -77,6 +77,12 @@ export class ChatFormComponent implements OnInit {
     return parts[parts.length - 1];
   }
 
+  hasRealParentPhoto(url: string | undefined): boolean {
+    if (!url) return false;
+    const filename = url.trim().toLowerCase();
+    return filename !== '' && filename !== 'mere.jpg' && filename !== 'pere.jpg';
+  }
+
   onProfilPhotoSelected(event: Event): void {
     const file = (event.target as HTMLInputElement).files?.[0];
     if (!file) return;

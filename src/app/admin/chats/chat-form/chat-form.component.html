@@ -49,16 +49,16 @@
 
     <div class="parents-upload-row">
       <div class="photo-upload">
-        <img *ngIf="model.urlProfilMother" [src]="url.apiUrlImgParentsCat + model.urlProfilMother" class="preview-round small">
-        <div *ngIf="!model.urlProfilMother" class="preview-placeholder round small">Mère</div>
+        <img *ngIf="hasRealParentPhoto(model.urlProfilMother)" [src]="url.apiUrlImgParentsCat + model.urlProfilMother" class="preview-round small">
+        <div *ngIf="!hasRealParentPhoto(model.urlProfilMother)" class="preview-placeholder round small">Mère</div>
         <label class="upload-btn small">
           {{ uploadingMother ? 'Envoi...' : 'Photo mère' }}
           <input type="file" accept="image/*" (change)="onMotherPhotoSelected($event)" [disabled]="uploadingMother">
         </label>
       </div>
       <div class="photo-upload">
-        <img *ngIf="model.urlProfilFather" [src]="url.apiUrlImgParentsCat + model.urlProfilFather" class="preview-round small">
-        <div *ngIf="!model.urlProfilFather" class="preview-placeholder round small">Père</div>
+        <img *ngIf="hasRealParentPhoto(model.urlProfilFather)" [src]="url.apiUrlImgParentsCat + model.urlProfilFather" class="preview-round small">
+        <div *ngIf="!hasRealParentPhoto(model.urlProfilFather)" class="preview-placeholder round small">Père</div>
         <label class="upload-btn small">
           {{ uploadingFather ? 'Envoi...' : 'Photo père' }}
           <input type="file" accept="image/*" (change)="onFatherPhotoSelected($event)" [disabled]="uploadingFather">
