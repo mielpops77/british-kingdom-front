@@ -4,8 +4,9 @@ import { ImageDialogComponent } from '../../image-dialog/image-dialog.component'
 import { environment } from 'src/environments/environment';
 import { CatService } from '../../Services/catService';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
+import { SeoService } from '../../Services/seo.service';
 import { Cat } from '../../../models/cats';
 
 
@@ -32,9 +33,11 @@ export class ProsperComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private elementRef: ElementRef,
     private route: ActivatedRoute,
+    private router: Router,
     private catService: CatService,
     private title: Title,
     private meta: Meta,
+    private seo: SeoService,
     @Inject(PLATFORM_ID) platformId: Object,
 
   ) {
@@ -74,6 +77,7 @@ export class ProsperComponent implements OnInit, OnDestroy {
     const sexLabel = this.selectedCat.sex === 'Mâle' ? 'mâle' : 'femelle';
     this.title.setTitle(`${this.selectedCat.name} - Chat ${sexLabel} ${this.selectedCat.breed} | Chatterie British Kingdom`);
     this.meta.updateTag({ name: 'description', content: `Découvrez ${this.selectedCat.name}, chat ${sexLabel} ${this.selectedCat.breed} de la chatterie British Kingdom à Othis, Seine-et-Marne.` });
+    this.seo.setCanonical(`https://chatterie-british-kingdom.fr${this.router.url}`);
   }
 
 

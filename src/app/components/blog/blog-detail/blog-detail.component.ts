@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgFor, NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
 import { BlogService } from '../../Services/blogService';
+import { SeoService } from '../../Services/seo.service';
 import { BlogPost } from '../../../models/blog-post';
 
 @Component({
@@ -12,7 +13,7 @@ import { BlogPost } from '../../../models/blog-post';
   standalone: true,
   imports: [NgIf, NgFor, NgSwitch, NgSwitchCase, RouterLink]
 })
-export class BlogDetailComponent implements OnInit {
+export class BlogDetailComponent implements OnInit, OnDestroy {
   post: BlogPost | undefined;
 
   constructor(
@@ -21,6 +22,7 @@ export class BlogDetailComponent implements OnInit {
     private title: Title,
     private meta: Meta,
     private blogService: BlogService,
+    private seo: SeoService,
   ) { }
 
   ngOnInit(): void {
@@ -33,11 +35,32 @@ export class BlogDetailComponent implements OnInit {
     this.blogService.getPostBySlug(slug).subscribe({
       next: (post) => {
         this.post = post;
+        const url = `https://chatterie-british-kingdom.fr/blog/${post.slug}`;
+
         this.title.setTitle(`${post.title} | Chatterie British Kingdom`);
         this.meta.updateTag({ name: 'description', content: post.excerpt });
+        this.seo.setCanonical(url);
+        this.seo.setOgTags({
+          title: post.title,
+          description: post.excerpt,
+          image: post.coverImage,
+          url
+        });
+        this.seo.setArticleJsonLd({
+          title: post.title,
+          description: post.excerpt,
+          image: post.coverImage,
+          url,
+          datePublished: post.date
+        });
       },
       error: () => this.router.navigateByUrl('/blog')
     });
+  }
+
+  ngOnDestroy(): void {
+    this.seo.removeJsonLd();
+    this.seo.setCanonical('https://chatterie-british-kingdom.fr/');
   }
 
   formaterDate(date: string): string {

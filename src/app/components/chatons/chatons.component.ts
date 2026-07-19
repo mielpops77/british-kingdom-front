@@ -7,6 +7,7 @@ import { Portee } from 'src/app/models/portee';
 import { Cat } from 'src/app/models/cats';
 import { Router, RouterLink } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
+import { SeoService } from '../Services/seo.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -36,7 +37,8 @@ export class ChatonsComponent implements OnInit, OnDestroy {
     private datePipe: DatePipe,
     private router: Router,
     private title: Title,
-    private meta: Meta
+    private meta: Meta,
+    private seo: SeoService
   ) { }
 
 
@@ -45,6 +47,7 @@ export class ChatonsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.title.setTitle("Chatons British Shorthair & Longhair disponibles | Chatterie British Kingdom");
     this.meta.updateTag({ name: 'description', content: "Découvrez nos portées et chatons British Shorthair et British Longhair disponibles à l'adoption, chatterie familiale à Othis." });
+    this.seo.setCanonical('https://chatterie-british-kingdom.fr/chatons');
     this.catSubscription = this.catService.cat$.subscribe(cats => {
       if (cats) {
         this.allCats = cats;
