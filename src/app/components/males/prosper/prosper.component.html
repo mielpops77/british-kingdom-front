@@ -75,7 +75,7 @@
   <p class="eyebrow-label">Galerie photos</p>
   <h2>{{ selectedCat?.name }} en images</h2>
   <div class="gallery-grid">
-    <img *ngFor="let image of selectedCat?.images" [src]="imageUrlCatImg + image"
+    <img *ngFor="let image of selectedCat?.images" [hidden]="!image" [src]="imageUrlCatImg + image"
       alt="Photo de {{ selectedCat?.name }}" (click)="openImageDialog(imageUrlCatImg + image)">
   </div>
 </section>
