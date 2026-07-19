@@ -92,7 +92,7 @@ export class ChatonsComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.galleryImages = Array.from({ length: 20 }, (_, i) =>
+    this.galleryImages = Array.from({ length: 28 }, (_, i) =>
       environment.apiUrlImgChaton + 'galerie-' + String(i + 1).padStart(2, '0') + '.jpg'
     );
 
