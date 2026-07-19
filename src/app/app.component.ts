@@ -31,6 +31,7 @@ export class AppComponent implements OnDestroy {
   private isBrowser: boolean;
 
   private bannerSubscription: Subscription | undefined;
+  private heartbeatInterval: any;
 
 
   constructor(
@@ -66,6 +67,10 @@ export class AppComponent implements OnDestroy {
 
     if (this.isBrowser && !this.isAdminRoute) {
       this.statistiqueService.enregistrerVisite().subscribe();
+      this.statistiqueService.sendHeartbeat().subscribe();
+      this.heartbeatInterval = setInterval(() => {
+        this.statistiqueService.sendHeartbeat().subscribe();
+      }, 30000);
     }
 
     this.bannerSubscription = this.catService.banner$.subscribe((banner) => {
@@ -131,6 +136,9 @@ export class AppComponent implements OnDestroy {
   ngOnDestroy(): void {
     if (this.bannerSubscription) {
       this.bannerSubscription.unsubscribe();
+    }
+    if (this.heartbeatInterval) {
+      clearInterval(this.heartbeatInterval);
     }
   }
 }

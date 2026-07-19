@@ -2,6 +2,12 @@
   <p class="eyebrow-label">Tableau de bord</p>
   <h1>Statistiques du site</h1>
 
+  <div class="online-badge">
+    <span class="online-dot"></span>
+    <span *ngIf="!loadingOnline">{{ onlineCount }} en ligne actuellement</span>
+    <span *ngIf="loadingOnline">Chargement...</span>
+  </div>
+
   <div class="stat-grid" *ngIf="stats">
     <div class="stat-card">
       <span class="stat-value">{{ stats.nbrVisitesTotal }}</span>
@@ -54,6 +60,7 @@
         <span class="visit-badge" *ngIf="visit.isBot">Robot</span>
       </div>
       <span class="visit-location">{{ visit.device }} · {{ visit.location || 'Localisation inconnue' }}</span>
+      <span class="visit-ip">{{ visit.visitorIp }}</span>
     </li>
   </ul>
 </div>

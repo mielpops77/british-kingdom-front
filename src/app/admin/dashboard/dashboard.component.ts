@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgIf, NgFor, DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
@@ -28,19 +28,25 @@ interface LocationStat {
   standalone: true,
   imports: [NgIf, NgFor, DatePipe]
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
   stats: Stats | undefined;
   loading = true;
-  recentVisits: { visitedAt: Date; location: string | null; device: string; isBot: boolean }[] = [];
+  recentVisits: { visitedAt: Date; location: string | null; device: string; isBot: boolean; visitorIp: string | null }[] = [];
   loadingVisits = true;
   dailyBars: DailyBar[] = [];
   loadingDaily = true;
   topLocations: LocationStat[] = [];
   loadingLocations = true;
+  onlineCount = 0;
+  loadingOnline = true;
+  private onlineInterval: any;
 
   constructor(private http: HttpClient, private statistiqueService: StatistiqueService) { }
 
   ngOnInit(): void {
+    this.refreshOnlineCount();
+    this.onlineInterval = setInterval(() => this.refreshOnlineCount(), 20000);
+
     this.http.get<Stats>(`${environment.apiUrl}statistique/${environment.id}`).subscribe({
       next: (stats) => {
         this.stats = stats;
@@ -53,7 +59,7 @@ export class DashboardComponent implements OnInit {
 
     this.statistiqueService.getRecentVisits(environment.id).subscribe({
       next: (visits) => {
-        this.recentVisits = visits.map(v => ({ visitedAt: new Date(v.visitedAt), location: v.location, device: v.device, isBot: v.isBot }));
+        this.recentVisits = visits.map(v => ({ visitedAt: new Date(v.visitedAt), location: v.location, device: v.device, isBot: v.isBot, visitorIp: v.visitorIp }));
         this.loadingVisits = false;
       },
       error: () => {
@@ -90,5 +96,23 @@ export class DashboardComponent implements OnInit {
         this.loadingLocations = false;
       }
     });
+  }
+
+  refreshOnlineCount(): void {
+    this.statistiqueService.getOnlineCount(environment.id).subscribe({
+      next: (res) => {
+        this.onlineCount = res.online;
+        this.loadingOnline = false;
+      },
+      error: () => {
+        this.loadingOnline = false;
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.onlineInterval) {
+      clearInterval(this.onlineInterval);
+    }
   }
 }

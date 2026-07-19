@@ -27,7 +27,7 @@ export class StatistiqueService {
   }
 
   getRecentVisits(profilId: number, limit = 20) {
-    return this.http.get<{ visitedAt: string; location: string | null; device: string; isBot: boolean }[]>(`${this.baseUrl}/recent/${profilId}?limit=${limit}`);
+    return this.http.get<{ visitedAt: string; location: string | null; device: string; isBot: boolean; visitorIp: string | null }[]>(`${this.baseUrl}/recent/${profilId}?limit=${limit}`);
   }
 
   getDailyStats(profilId: number, days = 14) {
@@ -36,5 +36,14 @@ export class StatistiqueService {
 
   getTopLocations(profilId: number, days = 30, limit = 5) {
     return this.http.get<{ location: string; count: number }[]>(`${this.baseUrl}/locations/${profilId}?days=${days}&limit=${limit}`);
+  }
+
+  sendHeartbeat() {
+    const profilId = environment.id;
+    return this.http.post<any>(`${this.baseUrl}/heartbeat`, { profilId });
+  }
+
+  getOnlineCount(profilId: number) {
+    return this.http.get<{ online: number }>(`${this.baseUrl}/online/${profilId}`);
   }
 }
