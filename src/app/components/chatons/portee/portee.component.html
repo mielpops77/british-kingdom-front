@@ -1,7 +1,9 @@
 <br>
-<p class="title" [ngStyle]="dynamicStyles.title">Les chatons de {{selectedPortee.nameFemale}} et
-    {{selectedPortee.nameMale}} </p>
-<p class="title" [ngStyle]="dynamicStyles.title">Née le {{selectedPortee.dateOfBirth}} </p>
+<ng-container *ngIf="selectedPortee">
+  <p class="title" [ngStyle]="dynamicStyles.title">Les chatons de {{selectedPortee.nameFemale}} et
+      {{selectedPortee.nameMale}} </p>
+  <p class="title" [ngStyle]="dynamicStyles.title">Née le {{selectedPortee.dateOfBirth}} </p>
+</ng-container>
 <br>
 <div class="couple-images-container" *ngIf="selectedPortee?.portee">
     <img [src]="selectedPortee.portee.urlProfilMother" (click)="redirectToNewUrl(selectedPortee?.idMaman,'femelles')"
@@ -28,28 +30,30 @@
 <div class="container-images" *ngIf="selectedPortee?.portee">
     <div class="carousel-container" *ngFor="let chaton of (selectedPortee.portee?.chatons ) || []; let i = index">
 
-        <div class="carousel-arrow-left" (click)="prevImages(i)">&#10094;</div>
+        <div class="carousel-title">
+            <p class="chaton-info">
+                <span class="left-value" [ngStyle]="dynamicStyles.statusName">{{
+                    selectedPortee.portee.chatons[i].status}}</span>
+                <span class="grp" [ngStyle]="dynamicStyles.background">
+                    <span class="chaton-sex">{{selectedPortee.portee.chatons[i].sex}}</span>
+                    <span class="chaton-status">-{{selectedPortee.portee.chatons[i].breed}}-</span>
+                    <span class="chaton-status">{{selectedPortee.portee.chatons[i].robe}}</span>
+                </span>
+                <span class="right-value"
+                [ngStyle]="dynamicStyles.statusName">{{selectedPortee.portee.chatons[i].name}}</span>
+            </p>
+        </div>
 
-        <div class="carousel-images">
+        <div class="carousel-row">
+            <button type="button" class="carousel-arrow-left" (click)="prevImages(i)" aria-label="Photo précédente">&#10094;</button>
 
-            <div class="carousel-title">
-                <p class="chaton-info">
-                    <span class="left-value" [ngStyle]="dynamicStyles.statusName">{{
-                        selectedPortee.portee.chatons[i].status}}</span>
-                    <span class="grp" [ngStyle]="dynamicStyles.background">
-                        <span class="chaton-sex">{{selectedPortee.portee.chatons[i].sex}}</span>
-                        <span class="chaton-status">-{{selectedPortee.portee.chatons[i].breed}}-</span>
-                        <span class="chaton-status">{{selectedPortee.portee.chatons[i].robe}}</span>
-                    </span>
-                    <span class="right-value"
-                    [ngStyle]="dynamicStyles.statusName">{{selectedPortee.portee.chatons[i].name}}</span>
-                </p>
+            <div class="carousel-images">
+                <img *ngFor="let image of displayedImages[i]" [src]="image"
+                    (click)="isChatonImage(image) ? null : openImageDialog(image)" class="square-image">
             </div>
 
-            <img *ngFor="let image of displayedImages[i]" [src]="image"
-                (click)="isChatonImage(image) ? null : openImageDialog(image)" class="square-image">
+            <button type="button" class="carousel-arrow-right" (click)="nextImages(i)" aria-label="Photo suivante">&#10095;</button>
         </div>
-        <div class="carousel-arrow-right" (click)="nextImages(i)">&#10095;</div>
 
 
     </div>
