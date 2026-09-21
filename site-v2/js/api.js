@@ -112,6 +112,14 @@
     return { key: s || 'inconnu', label: v || '—', tone: 'muted' };
   }
 
+  /**
+   * Photo d'un parent. « mere.jpg » et « pere.jpg » sont les silhouettes noires
+   * que l'administration met par défaut : on les traite comme une photo absente,
+   * la fiche affiche alors sa propre silhouette, dans les couleurs du site.
+   */
+  const PARENT_PAR_DEFAUT = /^(mere|pere)\.(jpe?g|png|webp)$/i;
+  const parentPhoto = (file) => (PARENT_PAR_DEFAUT.test(String(file || '').trim()) ? '' : join(IMG.catParents, file));
+
   function normCat(c) {
     if (!c) return null;
     const gallery = list(pick(c, ['images'], []));
@@ -128,8 +136,8 @@
       pedigreeUrl: join(IMG.pedigree, pick(c, ['pedigree'], '')),
       archivee: !!pick(c, ['archivee'], false),
       photo: join(IMG.catProfil, pick(c, ['urlProfil'], '')),
-      mother: join(IMG.catParents, pick(c, ['urlProfilMother'], '')),
-      father: join(IMG.catParents, pick(c, ['urlProfilFather'], '')),
+      mother: parentPhoto(pick(c, ['urlProfilMother'], '')),
+      father: parentPhoto(pick(c, ['urlProfilFather'], '')),
       gallery: gallery.map((g) => join(IMG.catGallery, g)),
       sailliesExterieures: pick(c, ['sailliesExterieures'], ''),
       raw: c
@@ -304,22 +312,23 @@
       const [cats, portees] = await Promise.all([api.allCats(), api.portees()]);
       const out = [];
       const push = (src, legende, groupe) => { if (src && !out.some((p) => p.src === src)) out.push({ src, legende, groupe }); };
-      cats.forEach((c) => {
-        push(c.photo, c.name, c.archivee ? 'retraites' : 'adultes');
-        c.gallery.forEach((g) => push(g, c.name, c.archivee ? 'retraites' : 'adultes'));
-      });
+      // D'abord les chatons, portée par portée, puis les adultes en activité, enfin les retraités.
       portees.forEach((p) => p.chatons.forEach((k) => {
         push(k.photo, k.name + (p.name ? ' · ' + p.name : ''), 'chatons');
         k.photos.forEach((ph) => push(ph, k.name + (p.name ? ' · ' + p.name : ''), 'chatons'));
       }));
+      const adult = (c) => { const g = c.archivee ? 'retraites' : 'adultes'; push(c.photo, c.name, g); c.gallery.forEach((ph) => push(ph, c.name, g)); };
+      cats.filter((c) => !c.archivee).forEach(adult);
+      cats.filter((c) => c.archivee).forEach(adult);
       return out;
     },
-    cat: (id) => withDemo('cat', async () => normCat(await http('cats/' + encodeURIComponent(id))), () => normCat((D().cats || []).find((c) => String(c.id) === String(id)))),
+    // Comme le site Angular : sans profilId, l'API répond 404 « Chat non trouvé ».
+    cat: (id) => withDemo('cat', async () => normCat(await http('cats/' + encodeURIComponent(id) + '?profilId=' + PROFIL_ID)), () => normCat((D().cats || []).find((c) => String(c.id) === String(id)))),
     portees: async () => {
       const all = await withDemo('portees', async () => (await http('portee?profilId=' + PROFIL_ID) || []).map(normPortee), () => (D().portees || []).map(normPortee));
       return all.filter((p) => p && !p.archivee).sort((a, b) => (parseDate(b.dateOfBirth) || 0) - (parseDate(a.dateOfBirth) || 0));
     },
-    portee: (id) => withDemo('portee', async () => normPortee(await http('portee/' + encodeURIComponent(id))), () => normPortee((D().portees || []).find((p) => String(p.id) === String(id)))),
+    portee: (id) => withDemo('portee', async () => normPortee(await http('portee/' + encodeURIComponent(id) + '?profilId=' + PROFIL_ID)), () => normPortee((D().portees || []).find((p) => String(p.id) === String(id)))),
     chatons: () => withDemo('chatons', async () => (await http('chaton?profilId=' + PROFIL_ID) || []).map(normChaton), () => (D().portees || []).flatMap((p) => p.chatons || []).map(normChaton)),
     posts: () => withDemo('blog', async () => (await http('blog?profilId=' + PROFIL_ID) || []).map(normPost), () => (D().posts || []).map(normPost)),
     post: (slug) => withDemo('article', async () => normPost(await http('blog/' + encodeURIComponent(slug) + '?profilId=' + PROFIL_ID)), () => normPost((D().posts || []).find((p) => p.slug === slug))),
