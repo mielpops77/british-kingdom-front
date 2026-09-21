@@ -3,17 +3,17 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Journal de la chatterie — conseils et vie de l'élevage</title>
-  <meta name="description" content="Conseils d'élevage, entretien du poil, arrivée du chaton à la maison et nouvelles de nos portées.">
-  <link rel="canonical" href="https://chatterie-british-kingdom.fr/blog.html">
+  <title>Galerie photos — Chatterie British Kingdom</title>
+  <meta name="description" content="Toutes les photos de nos British Shorthair et Longhair : adultes, chatons et retraités, en grand.">
+  <link rel="canonical" href="https://chatterie-british-kingdom.fr/galerie.html">
   <meta name="robots" content="index, follow">
   <meta name="theme-color" content="#fff6f4">
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Chatterie British Kingdom">
-  <meta property="og:title" content="Journal de la chatterie — conseils et vie de l'élevage">
-  <meta property="og:description" content="Conseils d'élevage, entretien du poil, arrivée du chaton à la maison et nouvelles de nos portées.">
-  <meta property="og:url" content="https://chatterie-british-kingdom.fr/blog.html">
+  <meta property="og:title" content="Galerie photos — Chatterie British Kingdom">
+  <meta property="og:description" content="Toutes les photos de nos British Shorthair et Longhair : adultes, chatons et retraités, en grand.">
+  <meta property="og:url" content="https://chatterie-british-kingdom.fr/galerie.html">
   <meta property="og:image" content="https://chatterie-british-kingdom.fr/assets/og-image.jpg">
   <meta property="og:locale" content="fr_FR">
   <meta name="twitter:card" content="summary_large_image">
@@ -52,10 +52,10 @@
 </span>
       <span>
         <span class="brand__name">British Kingdom</span>
-        <span class="brand__sub">Élevage familial · Othis</span>
+        <span class="brand__sub">Élevage familial</span>
       </span>
     </a>
-    <div class="nav-panel"><nav class="nav" id="menu" aria-label="Navigation principale"><a href="index.html">Accueil</a><a href="le-british.html">Le British</a><a href="nos-chats.html">Nos chats</a><a href="chatons.html">Chatons</a><a href="adopter.html">Adopter</a><a href="blog.html" aria-current="page">Journal</a><a href="contact.html">Contact</a></nav></div>
+    <div class="nav-panel"><nav class="nav" id="menu" aria-label="Navigation principale"><a href="index.html">Accueil</a><a href="le-british.html">Le British</a><a href="nos-adultes.html">Nos adultes</a><a href="chatons.html">Chatons</a><a href="retraites.html">Retraités</a><a href="galerie.html" aria-current="page">Galerie</a><a href="conseils.html">Conseils</a><a href="liste-attente.html">Liste d'attente</a><a href="contact.html">Contact</a></nav></div>
     <div class="header-actions">
       <a class="btn btn--sm btn--copper hide-sm" href="chatons.html">Voir les chatons</a>
       <button class="icon-btn theme-btn" type="button" aria-label="Changer de thème clair ou sombre">
@@ -69,15 +69,33 @@
 <main id="main">
 <section class="page-head">
   <div class="wrap">
-    <nav class="breadcrumb" aria-label="Fil d'Ariane"><span><a href="index.html">Accueil</a></span><span>Journal</span></nav>
-    <p class="eyebrow">Journal</p>
-    <h1>Le journal de la chatterie</h1>
-    <p class="lede">Nos conseils d'élevage, la vie des portées et ce que nous apprenons au fil des années.</p>
+    <nav class="breadcrumb" aria-label="Fil d'Ariane"><span><a href="index.html">Accueil</a></span><span>Galerie</span></nav>
+    <p class="eyebrow">En images</p>
+    <h1>La galerie</h1>
+    <p class="lede">Toutes nos photos au même endroit : les adultes, les chatons et les retraités. Cliquez sur une photo pour l'agrandir.</p>
   </div>
 </section>
 
 <section class="tight" style="padding-top:0">
-  <div class="wrap"><div id="blog-list"></div></div>
+  <div class="wrap">
+    <div class="filters" id="gallery-filters">
+      <button class="chip" type="button" data-filter="toutes" aria-pressed="true">Toutes</button>
+      <button class="chip" type="button" data-filter="adultes" aria-pressed="false">Nos adultes</button>
+      <button class="chip" type="button" data-filter="chatons" aria-pressed="false">Chatons</button>
+      <button class="chip" type="button" data-filter="retraites" aria-pressed="false">Retraités</button>
+      <span class="count-note" id="gallery-count"></span>
+    </div>
+    <div id="gallery-grid"></div>
+  </div>
+</section>
+
+<section class="panel panel--butter tight">
+  <div class="wrap wrap--narrow center">
+    <h2>Vous avez adopté chez nous ?</h2>
+    <p class="lede" style="margin-inline:auto">Envoyez-nous des photos de votre chat devenu grand. Rien ne
+      nous fait plus plaisir, et rien ne rassure mieux une famille qui hésite encore.</p>
+    <p style="margin-top:1.4rem"><a class="btn btn--copper" href="contact.html?sujet=Photos%20de%20mon%20chat">Envoyer des photos</a></p>
+  </div>
 </section>
 </main>
 <footer class="site-footer">
@@ -89,7 +107,7 @@
       </div>
       <div>
         <h4>Le site</h4>
-        <ul><li><a href="le-british.html">Le British</a></li><li><a href="nos-chats.html">Nos chats</a></li><li><a href="chatons.html">Chatons</a></li><li><a href="adopter.html">Adopter</a></li><li><a href="blog.html">Journal</a></li><li><a href="contact.html">Contact</a></li></ul>
+        <ul><li><a href="le-british.html">Le British</a></li><li><a href="nos-adultes.html">Nos adultes</a></li><li><a href="chatons.html">Chatons</a></li><li><a href="retraites.html">Retraités</a></li><li><a href="galerie.html">Galerie</a></li><li><a href="conseils.html">Conseils</a></li><li><a href="liste-attente.html">Liste d'attente</a></li><li><a href="contact.html">Contact</a></li></ul>
       </div>
       <div>
         <h4>Nous joindre</h4>
@@ -103,8 +121,8 @@
       <div>
         <h4>Informations</h4>
         <ul>
-          <li><a href="adopter.html#sante">Santé et dépistages</a></li>
-          <li><a href="adopter.html#faq">Questions fréquentes</a></li>
+          <li><a href="liste-attente.html#sante">Santé et dépistages</a></li>
+          <li><a href="liste-attente.html#faq">Questions fréquentes</a></li>
           <li><a href="mentions-legales.html">Mentions légales</a></li>
           <li><a href="politique-confidentialite.html">Confidentialité</a></li>
         </ul>
@@ -123,6 +141,6 @@
 <script src="js/api.js"></script>
 <script src="js/site.js"></script>
 <script src="js/pages.js"></script>
-<script>BKPages.blog();</script>
+<script>BKPages.galerie();</script>
 </body>
 </html>

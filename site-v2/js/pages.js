@@ -106,7 +106,7 @@
           kittensBox.innerHTML = empty(
             'Pas de chaton disponible pour le moment',
             'Nos portées sont rares et nos chatons partent souvent avant leur naissance. Inscrivez-vous sur la liste d’attente pour être prévenu en premier.',
-            '<a class="btn btn--copper" href="adopter.html#liste-attente">Rejoindre la liste d’attente</a>'
+            '<a class="btn btn--copper" href="liste-attente.html">Rejoindre la liste d’attente</a>'
           ) + (next ? '' : '');
         }
       }
@@ -127,7 +127,7 @@
   /* ======================================================================
      NOS CHATS (liste des reproducteurs)
      ====================================================================== */
-  async function nosChats() {
+  async function nosAdultes() {
     const box = $('#cats-list');
     const filters = $('#cats-filters');
     const note = $('#cats-count');
@@ -166,11 +166,11 @@
   async function ficheChat() {
     const box = $('#cat-detail');
     const id = new URLSearchParams(location.search).get('id');
-    if (!id) { box.innerHTML = empty('Chat introuvable', 'Revenez à la page <a href="nos-chats.html">Nos chats</a>.'); return; }
+    if (!id) { box.innerHTML = empty('Chat introuvable', 'Revenez à la page <a href="nos-adultes.html">Nos chats</a>.'); return; }
 
     try {
       const [cat, portees] = await Promise.all([api.cat(id), api.portees()]);
-      if (!cat || !cat.id) { box.innerHTML = empty('Chat introuvable', 'Ce chat n’est plus présenté sur le site. Voir <a href="nos-chats.html">tous nos chats</a>.'); return; }
+      if (!cat || !cat.id) { box.innerHTML = empty('Chat introuvable', 'Ce chat n’est plus présenté sur le site. Voir <a href="nos-adultes.html">tous nos chats</a>.'); return; }
 
       document.title = cat.name + ' — Chatterie British Kingdom';
       const bc = $('#cat-breadcrumb-name'); if (bc) bc.textContent = cat.name;
@@ -407,10 +407,10 @@
   async function article() {
     const box = $('#article-body');
     const slug = new URLSearchParams(location.search).get('slug');
-    if (!slug) { box.innerHTML = empty('Article introuvable', 'Voir <a href="blog.html">tous les articles</a>.'); return; }
+    if (!slug) { box.innerHTML = empty('Article introuvable', 'Voir <a href="conseils.html">tous les articles</a>.'); return; }
     try {
       const p = await api.post(slug);
-      if (!p || !p.slug) { box.innerHTML = empty('Article introuvable', 'Voir <a href="blog.html">tous les articles</a>.'); return; }
+      if (!p || !p.slug) { box.innerHTML = empty('Article introuvable', 'Voir <a href="conseils.html">tous les articles</a>.'); return; }
       document.title = p.title + ' — Chatterie British Kingdom';
       const bc = $('#article-breadcrumb-name'); if (bc) bc.textContent = p.title;
 
@@ -430,6 +430,69 @@
         (p.cover ? '<div class="reveal" style="margin-bottom:2rem;border-radius:var(--radius);overflow:hidden"><img src="' + esc(p.cover) + '" alt="' + esc(p.title) + '" data-guard></div>' : '') +
         '<div class="prose reveal">' + (blocks || '<p>' + esc(p.excerpt) + '</p>') + '</div>';
       guardImages(box); setupReveal(box);
+    } catch (e) { fail(box, e); }
+  }
+
+  /* ======================================================================
+     NOS RETRAITÉS
+     ====================================================================== */
+  async function retraites() {
+    const box = $('#retired-list');
+    const note = $('#retired-count');
+    box.innerHTML = skeletons(3, true);
+    try {
+      const list = await api.retired();
+      if (note) note.textContent = list.length ? list.length + (list.length > 1 ? ' chats' : ' chat') : '';
+      if (!list.length) {
+        box.innerHTML = empty('Aucun retraité pour le moment',
+          'Nos reproducteurs sont encore tous en activité. Cette page se remplira avec le temps.');
+        return;
+      }
+      list.sort((a, b) => (fmt.parseDate(a.dateOfBirth) || 0) - (fmt.parseDate(b.dateOfBirth) || 0));
+      box.innerHTML = '<div class="grid grid-3">' + list.map(catCard).join('') + '</div>';
+      guardImages(box); setupReveal(box);
+    } catch (e) { fail(box, e); }
+  }
+
+  /* ======================================================================
+     GALERIE
+     ====================================================================== */
+  async function galerie() {
+    const box = $('#gallery-grid');
+    const filters = $('#gallery-filters');
+    const note = $('#gallery-count');
+    box.innerHTML = '<div class="gallery">' + skeletons(12, false).replace(/skeleton--arch/g, 'skeleton') + '</div>';
+    let all = [];
+    let current = 'toutes';
+
+    function render() {
+      const list = current === 'toutes' ? all : all.filter((p) => p.groupe === current);
+      if (note) note.textContent = list.length + (list.length > 1 ? ' photos' : ' photo');
+      if (!list.length) {
+        box.innerHTML = empty('Aucune photo dans cette catégorie', 'Essayez un autre filtre.');
+        return;
+      }
+      box.innerHTML = '<div class="gallery gallery--big" id="gallery-inner">' + list.map((p, i) =>
+        '<button type="button" data-index="' + i + '" data-full="' + esc(p.src) + '" data-alt="' + esc(p.legende) + '" aria-label="Agrandir la photo de ' + esc(p.legende) + '">' +
+        '<img src="' + esc(p.src) + '" alt="' + esc(p.legende) + '" loading="lazy" data-guard>' +
+        '<span class="gallery__caption">' + esc(p.legende) + '</span>' +
+        '</button>').join('') + '</div>';
+      bindGallery($('#gallery-inner'));
+      guardImages(box); setupReveal(box);
+    }
+
+    try {
+      all = await api.gallery();
+      render();
+      if (filters) {
+        filters.addEventListener('click', (e) => {
+          const chip = e.target.closest('.chip');
+          if (!chip) return;
+          current = chip.dataset.filter;
+          $$('.chip', filters).forEach((c) => c.setAttribute('aria-pressed', String(c === chip)));
+          render();
+        });
+      }
     } catch (e) { fail(box, e); }
   }
 
@@ -463,5 +526,5 @@
     if (subject && field) field.value = subject;
   }
 
-  window.BKPages = { accueil, nosChats, ficheChat, chatons, portee, blog, article, temoignages, prefillContact };
+  window.BKPages = { accueil, nosAdultes, retraites, galerie, ficheChat, chatons, portee, blog, article, temoignages, prefillContact };
 })();

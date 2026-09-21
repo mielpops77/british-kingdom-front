@@ -224,7 +224,7 @@ section.tight { padding-block: clamp(2rem, 4vw, 3.5rem); }
 .grid-3 { grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); }
 .grid-4 { grid-template-columns: repeat(auto-fill, minmax(min(100%, 210px), 1fr)); }
 .hide { display: none !important; }
-@media (max-width: 720px) { .hide-sm { display: none !important; } }
+@media (max-width: 1250px) { .hide-sm { display: none !important; } }
 
 /* Filigrane de pattes */
 .paws {
@@ -364,8 +364,8 @@ section.tight { padding-block: clamp(2rem, 4vw, 3.5rem); }
 .nav-panel { display: contents; }
 .nav { display: flex; align-items: center; gap: .15rem; }
 .nav a {
-  padding: .5rem .72rem;
-  font-size: var(--t-sm); font-weight: 600;
+  padding: .5rem .62rem;
+  font-size: var(--t-sm); font-weight: 600; white-space: nowrap;
   color: var(--ink-2); text-decoration: none;
   border-radius: 8px;
   position: relative;
@@ -374,7 +374,7 @@ section.tight { padding-block: clamp(2rem, 4vw, 3.5rem); }
 .nav a:hover { color: var(--ink); background: color-mix(in srgb, var(--ink) 6%, transparent); }
 .nav a[aria-current="page"] { color: var(--ink); }
 .nav a[aria-current="page"]::after {
-  content: ""; position: absolute; left: .72rem; right: .72rem; bottom: .22rem;
+  content: ""; position: absolute; left: .62rem; right: .62rem; bottom: .22rem;
   height: 2px; border-radius: 2px; background: var(--copper);
 }
 .header-actions { display: flex; align-items: center; gap: .5rem; }
@@ -397,7 +397,7 @@ section.tight { padding-block: clamp(2rem, 4vw, 3.5rem); }
 }
 
 .burger { display: none; }
-@media (max-width: 960px) {
+@media (max-width: 1150px) {
   /* Le conteneur occupe exactement l'écran et découpe le panneau quand il est
      rangé : sans cela, le panneau hors écran ferait défiler la page en largeur. */
   .nav-panel {
@@ -1206,3 +1206,99 @@ details.faq[open] { background: var(--rose-soft); border-radius: var(--radius-s)
   :root:not([data-theme="light"]) .tile__text p { color: rgba(56, 23, 42, .82); }
 }
 .tile__count { top: .8rem; right: .8rem; background: var(--card); color: var(--rose-ink); }
+
+/* ==========================================================================
+   25. Galerie en grand
+   ========================================================================== */
+.gallery--big { grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr)); gap: 1rem; }
+.gallery--big button { aspect-ratio: 3 / 4; position: relative; border: 5px solid var(--card); box-shadow: var(--shadow-s); }
+.gallery--big button:hover { box-shadow: var(--shadow-m); }
+.gallery__caption {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  padding: 1.6rem .7rem .55rem;
+  font-size: var(--t-xs); font-weight: 700; color: #fff; text-align: left;
+  background: linear-gradient(to top, rgba(50, 20, 40, .82), transparent);
+  opacity: 0; transition: opacity .25s var(--ease);
+  pointer-events: none;
+}
+.gallery--big button:hover .gallery__caption,
+.gallery--big button:focus-visible .gallery__caption { opacity: 1; }
+@media (hover: none) { .gallery__caption { opacity: 1; } }
+
+/* ==========================================================================
+   26. Finitions : les détails qui font la différence
+   ========================================================================== */
+
+/* Le petit cœur doré des sur-titres, repris du site actuel */
+.eyebrow::after {
+  content: "\2665\FE0E";
+  font-family: var(--font-body);
+  font-size: .72em;
+  color: var(--honey);
+  margin-left: .1rem;
+}
+.eyebrow.center { justify-content: center; }
+
+/* Un trait manuscrit sous les titres de section */
+.wrap > .eyebrow + h2,
+.center > .eyebrow + h2 { position: relative; display: inline-block; }
+.wrap > .eyebrow + h2::after,
+.center > .eyebrow + h2::after {
+  content: "";
+  display: block;
+  height: 8px;
+  margin-top: .32em;
+  border-radius: 8px;
+  background: var(--rose-soft);
+  transform: rotate(-.35deg);
+}
+
+/* Les portraits reçoivent un liseré doré, signature du site actuel */
+.arch::after { border: 1.5px solid color-mix(in srgb, var(--honey) 55%, transparent); }
+.card:hover .arch::after { border-color: var(--honey); }
+
+/* Le bouton principal gagne une ombre colorée et un rebond plus franc */
+.btn--copper { box-shadow: 0 4px 0 color-mix(in srgb, var(--rose-deep) 55%, #000); }
+.btn--copper:hover { box-shadow: 0 6px 0 color-mix(in srgb, var(--rose-deep) 55%, #000), var(--shadow-m); }
+.btn--copper:active { transform: translateY(2px); box-shadow: 0 2px 0 color-mix(in srgb, var(--rose-deep) 55%, #000); }
+
+/* Les fiches reçoivent un liseré haut coloré */
+.sheet { position: relative; overflow: hidden; }
+.sheet::before {
+  content: ""; position: absolute; inset: 0 0 auto 0; height: 6px;
+  background: linear-gradient(90deg, var(--rose) 0 25%, var(--honey) 25% 50%, var(--mint) 50% 75%, var(--lilac) 75% 100%);
+}
+.sheet > :first-child { margin-top: .5rem; }
+
+/* Les cartes de chat : le nom sur un ruban */
+.card__title { display: inline-block; }
+.card:hover .card__title { color: var(--rose-ink); }
+
+/* Traînée de pattes discrète au bas des grandes sections */
+.pawtrail { position: relative; }
+.pawtrail::after {
+  content: "";
+  position: absolute; left: 50%; bottom: .6rem; transform: translateX(-50%);
+  width: 180px; height: 26px;
+  background: var(--rose);
+  opacity: .16;
+  -webkit-mask: url("../img/paw.svg") repeat-x center / 26px 26px;
+  mask: url("../img/paw.svg") repeat-x center / 26px 26px;
+}
+
+/* États vides plus chaleureux */
+.empty { border: 2px dashed var(--line); background: var(--card); }
+.empty__mark { color: var(--rose-soft); }
+
+/* Le fil d'Ariane et les filtres */
+.breadcrumb a:hover { color: var(--rose-ink); }
+.chip[aria-pressed="true"] { background: var(--rose-deep); color: #fff; border-color: var(--rose-deep); }
+:root[data-theme="dark"] .chip[aria-pressed="true"] { color: #40182a; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .chip[aria-pressed="true"] { color: #40182a; } }
+
+/* En-tête : rien ne se replie sur deux lignes */
+.brand__sub, .header-actions .btn { white-space: nowrap; }
+.header-actions .btn { flex: none; padding-inline: 1.1rem; }
+.brand { flex: none; }
+.nav-panel { min-width: 0; }
+@media (min-width: 1151px) { .nav { margin-inline: auto; } }

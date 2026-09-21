@@ -37,10 +37,12 @@ SITE = {
 NAV = [
     ("index.html", "Accueil"),
     ("le-british.html", "Le British"),
-    ("nos-chats.html", "Nos chats"),
+    ("nos-adultes.html", "Nos adultes"),
     ("chatons.html", "Chatons"),
-    ("adopter.html", "Adopter"),
-    ("blog.html", "Journal"),
+    ("retraites.html", "Retraités"),
+    ("galerie.html", "Galerie"),
+    ("conseils.html", "Conseils"),
+    ("liste-attente.html", "Liste d'attente"),
     ("contact.html", "Contact"),
 ]
 
@@ -173,7 +175,7 @@ def header(active):
       <span class="brand__mark">%(crown)s</span>
       <span>
         <span class="brand__name">British Kingdom</span>
-        <span class="brand__sub">Élevage familial · %(ville)s</span>
+        <span class="brand__sub">Élevage familial</span>
       </span>
     </a>
     <div class="nav-panel"><nav class="nav" id="menu" aria-label="Navigation principale">%(links)s</nav></div>
@@ -220,8 +222,8 @@ def footer(scripts=""):
       <div>
         <h4>Informations</h4>
         <ul>
-          <li><a href="adopter.html#sante">Santé et dépistages</a></li>
-          <li><a href="adopter.html#faq">Questions fréquentes</a></li>
+          <li><a href="liste-attente.html#sante">Santé et dépistages</a></li>
+          <li><a href="liste-attente.html#faq">Questions fréquentes</a></li>
           <li><a href="mentions-legales.html">Mentions légales</a></li>
           <li><a href="politique-confidentialite.html">Confidentialité</a></li>
         </ul>

@@ -290,9 +290,29 @@
   const api = {
     profil: () => withDemo('profil', async () => normProfil(await http('profil?profilId=' + PROFIL_ID)), () => normProfil(D().profil)),
     banner: () => withDemo('banner', async () => normBanner(await http('banner?profilId=' + PROFIL_ID)), () => normBanner(D().banner)),
-    cats: async () => {
-      const all = await withDemo('cats', async () => (await http('cats?profilId=' + PROFIL_ID) || []).map(normCat), () => (D().cats || []).map(normCat));
-      return all.filter((c) => c && !c.archivee);
+    /** Tous les chats, archivés compris. */
+    allCats: () => withDemo('cats', async () => (await http('cats?profilId=' + PROFIL_ID) || []).map(normCat), () => (D().cats || []).map(normCat)),
+    /** Les reproducteurs en activité. */
+    cats: async () => (await api.allCats()).filter((c) => c && !c.archivee),
+    /** Les retraités : les chats marqués « archivé » dans l'administration. */
+    retired: async () => (await api.allCats()).filter((c) => c && c.archivee),
+    /**
+     * Toutes les photos du site, pour la galerie : portraits et galeries des
+     * adultes, puis photos des chatons, portée par portée.
+     */
+    gallery: async () => {
+      const [cats, portees] = await Promise.all([api.allCats(), api.portees()]);
+      const out = [];
+      const push = (src, legende, groupe) => { if (src && !out.some((p) => p.src === src)) out.push({ src, legende, groupe }); };
+      cats.forEach((c) => {
+        push(c.photo, c.name, c.archivee ? 'retraites' : 'adultes');
+        c.gallery.forEach((g) => push(g, c.name, c.archivee ? 'retraites' : 'adultes'));
+      });
+      portees.forEach((p) => p.chatons.forEach((k) => {
+        push(k.photo, k.name + (p.name ? ' · ' + p.name : ''), 'chatons');
+        k.photos.forEach((ph) => push(ph, k.name + (p.name ? ' · ' + p.name : ''), 'chatons'));
+      }));
+      return out;
     },
     cat: (id) => withDemo('cat', async () => normCat(await http('cats/' + encodeURIComponent(id))), () => normCat((D().cats || []).find((c) => String(c.id) === String(id)))),
     portees: async () => {

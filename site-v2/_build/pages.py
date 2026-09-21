@@ -148,7 +148,7 @@ ACCUEIL = """
 <section class="tight">
   <div class="wrap">
     <div class="grid grid-3">
-      <a class="tile reveal" href="nos-chats.html">
+      <a class="tile reveal" href="nos-adultes.html">
         <img src="assets/photo-male.webp" alt="British Shorthair bleu aux yeux cuivre" data-guard>
         <span class="tile__text"><h3>Nos chats</h3><p>Les reproducteurs, leurs tests, leurs origines</p></span>
       </a>
@@ -156,7 +156,7 @@ ACCUEIL = """
         <img src="assets/photo-chaton.webp" alt="Chaton British Shorthair blanc" data-guard>
         <span class="tile__text"><h3>Les chatons</h3><p>Portées en cours et chatons disponibles</p></span>
       </a>
-      <a class="tile reveal" data-delay="2" href="adopter.html">
+      <a class="tile reveal" data-delay="2" href="liste-attente.html">
         <img src="assets/photo-femelle.webp" alt="British Shorthair sur un arbre à chat" data-guard>
         <span class="tile__text"><h3>Adopter</h3><p>Conditions, santé, garanties, liste d'attente</p></span>
       </a>
@@ -180,7 +180,7 @@ ACCUEIL = """
         <h2>Les reproducteurs de la chatterie</h2>
         <p class="lede">Chaque fiche indique la robe et son code EMS, la couleur des yeux, la date de
           naissance et les dépistages. C'est ce qu'un éleveur doit pouvoir montrer.</p>
-        <p><a class="link-arrow" href="nos-chats.html">Voir tous nos chats</a></p>
+        <p><a class="link-arrow" href="nos-adultes.html">Voir tous nos chats</a></p>
       </div>
       <div class="reveal" data-delay="1">
         <div id="home-cats"></div>
@@ -323,8 +323,8 @@ LE_BRITISH = page_head_block(
         Nous préférons mille fois une visite qui se conclut par un non qu'un chaton rendu trois mois plus tard.</p>
     </div>
     <div class="center" style="margin-top:2.4rem">
-      <a class="btn btn--copper" href="nos-chats.html">Voir nos chats</a>
-      <a class="btn btn--ghost" href="adopter.html">Conditions d'adoption</a>
+      <a class="btn btn--copper" href="nos-adultes.html">Voir nos chats</a>
+      <a class="btn btn--ghost" href="liste-attente.html">Conditions d'adoption</a>
     </div>
   </div>
 </section>
@@ -333,11 +333,11 @@ LE_BRITISH = page_head_block(
 # ==========================================================================
 # NOS CHATS
 # ==========================================================================
-NOS_CHATS = page_head_block(
+NOS_ADULTES = page_head_block(
     "La chatterie",
-    "Nos chats",
-    "Nos reproducteurs, avec leur robe, leur code EMS, leur âge et leurs dépistages. Cliquez sur un chat pour voir sa fiche complète et ses portées.",
-    [("index.html", "Accueil"), (None, "Nos chats")],
+    "Nos adultes",
+    "Nos mâles et nos femelles, avec leur robe, leur code EMS, leur âge et leurs dépistages. Cliquez sur un chat pour voir sa fiche complète et ses portées.",
+    [("index.html", "Accueil"), (None, "Nos adultes")],
 ) + """
 <section class="tight">
   <div class="wrap">
@@ -357,7 +357,7 @@ NOS_CHATS = page_head_block(
     <p class="lede" style="margin-inline:auto">Parce qu'un élevage familial ne peut pas bien s'occuper de
       vingt reproducteurs. Nos femelles vivent dans la maison, font peu de portées et partent en retraite
       stérilisées, chez nous ou dans une famille choisie.</p>
-    <p style="margin-top:1.4rem"><a class="link-arrow" href="adopter.html#sante">Nos dépistages en détail</a></p>
+    <p style="margin-top:1.4rem"><a class="link-arrow" href="liste-attente.html#sante">Nos dépistages en détail</a></p>
   </div>
 </section>
 """
@@ -370,7 +370,7 @@ FICHE_CHAT = """
   <div class="wrap">
     <nav class="breadcrumb" aria-label="Fil d'Ariane">
       <span><a href="index.html">Accueil</a></span>
-      <span><a href="nos-chats.html">Nos chats</a></span>
+      <span><a href="nos-adultes.html">Nos chats</a></span>
       <span id="cat-breadcrumb-name">Fiche</span>
     </nav>
   </div>
@@ -431,7 +431,7 @@ CHATONS = page_head_block(
           </dl>
           <p class="small" style="margin-top:1rem">Les chatons partent à partir de douze semaines,
             jamais avant. La loi autorise huit semaines ; nous gardons quatre semaines de plus.</p>
-          <p style="margin-top:1rem"><a class="btn btn--sm btn--copper" href="adopter.html#liste-attente">Rejoindre la liste d'attente</a></p>
+          <p style="margin-top:1rem"><a class="btn btn--sm btn--copper" href="liste-attente.html">Rejoindre la liste d'attente</a></p>
         </div>
       </div>
     </div>
@@ -468,13 +468,45 @@ PORTEE = """
 # ==========================================================================
 # ADOPTER (conditions, santé, garanties, liste d'attente, FAQ)
 # ==========================================================================
-ADOPTER = page_head_block(
+LISTE_ATTENTE = page_head_block(
     "Adopter",
-    "Adopter un chaton chez nous",
-    "Les étapes, les conditions, ce que nous dépistons et ce que nous garantissons. Tout est écrit ici, avant que vous nous écriviez.",
-    [("index.html", "Accueil"), (None, "Adopter")],
+    "La liste d'attente",
+    "Comment nous rejoindre, les étapes de l'adoption, ce que nous dépistons et ce que nous garantissons. Tout est écrit ici, avant que vous nous écriviez.",
+    [("index.html", "Accueil"), (None, "Liste d'attente")],
 ) + """
-<section class="tight" style="padding-top:0">
+<section class="tight" id="liste-attente" style="padding-top:0">
+  <div class="wrap">
+    <div class="split split--media-first">
+      <div class="split__media reveal">
+        <div class="frame"><div class="arch arch--wide">
+          <img src="assets/photo-chaton-feuilles.webp" alt="Chaton British dans les feuilles du jardin" data-guard>
+        </div></div>
+      </div>
+      <div class="reveal" data-delay="1">
+        <p class="eyebrow">Liste d'attente</p>
+        <h2>Être prévenu avant tout le monde</h2>
+        <p>Nous faisons peu de portées et nos chatons partent souvent avant leur naissance. La liste
+          d'attente sert à donner la priorité aux familles réellement engagées, plutôt qu'à écrire à
+          cinquante personnes à chaque naissance.</p>
+        <p>En versant l'acompte de %(acompte)s, vous rejoignez la liste et devenez prioritaire dès qu'un chaton
+          correspond à ce que vous cherchez. Cette somme est déduite du prix le jour où vous choisissez
+          votre chaton.</p>
+        <ul class="stack" style="list-style:none;padding:0;gap:.6rem;margin:1.2rem 0">
+          <li>Nous vous proposons jusqu'à trois chatons correspondant à vos critères</li>
+          <li>Après trois refus, votre place sur la liste est libérée</li>
+          <li>L'acompte n'est pas remboursable une fois versé</li>
+          <li>Plus vous êtes ouvert sur la couleur et le sexe, plus l'attente est courte</li>
+        </ul>
+        <p class="small">Ces conditions vous sont remises par écrit avant tout versement. Lisez-les, et
+          posez-nous vos questions : nous préférons un échange franc à une réservation précipitée.</p>
+        <p style="margin-top:1.2rem"><a class="btn btn--copper" href="contact.html?sujet=Liste%%20d%%27attente">Rejoindre la liste d'attente</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="panel panel--butter">
   <div class="wrap">
     <div class="split split--wide-text">
       <div class="reveal">
@@ -560,37 +592,6 @@ ADOPTER = page_head_block(
         transparence de nos dépistages, un chaton examiné par un vétérinaire dans les huit jours avant son
         départ, et le fait de rester joignables. Les garanties légales, vices rédhibitoires et garantie de
         conformité, s'appliquent de plein droit et figurent dans notre contrat.</p>
-    </div>
-  </div>
-</section>
-
-<section id="liste-attente">
-  <div class="wrap">
-    <div class="split split--media-first">
-      <div class="split__media reveal">
-        <div class="frame"><div class="arch arch--wide">
-          <img src="assets/photo-chaton-feuilles.webp" alt="Chaton British dans les feuilles du jardin" data-guard>
-        </div></div>
-      </div>
-      <div class="reveal" data-delay="1">
-        <p class="eyebrow">Liste d'attente</p>
-        <h2>Être prévenu avant tout le monde</h2>
-        <p>Nous faisons peu de portées et nos chatons partent souvent avant leur naissance. La liste
-          d'attente sert à donner la priorité aux familles réellement engagées, plutôt qu'à écrire à
-          cinquante personnes à chaque naissance.</p>
-        <p>En versant l'acompte de %(acompte)s, vous rejoignez la liste et devenez prioritaire dès qu'un chaton
-          correspond à ce que vous cherchez. Cette somme est déduite du prix le jour où vous choisissez
-          votre chaton.</p>
-        <ul class="stack" style="list-style:none;padding:0;gap:.6rem;margin:1.2rem 0">
-          <li>Nous vous proposons jusqu'à trois chatons correspondant à vos critères</li>
-          <li>Après trois refus, votre place sur la liste est libérée</li>
-          <li>L'acompte n'est pas remboursable une fois versé</li>
-          <li>Plus vous êtes ouvert sur la couleur et le sexe, plus l'attente est courte</li>
-        </ul>
-        <p class="small">Ces conditions vous sont remises par écrit avant tout versement. Lisez-les, et
-          posez-nous vos questions : nous préférons un échange franc à une réservation précipitée.</p>
-        <p style="margin-top:1.2rem"><a class="btn btn--copper" href="contact.html?sujet=Liste%%20d%%27attente">Rejoindre la liste d'attente</a></p>
-      </div>
     </div>
   </div>
 </section>
@@ -723,16 +724,82 @@ FAQ_HTML = "\n".join(
     % (q, a) for q, a in FAQ_ITEMS
 )
 
-ADOPTER = ADOPTER % {"acompte": SITE["acompte"], "faq": FAQ_HTML}
+LISTE_ATTENTE = LISTE_ATTENTE % {"acompte": SITE["acompte"], "faq": FAQ_HTML}
+
 
 # ==========================================================================
-# JOURNAL (blog) et ARTICLE
+# NOS RETRAITÉS
 # ==========================================================================
-BLOG = page_head_block(
-    "Journal",
-    "Le journal de la chatterie",
-    "Nos conseils d'élevage, la vie des portées et ce que nous apprenons au fil des années.",
-    [("index.html", "Accueil"), (None, "Journal")],
+RETRAITES = page_head_block(
+    "Une retraite méritée",
+    "Nos retraités",
+    "Nos anciens reproducteurs, stérilisés, qui coulent des jours tranquilles à la maison. Ils ont fait la chatterie, ils y restent.",
+    [("index.html", "Accueil"), (None, "Retraités")],
+) + """
+<section class="tight" style="padding-top:0">
+  <div class="wrap">
+    <div class="callout reveal" style="margin-bottom:2rem">
+      <p>Un chat d'élevage ne travaille pas toute sa vie. Passé quelques portées, nos femelles sont
+        stérilisées et prennent leur retraite. La plupart restent chez nous. Quand une retraitée serait
+        plus heureuse seule dans un foyer calme, nous lui cherchons une famille avec le même soin que
+        pour un chaton, et sans rien vous cacher de son âge ni de son caractère.</p>
+    </div>
+    <p class="small" id="retired-count" style="text-align:right"></p>
+    <div id="retired-list"></div>
+  </div>
+</section>
+
+<section class="panel panel--lilac tight">
+  <div class="wrap wrap--narrow center">
+    <h2>Adopter un chat adulte</h2>
+    <p class="lede" style="margin-inline:auto">Un adulte, c'est un caractère déjà formé, une propreté
+      acquise et une sérénité qu'un chaton n'a pas encore. Pour beaucoup de foyers, c'est le meilleur choix.
+      Demandez-nous si l'un des nôtres cherche une famille.</p>
+    <p style="margin-top:1.4rem"><a class="btn btn--copper" href="contact.html?sujet=Adoption%20d%27un%20retrait%C3%A9">Nous écrire</a></p>
+  </div>
+</section>
+"""
+
+# ==========================================================================
+# GALERIE
+# ==========================================================================
+GALERIE = page_head_block(
+    "En images",
+    "La galerie",
+    "Toutes nos photos au même endroit : les adultes, les chatons et les retraités. Cliquez sur une photo pour l'agrandir.",
+    [("index.html", "Accueil"), (None, "Galerie")],
+) + """
+<section class="tight" style="padding-top:0">
+  <div class="wrap">
+    <div class="filters" id="gallery-filters">
+      <button class="chip" type="button" data-filter="toutes" aria-pressed="true">Toutes</button>
+      <button class="chip" type="button" data-filter="adultes" aria-pressed="false">Nos adultes</button>
+      <button class="chip" type="button" data-filter="chatons" aria-pressed="false">Chatons</button>
+      <button class="chip" type="button" data-filter="retraites" aria-pressed="false">Retraités</button>
+      <span class="count-note" id="gallery-count"></span>
+    </div>
+    <div id="gallery-grid"></div>
+  </div>
+</section>
+
+<section class="panel panel--butter tight">
+  <div class="wrap wrap--narrow center">
+    <h2>Vous avez adopté chez nous ?</h2>
+    <p class="lede" style="margin-inline:auto">Envoyez-nous des photos de votre chat devenu grand. Rien ne
+      nous fait plus plaisir, et rien ne rassure mieux une famille qui hésite encore.</p>
+    <p style="margin-top:1.4rem"><a class="btn btn--copper" href="contact.html?sujet=Photos%20de%20mon%20chat">Envoyer des photos</a></p>
+  </div>
+</section>
+"""
+
+# ==========================================================================
+# CONSEILS et ARTICLE
+# ==========================================================================
+CONSEILS = page_head_block(
+    "Conseils",
+    "Nos conseils",
+    "Ce que nous avons appris au fil des portées : bien choisir son chaton, l'accueillir, entretenir son poil, le nourrir.",
+    [("index.html", "Accueil"), (None, "Conseils")],
 ) + """
 <section class="tight" style="padding-top:0">
   <div class="wrap"><div id="blog-list"></div></div>
@@ -744,14 +811,14 @@ ARTICLE = """
   <div class="wrap">
     <nav class="breadcrumb" aria-label="Fil d'Ariane">
       <span><a href="index.html">Accueil</a></span>
-      <span><a href="blog.html">Journal</a></span>
+      <span><a href="conseils.html">Journal</a></span>
       <span id="article-breadcrumb-name">Article</span>
     </nav>
   </div>
 </section>
 <section class="tight" style="padding-top:0">
   <div class="wrap wrap--narrow"><article id="article-body"></article>
-    <p style="margin-top:2.6rem"><a class="link-arrow" href="blog.html">Tous les articles</a></p>
+    <p style="margin-top:2.6rem"><a class="link-arrow" href="conseils.html">Tous nos conseils</a></p>
   </div>
 </section>
 """
@@ -825,8 +892,8 @@ CONTACT = page_head_block(
           <p class="small">Ces trois pages répondent à la plupart des questions, et vous feront gagner du temps.</p>
           <ul class="stack" style="list-style:none;padding:0;gap:.6rem;margin:1rem 0 0;font-size:var(--t-sm)">
             <li><a class="link-arrow" href="le-british.html">Le caractère du British</a></li>
-            <li><a class="link-arrow" href="adopter.html#sante">Nos dépistages et garanties</a></li>
-            <li><a class="link-arrow" href="adopter.html#faq">Les questions fréquentes</a></li>
+            <li><a class="link-arrow" href="liste-attente.html#sante">Nos dépistages et garanties</a></li>
+            <li><a class="link-arrow" href="liste-attente.html#faq">Les questions fréquentes</a></li>
           </ul>
         </div>
 
@@ -976,14 +1043,14 @@ PAGES = [
      "title": "Le British Shorthair et Longhair — caractère, entretien, couleurs",
      "desc": "Tempérament, différences entre Shorthair et Longhair, robes et codes EMS, brossage, vie en appartement : tout ce qu'il faut savoir avant d'adopter un British."},
 
-    {"file": "nos-chats.html", "body": NOS_CHATS,
-     "title": "Nos chats — reproducteurs de la Chatterie British Kingdom",
+    {"file": "nos-adultes.html", "body": NOS_ADULTES,
+     "title": "Nos adultes — mâles et femelles de la Chatterie British Kingdom",
      "desc": "Les mâles et femelles de notre élevage : robe et code EMS, couleur des yeux, âge, dépistages et portées.",
-     "scripts": '<script>BKPages.nosChats();</script>'},
+     "scripts": '<script>BKPages.nosAdultes();</script>'},
 
     {"file": "chat.html", "body": FICHE_CHAT,
      "title": "Fiche d'un chat — Chatterie British Kingdom",
-     "desc": "Fiche détaillée d'un de nos reproducteurs British Shorthair ou Longhair : robe, origines, photos et portées.",
+     "desc": "Fiche détaillée d'un de nos British Shorthair ou Longhair : robe, origines, photos et portées.",
      "scripts": '<script>BKPages.ficheChat();</script>'},
 
     {"file": "chatons.html", "body": CHATONS,
@@ -996,19 +1063,29 @@ PAGES = [
      "desc": "Les chatons d'une portée, leurs parents, leur âge et leur disponibilité, semaine après semaine.",
      "scripts": '<script>BKPages.portee();</script>'},
 
-    {"file": "adopter.html", "body": ADOPTER,
-     "title": "Adopter un chaton British — conditions, santé et garanties",
-     "desc": "Les étapes de l'adoption, nos conditions, les dépistages de nos reproducteurs (HCM, PKD, groupes sanguins), la liste d'attente et les questions fréquentes."},
+    {"file": "retraites.html", "body": RETRAITES,
+     "title": "Nos retraités — Chatterie British Kingdom",
+     "desc": "Nos anciens reproducteurs, stérilisés, qui profitent d'une retraite tranquille à la maison. Certains cherchent parfois une famille.",
+     "scripts": '<script>BKPages.retraites();</script>'},
 
-    {"file": "blog.html", "body": BLOG,
-     "title": "Journal de la chatterie — conseils et vie de l'élevage",
-     "desc": "Conseils d'élevage, entretien du poil, arrivée du chaton à la maison et nouvelles de nos portées.",
+    {"file": "galerie.html", "body": GALERIE,
+     "title": "Galerie photos — Chatterie British Kingdom",
+     "desc": "Toutes les photos de nos British Shorthair et Longhair : adultes, chatons et retraités, en grand.",
+     "scripts": '<script>BKPages.galerie();</script>'},
+
+    {"file": "conseils.html", "body": CONSEILS,
+     "title": "Conseils d'élevage — Chatterie British Kingdom",
+     "desc": "Bien choisir son chaton, préparer son arrivée, entretenir le poil d'un British Longhair, le nourrir : nos conseils d'éleveur.",
      "scripts": '<script>BKPages.blog();</script>'},
 
     {"file": "article.html", "body": ARTICLE,
-     "title": "Article — Journal de la Chatterie British Kingdom",
-     "desc": "Un article du journal de la Chatterie British Kingdom.",
+     "title": "Conseil — Chatterie British Kingdom",
+     "desc": "Un conseil d'élevage de la Chatterie British Kingdom.",
      "scripts": '<script>BKPages.article();</script>'},
+
+    {"file": "liste-attente.html", "body": LISTE_ATTENTE,
+     "title": "Liste d'attente et adoption — Chatterie British Kingdom",
+     "desc": "Comment rejoindre notre liste d'attente, les étapes de l'adoption, nos dépistages (HCM, PKD, groupes sanguins) et les questions fréquentes."},
 
     {"file": "contact.html", "body": CONTACT,
      "title": "Contact — Chatterie British Kingdom, Othis (77)",

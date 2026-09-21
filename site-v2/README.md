@@ -30,14 +30,21 @@ bandeau qui le signale : une page ne reste jamais vide.
 |---|---|
 | `index.html` | Accueil : vidéo, chatons disponibles, preuves de confiance, témoignages |
 | `le-british.html` | Guide de la race : caractère, Shorthair et Longhair, robes et codes EMS |
-| `nos-chats.html` | Reproducteurs, filtrables mâles et femelles |
+| `nos-adultes.html` | Reproducteurs en activité, filtrables mâles et femelles |
 | `chat.html?id=` | Fiche d'un chat : robe, EMS, parents, galerie, portées |
 | `chatons.html` | Portées en cours, chatons et leur statut |
 | `portee.html?id=` | Détail d'une portée, chatons, journal semaine par semaine |
-| `adopter.html` | Étapes, conditions, santé et dépistages, liste d'attente, 15 questions |
-| `blog.html`, `article.html?slug=` | Journal de la chatterie |
+| `retraites.html` | Anciens reproducteurs, ceux que l'administration marque « archivé » |
+| `galerie.html` | Toutes les photos du site, filtrables, avec visionneuse |
+| `conseils.html`, `article.html?slug=` | Conseils d'élevage |
+| `liste-attente.html` | Liste d'attente, étapes, conditions, santé et garanties, 15 questions |
 | `contact.html` | Formulaire, coordonnées, carte |
 | `mentions-legales.html`, `politique-confidentialite.html` | Pages légales |
+
+> **Page Retraités** : elle affiche les chats dont la case « archivé » est cochée
+> dans l'administration. Si vous utilisez cette case pour autre chose qu'une mise
+> à la retraite (chat vendu, décédé, retiré du site), il faudra ajouter un champ
+> dédié côté base.
 
 ## Organisation des fichiers
 
@@ -122,3 +129,6 @@ signalés par des commentaires `À COMPLÉTER` dans le code.
 - Comportement correct quand toutes les images échouent.
 - **Non vérifié** : les appels à l'API réelle, injoignable depuis
   l'environnement de développement utilisé. À tester en priorité.
+- **Photos de démonstration** : ce sont des images tirées de la vidéo et des
+  visuels du site actuel. En production, les photos viennent de l'API et du
+  stockage Azure, sans rien changer au code.

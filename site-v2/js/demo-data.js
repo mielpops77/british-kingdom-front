@@ -60,6 +60,20 @@ window.BK_DEMO = {
       dateOfBirth: '2022-08-14', sex: 'Femelle', eyeColor: 'Cuivre',
       urlProfil: 'assets/photo-chaton-feuilles.webp', urlProfilMother: '', urlProfilFather: '', images: [],
       pedigree: '', sailliesExterieures: 'Non', archivee: false
+    },
+    {
+      id: 6, profilId: 1, name: 'Victoria', robe: 'Bleu (BRI a)', breed: 'British Shorthair',
+      dateOfBirth: '2016-02-09', sex: 'Femelle', eyeColor: 'Cuivre',
+      urlProfil: 'assets/photo-femelle.webp', urlProfilMother: '', urlProfilFather: '',
+      images: ['assets/photo-femelle.webp', 'assets/poster-globe.webp'],
+      pedigree: '', sailliesExterieures: 'Non', archivee: true
+    },
+    {
+      id: 7, profilId: 1, name: 'Churchill', robe: 'Lilas (BRI c)', breed: 'British Longhair',
+      dateOfBirth: '2015-06-21', sex: 'Mâle', eyeColor: 'Cuivre',
+      urlProfil: 'assets/photo-male.webp', urlProfilMother: '', urlProfilFather: '',
+      images: ['assets/photo-male.webp'],
+      pedigree: '', sailliesExterieures: 'Non', archivee: true
     }
   ],
 
