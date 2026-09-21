@@ -53,13 +53,8 @@
     "sameAs": ["https://www.facebook.com/people/Chatterie-British-kingdom/61558762891533/", "https://www.instagram.com/chatterie_britishkingdom/", "https://www.tiktok.com/@elevage_british_kingdom", "https://www.youtube.com/@chatterie_british_kingdom"]
   }
   </script>
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-J3VHVLP0EY"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-J3VHVLP0EY', { anonymize_ip: true });
-  </script>
+  <!-- Google Analytics ne se charge qu'après « Accepter » dans le bandeau des cookies (js/site.js) -->
+  <meta name="bk-ga" content="G-J3VHVLP0EY">
 </head>
 <body>
 <a class="skip" href="#main">Aller au contenu</a>
@@ -135,8 +130,8 @@
       </li>
       <li class="reveal" data-delay="2">
         <span class="assurance__icon"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1L12 21l7.7-7.6 1.1-1a5.5 5.5 0 0 0 0-7.8Z"/></svg></span>
-        <h3>Stérilisés avant le départ</h3>
-        <p>Tous nos chatons sont stérilisés avant de rejoindre leur famille, pour une vie d'intérieur sereine.</p>
+        <h3>Suivis après l'adoption</h3>
+        <p>Un suivi et des conseils bien après le départ : une question, un doute, nous restons disponibles.</p>
       </li>
       <li class="reveal" data-delay="3">
         <span class="assurance__icon"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></span>
@@ -356,6 +351,7 @@
       <span>SIREN 844 064 436 · SIRET 84406443600026</span>
       <span>Chatons inscrits au LOOF</span>
       <span class="spacer"></span>
+      <button type="button" class="link-btn" data-consent-open>Cookies</button>
       <span>Site créé par <a href="https://www.eleveur-connect.fr/" target="_blank" rel="noopener">Eleveur-Connect</a></span>
     </div>
   </div>

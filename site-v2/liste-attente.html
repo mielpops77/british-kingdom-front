@@ -29,13 +29,8 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..700,0..100,0..1;1,9..144,300..700,0..100,0..1&family=Quicksand:wght@400;500;600;700&display=swap">
   <link rel="stylesheet" href="css/site.css">
 
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-J3VHVLP0EY"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-J3VHVLP0EY', { anonymize_ip: true });
-  </script>
+  <!-- Google Analytics ne se charge qu'après « Accepter » dans le bandeau des cookies (js/site.js) -->
+  <meta name="bk-ga" content="G-J3VHVLP0EY">
 </head>
 <body>
 <a class="skip" href="#main">Aller au contenu</a>
@@ -194,7 +189,7 @@
             <div><dt>Visite</dt><dd>sur rendez-vous</dd></div>
             <div><dt>Vie</dt><dd>en intérieur, de préférence</dd></div>
             <div><dt>Pedigree</dt><dd>LOOF</dd></div>
-            <div><dt>Stérilisation</dt><dd>avant le départ</dd></div>
+            <div><dt>Suivi</dt><dd>après l'adoption</dd></div>
           </dl>
           <p class="small" style="margin-top:1rem">Contactez-nous pour connaître le prix d'un chaton.</p>
         </div>
@@ -297,7 +292,7 @@
       <details class="faq"><summary>Peut-on venir voir les chatons avant de décider ?</summary><div class="faq__body"><p>Oui, et nous vous y encourageons. Les visites se font uniquement sur rendez-vous : vous rencontrez les chatons, vous voyez où ils ont grandi et vous posez toutes vos questions.</p></div></details>
       <details class="faq"><summary>Comment réserve-t-on, et à quoi sert l'acompte ?</summary><div class="faq__body"><p>Après notre échange et, idéalement, une visite, la réservation se fait par le versement de l'acompte de 200 €, qui est déduit du prix du chaton. Il bloque le chaton à votre nom.</p><p>Nous signons ensuite le certificat d'engagement et de connaissance, et la loi impose un délai de réflexion de sept jours avant le départ.</p></div></details>
       <details class="faq"><summary>Combien de temps faut-il attendre ?</summary><div class="faq__body"><p>Cela dépend de ce que vous cherchez. Si vous voulez une couleur précise, l'attente est plus longue ; si vous êtes ouvert sur la couleur et le sexe, elle est souvent bien plus courte. Nous vous le disons franchement dès le premier échange.</p></div></details>
-      <details class="faq"><summary>Pourquoi nos chatons sont-ils stérilisés ?</summary><div class="faq__body"><p>Tous nos chatons sont stérilisés avant leur départ. Un chat stérilisé ne marque pas son territoire, ne fugue pas en période de chaleurs et vit plus sereinement à l'intérieur.</p></div></details>
+      <details class="faq"><summary>Faut-il faire stériliser son chaton ?</summary><div class="faq__body"><p>Pour nos chatons mâles, oui : nous demandons aux futurs propriétaires de s'engager à les faire stériliser dès l'âge de 6 à 7 mois, afin d'éviter les comportements de marquage.</p><p>Parlez-en avec votre vétérinaire lors de la première visite : il vous indiquera le bon moment.</p></div></details>
       <details class="faq"><summary>Un chaton Longhair peut-il naître de deux Shorthair ?</summary><div class="faq__body"><p>Oui. Le poil long est un caractère récessif : deux British Shorthair porteurs du gène peuvent donner des Longhair dans la même portée. C'est le même chat, la même race et le même standard, avec une fourrure plus longue et un brossage plus régulier.</p></div></details>
     </div>
     <p class="small" style="margin-top:2rem">Une question qui n'est pas là ? <a href="contact.html">Écrivez-nous</a>.</p>
@@ -348,6 +343,7 @@
       <span>SIREN 844 064 436 · SIRET 84406443600026</span>
       <span>Chatons inscrits au LOOF</span>
       <span class="spacer"></span>
+      <button type="button" class="link-btn" data-consent-open>Cookies</button>
       <span>Site créé par <a href="https://www.eleveur-connect.fr/" target="_blank" rel="noopener">Eleveur-Connect</a></span>
     </div>
   </div>

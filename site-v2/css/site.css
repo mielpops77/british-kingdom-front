@@ -1227,6 +1227,28 @@ img.img-missing { display: none; }
 }
 .footer-bottom .spacer { margin-left: auto; }
 
+/* Bandeau des cookies : discret, en bas à gauche, refuser aussi simple qu'accepter */
+.consent {
+  position: fixed; z-index: 90;
+  left: 1rem; bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+  width: min(430px, calc(100vw - 2rem));
+  background: var(--card); color: var(--ink);
+  border: 1px solid var(--line); border-radius: var(--radius);
+  box-shadow: var(--shadow-l);
+  padding: 1.1rem 1.25rem 1.15rem;
+}
+.consent[hidden] { display: none; }
+.consent__title { font-family: var(--font-hand); font-size: 1.5rem; font-weight: 700; color: var(--rose-ink); margin: 0 0 .25rem; line-height: 1.1; }
+.consent__text { font-size: var(--t-sm); color: var(--ink-2); margin: 0 0 .95rem; line-height: 1.5; }
+.consent__text a { color: var(--rose-ink); }
+.consent__actions { display: flex; gap: .6rem; }
+.consent__actions .btn { flex: 1; }
+.link-btn {
+  background: none; border: 0; padding: 0; cursor: pointer;
+  font: inherit; color: var(--footer-ink);
+  text-decoration: underline; text-underline-offset: .18em;
+}
+
 /* --------------------------------------------------------------------------
    26. Apparitions au défilement
    -------------------------------------------------------------------------- */
@@ -1276,7 +1298,7 @@ img.img-missing { display: none; }
 }
 
 @media print {
-  .site-header, .site-footer, .burger, .icon-btn, .nav, .demo-banner, .video-frame { display: none !important; }
+  .site-header, .site-footer, .burger, .icon-btn, .nav, .demo-banner, .video-frame, .consent { display: none !important; }
   body { background: #fff; color: #000; }
   .arch, .card { break-inside: avoid; }
 }

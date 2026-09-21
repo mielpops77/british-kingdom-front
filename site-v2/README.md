@@ -49,8 +49,13 @@ selon le chat affiché.
 
 > **Page Retraités** : elle affiche les chats dont la case « archivé » est cochée
 > dans l'administration. Aujourd'hui ce sont Luna, Prosper Mysterious et
-> Fripouille. Si cette case sert aussi à autre chose (chat vendu, décédé,
-> retiré du site), il faudra ajouter un champ dédié côté base.
+> Fripouille. Confirmé le 22/09/2026 : cette case ne sert qu'aux retraités.
+
+> **Cookies** : Google Analytics ne se charge qu'après « Accepter » dans le
+> bandeau affiché à la première visite (`js/site.js`, identifiant lu dans la
+> balise `<meta name="bk-ga">`). Le choix est gardé six mois ; le lien
+> « Cookies » du pied de page rouvre le bandeau. Refuser efface les cookies
+> `_ga` déjà posés.
 
 > **Formulaire de liste d'attente** : il passe par le même envoi que le
 > formulaire de contact (`POST contact`), avec le sujet « Liste d'attente ».
@@ -162,20 +167,25 @@ par des commentaires `À COMPLÉTER` dans le code.
   affiche `06 19 67 09 34`, et le lien Instagram pointe vers
   `chatterie_british_kingdom` au lieu de `chatterie_britishkingdom`. Le
   nouveau site affiche `06 61 65 49 98` et le bon compte Instagram.
-- **Stérilisation** : les conditions disent « Tous nos chatons sont
-  stérilisés avant leur départ », le texte des mâles demande aux adoptants de
-  faire stériliser les mâles vers 6 à 7 mois. Les deux textes sont affichés.
+- **Stérilisation** : les chatons ne sont **pas** stérilisés avant le départ
+  (précisé le 22/09/2026). Le nouveau site ne le dit donc nulle part et la
+  FAQ reprend la règle du texte des mâles (stérilisation par l'adoptant vers
+  6 à 7 mois). À corriger dans l'administration : la page Conditions du site
+  actuel affiche encore « Tous nos chatons sont stérilisés avant leur départ ».
 - **Chatons de Tina et Voltaire** : ils sont saisis « British Shorthair »
   alors que les photos et les publications disent Longhair.
 - **Numéro de déclaration DDPP**, **ACACED** ou certificat de capacité, et
   **médiateur de la consommation** à nommer dans les mentions.
-- **Prix des chatons** : aucun n'est affiché, le site invite à appeler.
+- **Prix des chatons** : volontairement non affichés (choix du 22/09/2026),
+  le site invite à appeler ; seule la réservation de 200 € est annoncée.
 - **Conditions de la liste d'attente** : l'acompte non remboursable combiné à
   la libération de la place après trois refus doit être relu par un juriste.
   Les termes « acompte » et « arrhes » n'ont pas le même effet en droit.
-- **Bandeau de consentement aux cookies** : Google Analytics et
-  l'enregistrement des adresses IP se déclenchent dès le chargement de la
-  page, sans recueil du consentement. C'est le cas sur le site actuel aussi.
+- **Cookies : réglé pour Google Analytics** (bandeau Accepter / Refuser).
+  Reste à vérifier l'enregistrement des visites par l'API (adresse IP,
+  localisation), qui part toujours au chargement : pour être dispensé de
+  consentement, il doit rester strictement limité à la mesure d'audience.
+  Le site actuel, lui, charge encore Google Analytics sans consentement.
 - **Dépistages réels** : les dates et laboratoires des tests (HCM, PKD, FIV,
   FeLV, groupes sanguins) ne sont pas encore affichés sur les fiches.
 
@@ -211,4 +221,8 @@ par des commentaires `À COMPLÉTER` dans le code.
   (4,5:1 pour le texte courant, 3:1 pour les grands titres).
 - Relecture en capture d'écran de chaque page, sur ordinateur et sur
   téléphone, en clair et en sombre.
-- Formulaires testés en mode aperçu (aucun message réel envoyé).
+- Formulaires testés en mode aperçu : champs obligatoires signalés, sujet
+  prérempli, message de réussite ; aucun message réel envoyé.
+- Bandeau des cookies : aucune requête Google avant « Accepter », refus
+  mémorisé, lien « Cookies » qui rouvre le bandeau, accord gardé au
+  rechargement.

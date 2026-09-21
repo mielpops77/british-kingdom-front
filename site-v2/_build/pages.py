@@ -59,8 +59,8 @@ ACCUEIL = """
       </li>
       <li class="reveal" data-delay="2">
         <span class="assurance__icon">%(heart)s</span>
-        <h3>Stérilisés avant le départ</h3>
-        <p>Tous nos chatons sont stérilisés avant de rejoindre leur famille, pour une vie d'intérieur sereine.</p>
+        <h3>Suivis après l'adoption</h3>
+        <p>Un suivi et des conseils bien après le départ : une question, un doute, nous restons disponibles.</p>
       </li>
       <li class="reveal" data-delay="3">
         <span class="assurance__icon">%(pin)s</span>
@@ -473,8 +473,8 @@ CHATONS = page_head_block(
       <li class="reveal" data-delay="1"><span class="kit__icon">%(chip)s</span>Puce électronique d'identification</li>
       <li class="reveal" data-delay="2"><span class="kit__icon">%(syringe)s</span>Premières vaccinations à jour</li>
       <li class="reveal"><span class="kit__icon">%(heart)s</span>Carnet de santé complet</li>
-      <li class="reveal" data-delay="1"><span class="kit__icon">%(check)s</span>Stérilisé avant son départ</li>
-      <li class="reveal" data-delay="2"><span class="kit__icon">%(gift)s</span>De la nourriture et un peu de litière pour les premiers jours</li>
+      <li class="reveal" data-delay="1"><span class="kit__icon">%(gift)s</span>De la nourriture et un peu de litière pour les premiers jours</li>
+      <li class="reveal" data-delay="2"><span class="kit__icon">%(check)s</span>Un suivi et nos conseils, bien après l'adoption</li>
     </ul>
     <p class="small center" style="margin-top:1.4rem">Et les documents prévus par la loi : attestation de cession,
       certificat vétérinaire et document d'information sur les besoins de l'espèce.</p>
@@ -653,7 +653,7 @@ LISTE_ATTENTE = """<section class="page-head page-head--center">
             <div><dt>Visite</dt><dd>sur rendez-vous</dd></div>
             <div><dt>Vie</dt><dd>en intérieur, de préférence</dd></div>
             <div><dt>Pedigree</dt><dd>LOOF</dd></div>
-            <div><dt>Stérilisation</dt><dd>avant le départ</dd></div>
+            <div><dt>Suivi</dt><dd>après l'adoption</dd></div>
           </dl>
           <p class="small" style="margin-top:1rem">Contactez-nous pour connaître le prix d'un chaton.</p>
         </div>
@@ -811,9 +811,10 @@ FAQ_ITEMS = [
      "<p>Cela dépend de ce que vous cherchez. Si vous voulez une couleur précise, l'attente est plus "
      "longue ; si vous êtes ouvert sur la couleur et le sexe, elle est souvent bien plus courte. Nous vous "
      "le disons franchement dès le premier échange.</p>"),
-    ("Pourquoi nos chatons sont-ils stérilisés ?",
-     "<p>Tous nos chatons sont stérilisés avant leur départ. Un chat stérilisé ne marque pas son "
-     "territoire, ne fugue pas en période de chaleurs et vit plus sereinement à l'intérieur.</p>"),
+    ("Faut-il faire stériliser son chaton ?",
+     "<p>Pour nos chatons mâles, oui : nous demandons aux futurs propriétaires de s'engager à les faire "
+     "stériliser dès l'âge de 6 à 7 mois, afin d'éviter les comportements de marquage.</p>"
+     "<p>Parlez-en avec votre vétérinaire lors de la première visite : il vous indiquera le bon moment.</p>"),
     ("Un chaton Longhair peut-il naître de deux Shorthair ?",
      "<p>Oui. Le poil long est un caractère récessif : deux British Shorthair porteurs du gène peuvent "
      "donner des Longhair dans la même portée. C'est le même chat, la même race et le même standard, avec "
@@ -1104,11 +1105,15 @@ CONFIDENTIALITE = page_head_block(
       l'adresse IP et l'adresse IP elle-même. Ces données sont conservées
       <!-- À COMPLÉTER : durée réelle de conservation des visites en base --> et ne sont pas utilisées pour
       identifier une personne.</p>
-    <p>Le site utilise également Google Analytics, qui dépose des cookies de mesure d'audience.
-      <!-- À METTRE EN CONFORMITÉ : Google Analytics et la journalisation d'IP se déclenchent aujourd'hui
-           dès le chargement de la page, sans recueil du consentement. Un bandeau de consentement doit être
-           ajouté, ou la mesure d'audience remplacée par une solution exemptée de consentement. -->
-    </p>
+    <h2 id="cookies">Les cookies</h2>
+    <p>Le site peut utiliser Google Analytics, qui dépose des cookies de mesure d'audience, <strong>seulement
+      si vous l'acceptez</strong> dans le bandeau qui s'affiche à votre première visite. Si vous refusez, aucun
+      cookie de mesure n'est déposé. Votre choix est conservé six mois dans votre navigateur ; vous pouvez le
+      changer à tout moment grâce au lien « Cookies » en bas de chaque page.</p>
+    <p>Le site garde aussi dans votre navigateur votre préférence de thème, clair ou sombre. Ce réglage ne
+      sert qu'à l'affichage et ne nécessite pas votre accord.</p>
+    <!-- À VÉRIFIER : l'enregistrement des visites par l'API (adresse IP, localisation) se déclenche
+         sans consentement ; il doit rester strictement limité à la mesure d'audience pour en être dispensé. -->
 
     <h2>Ce que nous ne faisons pas</h2>
     <p>Nous ne vendons ni n'échangeons vos données. Nous n'envoyons pas de lettre d'information. Nous ne

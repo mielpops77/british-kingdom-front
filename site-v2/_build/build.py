@@ -192,13 +192,8 @@ def head(page):
   <link rel="stylesheet" href="%(fonts)s">
   <link rel="stylesheet" href="css/site.css">
 %(jsonld)s
-  <script async src="https://www.googletagmanager.com/gtag/js?id=%(ga)s"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', '%(ga)s', { anonymize_ip: true });
-  </script>
+  <!-- Google Analytics ne se charge qu'après « Accepter » dans le bandeau des cookies (js/site.js) -->
+  <meta name="bk-ga" content="%(ga)s">
 </head>
 <body>
 """ % {
@@ -288,6 +283,7 @@ def footer(scripts=""):
       <span>SIREN %(siren)s · SIRET %(siret)s</span>
       <span>Chatons inscrits au LOOF</span>
       <span class="spacer"></span>
+      <button type="button" class="link-btn" data-consent-open>Cookies</button>
       <span>Site créé par <a href="https://www.eleveur-connect.fr/" target="_blank" rel="noopener">Eleveur-Connect</a></span>
     </div>
   </div>

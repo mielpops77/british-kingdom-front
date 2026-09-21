@@ -472,7 +472,7 @@
       [4, 'Les découvertes', 'Premiers repas solides, apprentissage de la litière, premiers jeux avec la fratrie.'],
       [8, 'Identification et vaccins', 'Puce électronique et premières vaccinations, avec le carnet de santé.'],
       [10, 'La vie de famille', 'Visiteurs, bruits de la maison, câlins : le chaton s’habitue à tout ce qu’il retrouvera chez vous.'],
-      [12, 'Le départ', 'Vers douze semaines, stérilisé, avec son certificat LOOF, son carnet de santé et un peu de nourriture.']
+      [12, 'Le départ', 'Vers douze semaines, avec son certificat LOOF, son carnet de santé et un peu de nourriture pour les premiers jours.']
     ];
     return '<section class="tight journal">' +
       '<div class="section-head"><p class="eyebrow">Semaine après semaine</p><h2 class="reveal">Le journal de la portée</h2>' +

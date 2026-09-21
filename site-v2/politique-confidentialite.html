@@ -29,13 +29,8 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..700,0..100,0..1;1,9..144,300..700,0..100,0..1&family=Quicksand:wght@400;500;600;700&display=swap">
   <link rel="stylesheet" href="css/site.css">
 
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-J3VHVLP0EY"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-J3VHVLP0EY', { anonymize_ip: true });
-  </script>
+  <!-- Google Analytics ne se charge qu'après « Accepter » dans le bandeau des cookies (js/site.js) -->
+  <meta name="bk-ga" content="G-J3VHVLP0EY">
 </head>
 <body>
 <a class="skip" href="#main">Aller au contenu</a>
@@ -88,11 +83,15 @@
       l'adresse IP et l'adresse IP elle-même. Ces données sont conservées
       <!-- À COMPLÉTER : durée réelle de conservation des visites en base --> et ne sont pas utilisées pour
       identifier une personne.</p>
-    <p>Le site utilise également Google Analytics, qui dépose des cookies de mesure d'audience.
-      <!-- À METTRE EN CONFORMITÉ : Google Analytics et la journalisation d'IP se déclenchent aujourd'hui
-           dès le chargement de la page, sans recueil du consentement. Un bandeau de consentement doit être
-           ajouté, ou la mesure d'audience remplacée par une solution exemptée de consentement. -->
-    </p>
+    <h2 id="cookies">Les cookies</h2>
+    <p>Le site peut utiliser Google Analytics, qui dépose des cookies de mesure d'audience, <strong>seulement
+      si vous l'acceptez</strong> dans le bandeau qui s'affiche à votre première visite. Si vous refusez, aucun
+      cookie de mesure n'est déposé. Votre choix est conservé six mois dans votre navigateur ; vous pouvez le
+      changer à tout moment grâce au lien « Cookies » en bas de chaque page.</p>
+    <p>Le site garde aussi dans votre navigateur votre préférence de thème, clair ou sombre. Ce réglage ne
+      sert qu'à l'affichage et ne nécessite pas votre accord.</p>
+    <!-- À VÉRIFIER : l'enregistrement des visites par l'API (adresse IP, localisation) se déclenche
+         sans consentement ; il doit rester strictement limité à la mesure d'audience pour en être dispensé. -->
 
     <h2>Ce que nous ne faisons pas</h2>
     <p>Nous ne vendons ni n'échangeons vos données. Nous n'envoyons pas de lettre d'information. Nous ne
@@ -158,6 +157,7 @@
       <span>SIREN 844 064 436 · SIRET 84406443600026</span>
       <span>Chatons inscrits au LOOF</span>
       <span class="spacer"></span>
+      <button type="button" class="link-btn" data-consent-open>Cookies</button>
       <span>Site créé par <a href="https://www.eleveur-connect.fr/" target="_blank" rel="noopener">Eleveur-Connect</a></span>
     </div>
   </div>

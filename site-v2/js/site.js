@@ -297,6 +297,85 @@
     } else { play(); }
   }
 
+  /* ---------- consentement aux cookies de mesure d'audience ----------
+     Google Analytics ne se charge qu'après « Accepter ». Le choix est gardé
+     six mois dans le navigateur ; le lien « Cookies » du pied de page rouvre
+     le bandeau. Refuser est aussi simple qu'accepter, comme le demande la CNIL. */
+  const CONSENT_KEY = 'bk-consent';
+  const CONSENT_DAYS = 182;
+  let consentMemo = null; // si le stockage est indisponible, le choix vaut pour la page
+
+  function readConsent() {
+    try {
+      const c = JSON.parse(localStorage.getItem(CONSENT_KEY) || 'null');
+      if (c && (c.v === 'oui' || c.v === 'non') && Date.now() - c.t < CONSENT_DAYS * 86400000) return c.v;
+    } catch (e) { /* stockage indisponible */ }
+    return consentMemo;
+  }
+  function saveConsent(v) {
+    consentMemo = v;
+    try { localStorage.setItem(CONSENT_KEY, JSON.stringify({ v, t: Date.now() })); } catch (e) { /* non bloquant */ }
+  }
+  function gaId() { const m = $('meta[name="bk-ga"]'); return m ? m.content : ''; }
+  let gaLoaded = false;
+  function loadAnalytics() {
+    const id = gaId();
+    if (!id || gaLoaded) return;
+    gaLoaded = true;
+    window['ga-disable-' + id] = false;
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function () { window.dataLayer.push(arguments); };
+    window.gtag('js', new Date());
+    window.gtag('config', id, { anonymize_ip: true });
+    const s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(id);
+    document.head.appendChild(s);
+  }
+  function stopAnalytics() {
+    const id = gaId();
+    if (id) window['ga-disable-' + id] = true;
+    // Efface les cookies _ga déjà déposés, sur le domaine et son domaine parent
+    const host = location.hostname;
+    const domains = ['', host, '.' + host, '.' + host.split('.').slice(-2).join('.')];
+    document.cookie.split(';').map((c) => c.split('=')[0].trim()).filter((n) => /^_ga/.test(n)).forEach((name) => {
+      domains.forEach((d) => { document.cookie = name + '=; Max-Age=0; path=/' + (d ? '; domain=' + d : ''); });
+    });
+  }
+  let consentBox = null;
+  function showConsent() {
+    if (!consentBox) {
+      consentBox = document.createElement('div');
+      consentBox.className = 'consent';
+      consentBox.setAttribute('role', 'dialog');
+      consentBox.setAttribute('aria-labelledby', 'consent-title');
+      consentBox.innerHTML =
+        '<p class="consent__title" id="consent-title">Un petit cookie ?</p>' +
+        '<p class="consent__text">Avec votre accord, nous mesurons l’audience du site avec Google Analytics, pour savoir quelles pages vous intéressent. ' +
+        'Rien d’autre. <a href="politique-confidentialite.html#cookies">En savoir plus</a></p>' +
+        '<div class="consent__actions">' +
+          '<button type="button" class="btn btn--sm btn--ghost" data-consent="non">Refuser</button>' +
+          '<button type="button" class="btn btn--sm btn--primary" data-consent="oui">Accepter</button>' +
+        '</div>';
+      document.body.appendChild(consentBox);
+      consentBox.addEventListener('click', (e) => {
+        const b = e.target.closest('[data-consent]');
+        if (!b) return;
+        const v = b.dataset.consent;
+        saveConsent(v);
+        if (v === 'oui') loadAnalytics(); else stopAnalytics();
+        consentBox.hidden = true;
+      });
+    }
+    consentBox.hidden = false;
+  }
+  function setupConsent() {
+    const v = readConsent();
+    if (v === 'oui') loadAnalytics();
+    else if (v !== 'non') showConsent();
+    $$('[data-consent-open]').forEach((b) => b.addEventListener('click', showConsent));
+  }
+
   /* ---------- assemblage ---------- */
   function boot() {
     setupNav();
@@ -304,6 +383,7 @@
     guardImages();
     setupForms();
     setupHeroVideo();
+    setupConsent();
     const tb = $('.theme-btn');
     if (tb) tb.addEventListener('click', toggleTheme);
     $$('[data-icon]').forEach((el) => { el.innerHTML = icon(el.dataset.icon, el.dataset.iconSize || 24); });
