@@ -45,8 +45,9 @@ NAV = [
 ]
 
 FONTS = ("https://fonts.googleapis.com/css2?"
-         "family=Fraunces:opsz,wght,SOFT,WONK@9..144,300..700,0..100,0..1"
-         "&family=Karla:wght@400;500;600;700&display=swap")
+         "family=Caveat:wght@600;700"
+         "&family=Fraunces:opsz,wght,SOFT,WONK@9..144,300..700,0..100,0..1"
+         "&family=Quicksand:wght@400;500;600;700&display=swap")
 
 
 def crest_svg():
@@ -125,7 +126,7 @@ def head(page):
   <meta name="description" content="%(desc)s">
   <link rel="canonical" href="%(canon)s">
   <meta name="robots" content="index, follow">
-  <meta name="theme-color" content="#16202b">
+  <meta name="theme-color" content="#fff6f4">
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="%(nom)s">

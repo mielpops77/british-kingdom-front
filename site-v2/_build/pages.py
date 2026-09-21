@@ -17,29 +17,35 @@ MAIL = SITE["email"]
 # ACCUEIL
 # ==========================================================================
 ACCUEIL = """
-<section class="hero">
-  <div class="hero__media">
-    <video id="hero-video" autoplay muted loop playsinline preload="metadata" poster="assets/hero-poster.webp"
-           aria-hidden="true" tabindex="-1">
-      <source src="assets/hero.mp4" type="video/mp4">
-    </video>
-  </div>
-  <div class="wrap hero__inner">
-    <div class="hero__crest">%(crest)s</div>
-    <p class="eyebrow">Élevage familial · %(ville)s, %(region)s</p>
-    <h1>Des British élevés dans la maison, pas dans une cage</h1>
-    <p class="hero__lede">British Shorthair et British Longhair inscrits au LOOF. Nos chatons grandissent
-      au milieu du bruit de la vie de famille et partent à douze semaines, prêts à aimer la vôtre.</p>
-    <div class="hero__cta">
-      <a class="btn btn--copper" href="chatons.html">Voir les chatons</a>
-      <a class="btn btn--ghost" href="le-british.html">Découvrir la race</a>
+<section class="hero scallop">
+  <div class="wrap hero__grid">
+    <div class="hero__text">
+      <div class="hero__crest">%(crest)s</div>
+      <p class="eyebrow">Élevage familial à %(ville)s, en %(region)s</p>
+      <h1>Des British élevés dans la maison, au milieu des câlins</h1>
+      <p class="hero__lede">British Shorthair et British Longhair inscrits au LOOF. Nos chatons grandissent
+        dans le bruit de la vie de famille et partent à douze semaines, prêts à aimer la vôtre.</p>
+      <div class="hero__cta">
+        <a class="btn btn--copper" href="chatons.html">Voir les chatons</a>
+        <a class="btn btn--ghost" href="le-british.html">Découvrir la race</a>
+      </div>
+      <p class="hero__marks">
+        <span>%(check)s Pedigree LOOF</span>
+        <span>%(check)s Parents dépistés</span>
+        <span>%(check)s Départ à 12 semaines</span>
+        <span>%(check)s Élevage déclaré</span>
+      </p>
     </div>
-    <p class="hero__marks">
-      <span>%(check)s Pedigree LOOF</span>
-      <span>%(check)s Parents dépistés</span>
-      <span>%(check)s Départ à 12 semaines</span>
-      <span>%(check)s Élevage déclaré</span>
-    </p>
+    <div class="hero__media">
+      <div class="hero__blob">
+        <video id="hero-video" autoplay muted loop playsinline preload="metadata" poster="assets/hero-poster.webp"
+               aria-hidden="true" tabindex="-1">
+          <source src="assets/hero.mp4" type="video/mp4">
+        </video>
+      </div>
+      <span class="hero__sticker hero__sticker--1" aria-hidden="true"></span>
+      <span class="hero__sticker hero__sticker--2" aria-hidden="true"></span>
+    </div>
   </div>
 </section>
 
@@ -67,7 +73,7 @@ ACCUEIL = """
   </div>
 </section>
 
-<section class="panel paws">
+<section class="panel panel--mint paws scallop scallop--to-paper">
   <div class="wrap">
     <div class="center" style="max-width:56ch;margin-inline:auto">
       <p class="eyebrow center">Pourquoi nous</p>
@@ -158,7 +164,7 @@ ACCUEIL = """
   </div>
 </section>
 
-<section class="panel" id="temoignages-section">
+<section class="panel panel--butter" id="temoignages-section">
   <div class="wrap">
     <p class="eyebrow">Livre d'or</p>
     <h2>Des nouvelles de nos chatons</h2>
@@ -183,7 +189,7 @@ ACCUEIL = """
   </div>
 </section>
 
-<section class="panel-deep">
+<section class="panel panel--lilac">
   <div class="wrap center" style="max-width:54ch;margin-inline:auto">
     <h2>Une question, un projet d'adoption ?</h2>
     <p class="lede" style="margin-inline:auto">Nous répondons à tout le monde, même quand nous n'avons pas de
@@ -268,7 +274,7 @@ LE_BRITISH = page_head_block(
   </div>
 </section>
 
-<section class="panel">
+<section class="panel panel--mint">
   <div class="wrap">
     <p class="eyebrow">Au quotidien</p>
     <h2>Ce qu'il demande vraiment</h2>
@@ -345,7 +351,7 @@ NOS_CHATS = page_head_block(
   </div>
 </section>
 
-<section class="panel tight">
+<section class="panel panel--mint tight">
   <div class="wrap wrap--narrow center">
     <h2>Pourquoi si peu de chats ?</h2>
     <p class="lede" style="margin-inline:auto">Parce qu'un élevage familial ne peut pas bien s'occuper de
@@ -372,7 +378,7 @@ FICHE_CHAT = """
 <section class="tight" style="padding-top:0">
   <div class="wrap"><div id="cat-detail"></div></div>
 </section>
-<section class="panel tight">
+<section class="panel panel--lilac tight">
   <div class="wrap wrap--narrow center">
     <h2>Une question sur ce chat ?</h2>
     <p class="lede" style="margin-inline:auto">Ses tests, ses origines, ses portées à venir : demandez-nous, nous répondons précisément.</p>
@@ -397,7 +403,7 @@ CHATONS = page_head_block(
   </div>
 </section>
 
-<section class="panel">
+<section class="panel panel--butter">
   <div class="wrap">
     <div class="split">
       <div class="reveal">
@@ -449,7 +455,7 @@ PORTEE = """
 <section class="tight" style="padding-top:0">
   <div class="wrap"><div id="litter-detail"></div></div>
 </section>
-<section class="panel-deep tight">
+<section class="panel panel--butter tight">
   <div class="wrap wrap--narrow center">
     <h2>Un chaton vous plaît ?</h2>
     <p class="lede" style="margin-inline:auto">Écrivez-nous en nous parlant un peu de vous. Nous vous
@@ -509,7 +515,7 @@ ADOPTER = page_head_block(
   </div>
 </section>
 
-<section class="panel" id="sante">
+<section class="panel panel--sky" id="sante">
   <div class="wrap">
     <p class="eyebrow">Santé</p>
     <h2>Ce que nous dépistons, et pourquoi</h2>
@@ -589,7 +595,7 @@ ADOPTER = page_head_block(
   </div>
 </section>
 
-<section class="panel-deep">
+<section class="panel panel--mint">
   <div class="wrap">
     <p class="eyebrow">Le jour J</p>
     <h2>Préparer son arrivée</h2>
