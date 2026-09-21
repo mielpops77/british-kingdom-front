@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://chatterie-british-kingdom.fr/sitemap.xml
