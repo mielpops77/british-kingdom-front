@@ -149,11 +149,14 @@ ne pas perdre le référencement.
 Ces points demandent une décision ou une information. Certains sont signalés
 par des commentaires `À COMPLÉTER` dans le code.
 
-- **Deux SIRET différents** existent dans le dépôt : `84406443600026` dans les
-  mentions légales et `84432325300014` dans l'ancien pied de page. Le premier
-  est affiché, il faut confirmer le bon.
-- **Numéro SIREN** à afficher près des annonces de chatons. Le champ existe en
-  base, mais il contient aujourd'hui `204555555`, qui n'est pas un vrai SIREN.
+- **SIRET et SIREN : réglé.** L'annuaire des entreprises confirme
+  `84406443600026` (AMIEL ZEITOUN, Othis, activité 01.49Z, en activité). Le
+  SIREN `844 064 436` est affiché dans le pied de page, les mentions légales et
+  sous les annonces de chatons (pages Chatons et portée). L'autre numéro,
+  `84432325300014`, appartient à une autre entreprise : il ne reste qu'en
+  commentaire dans `src/app/footer/footer.component.html` (site Angular), à
+  supprimer. Le champ SIREN de la base contient `204555555`, factice : à
+  corriger dans l'administration.
 - **Coordonnées de l'administration à corriger** : le profil de l'API contient
   encore l'ancien téléphone `06 20 48 14 39`, le texte de la page Contact
   affiche `06 19 67 09 34`, et le lien Instagram pointe vers

@@ -455,6 +455,8 @@ CHATONS = page_head_block(
       <span class="count-note" id="kittens-summary"></span>
     </div>
     <div id="litters"></div>
+    <p class="legal-note">Chatons proposés par un élevage déclaré : AMIEL Zeitoun, %(ville)s, SIREN %(siren)s.
+      Chatons inscrits au LOOF, identifiés et vaccinés. <a href="mentions-legales.html">Mentions légales</a></p>
   </div>
 </section>
 
@@ -489,7 +491,7 @@ CHATONS = page_head_block(
   </div>
 </section>
 """ % {"doc": ico("doc", 22), "chip": ico("chip", 22), "syringe": ico("syringe", 22), "heart": ico("heart", 22),
-       "check": ico("check", 22), "gift": ico("gift", 22)}
+       "check": ico("check", 22), "gift": ico("gift", 22), "ville": SITE["ville"], "siren": SITE["siren"]}
 
 # ==========================================================================
 # PORTÉE
@@ -505,7 +507,10 @@ PORTEE = """
   </div>
 </section>
 <section class="tight" style="padding-top:0">
-  <div class="wrap"><div id="litter-detail"></div></div>
+  <div class="wrap"><div id="litter-detail"></div>
+    <p class="legal-note">Chatons proposés par un élevage déclaré : AMIEL Zeitoun, %(ville)s, SIREN %(siren)s.
+      <a href="mentions-legales.html">Mentions légales</a></p>
+  </div>
 </section>
 <section class="panel panel--blush tight">
   <div class="wrap wrap--narrow center">
@@ -518,7 +523,7 @@ PORTEE = """
     </div>
   </div>
 </section>
-"""
+""" % {"ville": SITE["ville"], "siren": SITE["siren"]}
 
 # ==========================================================================
 # LISTE D'ATTENTE (réservation, étapes, santé, FAQ)
@@ -1024,13 +1029,12 @@ MENTIONS = page_head_block(
     <p>Ce site est édité par AMIEL Zeitoun, entrepreneur individuel, dont le siège est situé
       %(adresse)s, %(cp)s %(ville)s, France.</p>
     <ul>
-      <li>SIRET : %(siret)s</li>
+      <li>SIREN : %(siren)s · SIRET : %(siret)s</li>
       <li>Téléphone : <a href="tel:%(tel_lien)s">%(tel)s</a></li>
       <li>E-mail : <a href="mailto:%(email)s">%(email)s</a></li>
       <li>Directeur de la publication : AMIEL Zeitoun</li>
     </ul>
-    <!-- À COMPLÉTER : numéro SIREN affiché dans les annonces de cession,
-         numéro de déclaration DDPP, numéro ACACED ou de certificat de capacité,
+    <!-- À COMPLÉTER : numéro de déclaration DDPP, numéro ACACED ou de certificat de capacité,
          numéro de TVA intracommunautaire le cas échéant, adhésions professionnelles. -->
 
     <h2>Hébergement</h2>
@@ -1071,7 +1075,7 @@ MENTIONS = page_head_block(
 </section>
 """ % {
     "adresse": SITE["adresse"], "cp": SITE["cp"], "ville": SITE["ville"],
-    "siret": SITE["siret"], "tel": T, "tel_lien": TL, "email": MAIL,
+    "siret": SITE["siret"], "siren": SITE["siren"], "tel": T, "tel_lien": TL, "email": MAIL,
 }
 
 # ==========================================================================

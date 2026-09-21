@@ -29,9 +29,12 @@ SITE = {
     "cp": "77280",
     "ville": "Othis",
     "region": "Seine-et-Marne",
-    # À CONFIRMER : le dépôt contient deux SIRET (84406443600026 dans les
-    # mentions légales, 84432325300014 dans l'ancien pied de page).
+    # Vérifié le 22/09/2026 dans l'annuaire des entreprises : AMIEL ZEITOUN,
+    # Othis, activité 01.49Z, en activité. (84432325300014, présent en
+    # commentaire dans l'ancien pied de page Angular, est celui d'une autre
+    # entreprise.) Le SIREN doit figurer près de toute offre de chaton.
     "siret": "84406443600026",
+    "siren": "844 064 436",
     "acompte": "200 €",
     "ga": "G-J3VHVLP0EY",
     "slogan": "élevés à la maison, avec tendresse",
@@ -282,7 +285,7 @@ def footer(scripts=""):
     </div>
     <div class="footer-bottom">
       <span>© 2026 %(nom)s</span>
-      <span>SIRET %(siret)s</span>
+      <span>SIREN %(siren)s · SIRET %(siret)s</span>
       <span>Chatons inscrits au LOOF</span>
       <span class="spacer"></span>
       <span>Site créé par <a href="https://www.eleveur-connect.fr/" target="_blank" rel="noopener">Eleveur-Connect</a></span>
@@ -299,7 +302,7 @@ def footer(scripts=""):
 """ % {
         "nom": SITE["nom"], "ville": SITE["ville"], "region": SITE["region"], "nav": nav_links,
         "tel": SITE["tel"], "tel_lien": SITE["tel_lien"], "email": SITE["email"], "slogan": SITE["slogan"],
-        "adresse": SITE["adresse"], "cp": SITE["cp"], "siret": SITE["siret"], "scripts": scripts,
+        "adresse": SITE["adresse"], "cp": SITE["cp"], "siret": SITE["siret"], "siren": SITE["siren"], "scripts": scripts,
         "medallion": medallion("medallion--md", alt=""), "socials": socials("socials"),
     }
 

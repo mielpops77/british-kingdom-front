@@ -22,7 +22,7 @@ window.BK_DEMO = {
   profil: {
     id: 4, profilId: 1, firstName: 'Amiel', lastName: 'Zeitoun',
     phoneNumber: '0661654998', email: 'chatterie.british.kingdom@gmail.com',
-    userType: 'professionnel', siren: '',
+    userType: 'professionnel', siren: '844064436',
     facebook: 'https://www.facebook.com/people/Chatterie-British-kingdom/61558762891533/',
     instagram: 'https://www.instagram.com/chatterie_britishkingdom/',
     tiktok: 'https://www.tiktok.com/@elevage_british_kingdom',
