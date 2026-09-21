@@ -5,13 +5,13 @@ Générateur du site Chatterie British Kingdom.
 
 Il assemble un gabarit commun (en-tête, navigation, pied de page) avec le
 contenu de chaque page et écrit des fichiers HTML complets et autonomes dans
-le dossier parent. Aucune dépendance : python3 _build/build.py
+le dossier parent, ainsi que le plan du site (sitemap.xml).
+Aucune dépendance : python3 _build/pages.py
 
 Le site produit fonctionne sans ce script : il n'est là que pour éviter de
-recopier l'en-tête et le pied de page dans douze fichiers.
+recopier l'en-tête et le pied de page dans chaque fichier.
 """
 import os
-import re
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.dirname(HERE)
@@ -29,15 +29,23 @@ SITE = {
     "cp": "77280",
     "ville": "Othis",
     "region": "Seine-et-Marne",
+    # À CONFIRMER : le dépôt contient deux SIRET (84406443600026 dans les
+    # mentions légales, 84432325300014 dans l'ancien pied de page).
     "siret": "84406443600026",
     "acompte": "200 €",
     "ga": "G-J3VHVLP0EY",
+    "slogan": "élevés à la maison, avec tendresse",
+    "facebook": "https://www.facebook.com/people/Chatterie-British-kingdom/61558762891533/",
+    "instagram": "https://www.instagram.com/chatterie_britishkingdom/",
+    "tiktok": "https://www.tiktok.com/@elevage_british_kingdom",
+    "youtube": "https://www.youtube.com/@chatterie_british_kingdom",
 }
 
 NAV = [
     ("index.html", "Accueil"),
     ("le-british.html", "Le British"),
-    ("nos-adultes.html", "Nos adultes"),
+    ("males.html", "Mâles"),
+    ("femelles.html", "Femelles"),
     ("chatons.html", "Chatons"),
     ("retraites.html", "Retraités"),
     ("galerie.html", "Galerie"),
@@ -48,18 +56,24 @@ NAV = [
 
 FONTS = ("https://fonts.googleapis.com/css2?"
          "family=Caveat:wght@600;700"
-         "&family=Fraunces:opsz,wght,SOFT,WONK@9..144,300..700,0..100,0..1"
+         "&family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..700,0..100,0..1;1,9..144,300..700,0..100,0..1"
          "&family=Quicksand:wght@400;500;600;700&display=swap")
+
+LOGO_ALT = "Logo de la Chatterie British Kingdom : un chat chocolat couronné, en manteau royal"
+
+
+def read_svg(name, cls=""):
+    with open(os.path.join(OUT, "img", name), encoding="utf-8") as fh:
+        svg = fh.read().strip()
+    return svg.replace("<svg ", '<svg class="%s" ' % cls, 1) if cls else svg
 
 
 def crest_svg():
-    with open(os.path.join(OUT, "img", "crest.svg"), encoding="utf-8") as fh:
-        return fh.read().replace('<svg ', '<svg class="crest-inline" ')
+    return read_svg("crest.svg", "crest-inline")
 
 
 def crown_svg():
-    with open(os.path.join(OUT, "img", "crown.svg"), encoding="utf-8") as fh:
-        return fh.read()
+    return read_svg("crown.svg")
 
 
 ICON = {
@@ -77,6 +91,16 @@ ICON = {
     "book": '<path d="M4 4h7a3 3 0 0 1 3 3v13a2.5 2.5 0 0 0-2.5-2.5H4Z"/><path d="M20 4h-3a3 3 0 0 0-3 3v13a2.5 2.5 0 0 1 2.5-2.5H20Z"/>',
     "clock": '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
     "star": '<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1L3.2 9.5l6.1-.9Z"/>',
+    "doc": '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>',
+    "chip": '<rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 2v4m6-4v4M9 18v4m6-4v4M2 9h4m-4 6h4m12-6h4m-4 6h4"/>',
+    "syringe": '<path d="m18 2 4 4M17 7l3-3M19 9 8.7 19.3a2 2 0 0 1-2.8 0l-1.2-1.2a2 2 0 0 1 0-2.8L15 5"/><path d="m9 11 4 4M5 19l-3 3M14 4l6 6"/>',
+    "gift": '<rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 0 1 0 5"/>',
+    "target": '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/>',
+    "sparkle": '<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6.3 6.3l2.5 2.5M15.2 15.2l2.5 2.5M6.3 17.7l2.5-2.5M15.2 8.8l2.5-2.5"/>',
+    "facebook": '<path d="M14 9h3V6h-3a4 4 0 0 0-4 4v2H8v3h2v7h3v-7h3l1-3h-4v-2a1 1 0 0 1 1-1Z"/>',
+    "instagram": '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor"/>',
+    "youtube": '<rect x="2" y="5" width="20" height="14" rx="4"/><path d="m10 9 5 3-5 3Z" fill="currentColor"/>',
+    "tiktok": '<path d="M15 4c.6 2.5 2.2 3.8 4.5 4v3c-1.7 0-3.3-.5-4.5-1.5V15a5.5 5.5 0 1 1-5.5-5.5c.3 0 .7 0 1 .1v3.1a2.5 2.5 0 1 0 1.5 2.3V4Z"/>',
 }
 
 
@@ -84,6 +108,20 @@ def ico(name, size=24, cls=""):
     return ('<svg viewBox="0 0 24 24" width="%d" height="%d" fill="none" stroke="currentColor" '
             'stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"%s>%s</svg>'
             % (size, size, (' class="%s"' % cls) if cls else "", ICON[name]))
+
+
+def medallion(size_cls="", bow=False, alt=LOGO_ALT, eager=False):
+    """Le logo de la chatterie dans son médaillon doré, avec ou sans nœud."""
+    return ('<span class="medallion%s%s"><img src="assets/logo.webp" alt="%s" width="512" height="512"%s></span>'
+            % (" " + size_cls if size_cls else "", " medallion--bow" if bow else "", alt,
+               "" if eager else ' loading="lazy"'))
+
+
+def socials(cls="socials"):
+    items = [("facebook", "Facebook"), ("instagram", "Instagram"), ("tiktok", "TikTok"), ("youtube", "YouTube")]
+    return '<ul class="%s">%s</ul>' % (cls, "".join(
+        '<li><a href="%s" target="_blank" rel="noopener" aria-label="%s (nouvel onglet)">%s</a></li>'
+        % (SITE[k], label, ico(k, 18)) for k, label in items))
 
 
 def head(page):
@@ -104,6 +142,7 @@ def head(page):
     "name": "%(nom)s",
     "description": "Élevage familial de chats British Shorthair et British Longhair à %(ville)s, en %(region)s. Chatons inscrits au LOOF.",
     "url": "%(domaine)s/",
+    "logo": "%(domaine)s/assets/logo.png",
     "image": "%(domaine)s/assets/og-image.jpg",
     "telephone": "%(tel_lien)s",
     "email": "%(email)s",
@@ -115,8 +154,8 @@ def head(page):
       "addressRegion": "Île-de-France",
       "addressCountry": "FR"
     },
-    "areaServed": "France",
-    "priceRange": "€€"
+    "areaServed": ["FR", "BE", "CH"],
+    "sameAs": ["%(facebook)s", "%(instagram)s", "%(tiktok)s", "%(youtube)s"]
   }
   </script>""" % SITE
     return """<!doctype html>
@@ -128,7 +167,8 @@ def head(page):
   <meta name="description" content="%(desc)s">
   <link rel="canonical" href="%(canon)s">
   <meta name="robots" content="index, follow">
-  <meta name="theme-color" content="#fff6f4">
+  <meta name="theme-color" content="#fff8f5" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#22161f" media="(prefers-color-scheme: dark)">
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="%(nom)s">
@@ -136,10 +176,12 @@ def head(page):
   <meta property="og:description" content="%(desc)s">
   <meta property="og:url" content="%(canon)s">
   <meta property="og:image" content="%(og)s">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta property="og:locale" content="fr_FR">
   <meta name="twitter:card" content="summary_large_image">
 
-  <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="assets/logo-160.png" type="image/png">
   <link rel="apple-touch-icon" href="assets/logo-160.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -168,19 +210,19 @@ def header(active):
         for href, label in NAV
     )
     return """<a class="skip" href="#main">Aller au contenu</a>
-<p class="demo-banner">Aperçu hors ligne : les chats, chatons et articles affichés sont des exemples, pas les animaux réels de la chatterie.</p>
+<p class="demo-banner">Aperçu hors ligne : les chats et chatons affichés reprennent le site officiel du 22 septembre 2026 et ont pu changer depuis.</p>
 <header class="site-header">
-  <div class="wrap site-header__inner">
-    <a class="brand" href="index.html">
-      <span class="brand__mark">%(crown)s</span>
-      <span>
+  <div class="wrap wrap--header site-header__inner">
+    <a class="brand" href="index.html" aria-label="Chatterie British Kingdom, accueil">
+      %(medallion)s
+      <span class="brand__text">
         <span class="brand__name">British Kingdom</span>
-        <span class="brand__sub">Élevage familial</span>
+        <span class="brand__sub">Shorthair &amp; Longhair</span>
       </span>
     </a>
     <div class="nav-panel"><nav class="nav" id="menu" aria-label="Navigation principale">%(links)s</nav></div>
     <div class="header-actions">
-      <a class="btn btn--sm btn--copper hide-sm" href="chatons.html">Voir les chatons</a>
+      <a class="btn btn--sm btn--primary hide-sm" href="chatons.html">Voir les chatons</a>
       <button class="icon-btn theme-btn" type="button" aria-label="Changer de thème clair ou sombre">
         %(sun)s%(moon)s
       </button>
@@ -191,7 +233,7 @@ def header(active):
 <div class="nav-scrim"></div>
 <main id="main">
 """ % {
-        "links": links, "crown": crown_svg(), "ville": SITE["ville"],
+        "links": links, "medallion": medallion("medallion--sm", eager=True, alt=""),
         "sun": ico("sun", 18, "sun"), "moon": ico("moon", 18, "moon"), "menu": ico("menu", 20),
     }
 
@@ -201,10 +243,19 @@ def footer(scripts=""):
     return """</main>
 <footer class="site-footer">
   <div class="wrap">
+    <div class="footer-top">
+      %(medallion)s
+      <div>
+        <p class="footer-name">%(nom)s</p>
+        <p class="footer-slogan">%(slogan)s</p>
+      </div>
+      %(socials)s
+    </div>
     <div class="footer-grid">
       <div class="footer-brand">
-        <span class="brand__name">%(nom)s</span>
-        <p>Élevage familial de British Shorthair et British Longhair, à %(ville)s en %(region)s. Nos chatons grandissent dans la maison, au milieu de la vie de famille.</p>
+        <h4>La chatterie</h4>
+        <p>Élevage familial de British Shorthair et British Longhair à %(ville)s, en %(region)s, à vingt minutes
+          de l'aéroport Paris-Charles de Gaulle. Chatons inscrits au LOOF, nés et élevés à la maison.</p>
       </div>
       <div>
         <h4>Le site</h4>
@@ -247,12 +298,13 @@ def footer(scripts=""):
 </html>
 """ % {
         "nom": SITE["nom"], "ville": SITE["ville"], "region": SITE["region"], "nav": nav_links,
-        "tel": SITE["tel"], "tel_lien": SITE["tel_lien"], "email": SITE["email"],
+        "tel": SITE["tel"], "tel_lien": SITE["tel_lien"], "email": SITE["email"], "slogan": SITE["slogan"],
         "adresse": SITE["adresse"], "cp": SITE["cp"], "siret": SITE["siret"], "scripts": scripts,
+        "medallion": medallion("medallion--md", alt=""), "socials": socials("socials"),
     }
 
 
-def page_head_block(eyebrow, title, lede, crumbs):
+def page_head_block(eyebrow, title, lede, crumbs, extra=""):
     """Bandeau de titre des pages intérieures."""
     trail = "".join('<span><a href="%s">%s</a></span>' % (h, l) if h else "<span>%s</span>" % l
                     for h, l in crumbs)
@@ -261,25 +313,41 @@ def page_head_block(eyebrow, title, lede, crumbs):
     <nav class="breadcrumb" aria-label="Fil d'Ariane">%s</nav>
     <p class="eyebrow">%s</p>
     <h1>%s</h1>
-    %s
+    %s%s
   </div>
 </section>
-""" % (trail, eyebrow, title, ('<p class="lede">%s</p>' % lede) if lede else "")
+""" % (trail, eyebrow, title, ('<p class="lede">%s</p>' % lede) if lede else "", extra)
 
 
 def write(page):
-    html = head(page) + header(page["file"]) + page["body"] + footer(page.get("scripts", ""))
+    html = head(page) + header(page.get("nav", page["file"])) + page["body"] + footer(page.get("scripts", ""))
     path = os.path.join(OUT, page["file"])
-    with open(path, "w", encoding="utf-8") as fh:
+    with open(path, "w", encoding="utf-8", newline="\n") as fh:
         fh.write(html)
     return path, len(html)
 
 
-def build(pages):
+def sitemap(pages, lastmod):
+    """Plan du site : toutes les pages publiques, sauf celles qui ont besoin d'un identifiant."""
+    urls = []
+    for p in pages:
+        if p.get("sitemap") is False:
+            continue
+        loc = SITE["domaine"] + "/" + ("" if p["file"] == "index.html" else p["file"])
+        urls.append("  <url>\n    <loc>%s</loc>\n    <lastmod>%s</lastmod>\n    <changefreq>%s</changefreq>\n"
+                    "    <priority>%s</priority>\n  </url>" % (loc, lastmod, p.get("freq", "monthly"), p.get("prio", "0.6")))
+    xml = ('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+           + "\n".join(urls) + "\n</urlset>\n")
+    with open(os.path.join(OUT, "sitemap.xml"), "w", encoding="utf-8", newline="\n") as fh:
+        fh.write(xml)
+
+
+def build(pages, lastmod):
     os.makedirs(OUT, exist_ok=True)
     total = 0
     for page in pages:
         path, size = write(page)
         total += size
         print("  %-34s %6.1f Ko" % (os.path.basename(path), size / 1024))
-    print("  %d pages, %.0f Ko au total" % (len(pages), total / 1024))
+    sitemap(pages, lastmod)
+    print("  %d pages, %.0f Ko au total, sitemap.xml à jour" % (len(pages), total / 1024))

@@ -2,123 +2,87 @@
 # -*- coding: utf-8 -*-
 """
 Contenu des pages du site Chatterie British Kingdom.
-Lancer : python3 _build/pages.py
+Lancer depuis site-v2 : python3 _build/pages.py
 """
 import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from build import SITE, ico, page_head_block, build, crest_svg  # noqa: E402
+from build import SITE, ico, page_head_block, build, crown_svg, medallion  # noqa: E402
 
 T = SITE["tel"]
 TL = SITE["tel_lien"]
 MAIL = SITE["email"]
+MISE_A_JOUR = "2026-09-22"
 
 # ==========================================================================
 # ACCUEIL
 # ==========================================================================
 ACCUEIL = """
-<section class="hero scallop">
+<section class="hero">
   <div class="wrap hero__grid">
     <div class="hero__text">
-      <div class="hero__crest">%(crest)s</div>
+      %(logo)s
       <p class="eyebrow">Élevage familial à %(ville)s, en %(region)s</p>
-      <h1>Des British élevés dans la maison, au milieu des câlins</h1>
-      <p class="hero__lede">British Shorthair et British Longhair inscrits au LOOF. Nos chatons grandissent
-        dans le bruit de la vie de famille et partent à douze semaines, prêts à aimer la vôtre.</p>
+      <h1>Chatterie <span class="nowrap">British Kingdom</span></h1>
+      <p class="hero__script">%(slogan)s</p>
+      <p class="hero__lede">British Shorthair et British Longhair inscrits au LOOF. Nos chatons naissent et
+        grandissent chez nous, au milieu de la vie de famille, et rejoignent la vôtre vers douze semaines.</p>
       <div class="hero__cta">
-        <a class="btn btn--copper" href="chatons.html">Voir les chatons</a>
-        <a class="btn btn--ghost" href="le-british.html">Découvrir la race</a>
+        <a class="btn btn--primary" href="chatons.html" id="hero-kittens-btn">Voir les chatons disponibles</a>
+        <a class="btn btn--ghost" href="liste-attente.html">Rejoindre la liste d'attente</a>
       </div>
-      <p class="hero__marks">
-        <span>%(check)s Pedigree LOOF</span>
-        <span>%(check)s Parents dépistés</span>
-        <span>%(check)s Départ à 12 semaines</span>
-        <span>%(check)s Élevage déclaré</span>
-      </p>
     </div>
     <div class="hero__media">
-      <div class="hero__blob">
-        <video id="hero-video" autoplay muted loop playsinline preload="metadata" poster="assets/hero-poster.webp"
-               aria-hidden="true" tabindex="-1">
-          <source src="assets/hero.mp4" type="video/mp4">
-        </video>
-      </div>
-      <span class="hero__sticker hero__sticker--1" aria-hidden="true"></span>
-      <span class="hero__sticker hero__sticker--2" aria-hidden="true"></span>
+      <figure class="hero__photo">
+        <img src="assets/photos/accueil-zara.webp" width="1050" height="1400" fetchpriority="high"
+             alt="Zara, femelle British Shorthair chocolat aux yeux vairons, assise sur une peau de mouton">
+      </figure>
+      <span class="hero__round" aria-hidden="true"><img src="assets/photos/accueil-chaton.webp" alt="" width="882" height="900"></span>
+      <p class="hero__label"><span class="hero__label-crown">%(crown)s</span><span><b>Chatterie familiale</b>%(ville)s, %(region)s</span></p>
     </div>
   </div>
 </section>
 
-<section class="tight">
+<section class="assurance" aria-labelledby="assurance-titre">
   <div class="wrap">
-    <div class="split split--wide-text">
-      <div class="reveal">
-        <p class="eyebrow">Nos chatons</p>
-        <h2>Ceux qui cherchent une famille</h2>
-        <p class="lede" id="home-kitten-count">Chargement…</p>
-        <p><a class="link-arrow" href="chatons.html">Toutes nos portées</a></p>
-      </div>
-      <div class="reveal" data-delay="1">
-        <div class="sheet">
-          <h3>Comment ça se passe</h3>
-          <ol class="steps" style="gap:1.1rem">
-            <li><h3>On échange</h3><p>Par téléphone ou par mail, sans engagement. On parle de votre foyer et de ce que vous cherchez.</p></li>
-            <li><h3>Vous venez les voir</h3><p>Sur rendez-vous, chez nous. Vous rencontrez la mère et vous voyez où ils grandissent.</p></li>
-            <li><h3>Il vous rejoint</h3><p>À douze semaines, identifié, vacciné, avec son pedigree et tout son dossier.</p></li>
-          </ol>
-        </div>
-      </div>
-    </div>
-    <div id="home-kittens" style="margin-top:2.6rem"></div>
-  </div>
-</section>
-
-<section class="panel panel--mint paws scallop scallop--to-paper">
-  <div class="wrap">
-    <div class="center" style="max-width:56ch;margin-inline:auto">
-      <p class="eyebrow center">Pourquoi nous</p>
-      <h2>Un élevage qui se regarde de près</h2>
-      <p class="lede" style="margin-inline:auto">Nous faisons peu de portées, nous testons nos reproducteurs et
-        nous vous montrons tout. Un élevage sérieux n'a rien à cacher, et surtout pas ses résultats.</p>
-      <div class="divider" aria-hidden="true"></div>
-    </div>
-    <div class="grid grid-3" style="margin-top:2rem">
-      <div class="feature reveal">
-        <span class="feature__icon">%(stetho)s</span>
-        <h3>Des parents dépistés</h3>
-        <p>Échographie cardiaque pour la HCM, test ADN pour la PKD, dépistage FIV et FeLV, groupe sanguin.
-          Les résultats et leurs dates figurent sur la fiche de chaque reproducteur.</p>
-      </div>
-      <div class="feature reveal" data-delay="1">
-        <span class="feature__icon">%(home)s</span>
+    <h2 class="visually-hidden" id="assurance-titre">Nos engagements</h2>
+    <ul class="assurance__list">
+      <li class="reveal">
+        <span class="assurance__icon">%(home)s</span>
         <h3>Élevés à la maison</h3>
-        <p>Pas de chatterie séparée. Aspirateur, enfants, visiteurs, télévision : nos chatons connaissent
-          déjà tout cela le jour de leur départ.</p>
-      </div>
-      <div class="feature reveal" data-delay="2">
-        <span class="feature__icon">%(book)s</span>
-        <h3>Tout est écrit</h3>
-        <p>Contrat lisible avant réservation, certificat d'engagement, certificat vétérinaire de moins de huit
-          jours, pedigree LOOF. Aucune promesse qu'on ne pourrait pas tenir.</p>
-      </div>
-      <div class="feature reveal">
-        <span class="feature__icon">%(clock)s</span>
-        <h3>Douze semaines, jamais huit</h3>
-        <p>La loi autorise huit semaines. Nous gardons nos chatons quatre semaines de plus, le temps du
-          deuxième vaccin et de la vraie socialisation.</p>
-      </div>
-      <div class="feature reveal" data-delay="1">
-        <span class="feature__icon">%(heart)s</span>
-        <h3>Nous reprenons nos chats</h3>
-        <p>À n'importe quel âge et quelle que soit la raison, plutôt que de les savoir en refuge ou sur
-          une petite annonce. C'est écrit dans le contrat.</p>
-      </div>
-      <div class="feature reveal" data-delay="2">
-        <span class="feature__icon">%(shield)s</span>
-        <h3>Joignables après</h3>
-        <p>Une question à trois mois, à trois ans ou à dix ans : vous avez notre numéro et nous répondons.
-          C'est la partie du métier que nous préférons.</p>
-      </div>
+        <p>Nos chatons naissent et grandissent en famille : ils connaissent déjà la vie d'une maison le jour du départ.</p>
+      </li>
+      <li class="reveal" data-delay="1">
+        <span class="assurance__icon">%(doc)s</span>
+        <h3>Inscrits au LOOF</h3>
+        <p>Certificat LOOF, puce électronique, premières vaccinations et carnet de santé complet.</p>
+      </li>
+      <li class="reveal" data-delay="2">
+        <span class="assurance__icon">%(heart)s</span>
+        <h3>Stérilisés avant le départ</h3>
+        <p>Tous nos chatons sont stérilisés avant de rejoindre leur famille, pour une vie d'intérieur sereine.</p>
+      </li>
+      <li class="reveal" data-delay="3">
+        <span class="assurance__icon">%(pin)s</span>
+        <h3>Jusqu'à vous</h3>
+        <p>Remise à Othis, à la gare de Roissy ou de Saint-Mard, livraison en France, en Suisse et en Belgique.</p>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="panel panel--blush scallop-top">
+  <div class="wrap">
+    <div class="section-head center">
+      <p class="eyebrow center">Nos chatons</p>
+      <h2>Les portées du moment</h2>
+      <p class="lede" id="home-kitten-count">Chargement des portées…</p>
+    </div>
+    <div id="home-litters"></div>
+    <div id="home-kittens"></div>
+    <div class="actions center">
+      <a class="btn btn--primary" href="chatons.html">Voir toutes les portées</a>
+      <a class="btn btn--ghost" href="liste-attente.html">Rejoindre la liste d'attente</a>
     </div>
   </div>
 </section>
@@ -127,18 +91,27 @@ ACCUEIL = """
   <div class="wrap">
     <div class="split split--media-first">
       <div class="split__media reveal">
-        <div class="frame"><div class="arch arch--wide">
-          <img src="assets/photo-chaton-lierre.webp" alt="Chaton British Shorthair blanc dans le jardin" data-guard>
-        </div></div>
+        <figure class="frame-photo">
+          <img src="assets/photos/bienvenue-chocolats.webp" width="960" height="1200" loading="lazy"
+               alt="Deux de nos British Shorthair chocolat, côte à côte sur une peau de mouton">
+          <span class="frame-photo__badge" aria-hidden="true">%(crown)s</span>
+        </figure>
       </div>
       <div class="reveal" data-delay="1">
-        <p class="eyebrow">La race</p>
-        <h2>Le chat qui vous suit de pièce en pièce, sans rien demander</h2>
-        <p>Le British est un chat posé. Il ne saute pas sur les meubles, il ne réclame pas, il ne crie pas.
-          Il s'installe dans la pièce où vous êtes et il attend. Cette discrétion, c'est sa force en
-          appartement et son piège : un British qui s'ennuie ne se plaint pas, il dort et il grossit.</p>
-        <p>Shorthair ou Longhair, c'est le même chat sous deux fourrures. Les deux naissent dans les mêmes
-          portées, et le choix tient au brossage que vous êtes prêt à lui offrir.</p>
+        <p class="eyebrow">La chatterie</p>
+        <p class="script">à %(ville)s, en %(region)s</p>
+        <h2>Bienvenue chez nous</h2>
+        <p>Nous sommes une chatterie familiale installée à %(ville)s, en %(region)s, à vingt minutes de
+          l'aéroport Paris-Charles de Gaulle. Nos British Shorthair et Longhair, au caractère doux et affectueux,
+          sont inscrits au LOOF et choyés en famille.</p>
+        <p>Le British est un compagnon tout en rondeur, paisible et affectueux. Son pelage est somptueux, et sa
+          personnalité en fait un partenaire idéal pour une vie de famille.</p>
+        <p class="signature">Toute la famille British Kingdom</p>
+        <ol class="mini-steps">
+          <li><b>On échange</b> par téléphone ou par mail, sans engagement.</li>
+          <li><b>Vous venez les voir</b>, sur rendez-vous, chez nous.</li>
+          <li><b>Il vous rejoint</b> vers douze semaines, avec son certificat LOOF et son carnet de santé.</li>
+        </ol>
         <p><a class="link-arrow" href="le-british.html">Tout savoir sur le British</a></p>
       </div>
     </div>
@@ -147,28 +120,64 @@ ACCUEIL = """
 
 <section class="tight">
   <div class="wrap">
-    <div class="grid grid-3">
-      <a class="tile reveal" href="nos-adultes.html">
-        <img src="assets/photo-male.webp" alt="British Shorthair bleu aux yeux cuivre" data-guard>
-        <span class="tile__text"><h3>Nos chats</h3><p>Les reproducteurs, leurs tests, leurs origines</p></span>
+    <div class="grid grid-3 tiles">
+      <a class="tile reveal" href="males.html">
+        <span class="tile__media"><img src="assets/photos/carte-males.webp" width="752" height="1000" loading="lazy" alt="Wilson, British Shorthair bleu aux yeux orange"></span>
+        <span class="tile__text"><span class="tile__title">Nos mâles</span>
+          <span class="tile__desc">Le British Shorthair est un compagnon tout en rondeur, paisible et affectueux.</span>
+          <span class="tile__more">Découvrir nos mâles</span></span>
       </a>
       <a class="tile reveal" data-delay="1" href="chatons.html">
-        <img src="assets/photo-chaton.webp" alt="Chaton British Shorthair blanc" data-guard>
-        <span class="tile__text"><h3>Les chatons</h3><p>Portées en cours et chatons disponibles</p></span>
+        <span class="tile__media"><img src="assets/photos/carte-chatons.webp" width="1200" height="900" loading="lazy" alt="Quatre chatons blottis dans un panier"></span>
+        <span class="tile__text"><span class="tile__title">Nos chatons</span>
+          <span class="tile__desc">Dès son plus jeune âge, le British incarne une douceur et une affection enveloppantes.</span>
+          <span class="tile__more">Voir les chatons</span></span>
       </a>
-      <a class="tile reveal" data-delay="2" href="liste-attente.html">
-        <img src="assets/photo-femelle.webp" alt="British Shorthair sur un arbre à chat" data-guard>
-        <span class="tile__text"><h3>Adopter</h3><p>Conditions, santé, garanties, liste d'attente</p></span>
+      <a class="tile reveal" data-delay="2" href="femelles.html">
+        <span class="tile__media"><img src="assets/photos/carte-femelles.webp" width="750" height="1000" loading="lazy" alt="Zara, British Shorthair chocolat aux yeux vairons"></span>
+        <span class="tile__text"><span class="tile__title">Nos femelles</span>
+          <span class="tile__desc">Avec son tempérament équilibré et paisible, le British Shorthair est le compagnon parfait.</span>
+          <span class="tile__more">Découvrir nos femelles</span></span>
       </a>
     </div>
   </div>
 </section>
 
-<section class="panel panel--butter" id="temoignages-section">
+<section class="panel panel--champagne">
   <div class="wrap">
-    <p class="eyebrow">Livre d'or</p>
-    <h2>Des nouvelles de nos chatons</h2>
-    <div id="testimonials" style="margin-top:1.8rem"></div>
+    <div class="section-head center">
+      <p class="eyebrow center">Ils sont nés chez nous</p>
+      <h2>Des nouvelles de nos anciens bébés</h2>
+      <p class="lede">Nos chatons grandissent, et leurs familles nous donnent de leurs nouvelles. Rien ne nous fait plus plaisir.</p>
+    </div>
+    <ul class="polaroids">
+      <li class="polaroid reveal">
+        <img src="assets/photos/ancien-aston.webp" width="720" height="900" loading="lazy" alt="Aston, British Shorthair blanc aux yeux bleus, adulte">
+        <p><b>Aston</b>Né chez nous en septembre 2024 sous le nom de Vulcain. Sa famille nous envoie de ses nouvelles chaque année.</p>
+      </li>
+      <li class="polaroid reveal" data-delay="1">
+        <img src="assets/photos/ancien-aragog.webp" width="675" height="900" loading="lazy" alt="Aragog, British Shorthair chocolat, devant son gâteau d'anniversaire">
+        <p><b>Aragog</b>Son premier anniversaire, fêté dans sa famille avec un gâteau fait maison.</p>
+      </li>
+      <li class="polaroid reveal" data-delay="2">
+        <img src="assets/photos/ancien-arlequin.webp" width="675" height="900" loading="lazy" alt="Arlequin, chaton British Shorthair aux yeux bleus">
+        <p><b>Arlequin</b>Devenu Snow dans sa famille, il est passé sur TF1 en juin 2026.</p>
+      </li>
+      <li class="polaroid reveal" data-delay="3">
+        <img src="assets/photos/ancien-akyo.webp" width="675" height="900" loading="lazy" alt="Akyo, chaton British Shorthair blanc qui tire la langue">
+        <p><b>Akyo</b>Né ici, il est revenu passer quelques jours à la maison un an plus tard.</p>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section id="temoignages-section" hidden>
+  <div class="wrap">
+    <div class="section-head center">
+      <p class="eyebrow center">Livre d'or</p>
+      <h2>Ils nous ont fait confiance</h2>
+    </div>
+    <div id="testimonials"></div>
   </div>
 </section>
 
@@ -176,35 +185,54 @@ ACCUEIL = """
   <div class="wrap">
     <div class="split">
       <div class="reveal">
-        <p class="eyebrow">Nos chats</p>
-        <h2>Les reproducteurs de la chatterie</h2>
-        <p class="lede">Chaque fiche indique la robe et son code EMS, la couleur des yeux, la date de
-          naissance et les dépistages. C'est ce qu'un éleveur doit pouvoir montrer.</p>
-        <p><a class="link-arrow" href="nos-adultes.html">Voir tous nos chats</a></p>
+        <p class="eyebrow">Petit moment de vie</p>
+        <h2>Une chasse au trésor pas comme les autres</h2>
+        <p class="lede">Des chatons partent à l'aventure, entre le globe du salon et les feuilles du jardin.
+          Une vidéo toute simple, juste pour le plaisir de les voir vivre.</p>
+        <p><a class="link-arrow" href="galerie.html">Toutes nos photos</a></p>
       </div>
       <div class="reveal" data-delay="1">
-        <div id="home-cats"></div>
+        <div class="video-frame">
+          <video data-autoplay muted loop playsinline preload="none" poster="assets/hero-poster.webp"
+                 aria-label="Vidéo : des chatons de la chatterie jouent au salon, puis explorent le jardin">
+            <source src="assets/hero.mp4" type="video/mp4">
+          </video>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
 <section class="panel panel--lilac">
-  <div class="wrap center" style="max-width:54ch;margin-inline:auto">
+  <div class="wrap">
+    <div class="section-head center">
+      <p class="eyebrow center">Bien s'informer</p>
+      <h2>Conseils et actualités</h2>
+      <p class="lede">Nos articles pour bien préparer l'arrivée de votre futur compagnon.</p>
+    </div>
+    <div id="home-posts"></div>
+    <div class="actions center"><a class="btn btn--ghost" href="conseils.html">Tous nos conseils</a></div>
+  </div>
+</section>
+
+<section class="cta-band">
+  <div class="wrap wrap--narrow center">
+    %(logo_cta)s
     <h2>Une question, un projet d'adoption ?</h2>
-    <p class="lede" style="margin-inline:auto">Nous répondons à tout le monde, même quand nous n'avons pas de
-      chaton disponible. Et nous préférons vous dire franchement d'attendre plutôt que de vous faire patienter pour rien.</p>
-    <div class="row" style="justify-content:center;margin-top:1.6rem">
-      <a class="btn btn--copper" href="contact.html">Nous écrire</a>
+    <p class="lede">Écrivez-nous ou appelez-nous : nous serons ravis de faire connaissance et de vous parler de nos chatons.</p>
+    <div class="actions center">
+      <a class="btn btn--primary" href="contact.html">Nous écrire</a>
       <a class="btn btn--ghost" href="tel:%(tel_lien)s">%(phone)s %(tel)s</a>
     </div>
+    <p class="small">Visites sur rendez-vous. Nous ne répondons pas aux appels masqués.</p>
   </div>
 </section>
 """ % {
-    "crest": crest_svg(), "ville": SITE["ville"], "region": SITE["region"],
-    "check": ico("check", 14), "stetho": ico("stetho", 30), "home": ico("home", 30),
-    "book": ico("book", 30), "clock": ico("clock", 30), "heart": ico("heart", 30),
-    "shield": ico("shield", 30), "tel": T, "tel_lien": TL, "phone": ico("phone", 16),
+    "logo": medallion("medallion--xl hero__logo", bow=True, eager=True),
+    "logo_cta": medallion("medallion--md", alt=""),
+    "crown": crown_svg(), "ville": SITE["ville"], "region": SITE["region"], "slogan": SITE["slogan"],
+    "home": ico("home", 26), "doc": ico("doc", 26), "heart": ico("heart", 26), "pin": ico("pin", 26),
+    "tel": T, "tel_lien": TL, "phone": ico("phone", 16),
 }
 
 # ==========================================================================
@@ -216,9 +244,19 @@ LE_BRITISH = page_head_block(
     "Ses qualités, ses défauts, ce qu'il demande vraiment. Lisez cette page avant de nous écrire : elle vous évitera peut-être une erreur.",
     [("index.html", "Accueil"), (None, "Le British")],
 ) + """
+<section class="tight" style="padding-top:0">
+  <div class="wrap">
+    <figure class="banner-photo reveal">
+      <img src="assets/photos/famille-quatre.webp" width="1552" height="655" loading="lazy"
+           alt="Quatre de nos British Shorthair côte à côte : un silver shaded, un golden shaded, un bleu et un chocolat">
+      <figcaption>Silver, golden, bleu, chocolat : quatre robes de la maison, un même caractère.</figcaption>
+    </figure>
+  </div>
+</section>
+
 <section class="tight">
   <div class="wrap">
-    <div class="split split--wide-text">
+    <div class="split split--wide-text split--top">
       <div class="prose reveal">
         <h2>Un tempérament, pas seulement une tête ronde</h2>
         <p>Le British Shorthair est un chat calme, égal, sans excès. Il joue, mais par courtes séquences.
@@ -244,9 +282,9 @@ LE_BRITISH = page_head_block(
           dense, qui se relève sous la main : c'est la signature de la race.</p>
 
         <h2>Les couleurs, et ce fameux code EMS</h2>
-        <p>Le British existe dans des dizaines de robes. Sur chaque fiche de ce site, vous trouverez le nom
-          courant et le code EMS entre parenthèses, la notation officielle utilisée par le LOOF.
-          <em>BRI</em> désigne le British, la lettre qui suit la couleur de base, les chiffres le patron.</p>
+        <p>Le British existe dans des dizaines de robes. Chacune a son code EMS, la notation officielle utilisée
+          par le LOOF et les pedigrees : <em>BRI</em> désigne le British, la lettre qui suit la couleur de base,
+          les chiffres le patron. Le tableau ci-contre donne les plus courantes.</p>
       </div>
       <div class="reveal" data-delay="1">
         <div class="sheet">
@@ -274,11 +312,13 @@ LE_BRITISH = page_head_block(
   </div>
 </section>
 
-<section class="panel panel--mint">
+<section class="panel panel--blush">
   <div class="wrap">
-    <p class="eyebrow">Au quotidien</p>
-    <h2>Ce qu'il demande vraiment</h2>
-    <div class="grid grid-3" style="margin-top:1.8rem">
+    <div class="section-head">
+      <p class="eyebrow">Au quotidien</p>
+      <h2>Ce qu'il demande vraiment</h2>
+    </div>
+    <div class="grid grid-3">
       <div class="feature reveal">
         <h3>Le poids, sa vraie faiblesse</h3>
         <p>Race lourde et peu dépensière, le British prend du poids très facilement. Pas de nourriture à
@@ -319,11 +359,10 @@ LE_BRITISH = page_head_block(
       <p><strong>Un mot sur les allergies.</strong> Aucune race n'est hypoallergénique, le British pas plus
         qu'une autre. L'allergie vient d'une protéine de la salive et des squames, pas de la longueur du
         poil : un Shorthair n'est donc pas moins allergisant qu'un Longhair. Si quelqu'un du foyer est
-        allergique, consultez un allergologue avant de vous engager, puis venez passer un moment chez nous.
-        Nous préférons mille fois une visite qui se conclut par un non qu'un chaton rendu trois mois plus tard.</p>
+        allergique, consultez un allergologue avant de vous engager, puis venez passer un moment chez nous.</p>
     </div>
-    <div class="center" style="margin-top:2.4rem">
-      <a class="btn btn--copper" href="nos-adultes.html">Voir nos chats</a>
+    <div class="actions center">
+      <a class="btn btn--primary" href="chatons.html">Voir nos chatons</a>
       <a class="btn btn--ghost" href="liste-attente.html">Conditions d'adoption</a>
     </div>
   </div>
@@ -331,46 +370,57 @@ LE_BRITISH = page_head_block(
 """
 
 # ==========================================================================
-# NOS CHATS
+# NOS MÂLES / NOS FEMELLES
 # ==========================================================================
-NOS_ADULTES = page_head_block(
-    "La chatterie",
-    "Nos adultes",
-    "Nos mâles et nos femelles, avec leur robe, leur code EMS, leur âge et leurs dépistages. Cliquez sur un chat pour voir sa fiche complète et ses portées.",
-    [("index.html", "Accueil"), (None, "Nos adultes")],
-) + """
-<section class="tight">
-  <div class="wrap">
-    <div class="filters" id="cats-filters">
-      <button class="chip" type="button" data-filter="tous" aria-pressed="true">Tous</button>
-      <button class="chip" type="button" data-filter="male" aria-pressed="false">Mâles</button>
-      <button class="chip" type="button" data-filter="female" aria-pressed="false">Femelles</button>
-      <span class="count-note" id="cats-count"></span>
-    </div>
-    <div id="cats-list"></div>
+def sex_page(male):
+    other = ("femelles.html", "Voir nos femelles") if male else ("males.html", "Voir nos mâles")
+    return page_head_block(
+        "La chatterie",
+        "Nos mâles" if male else "Nos femelles",
+        ("Nos étalons, leur robe, la couleur de leurs yeux et leur âge. Cliquez sur l'un d'eux pour voir sa fiche, ses photos et ses portées."
+         if male else
+         "Nos reproductrices, leur robe, la couleur de leurs yeux et leur âge. Cliquez sur l'une d'elles pour voir sa fiche, ses photos et ses portées."),
+        [("index.html", "Accueil"), (None, "Nos mâles" if male else "Nos femelles")],
+        '<p class="count-note" id="cats-count"></p>',
+    ) + """
+<section class="tight" style="padding-top:0">
+  <div class="wrap"><div id="cats-list"></div></div>
+</section>
+
+<section class="panel panel--blush" id="sex-about" hidden>
+  <div class="wrap wrap--narrow">
+    <article class="about-card reveal">
+      <p class="eyebrow">%(eyebrow)s</p>
+      <h2 id="sex-about-title"></h2>
+      <div class="prose" id="sex-about-text"></div>
+    </article>
   </div>
 </section>
 
-<section class="panel panel--mint tight">
-  <div class="wrap wrap--narrow center">
-    <h2>Pourquoi si peu de chats ?</h2>
-    <p class="lede" style="margin-inline:auto">Parce qu'un élevage familial ne peut pas bien s'occuper de
-      vingt reproducteurs. Nos femelles vivent dans la maison, font peu de portées et partent en retraite
-      stérilisées, chez nous ou dans une famille choisie.</p>
-    <p style="margin-top:1.4rem"><a class="link-arrow" href="liste-attente.html#sante">Nos dépistages en détail</a></p>
+<section class="tight">
+  <div class="wrap center">
+    <div class="actions center">
+      <a class="btn btn--primary" href="%(other_href)s">%(other_label)s</a>
+      <a class="btn btn--ghost" href="chatons.html">Les chatons</a>
+      <a class="btn btn--ghost" href="retraites.html">Nos retraités</a>
+    </div>
   </div>
 </section>
-"""
+""" % {"eyebrow": "Nos mâles" if male else "Nos femelles", "other_href": other[0], "other_label": other[1]}
+
+
+MALES = sex_page(True)
+FEMELLES = sex_page(False)
 
 # ==========================================================================
 # FICHE CHAT
 # ==========================================================================
 FICHE_CHAT = """
-<section class="page-head">
+<section class="page-head page-head--compact">
   <div class="wrap">
     <nav class="breadcrumb" aria-label="Fil d'Ariane">
       <span><a href="index.html">Accueil</a></span>
-      <span><a href="nos-adultes.html">Nos chats</a></span>
+      <span><a href="males.html" id="cat-breadcrumb-parent">Nos chats</a></span>
       <span id="cat-breadcrumb-name">Fiche</span>
     </nav>
   </div>
@@ -381,8 +431,8 @@ FICHE_CHAT = """
 <section class="panel panel--lilac tight">
   <div class="wrap wrap--narrow center">
     <h2>Une question sur ce chat ?</h2>
-    <p class="lede" style="margin-inline:auto">Ses tests, ses origines, ses portées à venir : demandez-nous, nous répondons précisément.</p>
-    <p style="margin-top:1.4rem"><a class="btn btn--copper" href="contact.html">Nous écrire</a></p>
+    <p class="lede">Ses origines, ses portées à venir : demandez-nous, nous vous répondons avec plaisir.</p>
+    <div class="actions center"><a class="btn btn--primary" href="contact.html">Nous écrire</a></div>
   </div>
 </section>
 """
@@ -392,58 +442,60 @@ FICHE_CHAT = """
 # ==========================================================================
 CHATONS = page_head_block(
     "Chatons",
-    "Nos portées",
-    "Chaque portée avec ses parents, l'âge des chatons et leur disponibilité. Un chaton réservé reste affiché : c'est la vie de la chatterie, pas une vitrine.",
+    "Nos chatons",
+    "Nés et élevés à la maison, à Othis. Chaque portée avec ses parents, l'âge des chatons et leur disponibilité. Un chaton réservé reste affiché : c'est la vie de la chatterie.",
     [("index.html", "Accueil"), (None, "Chatons")],
 ) + """
 <section class="tight" style="padding-top:0">
   <div class="wrap">
-    <div id="kittens-summary" style="margin-bottom:1.6rem"></div>
+    <div class="filters" id="kitten-filters">
+      <button class="chip" type="button" data-filter="tous" aria-pressed="true">Tous</button>
+      <button class="chip" type="button" data-filter="disponible" aria-pressed="false">Disponibles</button>
+      <button class="chip" type="button" data-filter="reserve" aria-pressed="false">Réservés</button>
+      <span class="count-note" id="kittens-summary"></span>
+    </div>
     <div id="litters"></div>
   </div>
 </section>
 
-<section class="panel panel--butter">
+<section class="panel panel--champagne">
   <div class="wrap">
-    <div class="split">
-      <div class="reveal">
-        <p class="eyebrow">Ce qui est compris</p>
-        <h2>Ce que votre chaton emporte</h2>
-        <ul class="stack" style="list-style:none;padding:0;gap:.7rem;margin:1.4rem 0 0">
-          <li>Pedigree LOOF, ou certificat de naissance en attendant l'édition</li>
-          <li>Puce électronique et enregistrement I-CAD à votre nom</li>
-          <li>Deux injections de vaccin faites, typhus et coryza</li>
-          <li>Vermifugé régulièrement depuis l'âge de trois semaines</li>
-          <li>Certificat vétérinaire de bonne santé de moins de huit jours</li>
-          <li>Carnet de santé, attestation de cession et contrat signé</li>
-          <li>Document d'information sur les besoins de l'espèce</li>
-          <li>De la nourriture et un peu de litière pour les premiers jours</li>
-        </ul>
-      </div>
-      <div class="reveal" data-delay="1">
-        <div class="sheet">
-          <h3>Les statuts affichés</h3>
-          <dl class="facts">
-            <div><dt>Disponible</dt><dd class="free">Aucune réservation en cours</dd></div>
-            <div><dt>Réservé</dt><dd class="free">Acompte versé par une famille</dd></div>
-            <div><dt>Reste à la chatterie</dt><dd class="free">Gardé pour l'élevage</dd></div>
-            <div><dt>Adopté</dt><dd class="free">Parti dans sa famille</dd></div>
-          </dl>
-          <p class="small" style="margin-top:1rem">Les chatons partent à partir de douze semaines,
-            jamais avant. La loi autorise huit semaines ; nous gardons quatre semaines de plus.</p>
-          <p style="margin-top:1rem"><a class="btn btn--sm btn--copper" href="liste-attente.html">Rejoindre la liste d'attente</a></p>
-        </div>
-      </div>
+    <div class="section-head center">
+      <p class="eyebrow center">Le grand jour</p>
+      <h2>Le départ de votre chaton</h2>
+      <p class="lede">Nos chatons sont prêts à partir vers douze semaines, avec tout ce qu'il faut pour un bon
+        départ dans leur nouvelle maison.</p>
+    </div>
+    <ul class="kit">
+      <li class="reveal"><span class="kit__icon">%(doc)s</span>Certificat LOOF, le Livre officiel des origines félines</li>
+      <li class="reveal" data-delay="1"><span class="kit__icon">%(chip)s</span>Puce électronique d'identification</li>
+      <li class="reveal" data-delay="2"><span class="kit__icon">%(syringe)s</span>Premières vaccinations à jour</li>
+      <li class="reveal"><span class="kit__icon">%(heart)s</span>Carnet de santé complet</li>
+      <li class="reveal" data-delay="1"><span class="kit__icon">%(check)s</span>Stérilisé avant son départ</li>
+      <li class="reveal" data-delay="2"><span class="kit__icon">%(gift)s</span>De la nourriture et un peu de litière pour les premiers jours</li>
+    </ul>
+    <p class="small center" style="margin-top:1.4rem">Et les documents prévus par la loi : attestation de cession,
+      certificat vétérinaire et document d'information sur les besoins de l'espèce.</p>
+    <div class="sheet sheet--statuses reveal">
+      <h3>Les statuts affichés</h3>
+      <dl class="facts">
+        <div><dt>Disponible</dt><dd class="free">Aucune réservation en cours</dd></div>
+        <div><dt>Réservé</dt><dd class="free">Une famille a versé un acompte</dd></div>
+        <div><dt>Reste à la chatterie</dt><dd class="free">Gardé à la maison</dd></div>
+        <div><dt>Adopté</dt><dd class="free">Parti dans sa famille</dd></div>
+      </dl>
+      <div class="actions"><a class="btn btn--sm btn--primary" href="liste-attente.html">Rejoindre la liste d'attente</a></div>
     </div>
   </div>
 </section>
-"""
+""" % {"doc": ico("doc", 22), "chip": ico("chip", 22), "syringe": ico("syringe", 22), "heart": ico("heart", 22),
+       "check": ico("check", 22), "gift": ico("gift", 22)}
 
 # ==========================================================================
 # PORTÉE
 # ==========================================================================
 PORTEE = """
-<section class="page-head">
+<section class="page-head page-head--compact">
   <div class="wrap">
     <nav class="breadcrumb" aria-label="Fil d'Ariane">
       <span><a href="index.html">Accueil</a></span>
@@ -455,113 +507,172 @@ PORTEE = """
 <section class="tight" style="padding-top:0">
   <div class="wrap"><div id="litter-detail"></div></div>
 </section>
-<section class="panel panel--butter tight">
+<section class="panel panel--blush tight">
   <div class="wrap wrap--narrow center">
     <h2>Un chaton vous plaît ?</h2>
-    <p class="lede" style="margin-inline:auto">Écrivez-nous en nous parlant un peu de vous. Nous vous
-      rappelons et nous vous proposons une visite avant toute réservation.</p>
-    <p style="margin-top:1.4rem"><a class="btn btn--copper" href="contact.html">Nous écrire</a></p>
+    <p class="lede">Écrivez-nous en nous parlant un peu de vous. Nous vous rappelons et nous vous proposons
+      une visite, sur rendez-vous.</p>
+    <div class="actions center">
+      <a class="btn btn--primary" href="contact.html">Nous écrire</a>
+      <a class="btn btn--ghost" href="liste-attente.html">La liste d'attente</a>
+    </div>
   </div>
 </section>
 """
 
 # ==========================================================================
-# ADOPTER (conditions, santé, garanties, liste d'attente, FAQ)
+# LISTE D'ATTENTE (réservation, étapes, santé, FAQ)
 # ==========================================================================
-LISTE_ATTENTE = page_head_block(
-    "Adopter",
-    "La liste d'attente",
-    "Comment nous rejoindre, les étapes de l'adoption, ce que nous dépistons et ce que nous garantissons. Tout est écrit ici, avant que vous nous écriviez.",
-    [("index.html", "Accueil"), (None, "Liste d'attente")],
-) + """
-<section class="tight" id="liste-attente" style="padding-top:0">
+LISTE_ATTENTE = """<section class="page-head page-head--center">
   <div class="wrap">
-    <div class="split split--media-first">
-      <div class="split__media reveal">
-        <div class="frame"><div class="arch arch--wide">
-          <img src="assets/photo-chaton-feuilles.webp" alt="Chaton British dans les feuilles du jardin" data-guard>
-        </div></div>
+    <nav class="breadcrumb" aria-label="Fil d'Ariane"><span><a href="index.html">Accueil</a></span><span>Liste d'attente</span></nav>
+    <span class="page-head__crown" aria-hidden="true">%(crown)s</span>
+    <h1>Liste d'attente</h1>
+    <p class="lede">Rejoignez notre liste d'attente : vous êtes prioritaire dès qu'un chaton correspondant à
+      vos critères est disponible.</p>
+  </div>
+</section>
+
+<section class="tight" id="liste-attente" style="padding-top:0">
+  <div class="wrap wrap--narrow">
+    <div class="reserve-card reveal">
+      <div class="avatars" id="waitlist-avatars" aria-hidden="true"></div>
+      <h2>Réserver votre futur compagnon</h2>
+      <p>En versant un acompte de %(acompte)s, vous rejoignez notre liste d'attente et êtes prioritaire dès qu'un
+        chaton correspondant à vos critères (couleur, sexe) est disponible. Cette somme est ensuite déduite du prix
+        d'achat le jour où vous choisissez votre chaton.</p>
+    </div>
+
+    <ul class="perks">
+      <li class="perk reveal"><span class="perk__icon">%(star)s</span><h3>Prioritaire</h3>
+        <p>Vous êtes prévenu avant tout le monde dès qu'un chaton correspondant à vos critères est disponible.</p></li>
+      <li class="perk reveal" data-delay="1"><span class="perk__icon">%(heart)s</span><h3>Acompte de %(acompte)s</h3>
+        <p>Il est déduit du prix de votre chaton le jour où vous le choisissez.</p></li>
+      <li class="perk reveal" data-delay="2"><span class="perk__icon">%(target)s</span><h3>Le chaton qu'il vous faut</h3>
+        <p>Nous vous proposons jusqu'à trois chatons correspondant à ce que vous cherchez.</p></li>
+    </ul>
+
+    <form id="waitlist-form" class="form-card reveal" data-form="waitlist" novalidate>
+      <h2 class="h3">M'inscrire sur la liste d'attente</h2>
+      <p class="small">Laissez-nous vos coordonnées et ce que vous cherchez : nous vous rappelons pour en parler,
+        avant tout versement.</p>
+      <div class="form-grid">
+        <div class="field">
+          <label for="w-name">Votre nom</label>
+          <input id="w-name" name="name" type="text" autocomplete="name" placeholder="Prénom et nom" required>
+          <span class="error"></span>
+        </div>
+        <div class="field">
+          <label for="w-num">Téléphone</label>
+          <input id="w-num" name="num" type="tel" autocomplete="tel" placeholder="06 …">
+          <span class="error"></span>
+        </div>
+        <div class="field field--full">
+          <label for="w-email">Votre e-mail</label>
+          <input id="w-email" name="email" type="email" autocomplete="email" placeholder="vous@exemple.fr" required>
+          <span class="error"></span>
+        </div>
+        <div class="field">
+          <label for="w-sexe">Chaton recherché</label>
+          <select id="w-sexe" name="sexe">
+            <option value="Peu importe">Peu importe</option>
+            <option value="Un mâle">Un mâle</option>
+            <option value="Une femelle">Une femelle</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="w-robe">Robe souhaitée <span class="hint">facultatif</span></label>
+          <input id="w-robe" name="robe" type="text" placeholder="Chocolat, cinnamon, silver shaded, bleu…">
+        </div>
+        <div class="field field--full">
+          <label for="w-message">Votre message</label>
+          <textarea id="w-message" name="message" required
+            placeholder="Parlez-nous un peu de vous, de votre foyer, et du chaton dont vous rêvez…"></textarea>
+          <span class="error"></span>
+        </div>
       </div>
-      <div class="reveal" data-delay="1">
-        <p class="eyebrow">Liste d'attente</p>
-        <h2>Être prévenu avant tout le monde</h2>
-        <p>Nous faisons peu de portées et nos chatons partent souvent avant leur naissance. La liste
-          d'attente sert à donner la priorité aux familles réellement engagées, plutôt qu'à écrire à
-          cinquante personnes à chaque naissance.</p>
-        <p>En versant l'acompte de %(acompte)s, vous rejoignez la liste et devenez prioritaire dès qu'un chaton
-          correspond à ce que vous cherchez. Cette somme est déduite du prix le jour où vous choisissez
-          votre chaton.</p>
-        <ul class="stack" style="list-style:none;padding:0;gap:.6rem;margin:1.2rem 0">
-          <li>Nous vous proposons jusqu'à trois chatons correspondant à vos critères</li>
-          <li>Après trois refus, votre place sur la liste est libérée</li>
-          <li>L'acompte n'est pas remboursable une fois versé</li>
-          <li>Plus vous êtes ouvert sur la couleur et le sexe, plus l'attente est courte</li>
-        </ul>
-        <p class="small">Ces conditions vous sont remises par écrit avant tout versement. Lisez-les, et
-          posez-nous vos questions : nous préférons un échange franc à une réservation précipitée.</p>
-        <p style="margin-top:1.2rem"><a class="btn btn--copper" href="contact.html?sujet=Liste%%20d%%27attente">Rejoindre la liste d'attente</a></p>
+      <div class="honey" aria-hidden="true">
+        <label for="w-website">Ne remplissez pas ce champ</label>
+        <input id="w-website" name="website" type="text" tabindex="-1" autocomplete="off">
       </div>
+      <button class="btn btn--primary" type="submit">M'inscrire sur la liste d'attente</button>
+      <p class="form-note">Vos coordonnées servent uniquement à vous répondre. Voir notre
+        <a href="politique-confidentialite.html">politique de confidentialité</a>.</p>
+      <p class="notice" data-result hidden></p>
+    </form>
+
+    <div class="conditions reveal">
+      <h3>Les conditions, en toute transparence</h3>
+      <ul class="pawed">
+        <li>Nous vous proposons jusqu'à trois chatons correspondant à vos critères</li>
+        <li>Après trois refus, votre place sur la liste est libérée</li>
+        <li>L'acompte n'est pas remboursable une fois versé</li>
+        <li>Plus vous êtes ouvert sur la couleur et le sexe, plus l'attente est courte</li>
+      </ul>
+      <p class="small">Ces conditions vous sont remises par écrit avant tout versement. Posez-nous toutes vos
+        questions : nous préférons un échange franc à une réservation précipitée.</p>
     </div>
   </div>
 </section>
 
-
-<section class="panel panel--butter">
+<section class="panel panel--blush">
   <div class="wrap">
     <div class="split split--wide-text">
       <div class="reveal">
+        <p class="eyebrow">Adopter</p>
         <h2>Les six étapes</h2>
-        <ol class="steps" style="margin-top:1.6rem">
+        <ol class="steps">
           <li><h3>Vous nous écrivez</h3><p>Présentez-vous en quelques lignes : votre foyer, vos autres animaux,
             ce que vous cherchez. Plus vous êtes précis, mieux nous vous orientons.</p></li>
           <li><h3>Nous échangeons</h3><p>Par téléphone le plus souvent. Nous vous disons franchement ce que
             nous avons, ce que nous n'avons pas, et combien de temps il faudra attendre.</p></li>
-          <li><h3>Vous venez nous voir</h3><p>Sur rendez-vous. Vous rencontrez la mère, vous voyez où les
-            chatons grandissent, vous posez toutes vos questions. Nous y tenons beaucoup.</p></li>
-          <li><h3>La réservation</h3><p>Versement de l'acompte de %(acompte)s, déduit du prix du chaton. Nous cessons
-            alors de le proposer. Vous recevez le contrat et le certificat d'engagement à signer.</p></li>
+          <li><h3>Vous venez nous voir</h3><p>Sur rendez-vous. Vous rencontrez les chatons, vous voyez où ils
+            grandissent et vous posez toutes vos questions.</p></li>
+          <li><h3>La réservation</h3><p>Versement de l'acompte de %(acompte)s, déduit du prix du chaton. Vous
+            recevez les documents à signer, dont le certificat d'engagement et de connaissance.</p></li>
           <li><h3>Le délai de réflexion</h3><p>La loi impose sept jours entre la signature du certificat
             d'engagement et de connaissance et la remise du chaton. Ce délai est fait pour vous.</p></li>
-          <li><h3>Le départ, à douze semaines</h3><p>Vous repartez avec le chaton, son dossier complet et
-            notre numéro. Nous restons joignables, y compris dans dix ans.</p></li>
+          <li><h3>Le départ, vers douze semaines</h3><p>Vous repartez avec le chaton, son dossier complet et
+            notre numéro. Nous restons disponibles après l'adoption.</p></li>
         </ol>
       </div>
       <div class="reveal" data-delay="1">
-        <div class="sheet">
+        <figure class="frame-photo frame-photo--tilt">
+          <img src="assets/photos/trio-chatons.webp" width="880" height="1100" loading="lazy" alt="Trois chatons British Longhair blottis les uns contre les autres">
+        </figure>
+        <div class="sheet" style="margin-top:1.6rem">
           <h3>Nos conditions</h3>
           <dl class="facts">
-            <div><dt>Départ</dt><dd>à partir de 12 semaines</dd></div>
+            <div><dt>Départ</dt><dd>vers 12 semaines</dd></div>
             <div><dt>Acompte</dt><dd>%(acompte)s</dd></div>
             <div><dt>Visite</dt><dd>sur rendez-vous</dd></div>
-            <div><dt>Vie</dt><dd>en intérieur</dd></div>
-            <div><dt>Pedigree</dt><dd>LOOF pour tous</dd></div>
-            <div><dt>Contrat</dt><dd>lisible avant réservation</dd></div>
+            <div><dt>Vie</dt><dd>en intérieur, de préférence</dd></div>
+            <div><dt>Pedigree</dt><dd>LOOF</dd></div>
+            <div><dt>Stérilisation</dt><dd>avant le départ</dd></div>
           </dl>
-          <p class="small" style="margin-top:1rem">Nous confions nos chatons à des foyers qui acceptent une
-            vie en intérieur, avec balcon sécurisé le cas échéant. Nous reprenons nos chats à tout âge si
-            vous ne pouvez plus les assumer.</p>
-          <p style="margin-top:1.2rem"><a class="btn btn--copper" href="contact.html">Commencer par un message</a></p>
+          <p class="small" style="margin-top:1rem">Contactez-nous pour connaître le prix d'un chaton.</p>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<section class="panel panel--sky" id="sante">
+<section class="panel panel--lilac" id="sante">
   <div class="wrap">
-    <p class="eyebrow">Santé</p>
-    <h2>Ce que nous dépistons, et pourquoi</h2>
-    <p class="lede">Un élevage sérieux teste ses reproducteurs et montre ses résultats, avec leur date et le
-      laboratoire. Les fiches de nos chats portent ces informations. Voici ce qu'elles veulent dire.</p>
-
-    <div class="grid grid-2" style="margin-top:2rem">
+    <div class="section-head">
+      <p class="eyebrow">Santé</p>
+      <h2>Ce qu'on dépiste chez le British, et pourquoi</h2>
+      <p class="lede">Quatre sujets à connaître avant d'adopter un British. Posez ces questions à tout éleveur,
+        nous compris : les réponses en disent long.</p>
+    </div>
+    <div class="grid grid-2">
       <div class="sheet reveal">
         <h3>La cardiomyopathie hypertrophique</h3>
         <p>C'est la maladie cardiaque la plus fréquente chez le chat, et le British y est prédisposé.
           Elle se dépiste par <strong>échographie du cœur réalisée par un vétérinaire cardiologue</strong>,
           répétée dans le temps, car un chat sain à deux ans peut se déclarer plus tard.</p>
-        <p class="small">Méfiez-vous d'un élevage qui annonce un « test ADN HCM » chez le British : les tests
-          génétiques existants concernent d'autres races. Chez le British, seule l'échographie fait foi.</p>
+        <p class="small">Méfiez-vous d'un « test ADN HCM » annoncé chez le British : les tests génétiques
+          existants concernent d'autres races. Chez le British, seule l'échographie fait foi.</p>
       </div>
       <div class="sheet reveal" data-delay="1">
         <h3>La polykystose rénale</h3>
@@ -575,32 +686,33 @@ LISTE_ATTENTE = page_head_block(
           mère de groupe B peut mourir dans ses premiers jours, empoisonné par le colostrum maternel.
           On appelle cela l'isoérythrolyse néonatale.</p>
         <p class="small">Connaître le groupe de chaque reproducteur permet d'éviter ces mariages ou de
-          protéger les chatons à la naissance. Nos groupes figurent sur les fiches.</p>
+          protéger les chatons à la naissance.</p>
       </div>
       <div class="sheet reveal" data-delay="1">
-        <h3>FIV, FeLV et le quotidien</h3>
-        <p>Nos reproducteurs sont dépistés FIV et FeLV. Nos chats vivent en intérieur, ce qui écarte
-          l'essentiel du risque de contamination.</p>
-        <p class="small">Vaccination à jour, vermifuges réguliers, suivi vétérinaire et registre sanitaire :
-          c'est la routine invisible d'un élevage, celle qui ne se voit pas sur les photos.</p>
+        <h3>FIV et FeLV</h3>
+        <p>Le virus de l'immunodéficience féline et celui de la leucose se dépistent par une simple prise de
+          sang. Un chat qui vit à l'intérieur, ou avec une sortie sécurisée, est à l'abri de l'essentiel du risque.</p>
+        <p class="small">Vaccins, vermifuges et suivi vétérinaire : c'est la routine invisible d'un élevage,
+          celle qui ne se voit pas sur les photos.</p>
       </div>
     </div>
 
     <div class="callout reveal" style="margin-top:2rem">
-      <p><strong>Ce que nous ne promettrons jamais.</strong> Aucun éleveur honnête ne peut garantir un chat
-        « sans maladie génétique » ni « en bonne santé à vie ». Ce que nous garantissons, c'est la
-        transparence de nos dépistages, un chaton examiné par un vétérinaire dans les huit jours avant son
-        départ, et le fait de rester joignables. Les garanties légales, vices rédhibitoires et garantie de
-        conformité, s'appliquent de plein droit et figurent dans notre contrat.</p>
+      <p><strong>Ce qu'aucun éleveur honnête ne promet.</strong> Personne ne peut garantir un chat « sans
+        maladie génétique » ni « en bonne santé à vie ». Votre chaton part identifié, vacciné, avec son carnet de
+        santé et un certificat vétérinaire. Les garanties légales, vices rédhibitoires et garantie de conformité,
+        s'appliquent de plein droit.</p>
     </div>
   </div>
 </section>
 
-<section class="panel panel--mint">
+<section>
   <div class="wrap">
-    <p class="eyebrow">Le jour J</p>
-    <h2>Préparer son arrivée</h2>
-    <div class="grid grid-3" style="margin-top:1.8rem">
+    <div class="section-head">
+      <p class="eyebrow">Le jour J</p>
+      <h2>Préparer son arrivée</h2>
+    </div>
+    <div class="grid grid-3">
       <div class="feature reveal"><h3>Une seule pièce</h3><p>Installez litière, gamelles, griffoir et
         couchage dans une pièce calme, et laissez-le en sortir de lui-même. Il quitte sa mère, sa fratrie
         et tous ses repères le même jour.</p></div>
@@ -614,37 +726,35 @@ LISTE_ATTENTE = page_head_block(
         odeurs, puis on fait des rencontres courtes et surveillées. Comptez une à trois semaines.</p></div>
       <div class="feature reveal" data-delay="1"><h3>Le vétérinaire</h3><p>Prenez rendez-vous dans les jours
         qui suivent, avec son carnet de santé. C'est aussi l'occasion de choisir votre vétérinaire.</p></div>
-      <div class="feature reveal" data-delay="2"><h3>Et nous</h3><p>Envoyez-nous des nouvelles et des photos.
-        Et appelez-nous à la moindre inquiétude : c'est exactement pour ça que nous laissons notre numéro.</p></div>
+      <div class="feature reveal" data-delay="2"><h3>Et nous</h3><p>Envoyez-nous des nouvelles et des photos,
+        et appelez-nous à la moindre question : nous restons disponibles après l'adoption.</p></div>
     </div>
   </div>
 </section>
 
-<section id="faq">
+<section id="faq" class="panel panel--champagne">
   <div class="wrap wrap--narrow">
-    <p class="eyebrow">Questions fréquentes</p>
-    <h2>Ce qu'on nous demande le plus souvent</h2>
-    <div style="margin-top:1.8rem">
+    <div class="section-head">
+      <p class="eyebrow">Questions fréquentes</p>
+      <h2>Ce qu'on nous demande le plus souvent</h2>
+    </div>
+    <div class="faq-list">
 %(faq)s
     </div>
-    <p class="small" style="margin-top:2rem">Une question qui n'est pas là ? Écrivez-nous, nous répondons à
-      tout le monde, même quand nous n'avons pas de chaton disponible.</p>
+    <p class="small" style="margin-top:2rem">Une question qui n'est pas là ? <a href="contact.html">Écrivez-nous</a>.</p>
   </div>
 </section>
 """
 
 FAQ_ITEMS = [
     ("Combien coûte un chaton chez vous ?",
-     "<p>Le prix dépend de la couleur, du sexe et du type, Shorthair ou Longhair. Les robes les plus "
-     "recherchées, golden, silver shaded, colourpoint et bicolore, sont en haut de la fourchette. "
-     "Appelez-nous, nous vous donnons le prix exact du chaton qui vous intéresse.</p>"
-     "<p>Ce prix couvre les dépistages des parents, la saillie, le suivi vétérinaire de la portée, "
-     "l'identification, les vaccins, la nourriture et l'inscription au LOOF. Nous ne faisons ni promotion "
-     "ni remise : un chaton n'est pas une marchandise qu'on solde.</p>"),
+     "<p>Le prix dépend notamment de la couleur, du sexe et du type, Shorthair ou Longhair. Contactez-nous : "
+     "nous vous donnons le prix exact du chaton qui vous intéresse.</p>"
+     "<p>Une réservation de 200 € est demandée pour garantir l'adoption. Elle est déduite du prix du chaton.</p>"),
     ("Faut-il adopter un ou deux chatons ?",
      "<p>Si personne n'est à la maison la journée, deux, sans hésiter. Un British s'ennuie en silence : il "
-     "ne miaule pas, il dort, il mange, il grossit. Deux chatons de la même portée se dépensent, se lavent "
-     "et se calment mutuellement, et le travail pour vous est à peine doublé.</p>"
+     "ne miaule pas, il dort, il mange, il grossit. Deux chatons se dépensent, se lavent et se calment "
+     "mutuellement, et le travail pour vous est à peine doublé.</p>"
      "<p>Si quelqu'un est présent la plupart du temps et qu'il y a déjà de la vie à la maison, un seul "
      "chaton s'épanouit très bien. Nous en parlons ensemble avant de décider.</p>"),
     ("Un British peut-il vivre en appartement ?",
@@ -655,64 +765,50 @@ FAQ_ITEMS = [
     ("Est-ce qu'il s'entend avec les enfants ?",
      "<p>Très bien, et c'est une de ses grandes qualités. Il est patient et ne griffe pratiquement jamais : "
      "quand il en a assez, il s'en va. C'est justement ce qu'il faut apprendre aux enfants, le laisser "
-     "partir, ne pas le poursuivre, ne pas le porter comme une poupée. Un British bien respecté revient "
-     "toujours de lui-même.</p>"),
+     "partir, ne pas le poursuivre, ne pas le porter comme une poupée.</p>"),
     ("Et avec un chien, ou avec mes autres chats ?",
      "<p>Très bien, avec de la méthode. On installe le chaton dans une pièce à lui pendant quelques jours, "
      "on échange les odeurs avec une couverture ou un jouet, puis on fait des rencontres courtes et "
-     "surveillées à travers une porte entrouverte avant le face-à-face.</p>"
+     "surveillées avant le face-à-face.</p>"
      "<p>Comptez une à trois semaines pour une cohabitation sereine. Le British est peu bagarreur : c'est "
      "en général le résident qui a besoin de temps, pas lui.</p>"),
     ("Le British est-il hypoallergénique ?",
      "<p>Non, et aucune race ne l'est vraiment. L'allergie vient d'une protéine de la salive et des "
      "squames, pas du poil : un Shorthair n'est donc pas moins allergisant qu'un Longhair.</p>"
      "<p>Si quelqu'un du foyer est allergique, parlez-en à un allergologue avant de vous engager, et venez "
-     "passer un moment chez nous. Nous préférons mille fois une visite qui se conclut par un non qu'un "
-     "chaton rendu trois mois plus tard.</p>"),
+     "passer un moment chez nous.</p>"),
     ("Est-ce qu'il perd beaucoup ses poils ?",
      "<p>Oui, comme tous les chats, et davantage au printemps et à l'automne. La fourrure du British est "
      "dense, avec un sous-poil épais : un bon brossage par semaine en temps normal, deux ou trois pendant "
-     "la mue, avec un peigne ou une brosse qui atteint le sous-poil. Un gant ne suffit pas.</p>"
+     "la mue, avec un peigne ou une brosse qui atteint le sous-poil.</p>"
      "<p>Le British Longhair demande un brossage tous les deux jours, surtout derrière les oreilles et sur "
-     "les culottes. C'est dix minutes, et la plupart des chats finissent par aimer ça.</p>"),
+     "les culottes.</p>"),
     ("Que mange-t-il, et puis-je changer de nourriture ?",
      "<p>Nos chatons partent avec de quoi tenir les premiers jours. Si vous souhaitez changer, faites-le "
      "progressivement sur dix à quinze jours en mélangeant les deux aliments.</p>"
-     "<p>Une règle compte plus que la marque : de l'eau fraîche toujours disponible, loin de la gamelle, et "
-     "pas de grignotage à volonté à l'âge adulte. Le British prend du poids très facilement.</p>"),
+     "<p>Notre article <a href=\"article.html?slug=bien-nourrir-son-chat\">Guide complet sur l'alimentation "
+     "du chat</a> répond à la plupart des questions.</p>"),
     ("J'habite loin, comment le chaton peut-il me rejoindre ?",
-     "<p>Vous venez le chercher, c'est ce que nous préférons de loin : vous voyez où il a grandi. Nous "
-     "pouvons aussi l'accompagner jusqu'à une gare ou un aéroport proches, ou vous orienter vers un taxi "
-     "animalier professionnel, à vos frais.</p>"
-     "<p>Nous n'expédions jamais un chaton seul en soute. Pour un départ vers la Belgique ou la Suisse, "
-     "comptez plus de douze semaines : la vaccination antirabique et son délai de validité l'imposent.</p>"),
+     "<p>Nous sommes à Othis, à vingt minutes de l'aéroport Paris-Charles de Gaulle. Nous pouvons vous "
+     "apporter le chaton à la gare de Roissy ou de Saint-Mard, et il existe des taxis animaliers si vous "
+     "habitez plus loin.</p>"
+     "<p>Nous livrons en France, en Suisse et en Belgique. Parlons-en ensemble pour trouver la solution la "
+     "plus douce pour lui.</p>"),
     ("Peut-on venir voir les chatons avant de décider ?",
-     "<p>Oui, et nous y tenons. Les visites se font sur rendez-vous, une fois que les chatons sont assez "
-     "grands. Vous verrez où ils vivent, vous rencontrerez leur mère, vous poserez toutes vos questions.</p>"
-     "<p>Deux règles d'hygiène simples : ne venez pas le jour où vous avez visité un autre élevage ou un "
-     "refuge, et on se lave les mains en arrivant. Les chatons sont fragiles jusqu'à leur deuxième vaccin.</p>"),
+     "<p>Oui, et nous vous y encourageons. Les visites se font uniquement sur rendez-vous : vous rencontrez "
+     "les chatons, vous voyez où ils ont grandi et vous posez toutes vos questions.</p>"),
     ("Comment réserve-t-on, et à quoi sert l'acompte ?",
      "<p>Après notre échange et, idéalement, une visite, la réservation se fait par le versement de "
-     "l'acompte, qui est déduit du prix du chaton. Il bloque le chaton à votre nom : nous cessons de le "
-     "proposer.</p>"
+     "l'acompte de 200 €, qui est déduit du prix du chaton. Il bloque le chaton à votre nom.</p>"
      "<p>Nous signons ensuite le certificat d'engagement et de connaissance, et la loi impose un délai de "
-     "réflexion de sept jours avant le départ. Les conditions vous sont remises par écrit avant tout "
-     "versement.</p>"),
+     "réflexion de sept jours avant le départ.</p>"),
     ("Combien de temps faut-il attendre ?",
      "<p>Cela dépend de ce que vous cherchez. Si vous voulez une couleur précise, l'attente est plus "
-     "longue ; si vous êtes ouvert sur la couleur et le sexe, elle est souvent bien plus courte.</p>"
-     "<p>Nous faisons peu de portées par an, délibérément : nos femelles ne sont pas des machines. Nous "
-     "vous disons franchement dès le premier échange combien de temps il faudra patienter.</p>"),
-    ("Quelles garanties avez-vous sur la santé du chaton ?",
-     "<p>Le chaton part avec un certificat vétérinaire établi dans les huit jours avant son départ, "
-     "identifié, vacciné et vermifugé. Ses parents sont dépistés et les résultats figurent sur leurs "
-     "fiches.</p>"
-     "<p>Les garanties légales, vices rédhibitoires et garantie de conformité, s'appliquent, et le détail "
-     "figure dans notre contrat que vous pouvez lire avant de vous engager. Nous ne vous promettrons jamais "
-     "un chat garanti en bonne santé à vie : aucun éleveur honnête ne le peut.</p>"),
-    ("Et si je ne peux plus m'occuper de mon chat, un jour ?",
-     "<p>Vous nous appelez. Nous reprenons nos chats, à n'importe quel âge et quelle que soit la raison, "
-     "plutôt que de les savoir en refuge ou sur une petite annonce. C'est écrit dans notre contrat.</p>"),
+     "longue ; si vous êtes ouvert sur la couleur et le sexe, elle est souvent bien plus courte. Nous vous "
+     "le disons franchement dès le premier échange.</p>"),
+    ("Pourquoi nos chatons sont-ils stérilisés ?",
+     "<p>Tous nos chatons sont stérilisés avant leur départ. Un chat stérilisé ne marque pas son "
+     "territoire, ne fugue pas en période de chaleurs et vit plus sereinement à l'intérieur.</p>"),
     ("Un chaton Longhair peut-il naître de deux Shorthair ?",
      "<p>Oui. Le poil long est un caractère récessif : deux British Shorthair porteurs du gène peuvent "
      "donner des Longhair dans la même portée. C'est le même chat, la même race et le même standard, avec "
@@ -724,8 +820,10 @@ FAQ_HTML = "\n".join(
     % (q, a) for q, a in FAQ_ITEMS
 )
 
-LISTE_ATTENTE = LISTE_ATTENTE % {"acompte": SITE["acompte"], "faq": FAQ_HTML}
-
+LISTE_ATTENTE = LISTE_ATTENTE % {
+    "acompte": SITE["acompte"], "faq": FAQ_HTML, "crown": crown_svg(),
+    "star": ico("star", 24), "heart": ico("heart", 24), "target": ico("target", 24),
+}
 
 # ==========================================================================
 # NOS RETRAITÉS
@@ -733,18 +831,16 @@ LISTE_ATTENTE = LISTE_ATTENTE % {"acompte": SITE["acompte"], "faq": FAQ_HTML}
 RETRAITES = page_head_block(
     "Une retraite méritée",
     "Nos retraités",
-    "Nos anciens reproducteurs, stérilisés, qui coulent des jours tranquilles à la maison. Ils ont fait la chatterie, ils y restent.",
+    "Nos anciens reproducteurs. Après leurs années d'élevage, ils profitent d'une vie tranquille et heureuse, bien méritée.",
     [("index.html", "Accueil"), (None, "Retraités")],
+    '<p class="count-note" id="retired-count"></p>',
 ) + """
 <section class="tight" style="padding-top:0">
   <div class="wrap">
     <div class="callout reveal" style="margin-bottom:2rem">
-      <p>Un chat d'élevage ne travaille pas toute sa vie. Passé quelques portées, nos femelles sont
-        stérilisées et prennent leur retraite. La plupart restent chez nous. Quand une retraitée serait
-        plus heureuse seule dans un foyer calme, nous lui cherchons une famille avec le même soin que
-        pour un chaton, et sans rien vous cacher de son âge ni de son caractère.</p>
+      <p>Après plusieurs années de reproduction, nos reproducteurs sont stérilisés. Nous veillons ensuite à ce
+        qu'ils profitent d'une vie tranquille et heureuse, chez nous ou dans une nouvelle famille choisie avec soin.</p>
     </div>
-    <p class="small" id="retired-count" style="text-align:right"></p>
     <div id="retired-list"></div>
   </div>
 </section>
@@ -752,10 +848,9 @@ RETRAITES = page_head_block(
 <section class="panel panel--lilac tight">
   <div class="wrap wrap--narrow center">
     <h2>Adopter un chat adulte</h2>
-    <p class="lede" style="margin-inline:auto">Un adulte, c'est un caractère déjà formé, une propreté
-      acquise et une sérénité qu'un chaton n'a pas encore. Pour beaucoup de foyers, c'est le meilleur choix.
-      Demandez-nous si l'un des nôtres cherche une famille.</p>
-    <p style="margin-top:1.4rem"><a class="btn btn--copper" href="contact.html?sujet=Adoption%20d%27un%20retrait%C3%A9">Nous écrire</a></p>
+    <p class="lede">Un adulte, c'est un caractère déjà formé et une sérénité qu'un chaton n'a pas encore.
+      Pour beaucoup de foyers, c'est le meilleur choix. Demandez-nous si l'un des nôtres cherche une famille.</p>
+    <div class="actions center"><a class="btn btn--primary" href="contact.html?sujet=Adoption%20d%27un%20retrait%C3%A9">Nous écrire</a></div>
   </div>
 </section>
 """
@@ -782,12 +877,12 @@ GALERIE = page_head_block(
   </div>
 </section>
 
-<section class="panel panel--butter tight">
+<section class="panel panel--champagne tight">
   <div class="wrap wrap--narrow center">
     <h2>Vous avez adopté chez nous ?</h2>
-    <p class="lede" style="margin-inline:auto">Envoyez-nous des photos de votre chat devenu grand. Rien ne
-      nous fait plus plaisir, et rien ne rassure mieux une famille qui hésite encore.</p>
-    <p style="margin-top:1.4rem"><a class="btn btn--copper" href="contact.html?sujet=Photos%20de%20mon%20chat">Envoyer des photos</a></p>
+    <p class="lede">Envoyez-nous des photos de votre chat devenu grand. Rien ne nous fait plus plaisir, et
+      rien ne rassure mieux une famille qui hésite encore.</p>
+    <div class="actions center"><a class="btn btn--primary" href="contact.html?sujet=Photos%20de%20mon%20chat">Envoyer des photos</a></div>
   </div>
 </section>
 """
@@ -798,7 +893,7 @@ GALERIE = page_head_block(
 CONSEILS = page_head_block(
     "Conseils",
     "Nos conseils",
-    "Ce que nous avons appris au fil des portées : bien choisir son chaton, l'accueillir, entretenir son poil, le nourrir.",
+    "Ce que nous avons appris au fil des portées, pour bien accueillir et bien nourrir votre British.",
     [("index.html", "Accueil"), (None, "Conseils")],
 ) + """
 <section class="tight" style="padding-top:0">
@@ -807,11 +902,11 @@ CONSEILS = page_head_block(
 """
 
 ARTICLE = """
-<section class="page-head">
+<section class="page-head page-head--compact">
   <div class="wrap">
     <nav class="breadcrumb" aria-label="Fil d'Ariane">
       <span><a href="index.html">Accueil</a></span>
-      <span><a href="conseils.html">Journal</a></span>
+      <span><a href="conseils.html">Conseils</a></span>
       <span id="article-breadcrumb-name">Article</span>
     </nav>
   </div>
@@ -829,49 +924,50 @@ ARTICLE = """
 CONTACT = page_head_block(
     "Contact",
     "Parlons de votre projet",
-    "Nous répondons à tout le monde, même quand nous n'avons pas de chaton disponible. Présentez-vous en quelques lignes : c'est ainsi que commencent nos plus belles adoptions.",
+    "Une question, une visite, un projet d'adoption ? Présentez-vous en quelques lignes : c'est ainsi que commencent nos plus belles adoptions.",
     [("index.html", "Accueil"), (None, "Contact")],
 ) + """
 <section class="tight" style="padding-top:0">
   <div class="wrap">
-    <div class="split split--wide-text">
+    <div class="split split--wide-text split--top">
       <div class="reveal">
-        <form id="contact-form" novalidate>
-          <div class="field">
-            <label for="f-name">Votre nom</label>
-            <input id="f-name" name="name" type="text" autocomplete="name" required>
-            <span class="error"></span>
-          </div>
-          <div class="field">
-            <label for="f-email">Votre e-mail</label>
-            <input id="f-email" name="email" type="email" autocomplete="email" required>
-            <span class="error"></span>
-          </div>
-          <div class="field">
-            <label for="f-num">Votre téléphone <span class="hint">facultatif, mais c'est plus simple pour échanger</span></label>
-            <input id="f-num" name="num" type="tel" autocomplete="tel">
-            <span class="error"></span>
-          </div>
-          <div class="field">
-            <label for="f-subject">Sujet</label>
-            <input id="f-subject" name="subject" type="text" placeholder="Demande d'information, visite, liste d'attente…">
-            <span class="error"></span>
-          </div>
-          <div class="field">
-            <label for="f-message">Votre message</label>
-            <textarea id="f-message" name="message" required
-              placeholder="Dites-nous qui vous êtes, comment vit votre foyer, si vous avez déjà des animaux, et le chaton que vous recherchez."></textarea>
-            <span class="error"></span>
+        <form id="contact-form" class="form-card" data-form="contact" novalidate>
+          <div class="form-grid">
+            <div class="field">
+              <label for="f-name">Votre nom</label>
+              <input id="f-name" name="name" type="text" autocomplete="name" required>
+              <span class="error"></span>
+            </div>
+            <div class="field">
+              <label for="f-num">Votre téléphone <span class="hint">facultatif</span></label>
+              <input id="f-num" name="num" type="tel" autocomplete="tel">
+              <span class="error"></span>
+            </div>
+            <div class="field field--full">
+              <label for="f-email">Votre e-mail</label>
+              <input id="f-email" name="email" type="email" autocomplete="email" required>
+              <span class="error"></span>
+            </div>
+            <div class="field field--full">
+              <label for="f-subject">Sujet</label>
+              <input id="f-subject" name="subject" type="text" placeholder="Demande d'information, visite, liste d'attente…">
+              <span class="error"></span>
+            </div>
+            <div class="field field--full">
+              <label for="f-message">Votre message</label>
+              <textarea id="f-message" name="message" required
+                placeholder="Dites-nous qui vous êtes, comment vit votre foyer, si vous avez déjà des animaux, et le chaton que vous recherchez."></textarea>
+              <span class="error"></span>
+            </div>
           </div>
           <div class="honey" aria-hidden="true">
             <label for="f-website">Ne remplissez pas ce champ</label>
             <input id="f-website" name="website" type="text" tabindex="-1" autocomplete="off">
           </div>
-          <button class="btn btn--copper" type="submit">Envoyer le message</button>
-          <p class="form-note" style="margin-top:1rem">Vos coordonnées servent uniquement à vous répondre.
-            Elles ne sont ni revendues ni utilisées pour de la publicité.
-            Voir notre <a href="politique-confidentialite.html">politique de confidentialité</a>.</p>
-          <p id="contact-result" class="notice" hidden></p>
+          <button class="btn btn--primary" type="submit">Envoyer le message</button>
+          <p class="form-note">Vos coordonnées servent uniquement à vous répondre. Elles ne sont ni revendues ni
+            utilisées pour de la publicité. Voir notre <a href="politique-confidentialite.html">politique de confidentialité</a>.</p>
+          <p class="notice" data-result hidden></p>
         </form>
       </div>
 
@@ -883,25 +979,26 @@ CONTACT = page_head_block(
             <div><dt>E-mail</dt><dd><a href="mailto:%(email)s">Nous écrire</a></dd></div>
             <div><dt>Adresse</dt><dd class="free">%(adresse)s<br>%(cp)s %(ville)s</dd></div>
             <div><dt>Visites</dt><dd>sur rendez-vous</dd></div>
-            <div><dt>Réponse</dt><dd>sous 48 heures</dd></div>
+            <div><dt>Remise</dt><dd class="free">à Othis, gare de Roissy ou de Saint-Mard</dd></div>
           </dl>
+          <p class="small" style="margin-top:1rem">À vingt minutes de l'aéroport Paris-Charles de Gaulle.
+            Nous ne répondons pas aux appels masqués.</p>
         </div>
 
         <div class="sheet" style="margin-top:1.4rem">
           <h3>Avant de nous écrire</h3>
-          <p class="small">Ces trois pages répondent à la plupart des questions, et vous feront gagner du temps.</p>
-          <ul class="stack" style="list-style:none;padding:0;gap:.6rem;margin:1rem 0 0;font-size:var(--t-sm)">
+          <ul class="link-list">
             <li><a class="link-arrow" href="le-british.html">Le caractère du British</a></li>
-            <li><a class="link-arrow" href="liste-attente.html#sante">Nos dépistages et garanties</a></li>
+            <li><a class="link-arrow" href="liste-attente.html">La liste d'attente et nos conditions</a></li>
             <li><a class="link-arrow" href="liste-attente.html#faq">Les questions fréquentes</a></li>
           </ul>
         </div>
 
-        <div style="margin-top:1.4rem;border-radius:var(--radius);overflow:hidden;border:1px solid var(--line)">
+        <div class="map-frame">
           <iframe
             title="Emplacement de la chatterie à %(ville)s"
             src="https://www.google.com/maps?q=%(adresse_url)s&output=embed"
-            width="100%%" height="300" style="border:0;display:block" loading="lazy"
+            width="100%%" height="300" loading="lazy"
             referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
       </div>
@@ -932,7 +1029,7 @@ MENTIONS = page_head_block(
       <li>E-mail : <a href="mailto:%(email)s">%(email)s</a></li>
       <li>Directeur de la publication : AMIEL Zeitoun</li>
     </ul>
-    <!-- À COMPLÉTER PAR L'ÉLEVEUSE : numéro SIREN affiché dans les annonces de cession,
+    <!-- À COMPLÉTER : numéro SIREN affiché dans les annonces de cession,
          numéro de déclaration DDPP, numéro ACACED ou de certificat de capacité,
          numéro de TVA intracommunautaire le cas échéant, adhésions professionnelles. -->
 
@@ -943,8 +1040,8 @@ MENTIONS = page_head_block(
     <h2>Activité d'élevage</h2>
     <p>Les chatons proposés sur ce site sont inscrits au LOOF, Livre Officiel des Origines Félines.
       Conformément à la réglementation, l'âge minimum légal de cession d'un chaton est de huit semaines ;
-      nos chatons partent à partir de douze semaines. Chaque cession donne lieu à la remise d'une
-      attestation de cession, d'un certificat vétérinaire de bonne santé, du document d'information sur
+      nos chatons partent vers douze semaines. Chaque cession donne lieu à la remise d'une
+      attestation de cession, d'un certificat vétérinaire, du document d'information sur
       les besoins de l'espèce et du certificat d'engagement et de connaissance signé au moins sept jours
       avant la remise de l'animal.</p>
 
@@ -965,7 +1062,7 @@ MENTIONS = page_head_block(
     <h2>Médiation de la consommation</h2>
     <p>Conformément au code de la consommation, en cas de litige non résolu avec nos services, vous pouvez
       recourir gratuitement à un médiateur de la consommation.</p>
-    <!-- À COMPLÉTER PAR L'ÉLEVEUSE : nom et coordonnées du médiateur de la consommation choisi. -->
+    <!-- À COMPLÉTER : nom et coordonnées du médiateur de la consommation choisi. -->
 
     <h2>Nous contacter</h2>
     <p>Pour toute question relative à ces mentions, écrivez-nous à
@@ -991,7 +1088,7 @@ CONFIDENTIALITE = page_head_block(
     <p>AMIEL Zeitoun, éditeur de ce site, %(adresse)s, %(cp)s %(ville)s. Pour toute question relative à
       vos données : <a href="mailto:%(email)s">%(email)s</a>.</p>
 
-    <h2>Le formulaire de contact</h2>
+    <h2>Les formulaires de contact et de liste d'attente</h2>
     <p>Lorsque vous nous écrivez, nous conservons votre nom, votre e-mail, votre téléphone si vous le
       renseignez, et votre message. Ces informations servent uniquement à vous répondre et à suivre votre
       projet d'adoption. Elles ne sont ni revendues, ni louées, ni utilisées pour de la prospection.</p>
@@ -1034,73 +1131,79 @@ CONFIDENTIALITE = page_head_block(
 # ASSEMBLAGE
 # ==========================================================================
 PAGES = [
-    {"file": "index.html", "body": ACCUEIL,
+    {"file": "index.html", "body": ACCUEIL, "freq": "weekly", "prio": "1.0",
      "title": "Chatterie British Kingdom — Élevage de British Shorthair et Longhair à Othis (77)",
-     "desc": "Élevage familial de chats British Shorthair et British Longhair en Seine-et-Marne. Chatons inscrits au LOOF, parents dépistés, départ à 12 semaines.",
+     "desc": "Élevage familial de chats British Shorthair et British Longhair en Seine-et-Marne. Chatons inscrits au LOOF, élevés à la maison, départ vers 12 semaines.",
      "scripts": '<script>BKPages.accueil();BKPages.temoignages("#testimonials",3);</script>'},
 
-    {"file": "le-british.html", "body": LE_BRITISH,
+    {"file": "le-british.html", "body": LE_BRITISH, "prio": "0.7",
      "title": "Le British Shorthair et Longhair — caractère, entretien, couleurs",
      "desc": "Tempérament, différences entre Shorthair et Longhair, robes et codes EMS, brossage, vie en appartement : tout ce qu'il faut savoir avant d'adopter un British."},
 
-    {"file": "nos-adultes.html", "body": NOS_ADULTES,
-     "title": "Nos adultes — mâles et femelles de la Chatterie British Kingdom",
-     "desc": "Les mâles et femelles de notre élevage : robe et code EMS, couleur des yeux, âge, dépistages et portées.",
-     "scripts": '<script>BKPages.nosAdultes();</script>'},
+    {"file": "males.html", "body": MALES, "prio": "0.8",
+     "title": "Nos mâles — les étalons de la Chatterie British Kingdom",
+     "desc": "Les mâles reproducteurs de notre élevage de British Shorthair et Longhair : robe, couleur des yeux, âge, photos et portées.",
+     "scripts": '<script>BKPages.sexPage("male");</script>'},
 
-    {"file": "chat.html", "body": FICHE_CHAT,
+    {"file": "femelles.html", "body": FEMELLES, "prio": "0.8",
+     "title": "Nos femelles — les reproductrices de la Chatterie British Kingdom",
+     "desc": "Les femelles reproductrices de notre élevage de British Shorthair et Longhair : robe, couleur des yeux, âge, photos et portées.",
+     "scripts": '<script>BKPages.sexPage("female");</script>'},
+
+    {"file": "chat.html", "body": FICHE_CHAT, "sitemap": False,
      "title": "Fiche d'un chat — Chatterie British Kingdom",
      "desc": "Fiche détaillée d'un de nos British Shorthair ou Longhair : robe, origines, photos et portées.",
      "scripts": '<script>BKPages.ficheChat();</script>'},
 
-    {"file": "chatons.html", "body": CHATONS,
+    {"file": "chatons.html", "body": CHATONS, "freq": "weekly", "prio": "0.9",
      "title": "Chatons British Shorthair et Longhair disponibles — Chatterie British Kingdom",
-     "desc": "Nos portées en cours, les chatons disponibles ou réservés, leurs parents et leur date de départ. Chatons inscrits au LOOF, départ à 12 semaines.",
+     "desc": "Nos portées en cours, les chatons disponibles ou réservés, leurs parents et leur date de départ. Chatons inscrits au LOOF, départ vers 12 semaines.",
      "scripts": '<script>BKPages.chatons();</script>'},
 
-    {"file": "portee.html", "body": PORTEE,
+    {"file": "portee.html", "body": PORTEE, "sitemap": False, "nav": "chatons.html",
      "title": "Une portée — Chatterie British Kingdom",
      "desc": "Les chatons d'une portée, leurs parents, leur âge et leur disponibilité, semaine après semaine.",
      "scripts": '<script>BKPages.portee();</script>'},
 
-    {"file": "retraites.html", "body": RETRAITES,
+    {"file": "retraites.html", "body": RETRAITES, "prio": "0.5",
      "title": "Nos retraités — Chatterie British Kingdom",
-     "desc": "Nos anciens reproducteurs, stérilisés, qui profitent d'une retraite tranquille à la maison. Certains cherchent parfois une famille.",
+     "desc": "Nos anciens reproducteurs, stérilisés, qui profitent d'une retraite tranquille et heureuse.",
      "scripts": '<script>BKPages.retraites();</script>'},
 
-    {"file": "galerie.html", "body": GALERIE,
+    {"file": "galerie.html", "body": GALERIE, "prio": "0.6",
      "title": "Galerie photos — Chatterie British Kingdom",
      "desc": "Toutes les photos de nos British Shorthair et Longhair : adultes, chatons et retraités, en grand.",
      "scripts": '<script>BKPages.galerie();</script>'},
 
-    {"file": "conseils.html", "body": CONSEILS,
-     "title": "Conseils d'élevage — Chatterie British Kingdom",
-     "desc": "Bien choisir son chaton, préparer son arrivée, entretenir le poil d'un British Longhair, le nourrir : nos conseils d'éleveur.",
+    {"file": "conseils.html", "body": CONSEILS, "prio": "0.6",
+     "title": "Conseils — Chatterie British Kingdom",
+     "desc": "Nos conseils d'éleveur pour bien accueillir et bien nourrir votre British Shorthair ou Longhair.",
      "scripts": '<script>BKPages.blog();</script>'},
 
-    {"file": "article.html", "body": ARTICLE,
+    {"file": "article.html", "body": ARTICLE, "sitemap": False, "nav": "conseils.html",
      "title": "Conseil — Chatterie British Kingdom",
      "desc": "Un conseil d'élevage de la Chatterie British Kingdom.",
      "scripts": '<script>BKPages.article();</script>'},
 
-    {"file": "liste-attente.html", "body": LISTE_ATTENTE,
+    {"file": "liste-attente.html", "body": LISTE_ATTENTE, "prio": "0.8",
      "title": "Liste d'attente et adoption — Chatterie British Kingdom",
-     "desc": "Comment rejoindre notre liste d'attente, les étapes de l'adoption, nos dépistages (HCM, PKD, groupes sanguins) et les questions fréquentes."},
+     "desc": "Rejoignez notre liste d'attente : acompte de 200 € déduit du prix, étapes de l'adoption, santé du British et questions fréquentes.",
+     "scripts": '<script>BKPages.listeAttente();</script>'},
 
-    {"file": "contact.html", "body": CONTACT,
+    {"file": "contact.html", "body": CONTACT, "prio": "0.6", "freq": "yearly",
      "title": "Contact — Chatterie British Kingdom, Othis (77)",
-     "desc": "Écrivez-nous pour une question, une visite ou un projet d'adoption. Réponse sous 48 heures. Visites sur rendez-vous à Othis, en Seine-et-Marne.",
+     "desc": "Écrivez-nous pour une question, une visite ou un projet d'adoption. Visites sur rendez-vous à Othis, en Seine-et-Marne.",
      "scripts": '<script>BKPages.prefillContact();</script>'},
 
-    {"file": "mentions-legales.html", "body": MENTIONS,
+    {"file": "mentions-legales.html", "body": MENTIONS, "prio": "0.2", "freq": "yearly",
      "title": "Mentions légales — Chatterie British Kingdom",
      "desc": "Éditeur, hébergeur, activité d'élevage et propriété intellectuelle du site de la Chatterie British Kingdom."},
 
-    {"file": "politique-confidentialite.html", "body": CONFIDENTIALITE,
+    {"file": "politique-confidentialite.html", "body": CONFIDENTIALITE, "prio": "0.2", "freq": "yearly",
      "title": "Politique de confidentialité — Chatterie British Kingdom",
      "desc": "Les données que nous collectons, leur usage, leur durée de conservation et comment exercer vos droits."},
 ]
 
 if __name__ == "__main__":
     print("Génération du site :")
-    build(PAGES)
+    build(PAGES, MISE_A_JOUR)

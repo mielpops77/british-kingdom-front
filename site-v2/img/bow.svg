@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 64" aria-hidden="true">
+  <!-- Petit nœud rose posé sur le médaillon du logo -->
+  <g stroke="#b3265a" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M56 34 L43 60 L51 56 L56 62 L60 37 Z" fill="#e2668f"/>
+    <path d="M64 34 L77 60 L69 56 L64 62 L60 37 Z" fill="#e2668f"/>
+    <path d="M60 31 C46 7 13 5 9 22 C6 39 39 46 60 31 Z" fill="#f28db0"/>
+    <path d="M60 31 C74 7 107 5 111 22 C114 39 81 46 60 31 Z" fill="#f28db0"/>
+  </g>
+  <path d="M55 29 C45 16 27 13 20 21" fill="none" stroke="#ffd0df" stroke-width="3" stroke-linecap="round" opacity=".9"/>
+  <path d="M65 29 C75 16 93 13 100 21" fill="none" stroke="#ffd0df" stroke-width="3" stroke-linecap="round" opacity=".9"/>
+  <ellipse cx="60" cy="31" rx="8.5" ry="9.5" fill="#d94d78" stroke="#b3265a" stroke-width="2.2"/>
+  <ellipse cx="58" cy="28" rx="2.6" ry="3" fill="#ffc2d6" opacity=".9"/>
+</svg>

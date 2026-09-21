@@ -185,6 +185,7 @@
     stetho: '<path d="M6 3v6a6 6 0 0 0 12 0V3"/><path d="M6 3H4m14 0h2"/><circle cx="18" cy="16" r="3"/><path d="M12 15v-2"/>',
     book: '<path d="M4 4h7a3 3 0 0 1 3 3v13a2.5 2.5 0 0 0-2.5-2.5H4Z"/><path d="M20 4h-3a3 3 0 0 0-3 3v13a2.5 2.5 0 0 1 2.5-2.5H20Z"/>',
     clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+    crown: '<path d="M3 18h18M4 15l-1-8 5 4 4-7 4 7 5-4-1 8Z" fill="currentColor" stroke-width="1.2"/>',
     facebook: '<path d="M14 9h3V6h-3a4 4 0 0 0-4 4v2H8v3h2v7h3v-7h3l1-3h-4v-2a1 1 0 0 1 1-1Z"/>',
     instagram: '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor"/>',
     youtube: '<rect x="2" y="5" width="20" height="14" rx="4"/><path d="m10 9 5 3-5 3Z" fill="currentColor"/>',
@@ -195,11 +196,16 @@
     return '<svg viewBox="0 0 24 24" width="' + s + '" height="' + s + '" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (ICONS[name] || '') + '</svg>';
   }
 
-  /* ---------- formulaire de contact ---------- */
-  function setupContactForm() {
-    const form = $('#contact-form');
-    if (!form) return;
-    const out = $('#contact-result');
+  /* ---------- formulaires : contact et liste d'attente ----------
+     Les deux passent par le même envoi de l'API (formulaire de contact).
+     Pour la liste d'attente, le sexe et la robe souhaités sont ajoutés en
+     tête du message et le sujet est fixé à « Liste d'attente ». */
+  function setupForms() {
+    $$('form[data-form]').forEach(setupForm);
+  }
+  function setupForm(form) {
+    const kind = form.dataset.form;
+    const out = $('[data-result]', form);
     const submit = $('button[type="submit"]', form);
 
     const rules = {
@@ -244,13 +250,20 @@
       submit.textContent = 'Envoi…';
       out.className = 'notice';
       out.hidden = true;
+      const val = (n) => (form.elements[n] ? String(form.elements[n].value || '').trim() : '');
+      let subject = val('subject');
+      let message = val('message');
+      if (kind === 'waitlist') {
+        subject = 'Liste d\'attente';
+        const wish = [val('sexe') ? 'Chaton recherché : ' + val('sexe') : '', val('robe') ? 'Robe souhaitée : ' + val('robe') : ''].filter(Boolean).join('\n');
+        message = (wish ? wish + '\n\n' : '') + message;
+      }
       try {
-        await window.BK.api.contact({
-          name: form.name.value, email: form.email.value, num: form.num.value,
-          subject: form.subject.value, message: form.message.value
-        });
+        await window.BK.api.contact({ name: val('name'), email: val('email'), num: val('num'), subject, message });
         out.className = 'notice notice--ok';
-        out.textContent = 'Message envoyé. Nous vous répondons sous 48 heures, souvent bien avant.';
+        out.textContent = kind === 'waitlist'
+          ? 'Merci ! Votre demande est bien arrivée. Nous vous recontactons pour en parler avant tout versement.'
+          : 'Message envoyé, merci ! Nous revenons vers vous dès que possible.';
         out.hidden = false;
         form.reset();
       } catch (err) {
@@ -265,9 +278,9 @@
     });
   }
 
-  /* ---------- vidéo d'accueil ---------- */
+  /* ---------- vidéo de l'accueil ---------- */
   function setupHeroVideo() {
-    const video = $('#hero-video');
+    const video = $('video[data-autoplay]');
     if (!video) return;
     // La vidéo est muette et décorative : on la met en pause hors écran et si
     // le visiteur a demandé moins d'animations.
@@ -289,7 +302,7 @@
     setupNav();
     setupReveal();
     guardImages();
-    setupContactForm();
+    setupForms();
     setupHeroVideo();
     const tb = $('.theme-btn');
     if (tb) tb.addEventListener('click', toggleTheme);
