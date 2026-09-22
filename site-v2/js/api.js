@@ -13,6 +13,8 @@
   const API_BASE = 'https://british-kingdom-back.azurewebsites.net/api/';
   const BLOB = 'https://stockagebackkingdom.blob.core.windows.net/conteneurkingdom/';
   const PROFIL_ID = 1;
+  // Le vrai site (chatterie-british-kingdom.fr) : le seul qui compte les visites
+  const OFFICIEL = /(^|\.)chatterie-british-kingdom\.fr$/i.test(location.hostname);
 
   const IMG = {
     catProfil: BLOB + 'CatsProfil/',
@@ -350,9 +352,12 @@
       if (demoActive) { await new Promise((r) => setTimeout(r, 600)); return { demo: true }; }
       return http('contact', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(body) });
     },
-    /** Statistiques de visite (mêmes appels que le site actuel), silencieux en cas d'échec. */
+    /**
+     * Statistiques de visite (mêmes appels que le site actuel), silencieux en cas d'échec.
+     * Seules les visites du vrai site comptent : un aperçu (Netlify, ordinateur) n'envoie rien.
+     */
     trackVisit: () => {
-      if (demoActive) return;
+      if (demoActive || !OFFICIEL) return;
       try {
         if (sessionStorage.getItem('bk_visit')) return;
         sessionStorage.setItem('bk_visit', '1');
@@ -360,7 +365,7 @@
       http('statistique', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ profilId: PROFIL_ID }) }).catch(() => {});
     },
     heartbeat: () => {
-      if (demoActive) return;
+      if (demoActive || !OFFICIEL) return;
       const send = () => http('statistique/heartbeat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ profilId: PROFIL_ID }) }).catch(() => {});
       send();
       setInterval(send, 30000);
@@ -368,7 +373,7 @@
   };
 
   window.BK = {
-    API_BASE, BLOB, PROFIL_ID, IMG,
+    API_BASE, BLOB, PROFIL_ID, IMG, officiel: OFFICIEL,
     api,
     img: { join, catProfil: (f) => join(IMG.catProfil, f), parent: (f) => join(IMG.catParents, f), gallery: (f) => join(IMG.catGallery, f), chaton: (f) => join(IMG.chaton, f), banner: (f) => join(IMG.banner, f), divers: (f) => join(IMG.divers, f) },
     fmt: { date: fmtDate, age, ageWeeks, parseDate, status: statusOf, sex: sexOf, SEX, STATUS },

@@ -530,7 +530,8 @@
   let gaLoaded = false;
   function loadAnalytics() {
     const id = gaId();
-    if (!id || gaLoaded) return;
+    // Google Analytics ne mesure que le vrai site, jamais un aperçu
+    if (!id || gaLoaded || !(window.BK && window.BK.officiel)) return;
     gaLoaded = true;
     window['ga-disable-' + id] = false;
     window.dataLayer = window.dataLayer || [];

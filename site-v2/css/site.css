@@ -982,6 +982,46 @@ textarea { min-height: 150px; resize: vertical; }
 }
 .video-frame video { width: 100%; height: 100%; object-fit: cover; }
 
+/* La vie à la chatterie (accueil) : la vidéo et toutes les photos, en mosaïque */
+.mosaic {
+  display: grid; gap: clamp(.5rem, 1.1vw, .85rem);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.mosaic__video, .mosaic__tile {
+  position: relative; overflow: hidden; margin: 0; padding: 0;
+  background: var(--paper-3); border: 4px solid var(--card);
+  border-radius: 20px; box-shadow: var(--shadow-s);
+}
+.mosaic__video { grid-column: span 3; grid-row: span 2; border-width: 6px; border-radius: 28px; box-shadow: var(--shadow-m); }
+.mosaic__video video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.mosaic__label {
+  position: absolute; left: .9rem; bottom: .9rem; max-width: calc(100% - 1.8rem);
+  padding: .1rem .85rem .2rem; border-radius: 999px;
+  background: var(--card); color: var(--rose-ink); box-shadow: var(--shadow-s);
+  font-family: var(--font-hand); font-size: 1.4rem; font-weight: 700; line-height: 1.2;
+  transform: rotate(-2deg); pointer-events: none;
+}
+.mosaic__tile { aspect-ratio: 1; cursor: zoom-in; transition: box-shadow .3s var(--ease); }
+.mosaic__tile img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; transition: transform .6s var(--ease); }
+.mosaic__tile:hover { box-shadow: var(--shadow-m); }
+.mosaic__tile:hover img { transform: scale(1.06); }
+.mosaic__caption {
+  position: absolute; left: .45rem; bottom: .45rem; max-width: calc(100% - .9rem);
+  padding: .1rem .6rem; border-radius: 999px;
+  background: var(--card); color: var(--ink); font-size: var(--t-xs); font-weight: 700;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  opacity: 0; transform: translateY(4px); transition: opacity .25s var(--ease), transform .25s var(--ease);
+  pointer-events: none;
+}
+.mosaic__tile:hover .mosaic__caption, .mosaic__tile:focus-visible .mosaic__caption { opacity: 1; transform: none; }
+.mosaic + .actions { margin-top: 1.6rem; }
+@media (max-width: 699px) {
+  .mosaic { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .mosaic__video { grid-column: 1 / -1; grid-row: auto; aspect-ratio: 16 / 10; border-width: 4px; border-radius: 22px; }
+  .mosaic__label { left: .6rem; bottom: .6rem; font-size: 1.15rem; }
+  .mosaic__tile { border-radius: 16px; }
+}
+
 .cta-band {
   background:
     radial-gradient(520px 260px at 15% 0%, var(--rose-soft) 0%, transparent 70%),
@@ -1321,7 +1361,10 @@ ul.pawed li:nth-child(3n+3)::before { background: var(--lilac); }
 .stage--kitten .stage__main::before { display: none; }
 .stage--kitten .stage__main::after { inset: 0; border: 0; border-radius: inherit; box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--gold) 55%, transparent); }
 .stage--kitten .stage__main img { object-fit: cover; }
-.stage--kitten .stage__count { left: auto; right: 12px; }
+/* L'arrondi du haut rognerait l'étiquette : elle se pose en bas, bien lisible. Les miniatures
+   disent déjà combien il y a de photos, le compteur est donc inutile ici. */
+.stage--kitten .stage__badge { top: auto; left: 12px; bottom: 12px; max-width: calc(100% - 72px); box-shadow: var(--shadow-s); }
+.stage--kitten .stage__count { display: none; }
 .stage--kitten .stage__zoom { width: 36px; height: 36px; right: 12px; bottom: 12px; }
 .stage--kitten .stage__thumbs { gap: .45rem; padding-top: .75rem; }
 .stage--kitten .stage__thumb { flex-basis: 54px; height: 54px; border-radius: 14px; border-width: 2px; }

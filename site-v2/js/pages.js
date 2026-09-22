@@ -211,6 +211,7 @@
         else { const s = postsBox.closest('section'); if (s) s.hidden = true; }
       } catch (e) { const s = postsBox.closest('section'); if (s) s.hidden = true; }
     }
+    await homeGallery();
     guardImages(); setupReveal();
   }
 
@@ -642,45 +643,63 @@
   }
 
   /* ======================================================================
-     GALERIE
+     LA VIE À LA CHATTERIE (accueil) : la galerie, en mosaïque
+     La page Galerie n'existe plus : toutes les photos du site (chatons,
+     adultes, retraités) se retrouvent ici, par paquets. La visionneuse
+     parcourt toutes les photos, même celles pas encore montrées.
      ====================================================================== */
-  async function galerie() {
-    const box = $('#gallery-grid');
-    const filters = $('#gallery-filters');
-    const note = $('#gallery-count');
-    box.innerHTML = '<div class="gallery gallery--big">' + skeletons(8, false).replace(/skeleton--arch/g, 'skeleton skeleton--tile') + '</div>';
-    let all = [];
-    let current = 'toutes';
+  /**
+   * Une photo par chat à tour de rôle, en alternant chatons et adultes : la
+   * mosaïque ne commence pas par dix photos du même chaton.
+   */
+  function varier(photos) {
+    const groups = new Map();
+    photos.forEach((p) => {
+      const key = p.groupe + '|' + p.legende;
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push(p);
+    });
+    const kittens = [...groups.values()].filter((g) => g[0].groupe === 'chatons');
+    const adults = [...groups.values()].filter((g) => g[0].groupe !== 'chatons');
+    const order = [];
+    for (let i = 0; i < Math.max(kittens.length, adults.length); i++) {
+      if (kittens[i]) order.push(kittens[i]);
+      if (adults[i]) order.push(adults[i]);
+    }
+    const out = [];
+    for (let round = 0; order.some((g) => g[round]); round++) order.forEach((g) => { if (g[round]) out.push(g[round]); });
+    return out;
+  }
 
-    function render() {
-      const list = current === 'toutes' ? all : all.filter((p) => p.groupe === current);
-      if (note) note.textContent = plural(list.length, 'photo', 'photos');
-      if (!list.length) {
-        box.innerHTML = empty('Aucune photo dans cette catégorie', 'Essayez un autre filtre.');
-        return;
-      }
-      box.innerHTML = '<div class="gallery gallery--big" id="gallery-inner">' + list.map((p, i) =>
-        '<button type="button" data-index="' + i + '" data-full="' + esc(p.src) + '" data-alt="' + esc(p.legende) + '" aria-label="Agrandir la photo de ' + esc(p.legende) + '">' +
+  async function homeGallery() {
+    const box = $('#home-gallery');
+    const more = $('#home-gallery-more');
+    if (!box) return;
+    // Des rangées toujours pleines : 2 photos par rangée sur téléphone, 4 sur ordinateur
+    // (la vidéo occupe trois cases sur deux rangées).
+    const phone = window.matchMedia('(max-width: 699px)').matches;
+    const first = phone ? 6 : 10, step = phone ? 8 : 12;
+    let all = [], shown = 0;
+    function add(n) {
+      const html = all.slice(shown, shown + n).map((p, k) =>
+        '<button type="button" class="mosaic__tile reveal" data-mosaic="' + (shown + k) + '" aria-label="Agrandir la photo : ' + esc(p.legende) + '">' +
         '<img src="' + esc(p.src) + '" alt="' + esc(p.legende) + '" loading="lazy" data-guard>' +
-        '<span class="gallery__caption">' + esc(p.legende) + '</span>' +
-        '</button>').join('') + '</div>';
-      bindGallery($('#gallery-inner'));
+        '<span class="mosaic__caption" aria-hidden="true">' + esc(p.legende) + '</span></button>').join('');
+      box.insertAdjacentHTML('beforeend', html);
+      shown = Math.min(all.length, shown + n);
+      if (more) more.hidden = shown >= all.length;
       guardImages(box); setupReveal(box);
     }
-
     try {
-      all = (await api.gallery()).map((p) => Object.assign(p, { legende: niceName(p.legende) }));
-      render();
-      if (filters) {
-        filters.addEventListener('click', (e) => {
-          const chip = e.target.closest('.chip');
-          if (!chip) return;
-          current = chip.dataset.filter;
-          $$('.chip', filters).forEach((c) => c.setAttribute('aria-pressed', String(c === chip)));
-          render();
-        });
-      }
-    } catch (e) { fail(box, e); }
+      // Les photos des chatons portent aussi le nom de leur portée : on garde le prénom seul
+      all = varier(await api.gallery()).map((p) => ({ src: p.src, legende: niceName(String(p.legende).split(' · ')[0]) }));
+      add(first);
+      if (more) more.addEventListener('click', () => add(step));
+      box.addEventListener('click', (e) => {
+        const t = e.target.closest('[data-mosaic]');
+        if (t) window.BKUI.openLb(all.map((p) => ({ src: p.src, alt: p.legende })), Number(t.dataset.mosaic));
+      });
+    } catch (e) { /* la vidéo reste seule, la section garde tout son sens */ }
   }
 
   /* ======================================================================
@@ -736,5 +755,5 @@
     if (subject && field) field.value = subject;
   }
 
-  window.BKPages = { accueil, sexPage, retraites, galerie, ficheChat, chatons, portee, blog, article, listeAttente, temoignages, prefillContact };
+  window.BKPages = { accueil, sexPage, retraites, ficheChat, chatons, portee, blog, article, listeAttente, temoignages, prefillContact };
 })();

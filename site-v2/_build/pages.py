@@ -181,25 +181,23 @@ ACCUEIL = """
   </div>
 </section>
 
-<section>
+<section id="galerie">
   <div class="wrap">
-    <div class="split">
-      <div class="reveal">
-        <p class="eyebrow">Petit moment de vie</p>
-        <h2>Une chasse au trésor pas comme les autres</h2>
-        <p class="lede">Des chatons partent à l'aventure, entre le globe du salon et les feuilles du jardin.
-          Une vidéo toute simple, juste pour le plaisir de les voir vivre.</p>
-        <p><a class="link-arrow" href="galerie.html">Toutes nos photos</a></p>
-      </div>
-      <div class="reveal" data-delay="1">
-        <div class="video-frame">
-          <video data-autoplay muted loop playsinline preload="none" poster="assets/hero-poster.webp"
-                 aria-label="Vidéo : des chatons de la chatterie jouent au salon, puis explorent le jardin">
-            <source src="assets/hero.mp4" type="video/mp4">
-          </video>
-        </div>
+    <div class="section-head center">
+      <p class="eyebrow center">En images</p>
+      <h2>La vie à la chatterie</h2>
+      <p class="lede">Nos chats et nos chatons au quotidien. Touchez une photo pour l'agrandir, puis zoomez.</p>
+    </div>
+    <div class="mosaic" id="home-gallery">
+      <div class="mosaic__video reveal">
+        <video data-autoplay muted loop playsinline preload="none" poster="assets/hero-poster.webp"
+               aria-label="Vidéo : des chatons de la chatterie jouent au salon, puis explorent le jardin">
+          <source src="assets/hero.mp4" type="video/mp4">
+        </video>
+        <span class="mosaic__label">Une chasse au trésor pas comme les autres</span>
       </div>
     </div>
+    <div class="actions center"><button class="btn btn--ghost" type="button" id="home-gallery-more" hidden>Voir plus de photos</button></div>
   </div>
 </section>
 
@@ -865,38 +863,6 @@ RETRAITES = page_head_block(
 """
 
 # ==========================================================================
-# GALERIE
-# ==========================================================================
-GALERIE = page_head_block(
-    "En images",
-    "La galerie",
-    "Toutes nos photos au même endroit : les adultes, les chatons et les retraités. Cliquez sur une photo pour l'agrandir.",
-    [("index.html", "Accueil"), (None, "Galerie")],
-) + """
-<section class="tight" style="padding-top:0">
-  <div class="wrap">
-    <div class="filters" id="gallery-filters">
-      <button class="chip" type="button" data-filter="toutes" aria-pressed="true">Toutes</button>
-      <button class="chip" type="button" data-filter="adultes" aria-pressed="false">Nos adultes</button>
-      <button class="chip" type="button" data-filter="chatons" aria-pressed="false">Chatons</button>
-      <button class="chip" type="button" data-filter="retraites" aria-pressed="false">Retraités</button>
-      <span class="count-note" id="gallery-count"></span>
-    </div>
-    <div id="gallery-grid"></div>
-  </div>
-</section>
-
-<section class="panel panel--champagne tight">
-  <div class="wrap wrap--narrow center">
-    <h2>Vous avez adopté chez nous ?</h2>
-    <p class="lede">Envoyez-nous des photos de votre chat devenu grand. Rien ne nous fait plus plaisir, et
-      rien ne rassure mieux une famille qui hésite encore.</p>
-    <div class="actions center"><a class="btn btn--primary" href="contact.html?sujet=Photos%20de%20mon%20chat">Envoyer des photos</a></div>
-  </div>
-</section>
-"""
-
-# ==========================================================================
 # CONSEILS et ARTICLE
 # ==========================================================================
 CONSEILS = page_head_block(
@@ -1181,11 +1147,6 @@ PAGES = [
      "title": "Nos retraités — Chatterie British Kingdom",
      "desc": "Nos anciens reproducteurs, stérilisés, qui profitent d'une retraite tranquille et heureuse.",
      "scripts": '<script>BKPages.retraites();</script>'},
-
-    {"file": "galerie.html", "body": GALERIE, "prio": "0.6",
-     "title": "Galerie photos — Chatterie British Kingdom",
-     "desc": "Toutes les photos de nos British Shorthair et Longhair : adultes, chatons et retraités, en grand.",
-     "scripts": '<script>BKPages.galerie();</script>'},
 
     {"file": "conseils.html", "body": CONSEILS, "prio": "0.6",
      "title": "Conseils — Chatterie British Kingdom",

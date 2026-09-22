@@ -28,22 +28,23 @@ qui le signale : une page ne reste jamais vide.
 
 | Fichier | Rôle |
 |---|---|
-| `index.html` | Accueil : logo, portées du moment et leurs couples, chatons, anciens bébés, vidéo, conseils |
+| `index.html` | Accueil : logo, portées du moment et leurs couples, chatons, anciens bébés, « La vie à la chatterie » (la vidéo et toutes les photos du site en mosaïque, avec visionneuse), conseils |
 | `le-british.html` | Guide de la race : caractère, Shorthair et Longhair, robes et codes EMS |
 | `males.html` | Les mâles en activité, avec le texte « À propos de nos mâles » saisi dans l'administration |
 | `femelles.html` | Les femelles en activité, avec le texte « À propos de nos femelles » |
-| `chat.html?id=` | Fiche d'un chat : robe, yeux, âge, parents, photos, portée du moment |
+| `chat.html?id=` | Fiche d'un chat : grande photo et miniatures, zoom, description, santé, parents, portée du moment, ses copains |
 | `chatons.html` | Les portées en cours, présentées par couple, filtrables par statut |
 | `portee.html?id=` | Détail d'une portée : les parents, les chatons, le journal semaine par semaine |
 | `retraites.html` | Anciens reproducteurs, ceux que l'administration marque « archivé » |
-| `galerie.html` | Toutes les photos du site, filtrables, avec visionneuse |
 | `conseils.html`, `article.html?slug=` | Les articles du blog |
 | `liste-attente.html` | Réservation (acompte de 200 €), inscription, étapes, santé, 14 questions |
 | `contact.html` | Formulaire, coordonnées, carte |
 | `mentions-legales.html`, `politique-confidentialite.html` | Pages légales |
 
-Menu : Accueil, Le British, Mâles, Femelles, Chatons, Retraités, Galerie,
-Conseils, Liste d'attente, Contact, plus le bouton « Voir les chatons ».
+Menu : Accueil, Le British, Mâles, Femelles, Chatons, Retraités, Conseils,
+Liste d'attente, Contact, plus le bouton « Voir les chatons ». La galerie n'a
+plus de page à elle : toutes les photos sont sur l'accueil, section « La vie à
+la chatterie », un chat après l'autre, en alternant chatons et adultes.
 Sur la fiche d'un chat, la rubrique Mâles, Femelles ou Retraités s'allume
 selon le chat affiché.
 
@@ -56,6 +57,17 @@ selon le chat affiché.
 > balise `<meta name="bk-ga">`). Le choix est gardé six mois ; le lien
 > « Cookies » du pied de page rouvre le bandeau. Refuser efface les cookies
 > `_ga` déjà posés.
+
+> **Statistiques** : les visites ne sont comptées (`POST statistique` et
+> `statistique/heartbeat`) et Google Analytics ne peut se charger que sur
+> `chatterie-british-kingdom.fr`. Un aperçu (Netlify, ordinateur) n'envoie
+> rien : il ne fausse pas les chiffres de l'administration.
+
+> **Descriptions des reproducteurs** : `js/descriptions.js` contient un texte
+> par chat, tiré de vos publications Facebook et Instagram (ce qui est entre
+> guillemets est cité mot pour mot), avec les résultats de santé quand une
+> annonce les donne. Si l'API
+> renvoie un jour un champ `description`, il passe devant.
 
 > **Formulaire de liste d'attente** : il passe par le même envoi que le
 > formulaire de contact (`POST contact`), avec le sujet « Liste d'attente ».
@@ -81,6 +93,7 @@ site-v2/
 ├── js/demo-data.js        données d'aperçu (miroir de l'API, voir plus bas)
 ├── js/site.js             thème, menu, apparitions, visionneuse, formulaires
 ├── js/pages.js            rendu des contenus dynamiques, une fonction par page
+├── js/descriptions.js     le texte de présentation de chaque reproducteur
 ├── img/*.svg              couronne, blason, patte, nœud, silhouette, filets
 ├── assets/logo*.{png,webp} le logo de la chatterie
 ├── assets/photos/         photos de mise en page, utilisées aussi en production
@@ -130,7 +143,7 @@ celles de l'API, qui sont anciennes (voir « Ce qu'il reste à compléter »).
 1. **Directement dans le fichier `.html`** pour corriger un mot.
 2. **Par le générateur** si l'en-tête, le menu ou le pied de page changent :
    éditer `_build/pages.py` ou `_build/build.py`, puis lancer
-   `python3 _build/pages.py` depuis `site-v2/`. Cela réécrit les quinze pages
+   `python3 _build/pages.py` depuis `site-v2/`. Cela réécrit les quatorze pages
    et `sitemap.xml`. Attention, cette commande écrase les retouches faites à
    la main dans les `.html`.
 
@@ -210,12 +223,11 @@ par des commentaires `À COMPLÉTER` dans le code.
 
 ## Vérifications faites (22 septembre 2026)
 
-- **API réelle** : les 14 adresses (accueil, mâles, femelles, trois fiches,
-  chatons, deux portées, retraités, galerie, conseils, un article, liste
-  d'attente) se remplissent depuis l'API sans basculer sur l'aperçu, sans
+- **API réelle** : les 13 adresses (accueil, mâles, femelles, trois fiches,
+  chatons, deux portées, retraités, conseils, un article, liste d'attente) se remplissent depuis l'API sans basculer sur l'aperçu, sans
   erreur et sans image cassée. Les envois de statistiques ont été bloqués
   pendant le test pour ne pas compter de fausses visites.
-- **Contrôle automatique** : 17 adresses × 390 et 1 360 pixels × thèmes clair
+- **Contrôle automatique** : 16 adresses × 390 et 1 360 pixels × thèmes clair
   et sombre. Aucune erreur JavaScript, aucun défilement horizontal, aucune
   image cassée, et toutes les paires texte / fond au contraste WCAG AA
   (4,5:1 pour le texte courant, 3:1 pour les grands titres).

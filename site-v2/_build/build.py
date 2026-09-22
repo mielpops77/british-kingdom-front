@@ -51,7 +51,6 @@ NAV = [
     ("femelles.html", "Femelles"),
     ("chatons.html", "Chatons"),
     ("retraites.html", "Retraités"),
-    ("galerie.html", "Galerie"),
     ("conseils.html", "Conseils"),
     ("liste-attente.html", "Liste d'attente"),
     ("contact.html", "Contact"),
