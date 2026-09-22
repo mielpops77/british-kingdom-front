@@ -322,6 +322,7 @@ def footer(scripts=""):
   </div>
 </footer>
 <script src="js/demo-data.js"></script>
+<script src="js/photos-hd.js"></script>
 <script src="js/api.js"></script>
 <script src="js/site.js"></script>
 <script src="js/pages.js"></script>

@@ -25,7 +25,23 @@ jobs:
         run: |
           npm install
           npm run build --if-present
-      
+
+      # Le nouveau site public (dossier site-v2) remplace les pages publiques de l'application Angular.
+      # Celle-ci ne sert plus que l'espace de gestion, sur /admin : son index devient admin.html,
+      # et le web.config de site-v2/_deploy envoie toutes les adresses /admin/… vers ce fichier.
+      - name: Assemble the public site (site-v2) with the admin (Angular)
+        shell: bash
+        run: |
+          set -e
+          OUT=dist/British-Kingdom/browser
+          test -f "$OUT/index.html"
+          mv "$OUT/index.html" "$OUT/admin.html"
+          cp -r site-v2/. "$OUT/"
+          rm -rf "$OUT/_build" "$OUT/_deploy" "$OUT/README.md"
+          cp site-v2/_deploy/web.config "$OUT/web.config"
+          test -f "$OUT/index.html" && test -f "$OUT/admin.html" && test -f "$OUT/web.config" && test -f "$OUT/js/photos-hd.js"
+          ls "$OUT" | head -50
+
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:

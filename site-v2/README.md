@@ -155,24 +155,38 @@ regroupés en haut de `_build/build.py`, dans le dictionnaire `SITE`.
 
 ## Mise en ligne
 
-Le site est entièrement statique : il suffit de copier le contenu de
-`site-v2/` (hors `_build/`, et si l'on veut hors `assets/chats`,
-`assets/chatons` et `assets/parents`) à la racine du serveur.
+**Sur chatterie-british-kingdom.fr** (App Service Azure `BritishKingdomFront`,
+derrière Cloudflare) : chaque envoi sur la branche `main` lance
+`.github/workflows/main_britishkingdomfront.yml`, qui compile l'application
+Angular puis assemble le site publié :
+
+- l'index de l'application Angular devient `admin.html` : elle ne sert plus
+  que l'espace de gestion, toujours à l'adresse **/admin** ;
+- le contenu de `site-v2/` est copié à la racine (sans `_build/`, `_deploy/`
+  ni ce README) ;
+- `site-v2/_deploy/web.config` remplace les règles du serveur : anciennes
+  adresses redirigées (`/males/116` → `chat.html?id=116`, `/portee/233`,
+  `/blog`, `/blog/…`, `/conditions`, `/accueil`), adresses sans `.html`
+  conservées (`/males`, `/chatons`, `/contact`…), `/admin/…` vers l'espace
+  de gestion, photos WebP servies avec le bon type.
+
+Pour revenir à l'ancien site : annuler la fusion sur `main` (`git revert`),
+la publication repart toute seule.
+
+**Photos en haute définition** : `js/photos-hd.js` et `assets/hd/`
+remplacent à l'affichage les anciennes photos réduites (500 × 500,
+800 × 550) par leur original retrouvé dans les dossiers triés de la
+chatterie, comparé image par image et vérifié à l'œil (30 photos le
+22/09/2026). L'API reste la source : une photo retirée dans l'espace de
+gestion disparaît du site, une photo ajoutée s'affiche telle quelle.
 
 **Aperçu en ligne** : <https://chatterie-british-kingdom-v2.netlify.app>, un
-site Netlify à part, pour faire relire le nouveau site. Le vrai site et la
-maquette Netlify ne sont pas touchés. L'aperçu lit l'API réelle, ne compte
-pas les visites et n'est pas référencé par les moteurs de recherche (en-tête
-`X-Robots-Tag: noindex` ajouté dans la copie publiée, pas dans ce dossier).
+site Netlify à part, pour faire relire le nouveau site. L'aperçu lit l'API
+réelle, ne compte pas les visites et n'est pas référencé par les moteurs de
+recherche (en-tête `X-Robots-Tag: noindex` ajouté dans la copie publiée).
 Pour le mettre à jour : copier `site-v2/` sans `_build/` ni ce README, y
 ajouter le fichier `_headers`, puis
 `netlify deploy --dir <copie> --site chatterie-british-kingdom-v2 --prod`.
-
-Pour remplacer le site actuel sur l'App Service Azure `BritishKingdomFront`,
-il faudra adapter le workflow `.github/workflows/main_britishkingdomfront.yml`,
-qui publie aujourd'hui le résultat de la compilation Angular. Les adresses
-changent (`/males` devient `males.html`, etc.) : prévoir des redirections pour
-ne pas perdre le référencement.
 
 ## Ce qu'il reste à compléter
 
@@ -211,16 +225,15 @@ par des commentaires `À COMPLÉTER` dans le code.
   localisation), qui part toujours au chargement : pour être dispensé de
   consentement, il doit rester strictement limité à la mesure d'audience.
   Le site actuel, lui, charge encore Google Analytics sans consentement.
-- **Photos trop petites dans l'administration** (relevé du 22/09/2026) :
-  l'ancienne administration, avant juillet 2026, réduisait chaque photo à
-  500 × 500 pour le profil et à 800 × 550 pour la galerie, recadrée en
-  paysage. La nouvelle garde la pleine qualité (Vesunna, Akira, les chatons :
-  1 200 × 1 600 et plus). À remettre en ligne depuis les originaux des
-  dossiers « Reproducteurs - … » : Apéricube (profil et 14 photos en
-  311 × 414), Voltaire (profil 387 × 516), les profils d'Eden, Tina, Spooky,
-  Wilson et Zara, les galeries d'Eden, Tina, Spooky, Wilson et Willy Wonka.
-  Le site n'agrandit plus inutilement ces photos : le grand cadre des fiches
-  prend la forme de chaque photo, du portrait au paysage.
+- **Photos encore petites** (relevé du 22/09/2026) : l'ancienne administration,
+  avant juillet 2026, réduisait chaque photo à 500 × 500 pour le profil et à
+  800 × 550 pour la galerie. 30 d'entre elles sont désormais affichées en
+  haute définition (voir « Mise en ligne »). Pour les autres, aucun original
+  n'existe sur l'ordinateur : Tina, Eden, Prosper et Fripouille (profil et
+  galerie), le profil de Zara et une partie de sa galerie, 8 photos de Willy
+  Wonka, 3 de Spooky, 3 de Wilson, 2 d'Apéricube et 1 de Luna. Les remettre en
+  ligne depuis le téléphone, dans l'espace de gestion (/admin), les rendra
+  nettes : la nouvelle administration garde la pleine qualité.
 - **Dépistages réels** : les dates et laboratoires des tests (HCM, PKD, FIV,
   FeLV, groupes sanguins) ne sont pas encore affichés sur les fiches.
 

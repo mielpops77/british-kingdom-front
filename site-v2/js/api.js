@@ -35,7 +35,15 @@
   /* ---------- utilitaires ---------- */
   // Un chemin déjà utilisable : URL absolue, donnée en ligne, ou fichier local du site.
   const isAbs = (s) => /^(https?:)?\/\//i.test(s || '') || /^data:/i.test(s || '') || /^\.?\/?(assets|img)\//i.test(s || '');
-  const join = (base, file) => (!file ? '' : isAbs(file) ? file : base + encodeURIComponent(String(file).trim()).replace(/%2F/g, '/'));
+  // Une ancienne photo réduite par l'ancienne administration est remplacée par son original en haute
+  // définition quand on l'a retrouvé (js/photos-hd.js) ; sinon, la photo de l'API telle quelle.
+  const HD = window.BK_HD || {};
+  const join = (base, file) => {
+    if (!file) return '';
+    if (isAbs(file)) return file;
+    const name = String(file).trim();
+    return HD[base.slice(BLOB.length) + name] || base + encodeURIComponent(name).replace(/%2F/g, '/');
+  };
 
   /** Lit la première clé existante d'un objet (l'API mélange camelCase et PascalCase sur les bannières). */
   function pick(obj, keys, fallback) {
