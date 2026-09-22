@@ -264,11 +264,8 @@
     const o = opts || {};
     const list = photos.filter(Boolean).filter((p, i, a) => a.indexOf(p) === i);
     const multi = list.length > 1;
-    // Adresse absolue : une url() relative placée dans une variable CSS serait
-    // résolue par rapport à la feuille de style, pas à la page.
-    const bg = (src) => ' style="--stage-bg:url(&quot;' + esc(new URL(src, document.baseURI).href) + '&quot;)"';
     return '<div class="stage' + (o.cls ? ' ' + o.cls : '') + '" data-stage data-name="' + esc(name) + '">' +
-      '<div class="stage__main" data-stage-main role="button" tabindex="0" aria-label="Agrandir la photo de ' + esc(name) + '"' + (list[0] ? bg(list[0]) : '') + '>' +
+      '<div class="stage__main" data-stage-main role="button" tabindex="0" aria-label="Agrandir la photo de ' + esc(name) + '">' +
         (list[0]
           ? '<img src="' + esc(list[0]) + '" alt="' + esc(name + (multi ? ', photo 1 sur ' + list.length : '')) + '" data-guard' + (o.eager ? ' fetchpriority="high"' : ' loading="lazy"') + '>'
           : '<div class="img-fallback" aria-hidden="true"></div>') +
@@ -283,13 +280,9 @@
         '<img src="' + esc(src) + '" alt="" loading="lazy" data-guard></button>').join('') + '</div>' : '') +
       '</div>';
   }
-  /** Branche chaque galerie « grande photo + miniatures » d'un bloc, fond flouté compris. */
+  /** Branche chaque galerie « grande photo + miniatures » d'un bloc. */
   function bindStages(root) {
-    $$('[data-stage]', root).forEach((el) => {
-      window.BKUI.bindStage(el, el.dataset.name || '');
-      const main = $('[data-stage-main]', el), img = main && $('img', main);
-      if (img) new MutationObserver(() => main.style.setProperty('--stage-bg', 'url("' + img.src + '")')).observe(img, { attributes: true, attributeFilter: ['src'] });
-    });
+    $$('[data-stage]', root).forEach((el) => window.BKUI.bindStage(el, el.dataset.name || ''));
   }
 
   const EYES_PLURAL = { vert: 'verts', bleu: 'bleus', jaune: 'jaunes', 'doré': 'dorés', noir: 'noirs' };
