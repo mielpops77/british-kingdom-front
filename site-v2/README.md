@@ -188,6 +188,35 @@ Pour le mettre à jour : copier `site-v2/` sans `_build/` ni ce README, y
 ajouter le fichier `_headers`, puis
 `netlify deploy --dir <copie> --site chatterie-british-kingdom-v2 --prod`.
 
+## Référencement (Google et assistants d'IA)
+
+- **Données structurées** (schema.org, en JSON-LD) sur chaque page : la
+  chatterie (adresse, téléphone, réseaux, zone de livraison, SIRET), le site,
+  la page, son fil d'Ariane, et les 14 questions de la liste d'attente
+  (FAQPage). Les articles reçoivent les leurs (Article) par `js/pages.js`.
+- **Contenu lisible sans JavaScript** : `_build/donnees.py` lit l'API à la
+  construction et écrit les listes (mâles, femelles, retraités, portées et
+  chatons, articles) directement dans les pages. Les robots des assistants
+  d'IA, qui n'exécutent pas JavaScript, les voient ; le JavaScript les
+  remplace ensuite par les données en direct.
+- **Fiches** (`chat.html?id=…`, `chaton.html?id=…`, `portee.html?id=…`,
+  `article.html?slug=…`) : pas d'adresse de référence commune dans le HTML ;
+  `js/pages.js` pose la bonne, avec une description propre à chaque fiche.
+- **Plan du site** : toutes les pages et toutes les fiches (40 adresses le
+  22/09/2026). **llms.txt** : le résumé de la chatterie pour les assistants
+  d'IA (l'essentiel, les chats, les portées, les articles, la FAQ).
+- **robots.txt** accueille explicitement Google, Bing et les robots d'IA
+  (GPTBot, ClaudeBot, PerplexityBot…), sauf sur /admin.
+- **À chaque publication**, le workflow refait les pages avec les données du
+  jour, puis prévient Bing (qui alimente ChatGPT et Copilot) et les autres
+  moteurs IndexNow de toutes les adresses du plan du site (clé :
+  `b3b32bcc5211835e4ea33859bce2e5eb.txt` à la racine).
+
+À faire par vous (comptes à votre nom) : Google Search Console (ajouter le
+site, envoyer `sitemap.xml`), Bing Webmaster Tools (importer depuis Search
+Console), et une fiche Google Business Profile pour apparaître sur Google
+Maps et dans les recherches « chatterie près de chez moi ».
+
 ## Ce qu'il reste à compléter
 
 Ces points demandent une décision ou une information. Certains sont signalés

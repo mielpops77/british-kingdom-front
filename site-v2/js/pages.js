@@ -65,9 +65,14 @@
       '</div>';
   }
 
+  // Les listes arrivent déjà écrites dans la page (instantané pour les robots et les assistants d'IA) :
+  // on les garde à l'écran pendant le chargement, sans squelettes, jusqu'aux données en direct.
+  const hasSnapshot = (box) => !!(box && box.querySelector('[data-snapshot]'));
+  const loading = (box, html) => { if (box && !hasSnapshot(box)) box.innerHTML = html; };
+
   function fail(container, e) {
     console.error(e);
-    if (!container) return;
+    if (!container || hasSnapshot(container)) return;
     container.innerHTML = empty(
       'Contenu momentanément indisponible',
       'Nous n’arrivons pas à joindre notre base de données. Réessayez dans un instant, ou appelez-nous au <a href="tel:+33661654998">06 61 65 49 98</a>.'
@@ -79,6 +84,27 @@
   const pageOf = (h) => String(h || '').split(/[?#]/)[0].replace(/^\.?\//, '').replace(/\.html$/, '') || 'index';
   function markNav(href) {
     $$('.nav a').forEach((a) => { if (pageOf(a.getAttribute('href')) === pageOf(href)) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
+  }
+
+  /* ---------- référencement des fiches ----------
+     Une fiche (chat.html?id=116…) ne déclare rien dans son HTML : une fois le chat, le chaton, la
+     portée ou l'article connu, on pose son adresse de référence (canonical) et sa description. */
+  const DOMAINE = 'https://chatterie-british-kingdom.fr/';
+  function referencer(chemin, description) {
+    const pose = (selector, tag, attrs) => {
+      let el = document.head.querySelector(selector);
+      if (!el) { el = document.createElement(tag); document.head.appendChild(el); }
+      Object.keys(attrs).forEach((k) => el.setAttribute(k, attrs[k]));
+    };
+    pose('link[rel="canonical"]', 'link', { rel: 'canonical', href: DOMAINE + chemin });
+    pose('meta[property="og:url"]', 'meta', { property: 'og:url', content: DOMAINE + chemin });
+    pose('meta[property="og:title"]', 'meta', { property: 'og:title', content: document.title });
+    if (description) {
+      const texte = String(description).replace(/\s+/g, ' ').trim();
+      const court = texte.length > 170 ? texte.slice(0, 167).replace(/\s+\S*$/, '') + '…' : texte;
+      pose('meta[name="description"]', 'meta', { name: 'description', content: court });
+      pose('meta[property="og:description"]', 'meta', { property: 'og:description', content: court });
+    }
   }
 
   /* ---------- cartes ---------- */
@@ -169,7 +195,7 @@
     const countBox = $('#home-kitten-count');
     const heroBtn = $('#hero-kittens-btn');
     const postsBox = $('#home-posts');
-    if (kittensBox) kittensBox.innerHTML = '<div class="grid grid-4">' + skeletons(4) + '</div>';
+    loading(kittensBox, '<div class="grid grid-4">' + skeletons(4) + '</div>');
 
     try {
       const [portees, cats] = await Promise.all([api.portees(), api.allCats()]);
@@ -223,7 +249,7 @@
   async function sexPage(sex) {
     const box = $('#cats-list');
     const note = $('#cats-count');
-    box.innerHTML = skeletons(3, true);
+    loading(box, skeletons(3, true));
     try {
       const cats = await api.cats();
       // L'ordre est celui de l'administration, comme sur le site actuel
@@ -352,6 +378,7 @@
       // Les citations entre guillemets passent en italique
       const aboutHtml = esc(about).replace(/«\s*([^»]+?)\s*»/g, '«&nbsp;<em>$1</em>&nbsp;»');
       const health = Array.isArray(extra.sante) ? extra.sante : [];
+      referencer('chat.html?id=' + encodeURIComponent(cat.id), portraitSentence(cat) + (about ? ' ' + about.replace(/[«»]/g, '') : ' Élevage familial LOOF à Othis (77).'));
 
       box.innerHTML =
         '<div class="profile">' +
@@ -421,7 +448,7 @@
     const box = $('#litters');
     const summary = $('#kittens-summary');
     const filters = $('#kitten-filters');
-    box.innerHTML = skeletons(3, true);
+    loading(box, skeletons(3, true));
     let portees = [], cats = [], current = 'tous';
 
     function render() {
@@ -496,6 +523,9 @@
       document.title = (p.name || 'Portée') + ' — Chatterie British Kingdom';
       const bc = $('#litter-breadcrumb-name'); if (bc) bc.textContent = p.name || 'Portée';
       const weeks = fmt.ageWeeks(p.dateOfBirth);
+      referencer('portee.html?id=' + encodeURIComponent(p.id), 'Portée ' + (p.name || '') + ' de la Chatterie British Kingdom' +
+        (p.dateOfBirth ? ', nés le ' + fmt.date(p.dateOfBirth) : '') + '. ' + plural(p.chatons.length, 'chaton', 'chatons') +
+        (p.available ? ', dont ' + plural(p.available, 'disponible', 'disponibles') : '') + (p.dateOfSell ? ', départ à partir du ' + fmt.date(p.dateOfSell) : '') + '.');
 
       const facts = [
         ['Naissance', p.dateOfBirth ? fmt.date(p.dateOfBirth) : ''],
@@ -599,6 +629,7 @@
       if (dob) lede += (female ? ', née le ' : ', né le ') + fmt.date(dob);
       if (motherName && fatherName) lede += (female ? ', fille de ' : male ? ', fils de ' : ', enfant de ') + motherName + ' et de ' + fatherName;
       lede += '.';
+      referencer('chaton.html?id=' + encodeURIComponent(k.id), name + ' : ' + lede.charAt(0).toLowerCase() + lede.slice(1) + ' ' + k.statusLabel + ', à la Chatterie British Kingdom (Othis, 77).');
 
       const wish = {
         disponible: Il + ' attend encore sa famille',
@@ -709,7 +740,7 @@
      ====================================================================== */
   async function blog() {
     const box = $('#blog-list');
-    box.innerHTML = skeletons(3, true);
+    loading(box, skeletons(3, true));
     try {
       const posts = (await api.posts()).sort(byDateDesc('date'));
       if (!posts.length) { box.innerHTML = empty('Aucun article pour le moment', 'Nos conseils arrivent très bientôt.'); return; }
@@ -727,6 +758,17 @@
       if (!p || !p.slug) { box.innerHTML = empty('Article introuvable', 'Voir <a href="conseils.html">tous les articles</a>.'); return; }
       document.title = p.title + ' — Chatterie British Kingdom';
       const bc = $('#article-breadcrumb-name'); if (bc) bc.textContent = p.title;
+      referencer('article.html?slug=' + encodeURIComponent(p.slug), p.excerpt);
+      const ld = document.createElement('script');
+      ld.type = 'application/ld+json';
+      ld.textContent = JSON.stringify({
+        '@context': 'https://schema.org', '@type': 'Article', headline: p.title, description: p.excerpt || undefined,
+        datePublished: p.date || undefined, image: p.cover ? [p.cover] : undefined, inLanguage: 'fr-FR',
+        author: { '@type': 'Organization', name: 'Chatterie British Kingdom', url: DOMAINE },
+        publisher: { '@id': DOMAINE + '#chatterie' },
+        mainEntityOfPage: DOMAINE + 'article.html?slug=' + encodeURIComponent(p.slug)
+      });
+      document.head.appendChild(ld);
 
       const blocks = (p.content || []).map((b) => {
         const t = (b.type || 'p').toLowerCase();
@@ -753,7 +795,7 @@
   async function retraites() {
     const box = $('#retired-list');
     const note = $('#retired-count');
-    box.innerHTML = skeletons(3, true);
+    loading(box, skeletons(3, true));
     try {
       const list = await api.retired();
       if (note) note.textContent = list.length ? plural(list.length, 'chat', 'chats') : '';

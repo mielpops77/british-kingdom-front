@@ -1,4 +1,25 @@
+# Chatterie British Kingdom — tous les robots sont les bienvenus, sauf dans l'espace de gestion.
 User-agent: *
+Allow: /
+Disallow: /admin
+
+# Moteurs de recherche et assistants d'IA : accueillis explicitement
+User-agent: Googlebot
+User-agent: Google-Extended
+User-agent: Bingbot
+User-agent: GPTBot
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: ClaudeBot
+User-agent: Claude-SearchBot
+User-agent: Claude-User
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: Applebot
+User-agent: Applebot-Extended
+User-agent: DuckDuckBot
+User-agent: Meta-ExternalAgent
+User-agent: CCBot
 Allow: /
 Disallow: /admin
 

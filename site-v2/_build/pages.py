@@ -1334,22 +1334,22 @@ CONFIDENTIALITE = page_head_block(
 # ==========================================================================
 PAGES = [
     {"file": "index.html", "body": ACCUEIL, "freq": "weekly", "prio": "1.0",
-     "title": "Chatterie British Kingdom — Élevage de British Shorthair et Longhair à Othis (77)",
-     "desc": "Élevage familial de chats British Shorthair et British Longhair en Seine-et-Marne. Chatons inscrits au LOOF, élevés à la maison, départ vers 12 semaines.",
+     "title": "Chatterie British Kingdom — British Shorthair et Longhair LOOF à Othis (77)",
+     "desc": "Élevage familial de British Shorthair et Longhair LOOF à Othis (77), près de Roissy. Chatons élevés à la maison, départ vers 12 semaines, livraison France, Belgique, Suisse.",
      "scripts": '<script>BKPages.accueil();BKPages.temoignages("#testimonials",3);</script>'},
 
     {"file": "le-british.html", "body": LE_BRITISH, "prio": "0.7",
      "title": "Le British Shorthair et Longhair — caractère, physique, couleurs, entretien",
-     "desc": "Caractère, physique, Shorthair ou Longhair, robes et codes EMS, petits secrets et conseils d'entretien : tout pour faire connaissance avec le British avant de l'adopter."},
+     "desc": "Caractère, physique, Shorthair ou Longhair, robes et codes EMS, entretien : tout savoir sur le British avant de l'adopter, par un élevage familial LOOF de Seine-et-Marne."},
 
     {"file": "males.html", "body": MALES, "prio": "0.8",
-     "title": "Nos mâles — les étalons de la Chatterie British Kingdom",
-     "desc": "Les mâles reproducteurs de notre élevage de British Shorthair et Longhair : robe, couleur des yeux, âge, photos et portées.",
+     "title": "Mâles British Shorthair et Longhair LOOF — Chatterie British Kingdom",
+     "desc": "Nos étalons British Shorthair et British Longhair : robe, couleur des yeux, âge, photos et portées. Élevage familial LOOF à Othis, en Seine-et-Marne (77).",
      "scripts": '<script>BKPages.sexPage("male");</script>'},
 
     {"file": "femelles.html", "body": FEMELLES, "prio": "0.8",
-     "title": "Nos femelles — les reproductrices de la Chatterie British Kingdom",
-     "desc": "Les femelles reproductrices de notre élevage de British Shorthair et Longhair : robe, couleur des yeux, âge, photos et portées.",
+     "title": "Femelles British Shorthair et Longhair LOOF — Chatterie British Kingdom",
+     "desc": "Nos reproductrices British Shorthair et British Longhair : robe, couleur des yeux, âge, photos et portées. Élevage familial LOOF à Othis, en Seine-et-Marne (77).",
      "scripts": '<script>BKPages.sexPage("female");</script>'},
 
     {"file": "chat.html", "body": FICHE_CHAT, "sitemap": False,
@@ -1358,8 +1358,8 @@ PAGES = [
      "scripts": '<script src="js/descriptions.js"></script>\n<script>BKPages.ficheChat();</script>'},
 
     {"file": "chatons.html", "body": CHATONS, "freq": "weekly", "prio": "0.9",
-     "title": "Chatons British Shorthair et Longhair disponibles — Chatterie British Kingdom",
-     "desc": "Nos portées en cours, les chatons disponibles ou réservés, leurs parents et leur date de départ. Chatons inscrits au LOOF, départ vers 12 semaines.",
+     "title": "Chatons British Shorthair et Longhair à adopter — Seine-et-Marne (77)",
+     "desc": "Nos portées en cours : chatons British Shorthair et Longhair LOOF, leurs parents, leur âge et leur disponibilité. Départ vers 12 semaines depuis Othis, près de Roissy.",
      "scripts": '<script>BKPages.chatons();</script>'},
 
     {"file": "chaton.html", "body": FICHE_CHATON, "sitemap": False, "nav": "chatons.html",
@@ -1378,8 +1378,8 @@ PAGES = [
      "scripts": '<script>BKPages.retraites();</script>'},
 
     {"file": "conseils.html", "body": CONSEILS, "prio": "0.6",
-     "title": "Conseils — Chatterie British Kingdom",
-     "desc": "Nos conseils d'éleveur pour bien accueillir et bien nourrir votre British Shorthair ou Longhair.",
+     "title": "Conseils d'éleveur pour votre British — Chatterie British Kingdom",
+     "desc": "Nos conseils d'éleveur pour bien accueillir et bien nourrir votre British Shorthair ou Longhair : préparer l'arrivée du chaton, alimentation, santé.",
      "scripts": '<script>BKPages.blog();</script>'},
 
     {"file": "article.html", "body": ARTICLE, "sitemap": False, "nav": "conseils.html",
@@ -1388,13 +1388,13 @@ PAGES = [
      "scripts": '<script>BKPages.article();</script>'},
 
     {"file": "liste-attente.html", "body": LISTE_ATTENTE, "prio": "0.8",
-     "title": "Liste d'attente et adoption — Chatterie British Kingdom",
-     "desc": "Rejoignez notre liste d'attente : acompte de 200 € déduit du prix, étapes de l'adoption, santé du British et questions fréquentes.",
+     "title": "Liste d'attente et réservation d'un chaton British — Chatterie British Kingdom",
+     "desc": "Réservez votre futur chaton British Shorthair ou Longhair : acompte de 200 € déduit du prix, étapes de l'adoption, santé, préparation et 14 questions fréquentes.",
      "scripts": '<script>BKPages.listeAttente();</script>'},
 
     {"file": "contact.html", "body": CONTACT, "prio": "0.6", "freq": "yearly",
-     "title": "Contact — Chatterie British Kingdom, Othis (77)",
-     "desc": "Écrivez-nous pour une question, une visite ou un projet d'adoption. Visites sur rendez-vous à Othis, en Seine-et-Marne.",
+     "title": "Contact et visites — Chatterie British Kingdom à Othis (77)",
+     "desc": "Téléphone, e-mail ou formulaire : une question, une visite sur rendez-vous ou un projet d'adoption. Remise du chaton à Othis, à la gare de Roissy ou de Saint-Mard.",
      "scripts": '<script>BKPages.prefillContact();</script>'},
 
     {"file": "mentions-legales.html", "body": MENTIONS, "prio": "0.2", "freq": "yearly",
@@ -1407,5 +1407,15 @@ PAGES = [
 ]
 
 if __name__ == "__main__":
+    import donnees
     print("Génération du site :")
-    build(PAGES, MISE_A_JOUR)
+    # Les chats, portées et articles du moment, écrits dans les pages pour les robots qui
+    # n'exécutent pas JavaScript (assistants d'IA notamment), puis le plan du site et llms.txt
+    DONNEES = donnees.charger()
+    ECRITES = donnees.injecter(PAGES, DONNEES, ico("heart", 18))
+    print("  instantané des données de l'API : %d listes écrites dans les pages" % ECRITES)
+    build(PAGES, DONNEES["jour"].isoformat() if DONNEES else MISE_A_JOUR, donnees.adresses_fiches(DONNEES, SITE["domaine"]))
+    with open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "llms.txt"), "w",
+              encoding="utf-8", newline="\n") as fh:
+        fh.write(donnees.llms(DONNEES, SITE, PAGES))
+    print("  llms.txt à jour")

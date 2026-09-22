@@ -11,8 +11,10 @@ Aucune dépendance : python3 _build/pages.py
 Le site produit fonctionne sans ce script : il n'est là que pour éviter de
 recopier l'en-tête et le pied de page dans chaque fichier.
 """
+import json
 import os
 import re
+import urllib.parse
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.dirname(HERE)
@@ -139,6 +141,61 @@ def socials(cls="socials"):
         % (SITE[k], label, ico(k, 18)) for k, label in items))
 
 
+# Pages dont l'adresse porte un identifiant (?id=…, ?slug=…) : leur adresse de référence (canonical)
+# et leur description sont posées par js/pages.js, une fois le chat, le chaton ou l'article connu.
+FICHES = {"chat.html", "chaton.html", "portee.html", "article.html"}
+TYPES_PAGE = {"contact.html": "ContactPage", "males.html": "CollectionPage", "femelles.html": "CollectionPage",
+              "chatons.html": "CollectionPage", "retraites.html": "CollectionPage", "conseils.html": "CollectionPage"}
+
+
+def donnees_structurees(page, canon):
+    """Données structurées (schema.org) : la chatterie, le site, la page, son fil d'Ariane et ses questions."""
+    from donnees import faq  # même dossier
+    d = SITE["domaine"]
+    adresse = "%s, %s %s" % (SITE["adresse"], SITE["cp"], SITE["ville"])
+    chatterie = {
+        "@type": "LocalBusiness", "@id": d + "/#chatterie",
+        "name": SITE["nom"], "alternateName": "British Kingdom",
+        "description": ("Élevage familial de British Shorthair et de British Longhair inscrits au LOOF à %s (%s), "
+                        "à 20 minutes de l'aéroport Paris-Charles de Gaulle. Chatons élevés à la maison, départ vers "
+                        "12 semaines, livraison en France, en Belgique et en Suisse." % (SITE["ville"], SITE["region"])),
+        "slogan": SITE["slogan"],
+        "url": d + "/", "logo": d + "/assets/logo.png",
+        "image": [d + "/assets/og-image.jpg", d + "/assets/logo.png"],
+        "telephone": SITE["tel_lien"], "email": SITE["email"],
+        "address": {"@type": "PostalAddress", "streetAddress": SITE["adresse"], "postalCode": SITE["cp"],
+                    "addressLocality": SITE["ville"], "addressRegion": "Île-de-France", "addressCountry": "FR"},
+        "hasMap": "https://www.google.com/maps/search/?api=1&query=" + urllib.parse.quote(adresse),
+        "areaServed": [{"@type": "Country", "name": n} for n in ("France", "Belgique", "Suisse")],
+        "knowsAbout": ["British Shorthair", "British Longhair", "Élevage de chats de race", "Chatons inscrits au LOOF"],
+        "identifier": {"@type": "PropertyValue", "propertyID": "SIRET", "value": SITE["siret"]},
+        "contactPoint": {"@type": "ContactPoint", "telephone": SITE["tel_lien"], "email": SITE["email"],
+                         "contactType": "customer service", "availableLanguage": "fr", "areaServed": ["FR", "BE", "CH"]},
+        "sameAs": [SITE["facebook"], SITE["instagram"], SITE["tiktok"], SITE["youtube"]],
+    }
+    graphe = [chatterie, {"@type": "WebSite", "@id": d + "/#site", "url": d + "/", "name": SITE["nom"],
+                          "inLanguage": "fr-FR", "publisher": {"@id": d + "/#chatterie"}}]
+    if page["file"] not in FICHES:
+        questions = faq(page["body"])
+        type_page = TYPES_PAGE.get(page["file"], "WebPage")
+        la_page = {"@type": [type_page, "FAQPage"] if questions else type_page, "@id": canon + "#page", "url": canon,
+                   "name": page["title"], "description": page["desc"], "inLanguage": "fr-FR",
+                   "isPartOf": {"@id": d + "/#site"}, "about": {"@id": d + "/#chatterie"}}
+        if questions:
+            la_page["mainEntity"] = [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": r}}
+                                     for q, r in questions]
+        if page["file"] != "index.html":
+            libelle = dict(NAV).get(page["file"]) or page["title"].split(" — ")[0]
+            la_page["breadcrumb"] = {"@id": canon + "#fil"}
+            graphe.append({"@type": "BreadcrumbList", "@id": canon + "#fil", "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "Accueil", "item": d + "/"},
+                {"@type": "ListItem", "position": 2, "name": libelle, "item": canon}]})
+        graphe.append(la_page)
+    return ('\n  <script type="application/ld+json">\n' +
+            json.dumps({"@context": "https://schema.org", "@graph": graphe}, ensure_ascii=False, indent=1) +
+            "\n  </script>")
+
+
 def head(page):
     """En-tête HTML complet d'une page."""
     title = page["title"]
@@ -146,33 +203,10 @@ def head(page):
     slug = page["file"]
     canon = SITE["domaine"] + "/" + ("" if slug == "index.html" else slug)
     og_image = SITE["domaine"] + "/assets/og-image.jpg"
-    jsonld = ""
-    if slug == "index.html":
-        jsonld = """
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    "@id": "%(domaine)s/#chatterie",
-    "name": "%(nom)s",
-    "description": "Élevage familial de chats British Shorthair et British Longhair à %(ville)s, en %(region)s. Chatons inscrits au LOOF.",
-    "url": "%(domaine)s/",
-    "logo": "%(domaine)s/assets/logo.png",
-    "image": "%(domaine)s/assets/og-image.jpg",
-    "telephone": "%(tel_lien)s",
-    "email": "%(email)s",
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": "%(adresse)s",
-      "postalCode": "%(cp)s",
-      "addressLocality": "%(ville)s",
-      "addressRegion": "Île-de-France",
-      "addressCountry": "FR"
-    },
-    "areaServed": ["FR", "BE", "CH"],
-    "sameAs": ["%(facebook)s", "%(instagram)s", "%(tiktok)s", "%(youtube)s"]
-  }
-  </script>""" % SITE
+    jsonld = donnees_structurees(page, canon)
+    # Une fiche ne déclare pas d'adresse de référence commune : js/pages.js pose la sienne (chat.html?id=116…)
+    reference = "" if slug in FICHES else (
+        '<link rel="canonical" href="%s">\n  <meta property="og:url" content="%s">' % (canon, canon))
     return """<!doctype html>
 <html lang="fr">
 <head>
@@ -195,8 +229,10 @@ def head(page):
   </script>
   <title>%(title)s</title>
   <meta name="description" content="%(desc)s">
-  <link rel="canonical" href="%(canon)s">
-  <meta name="robots" content="index, follow">
+  %(reference)s
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="geo.region" content="FR-77">
+  <meta name="geo.placename" content="Othis">
   <meta name="theme-color" content="#fff8f5" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#22161f" media="(prefers-color-scheme: dark)">
 
@@ -204,10 +240,10 @@ def head(page):
   <meta property="og:site_name" content="%(nom)s">
   <meta property="og:title" content="%(title)s">
   <meta property="og:description" content="%(desc)s">
-  <meta property="og:url" content="%(canon)s">
   <meta property="og:image" content="%(og)s">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Quatre British de la Chatterie British Kingdom côte à côte">
   <meta property="og:locale" content="fr_FR">
   <meta name="twitter:card" content="summary_large_image">
 
@@ -224,7 +260,7 @@ def head(page):
 </head>
 <body>
 """ % {
-        "title": title, "desc": desc, "canon": canon, "og": og_image,
+        "title": title, "desc": desc, "reference": reference, "og": og_image,
         "nom": SITE["nom"], "fonts": FONTS, "ga": SITE["ga"], "jsonld": jsonld,
     }
 
@@ -381,27 +417,27 @@ def write(page):
     return path, len(html)
 
 
-def sitemap(pages, lastmod):
-    """Plan du site : toutes les pages publiques, sauf celles qui ont besoin d'un identifiant."""
+def sitemap(pages, lastmod, fiches=()):
+    """Plan du site : toutes les pages publiques, puis les fiches (chats, chatons, portées, articles)
+    lues dans l'API au moment de la construction."""
     urls = []
-    for p in pages:
-        if p.get("sitemap") is False:
-            continue
-        loc = SITE["domaine"] + "/" + ("" if p["file"] == "index.html" else p["file"])
+    entrees = [(SITE["domaine"] + "/" + ("" if p["file"] == "index.html" else p["file"]), lastmod,
+                p.get("freq", "monthly"), p.get("prio", "0.6")) for p in pages if p.get("sitemap") is not False]
+    for loc, mod, freq, prio in entrees + list(fiches):
         urls.append("  <url>\n    <loc>%s</loc>\n    <lastmod>%s</lastmod>\n    <changefreq>%s</changefreq>\n"
-                    "    <priority>%s</priority>\n  </url>" % (loc, lastmod, p.get("freq", "monthly"), p.get("prio", "0.6")))
+                    "    <priority>%s</priority>\n  </url>" % (loc.replace("&", "&amp;"), mod, freq, prio))
     xml = ('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
            + "\n".join(urls) + "\n</urlset>\n")
     with open(os.path.join(OUT, "sitemap.xml"), "w", encoding="utf-8", newline="\n") as fh:
         fh.write(xml)
 
 
-def build(pages, lastmod):
+def build(pages, lastmod, fiches=()):
     os.makedirs(OUT, exist_ok=True)
     total = 0
     for page in pages:
         path, size = write(page)
         total += size
         print("  %-34s %6.1f Ko" % (os.path.basename(path), size / 1024))
-    sitemap(pages, lastmod)
+    sitemap(pages, lastmod, fiches)
     print("  %d pages, %.0f Ko au total, sitemap.xml à jour" % (len(pages), total / 1024))

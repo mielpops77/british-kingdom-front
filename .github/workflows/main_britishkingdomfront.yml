@@ -26,6 +26,15 @@ jobs:
           npm install
           npm run build --if-present
 
+      # Les listes du site public (chats, portées, articles), le plan du site et llms.txt sont refaits avec
+      # les données du jour de l'API, pour les robots qui n'exécutent pas JavaScript (assistants d'IA).
+      # Si l'API ne répond pas, les pages du dépôt partent telles quelles.
+      - name: Refresh the public pages with today's data (site-v2)
+        shell: bash
+        env:
+          PYTHONIOENCODING: utf-8
+        run: python site-v2/_build/pages.py || echo "Pages du dépôt publiées telles quelles"
+
       # Le nouveau site public (dossier site-v2) remplace les pages publiques de l'application Angular.
       # Celle-ci ne sert plus que l'espace de gestion, sur /admin : son index devient admin.html,
       # et le web.config de site-v2/_deploy envoie toutes les adresses /admin/… vers ce fichier.
@@ -72,3 +81,20 @@ jobs:
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: .
+
+      # Prévient Bing (qui alimente ChatGPT et Copilot), Yandex, Seznam… de toutes les pages du plan
+      # du site (protocole IndexNow). La clé est le fichier <32 caractères>.txt publié à la racine.
+      - name: Notify search engines (IndexNow)
+        continue-on-error: true
+        run: |
+          KEY=$(ls | grep -E '^[0-9a-f]{32}\.txt$' | head -1 | sed 's/\.txt$//')
+          python3 - "$KEY" <<'EOF'
+          import json, re, sys, urllib.request
+          key = sys.argv[1]
+          urls = [u.replace("&amp;", "&") for u in re.findall(r"<loc>([^<]+)</loc>", open("sitemap.xml", encoding="utf-8").read())]
+          body = json.dumps({"host": "chatterie-british-kingdom.fr", "key": key,
+                             "keyLocation": "https://chatterie-british-kingdom.fr/%s.txt" % key, "urlList": urls}).encode()
+          req = urllib.request.Request("https://api.indexnow.org/indexnow", data=body,
+                                       headers={"Content-Type": "application/json; charset=utf-8"})
+          print("IndexNow :", urllib.request.urlopen(req, timeout=30).status, "-", len(urls), "adresses envoyées")
+          EOF

@@ -1,0 +1,482 @@
+# -*- coding: utf-8 -*-
+"""
+Les vraies données de la chatterie, lues dans l'API au moment de construire le site.
+
+Pourquoi : les listes de chats, de portées et d'articles sont affichées par JavaScript. Google sait
+l'exécuter, mais les robots des assistants d'IA (ChatGPT, Claude, Perplexity…) et beaucoup d'autres
+ne le font pas : pour eux, ces pages étaient vides. On écrit donc, à chaque construction, un
+instantané de ces listes directement dans le HTML ; le JavaScript le remplace ensuite par les
+données en direct, avec exactement la même présentation.
+
+Ce module fabrique aussi :
+- les adresses des fiches (chats, chatons, portées) pour sitemap.xml ;
+- llms.txt, le résumé de la chatterie destiné aux assistants d'IA.
+
+Si l'API ne répond pas, rien n'est cassé : les pages sont construites sans instantané.
+"""
+import datetime
+import html
+import json
+import os
+import re
+import urllib.parse
+import urllib.request
+
+API = "https://british-kingdom-back.azurewebsites.net/api/"
+BLOB = "https://stockagebackkingdom.blob.core.windows.net/conteneurkingdom/"
+PROFIL = 1
+HERE = os.path.dirname(os.path.abspath(__file__))
+SITE_DIR = os.path.dirname(HERE)
+
+MOIS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août",
+        "septembre", "octobre", "novembre", "décembre"]
+STATUTS = {"disponible": "Disponible", "reserve": "Réservé", "rester": "Reste à la chatterie", "vendu": "Adopté"}
+
+
+# --------------------------------------------------------------------------
+# Lecture de l'API
+# --------------------------------------------------------------------------
+def _lire(chemin):
+    req = urllib.request.Request(API + chemin, headers={"Accept": "application/json",
+                                                          "User-Agent": "chatterie-british-kingdom-build"})
+    with urllib.request.urlopen(req, timeout=25) as rep:
+        return json.loads(rep.read().decode("utf-8"))
+
+
+def charger():
+    """Chats, portées et articles, ou None si l'API est injoignable."""
+    try:
+        return {
+            "cats": _lire("cats?profilId=%d" % PROFIL) or [],
+            "portees": _lire("portee?profilId=%d" % PROFIL) or [],
+            "posts": _lire("blog?profilId=%d" % PROFIL) or [],
+            "jour": datetime.date.today(),
+        }
+    except Exception as err:  # l'API peut être en maintenance : on construit sans instantané
+        print("  API injoignable, pages construites sans instantané (%s)" % err)
+        return None
+
+
+def _table_hd():
+    """La table des photos en haute définition (js/photos-hd.js), clé « Dossier/fichier »."""
+    try:
+        with open(os.path.join(SITE_DIR, "js", "photos-hd.js"), encoding="utf-8") as fh:
+            texte = fh.read()
+        m = re.search(r"window\.BK_HD\s*=\s*(\{.*?\});", texte, re.S)
+        return json.loads(m.group(1)) if m else {}
+    except (OSError, ValueError):
+        return {}
+
+
+def _descriptions():
+    """Les textes de js/descriptions.js, par identifiant de chat."""
+    try:
+        with open(os.path.join(SITE_DIR, "js", "descriptions.js"), encoding="utf-8") as fh:
+            texte = fh.read()
+    except OSError:
+        return {}
+    out = {}
+    for m in re.finditer(r'(\d+)\s*:\s*\{[^{}]*?texte:\s*"((?:[^"\\]|\\.)*)"', texte, re.S):
+        out[int(m.group(1))] = m.group(2).replace('\\"', '"')
+    return out
+
+
+# --------------------------------------------------------------------------
+# Mise en forme : les mêmes règles que js/pages.js et js/api.js
+# --------------------------------------------------------------------------
+esc = html.escape
+
+
+def nom(s):
+    """« Willy wonka » devient « Willy Wonka »."""
+    s = re.sub(r"\s+", " ", str(s or "")).strip()
+    return re.sub(r"(^|[\s-])([a-zàâäçéèêëîïôöùûüÿñ])", lambda m: m.group(1) + m.group(2).upper(), s)
+
+
+def propre(s):
+    """Espaces en trop retirés, texte tout en capitales adouci, première lettre en majuscule."""
+    t = re.sub(r"\s+", " ", str(s or "")).strip()
+    if not t:
+        return ""
+    if t == t.upper() and re.search(r"[A-Z]", t):
+        t = t.lower()
+    return t[0].upper() + t[1:]
+
+
+def robe(s):
+    """« Bleu (BRI a) » → (« Bleu », « BRI a »)."""
+    t = propre(s)
+    m = re.match(r"^(.*?)\s*\(([^)]+)\)\s*$", t)
+    return (m.group(1).strip(), m.group(2).strip()) if m else (t, "")
+
+
+def race_courte(s):
+    return re.sub(r"^British\s+", "", propre(s), flags=re.I)
+
+
+def date_de(v):
+    m = re.match(r"^(\d{4})-(\d{2})-(\d{2})", str(v or ""))
+    return datetime.date(int(m.group(1)), int(m.group(2)), int(m.group(3))) if m else None
+
+
+def date_longue(v):
+    d = v if isinstance(v, datetime.date) else date_de(v)
+    return "%d %s %d" % (d.day, MOIS[d.month - 1], d.year) if d else ""
+
+
+def age(v, jour):
+    d = date_de(v)
+    if not d:
+        return ""
+    mois = (jour.year - d.year) * 12 + (jour.month - d.month) - (1 if jour.day < d.day else 0)
+    if mois < 0:
+        return "à naître"
+    if mois < 1:
+        jours = max(0, (jour - d).days)
+        sem = jours // 7
+        return ("%d semaine%s" % (sem, "s" if sem > 1 else "")) if sem >= 1 else ("%d jour%s" % (jours, "s" if jours > 1 else ""))
+    if mois < 24:
+        return "%d mois" % mois
+    ans, reste = divmod(mois, 12)
+    return "%d an%s" % (ans, "s" if ans > 1 else "") + (" et %d mois" % reste if reste else "")
+
+
+def semaines(v, jour):
+    d = date_de(v)
+    return (jour - d).days // 7 if d else None
+
+
+def pluriel(n, un, plusieurs):
+    return "%d %s" % (n, plusieurs if n > 1 else un)
+
+
+def statut(v):
+    s = str(v or "").lower()
+    s = s.replace("é", "e").replace("è", "e")
+    for cle, debut in (("disponible", "dispo"), ("reserve", "reserv"), ("rester", "rest"), ("vendu", "vend"), ("vendu", "adopt")):
+        if s.startswith(debut):
+            return cle
+    return s or "inconnu"
+
+
+def sexe(v):
+    s = str(v or "").lower()
+    return "male" if s.startswith("m") else "female" if s.startswith("f") else ""
+
+
+class Photos:
+    """Adresse d'une photo de l'API, remplacée par sa version haute définition quand elle existe."""
+
+    def __init__(self):
+        self.hd = _table_hd()
+
+    def __call__(self, dossier, fichier):
+        f = str(fichier or "").strip()
+        if not f:
+            return ""
+        if re.match(r"^(https?:)?//", f):
+            return f
+        return self.hd.get(dossier + "/" + f) or BLOB + dossier + "/" + urllib.parse.quote(f)
+
+
+# --------------------------------------------------------------------------
+# Les cartes, identiques à celles de js/pages.js
+# --------------------------------------------------------------------------
+def _arch(src, alt, cls=""):
+    if not src:
+        return '<div class="arch %s"><div class="img-fallback" aria-hidden="true"></div></div>' % cls
+    return '<div class="arch %s"><img src="%s" alt="%s" loading="lazy" data-guard></div>' % (cls, esc(src), esc(alt))
+
+
+def carte_chat(c, photo, jour):
+    n = nom(c.get("name"))
+    r, _ = robe(c.get("robe"))
+    breed = race_courte(c.get("breed"))
+    return ('<a class="card reveal" href="chat.html?id=%s">' % c.get("id") +
+            '<div class="card__media">' + _arch(photo("CatsProfil", c.get("urlProfil")), "Portrait de " + n) +
+            ('<div class="card__badges"><span class="pill pill--breed">%s</span></div>' % esc(breed) if breed else "") +
+            '</div><div class="card__body"><h3 class="card__title">%s</h3><p class="card__meta">' % esc(n) +
+            ('<span>%s</span>' % esc(r) if r else "") +
+            ('<span><b>%s</b></span>' % esc(age(c.get("dateOfBirth"), jour)) if c.get("dateOfBirth") else "") +
+            '</p></div></a>')
+
+
+def _photo_chaton(k, photo):
+    photos = k.get("photos") or []
+    if isinstance(photos, str):
+        photos = [photos]
+    return photo("Chatons", k.get("urlProfil") or (photos[0] if photos else ""))
+
+
+def carte_chaton(k, photo, jour):
+    n = nom(k.get("name")) or "Chaton"
+    r, _ = robe(k.get("robe"))
+    st = statut(k.get("status"))
+    sx = sexe(k.get("sex"))
+    marque = ('<span class="sex sex--m" aria-hidden="true">♂</span>' if sx == "male" else
+              '<span class="sex sex--f" aria-hidden="true">♀</span>' if sx == "female" else "")
+    libelle = {"male": "Mâle", "female": "Femelle"}.get(sx, "")
+    breed = race_courte(k.get("breed"))
+    return ('<a class="card card--kitten reveal" href="chaton.html?id=%s">' % k.get("id") +
+            '<div class="card__media">' + _arch(_photo_chaton(k, photo), "Photo du chaton " + n) +
+            '<div class="card__badges"><span class="pill pill--%s">%s</span></div></div>' % (esc(st), esc(STATUTS.get(st, propre(k.get("status"))))) +
+            '<div class="card__body"><h3 class="card__title">%s</h3><p class="card__meta">' % esc(n) +
+            ('<span>%s%s</span>' % (marque, libelle) if libelle else "") +
+            ('<span>%s</span>' % esc(r) if r else "") + '</p>' +
+            ('<p class="card__sub">%s%s</p>' % (esc(age(k.get("dateOfBirth"), jour)), (" · " + esc(breed)) if breed else "") if k.get("dateOfBirth") else "") +
+            '</div></a>')
+
+
+def couple(p, cats, photo, lie, coeur):
+    par_id = {str(c.get("id")): c for c in cats}
+    mere, pere = par_id.get(str(p.get("idMaman"))), par_id.get(str(p.get("idPapa")))
+    ext = p.get("externalFatherName") or ""
+    photo_pere = photo("CatsParents", p.get("externalFatherPhoto")) if ext else photo("CatsProfil", p.get("urlProfilFather"))
+    photo_mere = photo("CatsProfil", p.get("urlProfilMother"))
+
+    def un(chat, src, role, externe=""):
+        n = nom(chat.get("name")) if chat else externe
+        src = src or (photo("CatsProfil", chat.get("urlProfil")) if chat else "")
+        dedans = ('<span class="couple__photo">' +
+                  ('<img src="%s" alt="" loading="lazy" data-guard>' % esc(src) if src else '<span class="img-fallback" aria-hidden="true"></span>') +
+                  '</span><span class="couple__role">%s</span>' % role +
+                  ('<span class="couple__name">%s</span>' % esc(n) if n else "") +
+                  ('<span class="couple__robe">%s</span>' % esc(robe(chat.get("robe"))[0]) if chat else
+                   ('<span class="couple__robe">Saillie extérieure</span>' if externe else "")))
+        if lie and chat:
+            return '<a class="couple__one" href="chat.html?id=%s">%s</a>' % (chat.get("id"), dedans)
+        return '<span class="couple__one">%s</span>' % dedans
+
+    return ('<div class="couple">' + un(pere, photo_pere, "Papa", ext) +
+            '<span class="couple__heart" aria-hidden="true">%s</span>' % coeur +
+            un(mere, photo_mere, "Maman") + '</div>')
+
+
+def _disponibles(p):
+    return [k for k in (p.get("chatons") or []) if statut(k.get("status")) == "disponible"]
+
+
+def _etat_portee(p):
+    n = len(_disponibles(p))
+    return ('<span class="pill pill--disponible">%s</span>' % pluriel(n, "disponible", "disponibles") if n
+            else '<span class="pill pill--vendu">Complète</span>')
+
+
+def carte_article(a, photo, i):
+    titre = a.get("title") or ""
+    return ('<a class="card card--post reveal" data-delay="%d" href="article.html?slug=%s">' % (i % 3, urllib.parse.quote(a.get("slug") or "")) +
+            '<div class="card__media">' + _arch(photo("ImgDivers", a.get("coverImage")), titre, "arch--landscape") +
+            ('<div class="card__badges"><span class="pill pill--breed">%s</span></div>' % esc(a["category"]) if a.get("category") else "") +
+            '</div><div class="card__body"><h3 class="card__title">%s</h3>' % esc(titre) +
+            '<p class="card__meta"><span>%s</span>%s</p>' % (esc(date_longue(a.get("date"))),
+                                                           ("<span>%d min de lecture</span>" % int(a["readingTime"])) if a.get("readingTime") else "") +
+            ('<p class="card__excerpt">%s</p>' % esc(a["excerpt"]) if a.get("excerpt") else "") +
+            '</div></a>')
+
+
+# --------------------------------------------------------------------------
+# Les instantanés, page par page
+# --------------------------------------------------------------------------
+def _portees_en_ligne(d):
+    ps = [p for p in d["portees"] if p and not p.get("archivee")]
+    return sorted(ps, key=lambda p: str(p.get("dateOfBirth") or ""), reverse=True)
+
+
+def _note(d):
+    # Visible seulement sans JavaScript (robots, lecteurs sans script) : la page se met ensuite à jour en direct
+    return '<p class="small snapshot-note">Disponibilités au %s.</p>' % date_longue(d["jour"])
+
+
+def instantanes(d, coeur):
+    """{fichier: {conteneur: html}} pour les pages qui affichent des données de l'API."""
+    photo = Photos()
+    jour = d["jour"]
+    actifs = [c for c in d["cats"] if c and not c.get("archivee")]
+    retraites = sorted([c for c in d["cats"] if c and c.get("archivee")], key=lambda c: str(c.get("dateOfBirth") or ""))
+    portees = _portees_en_ligne(d)
+    articles = sorted(d["posts"], key=lambda a: str(a.get("date") or ""), reverse=True)
+    out = {}
+
+    for fichier, sx in (("males.html", "male"), ("femelles.html", "female")):
+        liste = [c for c in actifs if sexe(c.get("sex")) == sx]
+        if liste:
+            grille = "grid-4" if len(liste) == 4 or len(liste) > 6 else "grid-3"
+            out[fichier] = {"cats-list": '<div data-snapshot><div class="grid %s cats">%s</div></div>' % (
+                grille, "".join(carte_chat(c, photo, jour) for c in liste))}
+
+    if retraites:
+        out["retraites.html"] = {"retired-list": '<div data-snapshot><div class="grid grid-3 cats">%s</div></div>' % "".join(
+            carte_chat(c, photo, jour) for c in retraites)}
+
+    if portees:
+        blocs = []
+        for i, p in enumerate(portees):
+            sem = semaines(p.get("dateOfBirth"), jour)
+            meta = ""
+            if p.get("dateOfBirth"):
+                meta += "<span>Nés le %s%s</span>" % (date_longue(p["dateOfBirth"]), (" · " + pluriel(sem, "semaine", "semaines")) if sem is not None and sem >= 0 else "")
+            if p.get("dateOfSell"):
+                meta += "<span>Départ à partir du %s</span>" % date_longue(p["dateOfSell"])
+            chatons = p.get("chatons") or []
+            blocs.append(
+                '<article class="litter reveal"><header class="litter__head">' + couple(p, d["cats"], photo, True, coeur) +
+                '<div class="litter__info"><p class="eyebrow">Portée %d sur %d</p><h2>%s</h2>' % (i + 1, len(portees), esc(p.get("name") or "Portée")) +
+                '<p class="litter__meta">%s</p>' % meta +
+                '<p class="litter__actions">%s<a class="link-arrow" href="portee.html?id=%s">La portée en détail</a></p></div></header>' % (_etat_portee(p), p.get("id")) +
+                ('<div class="grid grid-4 kittens">%s</div>' % "".join(carte_chaton(k, photo, jour) for k in chatons) if chatons
+                 else '<p class="small">Les chatons seront présentés ici dès les premières photos.</p>') +
+                '</article>')
+        out["chatons.html"] = {"litters": '<div data-snapshot>%s%s</div>' % (_note(d), "".join(blocs))}
+
+        # Accueil : les portées, puis huit chatons, un de chaque portée à tour de rôle
+        cartes = "".join(
+            '<a class="litter-card reveal" href="portee.html?id=%s">' % p.get("id") + couple(p, d["cats"], photo, False, coeur) +
+            '<span class="litter-card__name">%s</span>' % esc(p.get("name") or "Portée") +
+            '<span class="litter-card__meta">%s%s</span>' % (("Nés le %s · " % date_longue(p["dateOfBirth"])) if p.get("dateOfBirth") else "",
+                                                            pluriel(len(p.get("chatons") or []), "chaton", "chatons")) +
+            _etat_portee(p) + '</a>' for p in portees)
+        par_portee = [_disponibles(p) for p in portees]
+        melange, i = [], 0
+        while any(len(l) > i for l in par_portee):
+            melange += [l[i] for l in par_portee if len(l) > i]
+            i += 1
+        autres = [k for p in portees for k in (p.get("chatons") or []) if statut(k.get("status")) != "disponible"]
+        choisis = (melange + autres)[:8]
+        out["index.html"] = {"home-litters": '<div data-snapshot><div class="couples">%s</div></div>' % cartes}
+        if choisis:
+            out["index.html"]["home-kittens"] = '<div data-snapshot>%s<div class="grid grid-4 kittens">%s</div></div>' % (
+                _note(d), "".join(carte_chaton(k, photo, jour) for k in choisis))
+
+    if articles:
+        out.setdefault("index.html", {})["home-posts"] = '<div data-snapshot><div class="grid grid--center">%s</div></div>' % "".join(
+            carte_article(a, photo, i) for i, a in enumerate(articles[:3]))
+        out["conseils.html"] = {"blog-list": '<div data-snapshot><div class="grid grid--center">%s</div></div>' % "".join(
+            carte_article(a, photo, i) for i, a in enumerate(articles))}
+    return out
+
+
+def injecter(pages, d, coeur):
+    """Écrit les instantanés dans les conteneurs vides des pages (<div id="…"></div>)."""
+    if not d:
+        return 0
+    tout, n = instantanes(d, coeur), 0
+    for page in pages:
+        for cid, contenu in tout.get(page["file"], {}).items():
+            vide = '<div id="%s"></div>' % cid
+            if vide in page["body"]:
+                page["body"] = page["body"].replace(vide, '<div id="%s">%s</div>' % (cid, contenu), 1)
+                n += 1
+    return n
+
+
+# --------------------------------------------------------------------------
+# Plan du site : les fiches
+# --------------------------------------------------------------------------
+def adresses_fiches(d, domaine):
+    """[(adresse, dernière modification, fréquence, priorité)] des fiches de chats, de chatons et de portées."""
+    if not d:
+        return []
+    jour = d["jour"].isoformat()
+    out = []
+    for c in d["cats"]:
+        if c and c.get("id") is not None:
+            out.append(("%s/chat.html?id=%s" % (domaine, c["id"]), jour, "monthly", "0.6" if c.get("archivee") else "0.7"))
+    for p in _portees_en_ligne(d):
+        out.append(("%s/portee.html?id=%s" % (domaine, p["id"]), jour, "weekly", "0.7"))
+        for k in p.get("chatons") or []:
+            out.append(("%s/chaton.html?id=%s" % (domaine, k["id"]), jour, "weekly", "0.7"))
+    for a in d["posts"]:
+        if a.get("slug"):
+            out.append(("%s/article.html?slug=%s" % (domaine, urllib.parse.quote(a["slug"])), jour, "yearly", "0.5"))
+    return out
+
+
+# --------------------------------------------------------------------------
+# llms.txt : le résumé pour les assistants d'IA
+# --------------------------------------------------------------------------
+def _texte(h):
+    """HTML → texte simple."""
+    t = re.sub(r"<[^>]+>", " ", h)
+    t = html.unescape(t).replace(" ", " ")
+    return re.sub(r"\s+", " ", t).strip()
+
+
+def faq(body):
+    """[(question, réponse)] des blocs <details class="faq"> d'une page."""
+    # Seulement les vraies questions (class="faq" tout court) : d'autres volets repliables en reprennent le style
+    return [(_texte(q), _texte(r)) for q, r in re.findall(
+        r'<details class="faq">\s*<summary>(.*?)</summary>\s*<div class="faq__body">(.*?)</div>\s*</details>', body, re.S)]
+
+
+def llms(d, site, pages):
+    dom = site["domaine"]
+    j = d["jour"] if d else datetime.date.today()
+    L = ["# %s" % site["nom"], "",
+         "> Élevage familial de chats British Shorthair et British Longhair inscrits au LOOF, à %s (%s, 77), "
+         "à 20 minutes de l'aéroport Paris-Charles de Gaulle. Les chatons naissent et grandissent à la maison, "
+         "au milieu de la vie de famille, et partent vers 12 semaines. Livraison en France, en Belgique et en Suisse." % (site["ville"], site["region"]),
+         "", "## L'essentiel",
+         "- Races : British Shorthair (poil court) et British Longhair (poil mi-long), inscrits au LOOF.",
+         "- Adresse : %s, %s %s (%s, Île-de-France). Visites uniquement sur rendez-vous." % (site["adresse"], site["cp"], site["ville"], site["region"]),
+         "- Téléphone : %s (pas d'appels masqués). E-mail : %s." % (site["tel"], site["email"]),
+         "- Remise du chaton à Othis, à la gare de Roissy ou de Saint-Mard ; taxi animalier pour plus loin. Livraison en France, en Belgique et en Suisse.",
+         "- Au départ, vers 12 semaines : certificat LOOF, puce électronique d'identification, premières vaccinations, carnet de santé, un peu de nourriture et de litière. Les chatons ne sont pas stérilisés avant le départ.",
+         "- Réservation par la liste d'attente, avec un acompte de %s déduit du prix. Les prix ne sont pas publiés : ils se demandent par téléphone ou par e-mail." % site["acompte"],
+         "- Entreprise : SIREN %s, SIRET %s." % (site["siren"], site["siret"]),
+         "- Réseaux : Facebook (%s), Instagram (%s), TikTok (%s), YouTube (%s)." % (site["facebook"], site["instagram"], site["tiktok"], site["youtube"]),
+         "", "## Pages"]
+    for p in pages:
+        if p.get("sitemap") is False:
+            continue
+        adresse = dom + "/" + ("" if p["file"] == "index.html" else p["file"])
+        L.append("- [%s](%s) : %s" % (p["title"].split(" — ")[0], adresse, p["desc"]))
+    if d:
+        textes = _descriptions()
+        L += ["", "## Nos chats (au %s)" % date_longue(j)]
+        for titre, liste in (
+                ("Mâles", [c for c in d["cats"] if not c.get("archivee") and sexe(c.get("sex")) == "male"]),
+                ("Femelles", [c for c in d["cats"] if not c.get("archivee") and sexe(c.get("sex")) == "female"]),
+                ("Retraités", [c for c in d["cats"] if c.get("archivee")])):
+            if not liste:
+                continue
+            L += ["", "### " + titre]
+            for c in liste:
+                r, ems = robe(c.get("robe"))
+                yeux = propre(c.get("eyeColor")).lower()
+                # Même accord que les fiches (js/pages.js) : « yeux verts », « yeux vairons bleu/marron »
+                yeux = ("vairons" + yeux[len("vairon"):].lstrip("s")) if yeux.startswith("vairon") else \
+                    {"vert": "verts", "bleu": "bleus", "jaune": "jaunes", "doré": "dorés", "noir": "noirs"}.get(yeux, yeux)
+                fem = sexe(c.get("sex")) == "female"
+                ligne = "- [%s](%s/chat.html?id=%s) : %s %s%s%s%s." % (
+                    nom(c.get("name")), dom, c.get("id"), propre(c.get("breed")) or "British", (r or "").lower(),
+                    (" (%s)" % ems) if ems else "", (", yeux %s" % yeux) if yeux else "",
+                    (", née le " if fem else ", né le ") + date_longue(c["dateOfBirth"]) if c.get("dateOfBirth") else "")
+                if textes.get(c.get("id")):
+                    ligne += " " + textes[c["id"]]
+                L.append(ligne)
+        portees = _portees_en_ligne(d)
+        if portees:
+            L += ["", "## Portées en cours (disponibilités au %s)" % date_longue(j)]
+            for p in portees:
+                chatons = []
+                for k in p.get("chatons") or []:
+                    r, _ = robe(k.get("robe"))
+                    chatons.append("[%s](%s/chaton.html?id=%s) (%s, %s, %s)" % (
+                        nom(k.get("name")), dom, k.get("id"), {"male": "mâle", "female": "femelle"}.get(sexe(k.get("sex")), "chaton"),
+                        (r or "").lower(), STATUTS.get(statut(k.get("status")), "").lower()))
+                L.append("- [%s](%s/portee.html?id=%s) : %s%s. %s" % (
+                    p.get("name") or "Portée", dom, p.get("id"),
+                    ("nés le " + date_longue(p["dateOfBirth"])) if p.get("dateOfBirth") else "",
+                    (", départ à partir du " + date_longue(p["dateOfSell"])) if p.get("dateOfSell") else "",
+                    ("Chatons : " + ", ".join(chatons) + ".") if chatons else ""))
+        if d["posts"]:
+            L += ["", "## Conseils"]
+            for a in sorted(d["posts"], key=lambda a: str(a.get("date") or ""), reverse=True):
+                L.append("- [%s](%s/article.html?slug=%s) : %s" % (a.get("title"), dom, urllib.parse.quote(a.get("slug") or ""), a.get("excerpt") or ""))
+    questions = [q for p in pages for q in faq(p["body"])]
+    if questions:
+        L += ["", "## Questions fréquentes"]
+        for q, r in questions:
+            L += ["", "### " + q, r]
+    L += ["", "---", "Dernière mise à jour : %s. Source : %s" % (date_longue(j), dom + "/")]
+    return "\n".join(L) + "\n"
