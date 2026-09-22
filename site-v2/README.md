@@ -156,6 +156,15 @@ Le site est entièrement statique : il suffit de copier le contenu de
 `site-v2/` (hors `_build/`, et si l'on veut hors `assets/chats`,
 `assets/chatons` et `assets/parents`) à la racine du serveur.
 
+**Aperçu en ligne** : <https://chatterie-british-kingdom-v2.netlify.app>, un
+site Netlify à part, pour faire relire le nouveau site. Le vrai site et la
+maquette Netlify ne sont pas touchés. L'aperçu lit l'API réelle, ne compte
+pas les visites et n'est pas référencé par les moteurs de recherche (en-tête
+`X-Robots-Tag: noindex` ajouté dans la copie publiée, pas dans ce dossier).
+Pour le mettre à jour : copier `site-v2/` sans `_build/` ni ce README, y
+ajouter le fichier `_headers`, puis
+`netlify deploy --dir <copie> --site chatterie-british-kingdom-v2 --prod`.
+
 Pour remplacer le site actuel sur l'App Service Azure `BritishKingdomFront`,
 il faudra adapter le workflow `.github/workflows/main_britishkingdomfront.yml`,
 qui publie aujourd'hui le résultat de la compilation Angular. Les adresses

@@ -75,8 +75,10 @@
   }
 
   /** Marque dans le menu la rubrique d'une page qui n'y figure pas (fiche d'un chat). */
+  // « males.html », « /males » et « ./males » désignent la même page (certains hébergeurs réécrivent les liens)
+  const pageOf = (h) => String(h || '').split(/[?#]/)[0].replace(/^\.?\//, '').replace(/\.html$/, '') || 'index';
   function markNav(href) {
-    $$('.nav a').forEach((a) => { if (a.getAttribute('href') === href) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
+    $$('.nav a').forEach((a) => { if (pageOf(a.getAttribute('href')) === pageOf(href)) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
   }
 
   /* ---------- cartes ---------- */
