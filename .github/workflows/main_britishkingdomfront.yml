@@ -39,6 +39,9 @@ jobs:
           cp -r site-v2/. "$OUT/"
           rm -rf "$OUT/_build" "$OUT/_deploy" "$OUT/README.md"
           cp site-v2/_deploy/web.config "$OUT/web.config"
+          # Les deux vidéos de l'ancien site Angular (110 Mo) ne servent plus à rien en ligne :
+          # elles restent dans le dépôt (src/assets), mais ne sont plus envoyées au serveur.
+          rm -f "$OUT/assets/vidos.mp4" "$OUT/assets/IMG_9201.mp4"
           test -f "$OUT/index.html" && test -f "$OUT/admin.html" && test -f "$OUT/web.config" && test -f "$OUT/js/photos-hd.js"
           ls "$OUT" | head -50
 
