@@ -631,6 +631,38 @@ FICHE_CHAT = """
 """ % {"back": ico("back", 18)}
 
 # ==========================================================================
+# FICHE CHATON
+# ==========================================================================
+FICHE_CHATON = """
+<section class="page-head page-head--compact">
+  <div class="wrap page-head__row">
+    <a class="back-pill" href="chatons.html" id="kitten-back">%(back)s<span>Nos chatons</span></a>
+    <nav class="breadcrumb" aria-label="Fil d'Ariane">
+      <span><a href="index.html">Accueil</a></span>
+      <span><a href="chatons.html">Chatons</a></span>
+      <span id="kitten-breadcrumb-litter" hidden><a href="chatons.html" id="kitten-breadcrumb-litter-link">Portée</a></span>
+      <span id="kitten-breadcrumb-name">Chaton</span>
+    </nav>
+  </div>
+</section>
+<section class="tight" style="padding-top:.4rem">
+  <div class="wrap"><div id="kitten-detail"></div>
+    <p class="legal-note">Chatons proposés par un élevage déclaré : AMIEL Zeitoun, %(ville)s, SIREN %(siren)s.
+      <a href="mentions-legales.html">Mentions légales</a></p>
+  </div>
+</section>
+<section class="panel panel--blush tight" id="kitten-siblings-section" hidden>
+  <div class="wrap">
+    <div class="section-head center">
+      <p class="eyebrow center">La même portée</p>
+      <h2 id="kitten-siblings-title">Ses frères et sœurs</h2>
+    </div>
+    <div class="friends" id="kitten-siblings"></div>
+  </div>
+</section>
+""" % {"back": ico("back", 18), "ville": SITE["ville"], "siren": SITE["siren"]}
+
+# ==========================================================================
 # CHATONS
 # ==========================================================================
 CHATONS = page_head_block(
@@ -1329,6 +1361,11 @@ PAGES = [
      "title": "Chatons British Shorthair et Longhair disponibles — Chatterie British Kingdom",
      "desc": "Nos portées en cours, les chatons disponibles ou réservés, leurs parents et leur date de départ. Chatons inscrits au LOOF, départ vers 12 semaines.",
      "scripts": '<script>BKPages.chatons();</script>'},
+
+    {"file": "chaton.html", "body": FICHE_CHATON, "sitemap": False, "nav": "chatons.html",
+     "title": "Fiche d'un chaton — Chatterie British Kingdom",
+     "desc": "Un de nos chatons British Shorthair ou Longhair : ses photos, sa robe, sa date de naissance, ses parents et sa disponibilité.",
+     "scripts": '<script>BKPages.ficheChaton();</script>'},
 
     {"file": "portee.html", "body": PORTEE, "sitemap": False, "nav": "chatons.html",
      "title": "Une portée — Chatterie British Kingdom",

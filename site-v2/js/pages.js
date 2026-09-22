@@ -102,7 +102,7 @@
 
   function kittenCard(k) {
     const r = splitRobe(k.robe);
-    return '<a class="card card--kitten reveal" href="portee.html?id=' + encodeURIComponent(k.idPortee) + '#chaton-' + encodeURIComponent(k.id) + '">' +
+    return '<a class="card card--kitten reveal" href="chaton.html?id=' + encodeURIComponent(k.id) + '">' +
       '<div class="card__media">' + archImg(k.photo, 'Photo du chaton ' + niceName(k.name)) +
         '<div class="card__badges"><span class="pill pill--' + k.status + '">' + esc(k.statusLabel) + '</span></div>' +
       '</div>' +
@@ -539,16 +539,147 @@
     const r = splitRobe(k.robe);
     const name = niceName(k.name) || 'Chaton';
     const photos = k.photos.length ? k.photos : (k.photo ? [k.photo] : []);
+    const fiche = 'chaton.html?id=' + encodeURIComponent(k.id);
     return '<article class="kitten-detail reveal" id="chaton-' + esc(k.id) + '">' +
       stage(photos, name, { cls: 'stage--kitten', badge: '<span class="stage__badge pill pill--' + k.status + '">' + esc(k.statusLabel) + '</span>' }) +
       '<div class="card__body">' +
-        '<h3 class="card__title">' + esc(name) + '</h3>' +
+        '<h3 class="card__title"><a href="' + fiche + '">' + esc(name) + '</a></h3>' +
         '<p class="card__meta">' + [k.sexLabel ? sexMark(k.sex) + esc(k.sexLabel) : '', esc(r.nom), esc(shortBreed(k.breed)), k.loof ? 'LOOF' : '']
           .filter(Boolean).map((x) => '<span>' + x + '</span>').join('') + '</p>' +
-        (k.status === 'disponible'
-          ? '<p class="kitten-detail__cta"><a class="btn btn--sm btn--primary" href="contact.html?sujet=' + encodeURIComponent('Chaton ' + name) + '">Se renseigner sur ' + esc(name) + '</a></p>'
-          : '') +
+        '<p class="kitten-detail__cta">' +
+          (k.status === 'disponible'
+            ? '<a class="btn btn--sm btn--primary" href="contact.html?sujet=' + encodeURIComponent('Chaton ' + name) + '">Se renseigner sur ' + esc(name) + '</a>'
+            : '') +
+          '<a class="btn btn--sm btn--ghost" href="' + fiche + '">Sa fiche</a>' +
+        '</p>' +
       '</div></article>';
+  }
+
+  /* ======================================================================
+     FICHE D'UN CHATON
+     Tout vient de l'API : prénom, sexe, robe, race, LOOF, statut, naissance,
+     photos, portée et parents. Rien n'est inventé ; un champ vide ne s'affiche pas.
+     ====================================================================== */
+  async function ficheChaton() {
+    const box = $('#kitten-detail');
+    const id = new URLSearchParams(location.search).get('id');
+    const lost = () => empty('Chaton introuvable', 'Ce chaton n’est plus présenté sur le site. Voir <a href="chatons.html">nos chatons</a>.');
+    if (!id) { box.innerHTML = lost(); return; }
+    markNav('chatons.html');
+
+    try {
+      const [portees, cats] = await Promise.all([api.portees(), api.allCats()]);
+      let p = null, k = null;
+      portees.some((pp) => { const f = pp.chatons.find((c) => String(c.id) === String(id)); if (f) { p = pp; k = f; } return !!f; });
+      if (!k) { box.innerHTML = lost(); return; }
+
+      const name = niceName(k.name) || 'Chaton';
+      const female = k.sex === 'female', male = k.sex === 'male';
+      const Il = female ? 'Elle' : 'Il';
+      document.title = name + ' — Chatterie British Kingdom';
+      const litterHref = 'portee.html?id=' + encodeURIComponent(p.id);
+      const bcName = $('#kitten-breadcrumb-name'); if (bcName) bcName.textContent = name;
+      const bcLitter = $('#kitten-breadcrumb-litter'), bcLitterLink = $('#kitten-breadcrumb-litter-link');
+      if (bcLitter && bcLitterLink && p.name) { bcLitterLink.href = litterHref; bcLitterLink.textContent = p.name; bcLitter.hidden = false; }
+      const back = $('#kitten-back');
+      if (back) { back.href = litterHref; $('span', back).textContent = 'Sa portée'; }
+
+      const r = splitRobe(k.robe);
+      const mother = cats.find((c) => String(c.id) === String(p.idMaman));
+      const father = cats.find((c) => String(c.id) === String(p.idPapa));
+      const motherName = mother ? niceName(mother.name) : '';
+      const fatherName = father ? niceName(father.name) : niceName(p.externalFatherName || '');
+      const dob = k.dateOfBirth || p.dateOfBirth;
+      const weeks = fmt.ageWeeks(dob);
+      const sell = fmt.parseDate(p.dateOfSell);
+      const leavesLater = sell && sell > new Date();
+
+      // « Une petite femelle British Shorthair black silver shaded, née le 31 juillet 2026, fille de Tina et de Voltaire. »
+      let lede = (female ? 'Une petite femelle ' : male ? 'Un petit mâle ' : 'Un chaton ') + (cleanText(k.breed) || 'British') + (r.nom ? ' ' + r.nom.toLowerCase() : '');
+      if (dob) lede += (female ? ', née le ' : ', né le ') + fmt.date(dob);
+      if (motherName && fatherName) lede += (female ? ', fille de ' : male ? ', fils de ' : ', enfant de ') + motherName + ' et de ' + fatherName;
+      lede += '.';
+
+      const wish = {
+        disponible: Il + ' attend encore sa famille',
+        reserve: Il + ' a déjà trouvé sa famille',
+        rester: Il + ' reste à la maison, avec nous',
+        vendu: Il + ' est parti' + (female ? 'e' : '') + ' dans sa famille'
+      }[k.status] || '';
+
+      const pills = [
+        '<span class="pill pill--' + k.status + '">' + esc(k.statusLabel) + '</span>',
+        shortBreed(k.breed) ? '<span class="pill pill--breed">' + esc(cleanText(k.breed)) + '</span>' : '',
+        k.loof ? '<span class="pill pill--breed">' + (female ? 'Inscrite' : 'Inscrit') + ' au LOOF</span>' : ''
+      ].join('');
+
+      const traits = [
+        k.sexLabel ? trait(female ? 'female' : 'male', 'Sexe', k.sexLabel) : '',
+        r.nom ? trait('palette', 'Robe', r.nom, r.ems) : '',
+        dob ? trait('cake', 'Naissance', fmt.date(dob), weeks != null && weeks >= 0 ? plural(weeks, 'semaine', 'semaines') : '') : '',
+        leavesLater ? trait('home', 'Départ possible', 'à partir du ' + fmt.date(p.dateOfSell)) : ''
+      ].join('');
+
+      // Sa petite valise : la même liste que la page Chatons (pas de stérilisation avant le départ)
+      const kit = [
+        k.loof ? 'Son certificat LOOF' : '',
+        'Sa puce électronique d’identification',
+        'Ses premières vaccinations à jour',
+        'Son carnet de santé complet',
+        'De la nourriture et un peu de litière pour les premiers jours',
+        'Un suivi et nos conseils, bien après l’adoption'
+      ].filter(Boolean);
+      const showKit = k.status === 'disponible' || k.status === 'reserve';
+
+      const photos = [k.photo].concat(k.photos);
+      box.innerHTML =
+        '<div class="profile">' +
+          '<div class="profile__gallery reveal">' + stage(photos, name, { eager: true }) + '</div>' +
+          '<div class="profile__info reveal" data-delay="1">' +
+            '<p class="eyebrow">' + (female ? 'Notre chatonne' : 'Notre chaton') + '</p>' +
+            '<h1 class="profile__name">' + esc(name) + '<span class="profile__paw" aria-hidden="true"></span></h1>' +
+            (wish ? '<p class="profile__wish">' + esc(wish) + '</p>' : '') +
+            '<p class="profile__lede">' + esc(lede) + '</p>' +
+            '<p class="profile__pills">' + pills + '</p>' +
+            (traits ? '<ul class="traits">' + traits + '</ul>' : '') +
+
+            ((mother || father || p.externalFatherName) ?
+              '<div class="profile__block"><h2 class="profile__h">Ses parents</h2>' + couple(p, cats, true) + '</div>' : '') +
+
+            (showKit ?
+              '<div class="profile__block"><h2 class="profile__h">Dans sa petite valise</h2>' +
+              '<ul class="health">' + kit.map((x) => '<li>' + icon('check', 16) + '<span>' + esc(x) + '</span></li>').join('') + '</ul>' +
+              '<p class="health__source">Et les documents prévus par la loi : attestation de cession, certificat vétérinaire et document d’information sur les besoins de l’espèce.</p></div>' : '') +
+
+            '<div class="actions">' +
+              (k.status === 'disponible'
+                ? '<a class="btn btn--primary" href="contact.html?sujet=' + encodeURIComponent('Chaton ' + name) + '">Se renseigner sur ' + esc(name) + '</a>'
+                : '<a class="btn btn--primary" href="chatons.html">Voir les chatons disponibles</a>') +
+              '<a class="btn btn--ghost" href="liste-attente.html">La liste d’attente</a>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+
+      bindStages(box);
+      guardImages(box); setupReveal(box);
+
+      // Ses frères et sœurs, pour continuer la visite
+      const siblings = p.chatons.filter((c) => String(c.id) !== String(k.id));
+      const section = $('#kitten-siblings-section');
+      if (section && siblings.length) {
+        const allM = siblings.every((c) => c.sex === 'male'), allF = siblings.every((c) => c.sex === 'female');
+        const plur = siblings.length > 1;
+        $('#kitten-siblings-title').textContent = allM ? (plur ? 'Ses frères' : 'Son frère') : allF ? (plur ? 'Ses sœurs' : 'Sa sœur') : 'Ses frères et sœurs';
+        $('#kitten-siblings').innerHTML = siblings.map((c) =>
+          '<a class="friend reveal" href="chaton.html?id=' + encodeURIComponent(c.id) + '">' +
+            '<span class="friend__photo">' + (c.photo ? '<img src="' + esc(c.photo) + '" alt="" loading="lazy" data-guard>' : '<span class="img-fallback" aria-hidden="true"></span>') + '</span>' +
+            '<span class="friend__name">' + esc(niceName(c.name)) + '</span>' +
+            '<span class="friend__robe">' + esc(c.statusLabel) + '</span>' +
+          '</a>').join('');
+        section.hidden = false;
+        guardImages(section); setupReveal(section);
+      }
+    } catch (e) { fail(box, e); }
   }
 
   /** Journal de la portée : les grandes étapes, situées par rapport à l'âge réel des chatons. */
@@ -750,5 +881,5 @@
     if (subject && field) field.value = subject;
   }
 
-  window.BKPages = { accueil, sexPage, retraites, ficheChat, chatons, portee, blog, article, listeAttente, temoignages, prefillContact };
+  window.BKPages = { accueil, sexPage, retraites, ficheChat, ficheChaton, chatons, portee, blog, article, listeAttente, temoignages, prefillContact };
 })();

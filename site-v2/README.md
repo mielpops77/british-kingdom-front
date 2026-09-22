@@ -34,6 +34,7 @@ qui le signale : une page ne reste jamais vide.
 | `femelles.html` | Les femelles en activité, avec le texte « À propos de nos femelles » |
 | `chat.html?id=` | Fiche d'un chat : grande photo et miniatures, zoom, description, santé, parents, portée du moment, ses copains |
 | `chatons.html` | Les portées en cours, présentées par couple, filtrables par statut |
+| `chaton.html?id=` | Fiche d'un chaton : photos et zoom, statut, sexe, robe, naissance et âge, date de départ, parents, sa petite valise, ses frères et sœurs |
 | `portee.html?id=` | Détail d'une portée : les parents, les chatons, le journal semaine par semaine |
 | `retraites.html` | Anciens reproducteurs, ceux que l'administration marque « archivé » |
 | `conseils.html`, `article.html?slug=` | Les articles du blog |
