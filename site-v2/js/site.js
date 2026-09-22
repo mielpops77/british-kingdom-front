@@ -595,16 +595,16 @@
     { key: 'lavande', name: 'Lavande', note: 'violet tendre, rose et or', sw: ['#5b3ea3', '#c29a4e', '#d8648d', '#fbf9fd'] },
   ];
   const SHAPES = [
-    { key: 'arche', name: 'Arche', note: 'la forme actuelle' },
+    { key: 'arche', name: 'Arche', note: 'la forme d’origine' },
     { key: 'medaillon', name: 'Médaillon', note: 'tout rond, comme le logo' },
-    { key: 'doux', name: 'Coins arrondis', note: 'simple et doux' },
+    { key: 'doux', name: 'Coins arrondis', note: 'simple et doux, la forme par défaut' },
     { key: 'galet', name: 'Galet', note: 'tout en rondeurs, un peu différent pour chaque chat' },
     { key: 'polaroid', name: 'Polaroïd', note: 'comme des photos souvenirs' },
   ];
   // Chaque essai : l'attribut posé sur <html>, sa mémoire et son nom dans l'adresse
   const TRIALS = {
     palette: { attr: 'data-palette', store: 'bk-palette', param: 'palette', def: 'framboise' },
-    forme: { attr: 'data-shape', store: 'bk-forme', param: 'forme', def: 'arche' },
+    forme: { attr: 'data-shape', store: 'bk-forme', param: 'forme', def: 'doux' },
   };
   function setTrial(kind, key) {
     const t = TRIALS[kind];

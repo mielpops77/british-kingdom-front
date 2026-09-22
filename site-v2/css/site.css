@@ -2037,42 +2037,43 @@ img.img-missing { display: none; }
 
 /* --------------------------------------------------------------------------
    Formes des photos à l'essai (html[data-shape])
-   L'arche reste la forme du site. Les autres s'essaient avec ?forme=medaillon,
-   doux, galet ou polaroid, ou avec le bouton « Essayer » des aperçus. Elles
+   Les coins arrondis sont la forme par défaut (à l'essai). Les autres s'essaient avec
+   ?forme=arche, medaillon, galet ou polaroid, ou avec le bouton « Essayer » des aperçus. Elles
    touchent les portraits des chats et des chatons : cartes des pages Mâles,
    Femelles, Retraités, Chatons, accueil, et photos des chatons d'une portée.
    -------------------------------------------------------------------------- */
 /* Médaillon : tout rond, cerclé d'or, le prénom centré dessous */
-:root[data-shape="medaillon"] .card__media .arch {
+:root[data-shape="medaillon"] .card:not(.card--post) .card__media .arch {
   aspect-ratio: 1; border-radius: 50%;
   box-shadow: 0 0 0 1.5px var(--gold), var(--shadow-m);
 }
 :root[data-shape="medaillon"] .stage--kitten .stage__main { aspect-ratio: 1; border-radius: 50%; }
 
-/* Coins arrondis : simple et doux */
-:root[data-shape="doux"] .card__media .arch { aspect-ratio: 4 / 5; border-radius: 26px; }
-:root[data-shape="doux"] .stage--kitten .stage__main { border-radius: 26px; }
+/* Coins arrondis : simple et doux. C'est la forme affichée par défaut (choix du 22/09/2026, à l'essai) ;
+   ?forme=arche redonne l'arche d'origine. */
+:root:not([data-shape]) .card:not(.card--post) .card__media .arch, :root[data-shape="doux"] .card:not(.card--post) .card__media .arch { aspect-ratio: 4 / 5; border-radius: 26px; }
+:root:not([data-shape]) .stage--kitten .stage__main, :root[data-shape="doux"] .stage--kitten .stage__main { border-radius: 26px; }
 
 /* Galet : des rondeurs un peu différentes d'une carte à l'autre, qui ondulent au survol */
-:root[data-shape="galet"] .card__media .arch,
+:root[data-shape="galet"] .card:not(.card--post) .card__media .arch,
 :root[data-shape="galet"] .stage--kitten .stage__main {
   aspect-ratio: 1; border-radius: 64% 36% 56% 44% / 47% 58% 42% 53%;
   transition: border-radius .9s var(--ease);
 }
-:root[data-shape="galet"] .card:nth-child(3n+2) .card__media .arch,
+:root[data-shape="galet"] .card:not(.card--post):nth-child(3n+2) .card__media .arch,
 :root[data-shape="galet"] .kitten-detail:nth-child(3n+2) .stage__main { border-radius: 38% 62% 40% 60% / 60% 40% 60% 40%; }
-:root[data-shape="galet"] .card:nth-child(3n+3) .card__media .arch,
+:root[data-shape="galet"] .card:not(.card--post):nth-child(3n+3) .card__media .arch,
 :root[data-shape="galet"] .kitten-detail:nth-child(3n+3) .stage__main { border-radius: 56% 44% 67% 33% / 41% 61% 39% 59%; }
-:root[data-shape="galet"] .card:hover .card__media .arch { border-radius: 46% 54% 42% 58% / 58% 45% 55% 42%; }
+:root[data-shape="galet"] .card:not(.card--post):hover .card__media .arch { border-radius: 46% 54% 42% 58% / 58% 45% 55% 42%; }
 
 /* Médaillon et galet : l'étiquette passe sous la photo, au milieu, et le texte se centre */
-:root[data-shape="medaillon"] .card__badges,
-:root[data-shape="galet"] .card__badges {
+:root[data-shape="medaillon"] .card:not(.card--post) .card__badges,
+:root[data-shape="galet"] .card:not(.card--post) .card__badges {
   left: 50%; top: auto; bottom: -.55rem; transform: translateX(-50%);
   flex-direction: row; align-items: center;
 }
-:root[data-shape="medaillon"] .card__media .arch img,
-:root[data-shape="galet"] .card__media .arch img { object-position: 50% 32%; }
+:root[data-shape="medaillon"] .card:not(.card--post) .card__media .arch img,
+:root[data-shape="galet"] .card:not(.card--post) .card__media .arch img { object-position: 50% 32%; }
 :root[data-shape="medaillon"] .cats .card__body, :root[data-shape="medaillon"] .kittens .card__body,
 :root[data-shape="galet"] .cats .card__body, :root[data-shape="galet"] .kittens .card__body { text-align: center; padding-top: 1.35rem; }
 :root[data-shape="medaillon"] .cats .card__meta, :root[data-shape="medaillon"] .kittens .card__meta,
@@ -2084,21 +2085,21 @@ img.img-missing { display: none; }
 :root[data-shape="galet"] .stage--kitten .stage__zoom { display: none; }
 
 /* Polaroïd : un cadre blanc, plus large en bas, un peu penché, avec son ruban adhésif */
-:root[data-shape="polaroid"] .card__media .arch {
+:root[data-shape="polaroid"] .card:not(.card--post) .card__media .arch {
   aspect-ratio: 1 / 1.1; border-radius: 4px;
   border-width: 10px 10px 30px; box-shadow: var(--shadow-m);
   transform: rotate(-2deg); transition: transform .45s var(--bounce);
 }
-:root[data-shape="polaroid"] .card:nth-child(2n) .card__media .arch { transform: rotate(1.6deg); }
-:root[data-shape="polaroid"] .card:nth-child(3n) .card__media .arch { transform: rotate(-.8deg); }
-:root[data-shape="polaroid"] .card:hover .card__media .arch { transform: rotate(0); }
-:root[data-shape="polaroid"] .card__media .arch::after { display: none; }
-:root[data-shape="polaroid"] .card__media::before {
+:root[data-shape="polaroid"] .card:not(.card--post):nth-child(2n) .card__media .arch { transform: rotate(1.6deg); }
+:root[data-shape="polaroid"] .card:not(.card--post):nth-child(3n) .card__media .arch { transform: rotate(-.8deg); }
+:root[data-shape="polaroid"] .card:not(.card--post):hover .card__media .arch { transform: rotate(0); }
+:root[data-shape="polaroid"] .card:not(.card--post) .card__media .arch::after { display: none; }
+:root[data-shape="polaroid"] .card:not(.card--post) .card__media::before {
   content: ""; position: absolute; z-index: 2; top: -9px; left: 50%; width: 76px; height: 22px;
   transform: translateX(-50%) rotate(-3deg); border-radius: 3px;
   background: color-mix(in srgb, var(--rose) 30%, transparent);
 }
-:root[data-shape="polaroid"] .card__badges { left: 1.2rem; top: 1.2rem; }
+:root[data-shape="polaroid"] .card:not(.card--post) .card__badges { left: 1.2rem; top: 1.2rem; }
 :root[data-shape="polaroid"] .stage--kitten .stage__main { border-radius: 4px; border-width: 9px 9px 26px; }
 :root[data-shape="polaroid"] .stage--kitten .stage__main::after { display: none; }
 
