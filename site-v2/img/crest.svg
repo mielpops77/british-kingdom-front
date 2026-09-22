@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 150" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true">
+  <!-- couronne -->
+  <g fill="currentColor" stroke="none">
+    <path d="M45 30 V20 C46.2 22.8 47.6 25.4 49.5 25.7 C51 24.5 52 20 53 16.5 C54 20 55 24.5 56.5 25 C58 24.5 59 19 60 13 C61 19 62 24.5 63.5 25 C65 24.5 66 20 67 16.5 C68 20 69 24.5 70.5 25.7 C72.4 25.4 73.8 22.8 75 20 V30 Z"/>
+    <circle cx="45" cy="19" r="1.5"/><circle cx="53" cy="15.5" r="1.5"/><circle cx="60" cy="12" r="1.6"/><circle cx="67" cy="15.5" r="1.5"/><circle cx="75" cy="19" r="1.5"/>
+    <rect x="44.5" y="31.5" width="31" height="3" rx="1"/>
+  </g>
+  <!-- écu double filet -->
+  <path d="M22 44 H98 V92 C98 116 80 130 60 138 C40 130 22 116 22 92 Z"/>
+  <path d="M27 49 H93 V91 C93 112 77 124.5 60 132 C43 124.5 27 112 27 91 Z" stroke-width="0.75"/>
+  <!-- monogramme -->
+  <text x="47" y="102" font-family="'Libre Caslon Display','Libre Caslon Text',Georgia,'Times New Roman',serif" font-size="44" text-anchor="middle" fill="currentColor" stroke="none">B</text>
+  <text x="74" y="102" font-family="'Libre Caslon Display','Libre Caslon Text',Georgia,'Times New Roman',serif" font-size="44" text-anchor="middle" fill="currentColor" stroke="none">K</text>
+  <!-- filet sous les lettres -->
+  <line x1="46" y1="110" x2="74" y2="110" stroke-width="0.75"/>
+</svg>
