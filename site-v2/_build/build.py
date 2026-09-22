@@ -12,6 +12,7 @@ Le site produit fonctionne sans ce script : il n'est là que pour éviter de
 recopier l'en-tête et le pied de page dans chaque fichier.
 """
 import os
+import re
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.dirname(HERE)
@@ -105,6 +106,16 @@ ICON = {
     "instagram": '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor"/>',
     "youtube": '<rect x="2" y="5" width="20" height="14" rx="4"/><path d="m10 9 5 3-5 3Z" fill="currentColor"/>',
     "tiktok": '<path d="M15 4c.6 2.5 2.2 3.8 4.5 4v3c-1.7 0-3.3-.5-4.5-1.5V15a5.5 5.5 0 1 1-5.5-5.5c.3 0 .7 0 1 .1v3.1a2.5 2.5 0 1 0 1.5 2.3V4Z"/>',
+    # Page Le British
+    "bubble": '<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/><path d="M8.5 12h.01M12 12h.01M15.5 12h.01"/>',
+    "smile": '<circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9.5h.01M15 9.5h.01"/>',
+    "paw": '<circle cx="11" cy="4" r="2"/><circle cx="18" cy="8" r="2"/><circle cx="20" cy="16" r="2"/><path d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.05Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z"/>',
+    "scale": '<circle cx="12" cy="5" r="3"/><path d="M6.5 8a2 2 0 0 0-1.9 1.46L2.1 18.5A2 2 0 0 0 4 21h16a2 2 0 0 0 1.93-2.54L19.4 9.5A2 2 0 0 0 17.48 8Z"/>',
+    "comb": '<rect x="3" y="6" width="18" height="4.5" rx="1.5"/><path d="M5.5 10.5V17M9 10.5V17M12.5 10.5V17M16 10.5V17M19.5 10.5V17"/>',
+    "yarn": '<circle cx="11" cy="11" r="8"/><path d="M4.5 8.5c4-1.5 9-1 13 2M3.6 13c4.6-1.2 9.6.2 12.9 3.8M8.5 3.4c-1.8 4.5-1 10.2 2.3 15.5M17.3 16.3c1.8.8 3.1 2.3 3.7 4.7"/>',
+    "users": '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>',
+    "sprout": '<path d="M7 20h10M12 20v-7"/><path d="M12 13c0-3.5-2.5-6-6.5-6 0 3.5 2.5 6 6.5 6ZM12 11c0-3.3 2.2-5.8 6.2-5.8 0 3.3-2.2 5.8-6.2 5.8Z"/>',
+    "eye": '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/>',
 }
 
 
@@ -325,8 +336,29 @@ def page_head_block(eyebrow, title, lede, crumbs, extra=""):
 """ % (trail, eyebrow, title, ('<p class="lede">%s</p>' % lede) if lede else "", extra)
 
 
+_TAG = re.compile(r"(<[^>]+>)")
+
+
+def typo_fr(html):
+    """Typographie française : une espace insécable avant ? ! : ; » et après « (texte seulement,
+    jamais dans les balises ni les scripts), pour qu'un signe ne parte pas seul à la ligne."""
+    out, skip = [], False
+    for part in _TAG.split(html):
+        if part.startswith("<"):
+            low = part[:9].lower()
+            if low.startswith("<script") or low.startswith("<style"):
+                skip = True
+            elif low.startswith("</script") or low.startswith("</style"):
+                skip = False
+        elif not skip and part.strip():
+            part = re.sub(r" ([?!:;»])", r"&nbsp;\1", part)
+            part = part.replace("« ", "«&nbsp;")
+        out.append(part)
+    return "".join(out)
+
+
 def write(page):
-    html = head(page) + header(page.get("nav", page["file"])) + page["body"] + footer(page.get("scripts", ""))
+    html = typo_fr(head(page) + header(page.get("nav", page["file"])) + page["body"] + footer(page.get("scripts", "")))
     path = os.path.join(OUT, page["file"])
     with open(path, "w", encoding="utf-8", newline="\n") as fh:
         fh.write(html)

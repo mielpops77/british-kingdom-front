@@ -37,7 +37,7 @@ ACCUEIL = """
         <img src="assets/photos/accueil-zara.webp" width="1050" height="1400" fetchpriority="high"
              alt="Zara, femelle British Shorthair chocolat aux yeux vairons, assise sur une peau de mouton">
       </figure>
-      <span class="hero__round" aria-hidden="true"><img src="assets/photos/accueil-chaton.webp" alt="" width="882" height="900"></span>
+      <span class="hero__round" aria-hidden="true"><img src="assets/photos/accueil-chaton-coucou.webp" alt="" width="480" height="480"></span>
       <p class="hero__label"><span class="hero__label-crown">%(crown)s</span><span><b>Chatterie familiale</b>%(ville)s, %(region)s</span></p>
     </div>
   </div>
@@ -236,136 +236,328 @@ ACCUEIL = """
 # ==========================================================================
 # LE BRITISH
 # ==========================================================================
-LE_BRITISH = page_head_block(
-    "La race",
-    "Le British, en toute honnêteté",
-    "Ses qualités, ses défauts, ce qu'il demande vraiment. Lisez cette page avant de nous écrire : elle vous évitera peut-être une erreur.",
-    [("index.html", "Accueil"), (None, "Le British")],
-) + """
-<section class="tight" style="padding-top:0">
-  <div class="wrap">
-    <figure class="banner-photo reveal">
-      <img src="assets/photos/famille-quatre.webp" width="1552" height="655" loading="lazy"
-           alt="Quatre de nos British Shorthair côte à côte : un silver shaded, un golden shaded, un bleu et un chocolat">
-      <figcaption>Silver, golden, bleu, chocolat : quatre robes de la maison, un même caractère.</figcaption>
-    </figure>
+LE_BRITISH = """
+<section class="bh-hero">
+  <div class="wrap bh-hero__grid">
+    <div class="bh-hero__text">
+      <nav class="breadcrumb" aria-label="Fil d'Ariane"><span><a href="index.html">Accueil</a></span><span>Le British</span></nav>
+      <p class="eyebrow">La race</p>
+      <h1>Le British, tout en rondeur <span class="bh-hero__script">et en douceur</span></h1>
+      <p class="lede">Une bouille ronde, une fourrure de peluche et un cœur en or : c'est le chat qui a
+        conquis notre maison. Voici comment il est vraiment, pour savoir s'il est fait pour la vôtre.</p>
+      <ul class="bh-stickers" aria-label="Le British en quatre mots">
+        <li>%(heart)s Câlin à sa façon</li>
+        <li>%(moon)s Calme et posé</li>
+        <li>%(bubble)s Tout en discrétion</li>
+        <li>%(home)s Casanier</li>
+      </ul>
+    </div>
+    <div class="bh-hero__art">
+      <figure class="bh-polaroid">
+        <img src="assets/photos/british-wilson-langue.webp" width="900" height="1125" fetchpriority="high"
+             alt="Wilson, notre British Shorthair bleu aux yeux orange, assis, le bout de la langue sorti">
+        <figcaption>Wilson, pris sur le fait</figcaption>
+      </figure>
+      <figure class="bh-bubble">
+        <img src="assets/photos/british-chaton-langue.webp" width="420" height="420" loading="lazy"
+             alt="Un de nos chatons, tout blanc aux yeux bleus, qui tire la langue">
+      </figure>
+      <span class="bh-hero__tag">%(crown)s Shorthair &amp; Longhair</span>
+    </div>
   </div>
 </section>
 
-<section class="tight">
+<section class="tight bh-id-section">
   <div class="wrap">
-    <div class="split split--wide-text split--top">
-      <div class="prose reveal">
-        <h2>Un tempérament, pas seulement une tête ronde</h2>
-        <p>Le British Shorthair est un chat calme, égal, sans excès. Il joue, mais par courtes séquences.
-          Il est affectueux, mais à sa façon : il s'installe à côté de vous plutôt que sur vous, et beaucoup
-          de British n'aiment pas être portés. Si vous cherchez un chat qui vous attend sur l'épaule toute la
-          soirée, ce n'est pas la bonne race.</p>
-        <p>C'est un chat silencieux. Il miaule peu et rarement fort. Cette réserve explique sa réputation de
-          chat facile, et elle impose une vigilance : un British malade, en surpoids ou qui s'ennuie ne le
-          fera pas savoir. C'est à vous de le remarquer.</p>
+    <div class="bh-idcard reveal">
+      <p class="bh-idcard__title">Sa carte d'identité</p>
+      <dl class="bh-idcard__list">
+        <div><dt>%(pin)s Origine</dt><dd>Grande-Bretagne</dd></div>
+        <div><dt>%(scale)s Poids adulte</dt><dd>4 à 8 kg environ</dd></div>
+        <div><dt>%(comb)s Fourrure</dt><dd>courte ou mi-longue, très dense</dd></div>
+        <div><dt>%(heart)s Caractère</dt><dd>calme, doux, fidèle</dd></div>
+        <div><dt>%(sparkle)s Entretien</dt><dd>un brossage par semaine</dd></div>
+      </dl>
+    </div>
+  </div>
+</section>
 
-        <h2>Shorthair ou Longhair : le même chat, deux fourrures</h2>
-        <p>Le British Longhair n'est pas une autre race dans l'esprit de l'élevage : c'est un British porteur
-          du gène poil long. Deux Shorthair porteurs peuvent donner des Longhair dans la même portée.
-          Même morphologie, même caractère, même standard, sauf la longueur du poil.</p>
-        <p>La vraie différence est pour vous : un Shorthair demande un bon brossage par semaine, deux ou
-          trois pendant la mue. Un Longhair demande un brossage tous les deux jours, surtout derrière les
-          oreilles et sur les culottes, sous peine de nœuds qu'il faudra couper.</p>
+<section>
+  <div class="wrap">
+    <div class="section-head center">
+      <p class="eyebrow center">Son caractère</p>
+      <h2>Un vrai nounours, avec sa petite personnalité</h2>
+      <p class="lede">Posé, doux et fidèle, le British aime la vie de famille… à son rythme.</p>
+    </div>
+    <div class="bh-traits">
+      <article class="bh-trait reveal">
+        <span class="bh-trait__icon">%(heart)s</span>
+        <h3>Câlin, à sa façon</h3>
+        <p>Il adore être près de vous, un peu moins dans vos bras. Il s'installe à côté de vous sur le
+          canapé et vous suit de pièce en pièce. Beaucoup de British n'aiment pas trop être portés : on respecte.</p>
+      </article>
+      <article class="bh-trait reveal" data-delay="1">
+        <span class="bh-trait__icon">%(moon)s</span>
+        <h3>Calme et posé</h3>
+        <p>Il joue avec entrain, par petites séances, puis s'offre une longue sieste. Pas de course folle
+          dans les rideaux : c'est un chat zen.</p>
+      </article>
+      <article class="bh-trait reveal" data-delay="2">
+        <span class="bh-trait__icon">%(bubble)s</span>
+        <h3>Tout en discrétion</h3>
+        <p>Il miaule peu, et rarement fort. Revers de la médaille : un British qui a mal ou qui s'ennuie
+          ne le dira pas. C'est à vous d'ouvrir l'œil.</p>
+      </article>
+      <article class="bh-trait reveal">
+        <span class="bh-trait__icon">%(smile)s</span>
+        <h3>Patient avec les enfants</h3>
+        <p>Il ne sort pratiquement jamais les griffes : quand il en a assez, il s'en va. La seule règle à
+          apprendre aux enfants : le laisser partir, sans jamais le poursuivre.</p>
+      </article>
+      <article class="bh-trait reveal" data-delay="1">
+        <span class="bh-trait__icon">%(paw)s</span>
+        <h3>Bon camarade</h3>
+        <p>Peu bagarreur, il s'entend avec les chiens comme avec les chats. Comptez une à trois semaines de
+          présentations en douceur : c'est souvent l'animal déjà là qui a besoin de temps.</p>
+      </article>
+      <article class="bh-trait reveal" data-delay="2">
+        <span class="bh-trait__icon">%(home)s</span>
+        <h3>Casanier</h3>
+        <p>Il est très heureux en appartement : il grimpe peu et ne cherche pas à sortir. Offrez-lui un
+          poste d'observation en hauteur et un vrai moment de jeu chaque jour.</p>
+      </article>
+    </div>
+  </div>
+</section>
 
-        <h2>La morphologie en quelques mots</h2>
-        <p>Corps compact et musclé posé sur des pattes courtes et fortes. Tête ronde, joues pleines,
-          petites oreilles arrondies bien écartées, nez court et droit. De grands yeux ronds, cuivre chez
-          les robes classiques, verts chez les silver et golden, bleus chez les colourpoint. Une fourrure
-          dense, qui se relève sous la main : c'est la signature de la race.</p>
+<section class="panel panel--blush scallop-top">
+  <div class="wrap">
+    <div class="section-head center">
+      <p class="eyebrow center">Son physique</p>
+      <h2>Tout en rondeur, des oreilles jusqu'aux pattes</h2>
+      <p class="lede">Le British se reconnaît au premier coup d'œil. Petit tour du propriétaire, avec Vesunna.</p>
+    </div>
+    <div class="bh-anatomy">
+      <ul class="bh-anatomy__col">
+        <li class="reveal"><h3>Une tête bien ronde</h3><p>large, avec de bonnes joues, encore plus marquées chez les mâles</p></li>
+        <li class="reveal" data-delay="1"><h3>De petites oreilles</h3><p>arrondies au bout et bien écartées</p></li>
+        <li class="reveal" data-delay="2"><h3>De grands yeux ronds</h3><p>cuivre ou orange le plus souvent, verts chez les silver et les golden, bleus chez les colourpoint</p></li>
+      </ul>
+      <figure class="bh-anatomy__photo reveal">
+        <div class="arch arch--wide"><img src="assets/photos/british-silhouette-vesunna.webp" width="800" height="1000" loading="lazy"
+             alt="Vesunna, British Shorthair black golden shaded aux yeux verts, assise bien droite sur un coussin"></div>
+        <figcaption>Vesunna, black golden shaded</figcaption>
+      </figure>
+      <ul class="bh-anatomy__col bh-anatomy__col--right">
+        <li class="reveal"><h3>Un nez court</h3><p>large et droit</p></li>
+        <li class="reveal" data-delay="1"><h3>Un corps compact</h3><p>trapu et musclé, posé sur des pattes courtes et fortes</p></li>
+        <li class="reveal" data-delay="2"><h3>Une fourrure de peluche</h3><p>dense et ferme, elle se relève sous la main : c'est la signature de la race</p></li>
+      </ul>
+    </div>
+  </div>
+</section>
 
-        <h2>Les couleurs, et ce fameux code EMS</h2>
-        <p>Le British existe dans des dizaines de robes. Chacune a son code EMS, la notation officielle utilisée
-          par le LOOF et les pedigrees : <em>BRI</em> désigne le British, la lettre qui suit la couleur de base,
-          les chiffres le patron. Le tableau ci-contre donne les plus courantes.</p>
-      </div>
-      <div class="reveal" data-delay="1">
-        <div class="sheet">
-          <h3>Les robes les plus courantes</h3>
-          <dl class="facts">
-            <div><dt>Bleu</dt><dd>BRI a</dd></div>
-            <div><dt>Lilas</dt><dd>BRI c</dd></div>
-            <div><dt>Chocolat</dt><dd>BRI b</dd></div>
+<section>
+  <div class="wrap">
+    <div class="section-head center">
+      <p class="eyebrow center">Deux fourrures</p>
+      <h2>Shorthair ou Longhair ? <span class="bh-h2-script">le même cœur, deux manteaux</span></h2>
+    </div>
+    <div class="bh-coats">
+      <article class="bh-coat reveal">
+        <div class="arch arch--wide bh-coat__photo"><img src="assets/photos/british-shorthair-willy-wonka.webp" width="760" height="950" loading="lazy"
+             alt="Willy Wonka, British Shorthair chocolat aux yeux orange, assis sur un coussin blanc"></div>
+        <div class="bh-coat__body">
+          <div class="bh-coat__head"><p class="bh-coat__kind">Poil court</p><h3>British Shorthair</h3></div>
+          <ul class="pawed">
+            <li>Une fourrure courte, dense et pleine, comme une peluche.</li>
+            <li>Un bon brossage par semaine, deux ou trois pendant la mue.</li>
+          </ul>
+          <p class="bh-coat__who">Ici, Willy Wonka, chocolat aux yeux orange</p>
+        </div>
+      </article>
+      <p class="bh-coats__equal" aria-hidden="true"><span>%(heart)s</span>même caractère</p>
+      <article class="bh-coat reveal" data-delay="1">
+        <div class="arch arch--wide bh-coat__photo"><img src="assets/photos/british-longhair-voltaire.webp" width="760" height="950" loading="lazy"
+             alt="Voltaire, British Longhair black silver shaded aux yeux verts, à la collerette toute blanche"></div>
+        <div class="bh-coat__body">
+          <div class="bh-coat__head"><p class="bh-coat__kind">Poil mi-long</p><h3>British Longhair</h3></div>
+          <ul class="pawed">
+            <li>Une fourrure mi-longue et soyeuse, avec une jolie collerette et des culottes.</li>
+            <li>Un brossage tous les deux jours, surtout derrière les oreilles et sur les culottes, pour éviter les nœuds.</li>
+          </ul>
+          <p class="bh-coat__who">Ici, Voltaire, black silver shaded aux yeux verts</p>
+        </div>
+      </article>
+    </div>
+    <p class="bh-coats__note reveal">Le Longhair, c'est un British qui porte le gène du poil long : même silhouette,
+      même caractère, seule la fourrure change. Deux Shorthair porteurs de ce gène peuvent d'ailleurs donner
+      naissance, dans la même portée, à des chatons à poil court et à poil long.</p>
+  </div>
+</section>
+
+<section class="panel panel--lilac scallop-top">
+  <div class="wrap">
+    <div class="section-head center">
+      <p class="eyebrow center">Nuancier</p>
+      <h2>Les couleurs de la maison</h2>
+      <p class="lede">Le British existe dans des dizaines de robes. Voici celles de nos chats, avec leur code EMS,
+        l'écriture officielle des pedigrees.</p>
+    </div>
+    <ul class="bh-robes">
+      <li class="bh-robe reveal">
+        <span class="bh-robe__photo"><img src="assets/photos/robe-bleu-wilson.webp" width="440" height="440" loading="lazy" alt="Wilson, British Shorthair bleu"></span>
+        <b class="bh-robe__name">Bleu</b><span class="bh-robe__ems">BRI a</span><span class="bh-robe__who">Wilson</span>
+      </li>
+      <li class="bh-robe reveal" data-delay="1">
+        <span class="bh-robe__photo"><img src="assets/photos/robe-chocolat-willy-wonka.webp" width="440" height="440" loading="lazy" alt="Willy Wonka, British Shorthair chocolat"></span>
+        <b class="bh-robe__name">Chocolat</b><span class="bh-robe__ems">BRI b</span><span class="bh-robe__who">Willy Wonka</span>
+      </li>
+      <li class="bh-robe reveal" data-delay="2">
+        <span class="bh-robe__photo"><img src="assets/photos/robe-lilas-luna.webp" width="440" height="440" loading="lazy" alt="Luna, British Shorthair lilas"></span>
+        <b class="bh-robe__name">Lilas</b><span class="bh-robe__ems">BRI c</span><span class="bh-robe__who">Luna</span>
+      </li>
+      <li class="bh-robe reveal">
+        <span class="bh-robe__photo"><img src="assets/photos/robe-silver-tina.webp" width="440" height="440" loading="lazy" alt="Tina, British Shorthair black silver shaded"></span>
+        <b class="bh-robe__name">Black silver shaded</b><span class="bh-robe__ems">BRI ns 11</span><span class="bh-robe__who">Tina</span>
+      </li>
+      <li class="bh-robe reveal" data-delay="1">
+        <span class="bh-robe__photo"><img src="assets/photos/robe-golden-vesunna.webp" width="440" height="440" loading="lazy" alt="Vesunna, British Shorthair black golden shaded"></span>
+        <b class="bh-robe__name">Black golden shaded</b><span class="bh-robe__ems">BRI ny 11</span><span class="bh-robe__who">Vesunna</span>
+      </li>
+      <li class="bh-robe reveal" data-delay="2">
+        <span class="bh-robe__photo"><img src="assets/photos/robe-silver-longhair-voltaire.webp" width="440" height="440" loading="lazy" alt="Voltaire, British Longhair black silver shaded"></span>
+        <b class="bh-robe__name">Black silver shaded</b><span class="bh-robe__ems">BLH ns 11</span><span class="bh-robe__who">Voltaire, poil long</span>
+      </li>
+    </ul>
+
+    <div class="bh-ems reveal">
+      <h3>Comment lire un code EMS ?</h3>
+      <ol class="bh-ems__parts">
+        <li><b>BRI</b><span>la race : British Shorthair, ou BLH pour le Longhair</span></li>
+        <li><b>n</b><span>la couleur : noir (a bleu, b chocolat, c lilas…)</span></li>
+        <li><b>s</b><span>silver, ou y pour golden</span></li>
+        <li><b>11</b><span>le motif : shaded</span></li>
+      </ol>
+      <details class="faq bh-ems__more">
+        <summary>Les autres robes courantes et leur code</summary>
+        <div class="faq__body">
+          <dl class="facts bh-ems__facts">
             <div><dt>Noir</dt><dd>BRI n</dd></div>
             <div><dt>Crème</dt><dd>BRI e</dd></div>
             <div><dt>Roux</dt><dd>BRI d</dd></div>
             <div><dt>Cinnamon</dt><dd>BRI o</dd></div>
             <div><dt>Fawn</dt><dd>BRI p</dd></div>
             <div><dt>Écaille de tortue</dt><dd>BRI f</dd></div>
-            <div><dt>Black silver shaded</dt><dd>BRI ns 11</dd></div>
-            <div><dt>Golden shaded</dt><dd>BRI ny 11</dd></div>
             <div><dt>Colourpoint bleu</dt><dd>BRI a 33</dd></div>
             <div><dt>Bicolore bleu et blanc</dt><dd>BRI a 03</dd></div>
           </dl>
-          <p class="small" style="margin-top:1rem">La couleur définitive des yeux n'est établie que vers
-            trois à quatre mois. Avant cela, tous les chatons ont les yeux bleus.</p>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="panel panel--blush">
-  <div class="wrap">
-    <div class="section-head">
-      <p class="eyebrow">Au quotidien</p>
-      <h2>Ce qu'il demande vraiment</h2>
-    </div>
-    <div class="grid grid-3">
-      <div class="feature reveal">
-        <h3>Le poids, sa vraie faiblesse</h3>
-        <p>Race lourde et peu dépensière, le British prend du poids très facilement. Pas de nourriture à
-          volonté à l'âge adulte, des jouets qui le font courir, et une pesée régulière.</p>
-      </div>
-      <div class="feature reveal" data-delay="1">
-        <h3>Le brossage</h3>
-        <p>Un peigne ou une brosse qui atteint le sous-poil : un gant ne suffit pas. Une fois par semaine,
-          deux ou trois pendant la mue. Tous les deux jours pour un Longhair.</p>
-      </div>
-      <div class="feature reveal" data-delay="2">
-        <h3>L'appartement</h3>
-        <p>Il y est très bien : calme, peu grimpeur, il ne cherche pas à sortir. Il lui faut des points
-          d'observation en hauteur et un vrai temps de jeu quotidien. Un balcon se sécurise par un filet.</p>
-      </div>
-      <div class="feature reveal">
-        <h3>Les enfants</h3>
-        <p>Patient, il ne griffe pratiquement jamais : quand il en a assez, il part. C'est ce qu'il faut
-          apprendre aux enfants, le laisser partir et ne jamais le poursuivre.</p>
-      </div>
-      <div class="feature reveal" data-delay="1">
-        <h3>Les autres animaux</h3>
-        <p>Peu bagarreur, il s'entend avec chiens et chats. Comptez une à trois semaines d'introduction
-          progressive : c'est en général le résident qui a besoin de temps, pas lui.</p>
-      </div>
-      <div class="feature reveal" data-delay="2">
-        <h3>La solitude</h3>
-        <p>Si personne n'est à la maison la journée, prenez-en deux. Deux chatons se dépensent et se
-          calment mutuellement, et le travail pour vous est à peine doublé.</p>
-      </div>
+      </details>
     </div>
   </div>
 </section>
 
 <section>
-  <div class="wrap wrap--narrow">
-    <div class="callout reveal">
-      <p><strong>Un mot sur les allergies.</strong> Aucune race n'est hypoallergénique, le British pas plus
-        qu'une autre. L'allergie vient d'une protéine de la salive et des squames, pas de la longueur du
-        poil : un Shorthair n'est donc pas moins allergisant qu'un Longhair. Si quelqu'un du foyer est
-        allergique, consultez un allergologue avant de vous engager, puis venez passer un moment chez nous.</p>
+  <div class="wrap">
+    <div class="section-head center">
+      <p class="eyebrow center">Le saviez-vous ?</p>
+      <h2>Petits secrets de British</h2>
     </div>
-    <div class="actions center">
-      <a class="btn btn--primary" href="chatons.html">Voir nos chatons</a>
-      <a class="btn btn--ghost" href="liste-attente.html">Conditions d'adoption</a>
+    <div class="bh-notes reveal">
+      <article class="bh-note">
+        <span class="bh-note__pic"><img src="assets/photos/chaton-yeux-bleus.webp" width="420" height="420" loading="lazy" alt="Un de nos chatons chocolat, aux yeux encore tout bleus"></span>
+        <h3>Des yeux bleus… pour commencer</h3>
+        <p>Tous les chatons naissent les yeux bleus, comme ce petit chocolat. Leur vraie couleur apparaît vers
+          trois ou quatre mois, puis s'intensifie encore pendant de longs mois.</p>
+      </article>
+      <article class="bh-note">
+        <span class="bh-note__icon">%(star)s</span>
+        <h3>Une star depuis 1871</h3>
+        <p>C'est l'une des plus anciennes races anglaises : il faisait déjà partie des vedettes du tout premier
+          grand concours félin, au Crystal Palace de Londres, en 1871.</p>
+      </article>
+      <article class="bh-note">
+        <span class="bh-note__icon">%(smile)s</span>
+        <h3>Un sourire célèbre</h3>
+        <p>On dit souvent que le Chat du Cheshire, le chat au grand sourire d'<em>Alice au pays des
+          merveilles</em>, a été inspiré par un British.</p>
+      </article>
+      <article class="bh-note">
+        <span class="bh-note__icon">%(sprout)s</span>
+        <h3>Il prend son temps pour grandir</h3>
+        <p>Il lui faut environ trois ans pour atteindre sa carrure d'adulte. Les mâles en profitent pour se
+          faire de belles bajoues.</p>
+      </article>
     </div>
   </div>
 </section>
-"""
+
+<section class="panel panel--champagne scallop-top">
+  <div class="wrap">
+    <div class="section-head center">
+      <p class="eyebrow center">Au quotidien</p>
+      <h2>Ce qu'il lui faut pour être heureux</h2>
+    </div>
+    <div class="bh-traits bh-traits--4">
+      <article class="bh-trait reveal">
+        <span class="bh-trait__icon">%(scale)s</span>
+        <h3>Surveiller sa ligne</h3>
+        <p>C'est son petit point faible : gourmand et peu sportif, il grossit vite. À l'âge adulte, pas de
+          gamelle à volonté, des jeux qui le font courir et une pesée de temps en temps.</p>
+      </article>
+      <article class="bh-trait reveal" data-delay="1">
+        <span class="bh-trait__icon">%(comb)s</span>
+        <h3>Un brossage régulier</h3>
+        <p>Avec une brosse ou un peigne qui atteint le sous-poil (un gant ne suffit pas) : une fois par
+          semaine pour un Shorthair, tous les deux jours pour un Longhair.</p>
+      </article>
+      <article class="bh-trait reveal" data-delay="2">
+        <span class="bh-trait__icon">%(yarn)s</span>
+        <h3>Du jeu et de la hauteur</h3>
+        <p>Un vrai moment de jeu chaque jour, et un arbre à chat pour observer la maison d'en haut. Un balcon ?
+          Un filet le rend sûr.</p>
+      </article>
+      <article class="bh-trait reveal" data-delay="3">
+        <span class="bh-trait__icon">%(users)s</span>
+        <h3>De la compagnie</h3>
+        <p>Si la maison est vide toute la journée, pensez à en adopter deux : ils jouent ensemble, se calment
+          ensemble, et pour vous le travail est à peine doublé.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="tight">
+  <div class="wrap wrap--narrow">
+    <div class="callout bh-allergy reveal">
+      <p><strong>Un mot sur les allergies.</strong> Aucun chat n'est hypoallergénique, le British pas plus qu'un
+        autre. L'allergie vient d'une protéine présente dans la salive et les squames, pas de la longueur du
+        poil : un Shorthair n'est donc pas moins allergisant qu'un Longhair. Si quelqu'un chez vous est
+        allergique, parlez-en à un allergologue avant de vous engager, puis venez rencontrer nos chats.</p>
+    </div>
+  </div>
+</section>
+
+<section class="cta-band">
+  <div class="wrap wrap--narrow center">
+    %(logo_cta)s
+    <h2>Vous aussi, vous avez craqué ?</h2>
+    <p class="lede">Faites connaissance avec nos reproducteurs, ou découvrez les chatons du moment.</p>
+    <div class="actions center">
+      <a class="btn btn--primary" href="chatons.html">Voir les chatons</a>
+      <a class="btn btn--ghost" href="males.html">Nos mâles</a>
+      <a class="btn btn--ghost" href="femelles.html">Nos femelles</a>
+    </div>
+  </div>
+</section>
+""" % {
+    "heart": ico("heart", 18), "moon": ico("moon", 18), "bubble": ico("bubble", 18), "home": ico("home", 18),
+    "pin": ico("pin", 18), "scale": ico("scale", 18), "comb": ico("comb", 18), "sparkle": ico("sparkle", 18),
+    "smile": ico("smile", 18), "paw": ico("paw", 18), "star": ico("star", 18), "sprout": ico("sprout", 18),
+    "yarn": ico("yarn", 18), "users": ico("users", 18),
+    "crown": crown_svg(), "logo_cta": medallion("medallion--md", alt=""),
+}
 
 # ==========================================================================
 # NOS MÂLES / NOS FEMELLES
@@ -1115,8 +1307,8 @@ PAGES = [
      "scripts": '<script>BKPages.accueil();BKPages.temoignages("#testimonials",3);</script>'},
 
     {"file": "le-british.html", "body": LE_BRITISH, "prio": "0.7",
-     "title": "Le British Shorthair et Longhair — caractère, entretien, couleurs",
-     "desc": "Tempérament, différences entre Shorthair et Longhair, robes et codes EMS, brossage, vie en appartement : tout ce qu'il faut savoir avant d'adopter un British."},
+     "title": "Le British Shorthair et Longhair — caractère, physique, couleurs, entretien",
+     "desc": "Caractère, physique, Shorthair ou Longhair, robes et codes EMS, petits secrets et conseils d'entretien : tout pour faire connaissance avec le British avant de l'adopter."},
 
     {"file": "males.html", "body": MALES, "prio": "0.8",
      "title": "Nos mâles — les étalons de la Chatterie British Kingdom",

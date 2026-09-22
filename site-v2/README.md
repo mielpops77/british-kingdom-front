@@ -29,7 +29,7 @@ qui le signale : une page ne reste jamais vide.
 | Fichier | Rôle |
 |---|---|
 | `index.html` | Accueil : logo, portées du moment et leurs couples, chatons, anciens bébés, « La vie à la chatterie » (la vidéo et toutes les photos du site en mosaïque, avec visionneuse), conseils |
-| `le-british.html` | Guide de la race : caractère, Shorthair et Longhair, robes et codes EMS |
+| `le-british.html` | La race, avec nos chats en photo : carte d'identité, caractère, physique, Shorthair ou Longhair, les robes de la maison et leur code EMS, petits secrets, conseils du quotidien |
 | `males.html` | Les mâles en activité, avec le texte « À propos de nos mâles » saisi dans l'administration |
 | `femelles.html` | Les femelles en activité, avec le texte « À propos de nos femelles » |
 | `chat.html?id=` | Fiche d'un chat : grande photo et miniatures, zoom, description, santé, parents, portée du moment, ses copains |
@@ -145,7 +145,9 @@ celles de l'API, qui sont anciennes (voir « Ce qu'il reste à compléter »).
    éditer `_build/pages.py` ou `_build/build.py`, puis lancer
    `python3 _build/pages.py` depuis `site-v2/`. Cela réécrit les quatorze pages
    et `sitemap.xml`. Attention, cette commande écrase les retouches faites à
-   la main dans les `.html`.
+   la main dans les `.html`. Elle pose aussi les espaces insécables de la
+   typographie française (avant ? ! : ; » et après «) : un signe ne part plus
+   seul à la ligne.
 
 Le nom, le téléphone, l'adresse, le SIRET et les réseaux sociaux sont
 regroupés en haut de `_build/build.py`, dans le dictionnaire `SITE`.
