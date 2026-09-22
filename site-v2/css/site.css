@@ -43,6 +43,7 @@
   --footer-bg:  #3d2335;
   --footer-ink: #fbe9ef;
   --footer-ink-2: #e7c9d6;
+  --footer-script: #f2c9d8; /* slogan manuscrit du pied de page */
 
   --shadow-s: 0 1px 2px rgba(120, 50, 80, .06), 0 4px 14px rgba(120, 50, 80, .07);
   --shadow-m: 0 2px 6px rgba(120, 50, 80, .07), 0 14px 34px rgba(120, 50, 80, .11);
@@ -99,6 +100,145 @@
   --lilac: #c2a8f0; --lilac-ink: #cdb8f5; --lilac-soft: #352a4b;
   --on-accent: #3a1026;
   --footer-bg: #170e16; --footer-ink: #fbe9ef; --footer-ink-2: #dcbccb;
+  --shadow-s: 0 1px 2px rgba(0, 0, 0, .3), 0 4px 14px rgba(0, 0, 0, .22);
+  --shadow-m: 0 2px 6px rgba(0, 0, 0, .34), 0 14px 34px rgba(0, 0, 0, .38);
+  --shadow-l: 0 6px 16px rgba(0, 0, 0, .4), 0 30px 64px rgba(0, 0, 0, .5);
+}
+
+/* --------------------------------------------------------------------------
+   1 bis. Palettes à l'essai
+   La palette ci-dessus (« Framboise ») reste celle du site. Les suivantes
+   s'essaient avec l'attribut data-palette sur <html> : adresse ?palette=royal,
+   ou le bouton « Palette » des aperçus (jamais affiché sur le vrai site).
+   Chaque palette garde les mêmes rôles : --rose = couleur principale,
+   --gold = ornements, --lilac = couleur d'appoint.
+   -------------------------------------------------------------------------- */
+/* Bleu royal : les couleurs du logo, marine, or de la couronne, touche bordeaux */
+:root[data-palette="royal"] {
+  --paper: #f9f7f2; --paper-2: #eef1f8; --paper-3: #e1e7f2; --champagne: #f6f0e4; --lavender: #f0eef8;
+  --card: #ffffff; --line: #dde3ee; --line-soft: #eaeef5;
+  --ink: #1d2744; --ink-2: #434d69; --ink-3: #56607d;
+  --rose: #3f5fa8; --rose-ink: #2d4a8e; --rose-deep: #253d78; --rose-soft: #e4eaf8;
+  --gold: #b8913f; --gold-ink: #7a5a14; --gold-soft: #f4ead6;
+  --lilac: #a8475f; --lilac-ink: #8e2f48; --lilac-soft: #f6e4e9;
+  --on-accent: #ffffff;
+  --footer-bg: #1b2440; --footer-ink: #f4f2ec; --footer-ink-2: #c8cfe0; --footer-script: #ecd09a;
+  --shadow-s: 0 1px 2px rgba(30, 45, 90, .06), 0 4px 14px rgba(30, 45, 90, .07);
+  --shadow-m: 0 2px 6px rgba(30, 45, 90, .07), 0 14px 34px rgba(30, 45, 90, .11);
+  --shadow-l: 0 6px 16px rgba(30, 45, 90, .10), 0 30px 64px rgba(30, 45, 90, .16);
+  --bow-filter: hue-rotate(-120deg) saturate(.75);
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-palette="royal"]:not([data-theme="light"]) {
+    --paper: #111726; --paper-2: #172036; --paper-3: #222c45; --champagne: #221e18; --lavender: #1b1f36;
+    --card: #19223a; --line: #2e3a5a; --line-soft: #232d48;
+    --ink: #f0f3fa; --ink-2: #cdd4e6; --ink-3: #a6afc8;
+    --rose: #92b1ff; --rose-ink: #a8c1ff; --rose-deep: #92b1ff; --rose-soft: #24325a;
+    --gold: #e0bf7a; --gold-ink: #ebcf95; --gold-soft: #3a2f1e;
+    --lilac: #f28ea6; --lilac-ink: #f6a6b9; --lilac-soft: #43242f;
+    --on-accent: #0e1731;
+    --footer-bg: #0a0e1a; --footer-ink: #eef1f8; --footer-ink-2: #c3cadd;
+    --shadow-s: 0 1px 2px rgba(0, 0, 0, .3), 0 4px 14px rgba(0, 0, 0, .22);
+    --shadow-m: 0 2px 6px rgba(0, 0, 0, .34), 0 14px 34px rgba(0, 0, 0, .38);
+    --shadow-l: 0 6px 16px rgba(0, 0, 0, .4), 0 30px 64px rgba(0, 0, 0, .5);
+  }
+}
+:root[data-palette="royal"][data-theme="dark"] {
+  --paper: #111726; --paper-2: #172036; --paper-3: #222c45; --champagne: #221e18; --lavender: #1b1f36;
+  --card: #19223a; --line: #2e3a5a; --line-soft: #232d48;
+  --ink: #f0f3fa; --ink-2: #cdd4e6; --ink-3: #a6afc8;
+  --rose: #92b1ff; --rose-ink: #a8c1ff; --rose-deep: #92b1ff; --rose-soft: #24325a;
+  --gold: #e0bf7a; --gold-ink: #ebcf95; --gold-soft: #3a2f1e;
+  --lilac: #f28ea6; --lilac-ink: #f6a6b9; --lilac-soft: #43242f;
+  --on-accent: #0e1731;
+  --footer-bg: #0a0e1a; --footer-ink: #eef1f8; --footer-ink-2: #c3cadd;
+  --shadow-s: 0 1px 2px rgba(0, 0, 0, .3), 0 4px 14px rgba(0, 0, 0, .22);
+  --shadow-m: 0 2px 6px rgba(0, 0, 0, .34), 0 14px 34px rgba(0, 0, 0, .38);
+  --shadow-l: 0 6px 16px rgba(0, 0, 0, .4), 0 30px 64px rgba(0, 0, 0, .5);
+}
+
+/* Chocolat & rose poudré : la couleur de nos British, tout en douceur */
+:root[data-palette="chocolat"] {
+  --paper: #fdf8f4; --paper-2: #f9ece8; --paper-3: #f1ded8; --champagne: #f5ebe0; --lavender: #f2e9e3;
+  --card: #ffffff; --line: #ebdad3; --line-soft: #f4e8e3;
+  --ink: #3a2923; --ink-2: #5f4a42; --ink-3: #715b52;
+  --rose: #9a6a53; --rose-ink: #7a4a33; --rose-deep: #6f4431; --rose-soft: #f3e6de;
+  --gold: #c08a52; --gold-ink: #845828; --gold-soft: #f6e8d8;
+  --lilac: #d48a9e; --lilac-ink: #9a4560; --lilac-soft: #fae6ec;
+  --on-accent: #ffffff;
+  --footer-bg: #3a2923; --footer-ink: #fbeee8; --footer-ink-2: #e3cbc1; --footer-script: #f4c3cf;
+  --shadow-s: 0 1px 2px rgba(90, 50, 40, .06), 0 4px 14px rgba(90, 50, 40, .07);
+  --shadow-m: 0 2px 6px rgba(90, 50, 40, .07), 0 14px 34px rgba(90, 50, 40, .11);
+  --shadow-l: 0 6px 16px rgba(90, 50, 40, .10), 0 30px 64px rgba(90, 50, 40, .16);
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-palette="chocolat"]:not([data-theme="light"]) {
+    --paper: #1d1513; --paper-2: #271c19; --paper-3: #352723; --champagne: #2a2018; --lavender: #2a201c;
+    --card: #2a1f1b; --line: #4a3731; --line-soft: #372925;
+    --ink: #fbefe9; --ink-2: #e7d3ca; --ink-3: #c7afa5;
+    --rose: #dcae95; --rose-ink: #e6bea8; --rose-deep: #dcae95; --rose-soft: #3e2d25;
+    --gold: #e3b27c; --gold-ink: #ecc596; --gold-soft: #3b2c1e;
+    --lilac: #f39db5; --lilac-ink: #f7b1c5; --lilac-soft: #4a2833;
+    --on-accent: #2a1a12;
+    --footer-bg: #130d0b; --footer-ink: #fbefe9; --footer-ink-2: #dcc3b8;
+    --shadow-s: 0 1px 2px rgba(0, 0, 0, .3), 0 4px 14px rgba(0, 0, 0, .22);
+    --shadow-m: 0 2px 6px rgba(0, 0, 0, .34), 0 14px 34px rgba(0, 0, 0, .38);
+    --shadow-l: 0 6px 16px rgba(0, 0, 0, .4), 0 30px 64px rgba(0, 0, 0, .5);
+  }
+}
+:root[data-palette="chocolat"][data-theme="dark"] {
+  --paper: #1d1513; --paper-2: #271c19; --paper-3: #352723; --champagne: #2a2018; --lavender: #2a201c;
+  --card: #2a1f1b; --line: #4a3731; --line-soft: #372925;
+  --ink: #fbefe9; --ink-2: #e7d3ca; --ink-3: #c7afa5;
+  --rose: #dcae95; --rose-ink: #e6bea8; --rose-deep: #dcae95; --rose-soft: #3e2d25;
+  --gold: #e3b27c; --gold-ink: #ecc596; --gold-soft: #3b2c1e;
+  --lilac: #f39db5; --lilac-ink: #f7b1c5; --lilac-soft: #4a2833;
+  --on-accent: #2a1a12;
+  --footer-bg: #130d0b; --footer-ink: #fbefe9; --footer-ink-2: #dcc3b8;
+  --shadow-s: 0 1px 2px rgba(0, 0, 0, .3), 0 4px 14px rgba(0, 0, 0, .22);
+  --shadow-m: 0 2px 6px rgba(0, 0, 0, .34), 0 14px 34px rgba(0, 0, 0, .38);
+  --shadow-l: 0 6px 16px rgba(0, 0, 0, .4), 0 30px 64px rgba(0, 0, 0, .5);
+}
+
+/* Lavande : violet tendre, rose et or, comme un rêve de chaton */
+:root[data-palette="lavande"] {
+  --paper: #fbf9fd; --paper-2: #f3eefb; --paper-3: #e8e0f6; --champagne: #f8f1e6; --lavender: #eee8fa;
+  --card: #ffffff; --line: #e2d9f1; --line-soft: #eee8f8;
+  --ink: #2d2445; --ink-2: #534a6b; --ink-3: #655c80;
+  --rose: #8467cf; --rose-ink: #6244ab; --rose-deep: #5b3ea3; --rose-soft: #ece4fb;
+  --gold: #c29a4e; --gold-ink: #86621b; --gold-soft: #f7ecd8;
+  --lilac: #d8648d; --lilac-ink: #ad3a66; --lilac-soft: #fbe4ee;
+  --on-accent: #ffffff;
+  --footer-bg: #2d2445; --footer-ink: #f4effc; --footer-ink-2: #d3c9e8; --footer-script: #e3d3ff;
+  --shadow-s: 0 1px 2px rgba(70, 50, 120, .06), 0 4px 14px rgba(70, 50, 120, .07);
+  --shadow-m: 0 2px 6px rgba(70, 50, 120, .07), 0 14px 34px rgba(70, 50, 120, .11);
+  --shadow-l: 0 6px 16px rgba(70, 50, 120, .10), 0 30px 64px rgba(70, 50, 120, .16);
+  --bow-filter: hue-rotate(-75deg);
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-palette="lavande"]:not([data-theme="light"]) {
+    --paper: #18142a; --paper-2: #211b36; --paper-3: #2e2647; --champagne: #272017; --lavender: #221c38;
+    --card: #231d38; --line: #3d3460; --line-soft: #2e2748;
+    --ink: #f4f0fc; --ink-2: #d8d0ec; --ink-3: #b4aacf;
+    --rose: #baa2ff; --rose-ink: #c9b5ff; --rose-deep: #baa2ff; --rose-soft: #342a58;
+    --gold: #e0bf7a; --gold-ink: #ebcf95; --gold-soft: #3b2f1f;
+    --lilac: #ff90b3; --lilac-ink: #ffa6c1; --lilac-soft: #4a2638;
+    --on-accent: #1c1236;
+    --footer-bg: #100d1c; --footer-ink: #f4effc; --footer-ink-2: #cfc5e6;
+    --shadow-s: 0 1px 2px rgba(0, 0, 0, .3), 0 4px 14px rgba(0, 0, 0, .22);
+    --shadow-m: 0 2px 6px rgba(0, 0, 0, .34), 0 14px 34px rgba(0, 0, 0, .38);
+    --shadow-l: 0 6px 16px rgba(0, 0, 0, .4), 0 30px 64px rgba(0, 0, 0, .5);
+  }
+}
+:root[data-palette="lavande"][data-theme="dark"] {
+  --paper: #18142a; --paper-2: #211b36; --paper-3: #2e2647; --champagne: #272017; --lavender: #221c38;
+  --card: #231d38; --line: #3d3460; --line-soft: #2e2748;
+  --ink: #f4f0fc; --ink-2: #d8d0ec; --ink-3: #b4aacf;
+  --rose: #baa2ff; --rose-ink: #c9b5ff; --rose-deep: #baa2ff; --rose-soft: #342a58;
+  --gold: #e0bf7a; --gold-ink: #ebcf95; --gold-soft: #3b2f1f;
+  --lilac: #ff90b3; --lilac-ink: #ffa6c1; --lilac-soft: #4a2638;
+  --on-accent: #1c1236;
+  --footer-bg: #100d1c; --footer-ink: #f4effc; --footer-ink-2: #cfc5e6;
   --shadow-s: 0 1px 2px rgba(0, 0, 0, .3), 0 4px 14px rgba(0, 0, 0, .22);
   --shadow-m: 0 2px 6px rgba(0, 0, 0, .34), 0 14px 34px rgba(0, 0, 0, .38);
   --shadow-l: 0 6px 16px rgba(0, 0, 0, .4), 0 30px 64px rgba(0, 0, 0, .5);
@@ -443,7 +583,7 @@ section[hidden] { display: none; }
   content: ""; position: absolute; z-index: 2;
   left: 50%; top: -18%; width: 46%; aspect-ratio: 2 / 1; transform: translateX(-50%);
   background: url("../img/bow.svg") no-repeat center / contain;
-  filter: drop-shadow(0 2px 3px rgba(120, 30, 60, .25));
+  filter: var(--bow-filter, hue-rotate(0deg)) drop-shadow(0 2px 3px rgba(120, 30, 60, .25));
 }
 
 /* --------------------------------------------------------------------------
@@ -1491,7 +1631,7 @@ img.img-missing { display: none; }
 }
 .footer-top .medallion { box-shadow: 0 0 0 1.5px #e0bf7a; background: #fff; }
 .footer-name { font-family: var(--font-display); font-size: 1.5rem; font-weight: 580; color: var(--footer-ink); margin: 0; line-height: 1.1; }
-.footer-slogan { font-family: var(--font-hand); font-size: 1.45rem; font-weight: 700; color: #f2c9d8; margin: .1rem 0 0; }
+.footer-slogan { font-family: var(--font-hand); font-size: 1.45rem; font-weight: 700; color: var(--footer-script); margin: .1rem 0 0; }
 .footer-grid { display: grid; gap: 2rem clamp(1.5rem, 4vw, 3rem); grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); }
 .footer-grid h4 { font-family: var(--font-hand); font-size: 1.45rem; font-weight: 700; color: #ecd09a; margin: 0 0 .7rem; letter-spacing: 0; }
 .footer-grid ul { list-style: none; margin: 0; padding: 0; display: grid; gap: .45rem; font-size: var(--t-sm); }
@@ -1843,6 +1983,37 @@ img.img-missing { display: none; }
   .bh-robe__photo { width: 124px; }
   .bh-ems__parts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+
+/* Le bouton « Palette » des aperçus (jamais sur le vrai site) */
+.palette-picker { position: fixed; right: 16px; bottom: 16px; z-index: 85; }
+.palette-picker__toggle {
+  display: inline-flex; align-items: center; gap: .45rem;
+  padding: .6rem 1.05rem .6rem .85rem; border-radius: 999px;
+  border: 1.5px solid var(--line); background: var(--card); color: var(--ink);
+  box-shadow: var(--shadow-m); cursor: pointer;
+  font: 700 var(--t-sm) / 1 var(--font-body);
+}
+.palette-picker__toggle svg { color: var(--rose-ink); flex: none; }
+.palette-picker__panel {
+  position: absolute; right: 0; bottom: calc(100% + .6rem); width: min(310px, calc(100vw - 32px));
+  background: var(--card); border: 1px solid var(--line-soft); border-radius: var(--radius-s);
+  box-shadow: var(--shadow-l); padding: .9rem .8rem .8rem;
+}
+.palette-picker__panel[hidden] { display: none; }
+.palette-picker__title { margin: 0 .3rem .45rem; font-family: var(--font-hand); font-size: 1.35rem; font-weight: 700; color: var(--rose-ink); }
+.palette-picker__opt {
+  display: flex; align-items: center; gap: .8rem; width: 100%; margin: 0 0 .2rem; padding: .55rem .6rem;
+  border-radius: 12px; border: 1.5px solid transparent; background: none; color: var(--ink);
+  text-align: left; cursor: pointer; font: inherit;
+}
+.palette-picker__opt:hover { background: var(--paper-2); }
+.palette-picker__opt[aria-pressed="true"] { border-color: var(--gold); background: var(--paper-2); }
+.palette-picker__opt b { display: block; font-size: var(--t-sm); line-height: 1.3; }
+.palette-picker__opt small { display: block; font-size: var(--t-xs); color: var(--ink-3); line-height: 1.35; }
+.palette-picker__sw { display: inline-flex; flex: none; padding-left: 6px; }
+.palette-picker__sw i { width: 20px; height: 20px; margin-left: -6px; border-radius: 50%; border: 2px solid var(--card); box-shadow: 0 0 0 1px var(--line); }
+.palette-picker__hint { margin: .5rem .3rem 0; font-size: var(--t-xs); line-height: 1.45; color: var(--ink-3); }
+@media print { .palette-picker { display: none; } }
 
 /* --------------------------------------------------------------------------
    27. Divers et impression

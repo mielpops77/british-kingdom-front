@@ -178,6 +178,17 @@ def head(page):
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <script>
+    /* Thème et palette mémorisés, posés avant l'affichage : pas de changement de couleur au chargement.
+       La palette à l'essai vient de l'adresse (?palette=royal) ou du dernier choix. */
+    try {
+      var bkRoot = document.documentElement, bkTheme = localStorage.getItem('bk-theme');
+      if (bkTheme === 'dark' || bkTheme === 'light') bkRoot.setAttribute('data-theme', bkTheme);
+      var bkPalette = new URLSearchParams(location.search).get('palette');
+      if (bkPalette !== null) localStorage.setItem('bk-palette', bkPalette); else bkPalette = localStorage.getItem('bk-palette');
+      if (bkPalette && /^[a-z]{3,20}$/.test(bkPalette)) bkRoot.setAttribute('data-palette', bkPalette);
+    } catch (e) { /* stockage indisponible : palette et thème par défaut */ }
+  </script>
   <title>%(title)s</title>
   <meta name="description" content="%(desc)s">
   <link rel="canonical" href="%(canon)s">
