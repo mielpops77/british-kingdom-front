@@ -417,25 +417,28 @@ FEMELLES = sex_page(False)
 # ==========================================================================
 FICHE_CHAT = """
 <section class="page-head page-head--compact">
-  <div class="wrap">
+  <div class="wrap page-head__row">
+    <a class="back-pill" href="males.html" id="cat-back">%(back)s<span>Nos mâles</span></a>
     <nav class="breadcrumb" aria-label="Fil d'Ariane">
       <span><a href="index.html">Accueil</a></span>
-      <span><a href="males.html" id="cat-breadcrumb-parent">Nos chats</a></span>
+      <span><a href="males.html" id="cat-breadcrumb-parent">Nos mâles</a></span>
       <span id="cat-breadcrumb-name">Fiche</span>
     </nav>
   </div>
 </section>
-<section class="tight" style="padding-top:0">
+<section class="tight" style="padding-top:.4rem">
   <div class="wrap"><div id="cat-detail"></div></div>
 </section>
-<section class="panel panel--lilac tight">
-  <div class="wrap wrap--narrow center">
-    <h2>Une question sur ce chat ?</h2>
-    <p class="lede">Ses origines, ses portées à venir : demandez-nous, nous vous répondons avec plaisir.</p>
-    <div class="actions center"><a class="btn btn--primary" href="contact.html">Nous écrire</a></div>
+<section class="panel panel--blush tight" id="cat-others-section" hidden>
+  <div class="wrap">
+    <div class="section-head center">
+      <p class="eyebrow center">Découvrez aussi</p>
+      <h2 id="cat-others-title">Ses compagnons</h2>
+    </div>
+    <div class="friends" id="cat-others"></div>
   </div>
 </section>
-"""
+""" % {"back": ico("back", 18)}
 
 # ==========================================================================
 # CHATONS
@@ -1162,7 +1165,7 @@ PAGES = [
     {"file": "chat.html", "body": FICHE_CHAT, "sitemap": False,
      "title": "Fiche d'un chat — Chatterie British Kingdom",
      "desc": "Fiche détaillée d'un de nos British Shorthair ou Longhair : robe, origines, photos et portées.",
-     "scripts": '<script>BKPages.ficheChat();</script>'},
+     "scripts": '<script src="js/descriptions.js"></script>\n<script>BKPages.ficheChat();</script>'},
 
     {"file": "chatons.html", "body": CHATONS, "freq": "weekly", "prio": "0.9",
      "title": "Chatons British Shorthair et Longhair disponibles — Chatterie British Kingdom",

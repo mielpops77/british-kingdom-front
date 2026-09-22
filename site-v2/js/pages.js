@@ -251,6 +251,63 @@
   /* ======================================================================
      FICHE D'UN CHAT
      ====================================================================== */
+  /**
+   * Galerie « grande photo + miniatures » : la miniature touchée passe en grand,
+   * la grande photo s'ouvre dans la visionneuse (avec zoom). Le fond flouté
+   * reprend la photo : elle est montrée entière, sans être rognée ni entourée
+   * de bandes vides, qu'elle soit en hauteur ou en largeur.
+   */
+  function stage(photos, name, opts) {
+    const o = opts || {};
+    const list = photos.filter(Boolean).filter((p, i, a) => a.indexOf(p) === i);
+    const multi = list.length > 1;
+    // Adresse absolue : une url() relative placée dans une variable CSS serait
+    // résolue par rapport à la feuille de style, pas à la page.
+    const bg = (src) => ' style="--stage-bg:url(&quot;' + esc(new URL(src, document.baseURI).href) + '&quot;)"';
+    return '<div class="stage' + (o.cls ? ' ' + o.cls : '') + '" data-stage data-name="' + esc(name) + '">' +
+      '<div class="stage__main" data-stage-main role="button" tabindex="0" aria-label="Agrandir la photo de ' + esc(name) + '"' + (list[0] ? bg(list[0]) : '') + '>' +
+        (list[0]
+          ? '<img src="' + esc(list[0]) + '" alt="' + esc(name + (multi ? ', photo 1 sur ' + list.length : '')) + '" data-guard' + (o.eager ? ' fetchpriority="high"' : ' loading="lazy"') + '>'
+          : '<div class="img-fallback" aria-hidden="true"></div>') +
+        (o.badge || '') +
+        (multi ? '<span class="stage__count" data-stage-count>1 / ' + list.length + '</span>' : '') +
+        (list[0] ? '<span class="stage__zoom" aria-hidden="true">' + icon('zoomin', 18) + '</span>' : '') +
+        (multi ? '<button type="button" class="stage__nav stage__nav--prev" data-stage-nav="-1" aria-label="Photo précédente">' + icon('left', 18) + '</button>' +
+                 '<button type="button" class="stage__nav stage__nav--next" data-stage-nav="1" aria-label="Photo suivante">' + icon('right', 18) + '</button>' : '') +
+      '</div>' +
+      (multi ? '<div class="stage__thumbs">' + list.map((src, i) =>
+        '<button type="button" class="stage__thumb" data-stage-thumb data-full="' + esc(src) + '" aria-current="' + (i === 0) + '" aria-label="Voir la photo ' + (i + 1) + (name ? ' de ' + esc(name) : '') + '">' +
+        '<img src="' + esc(src) + '" alt="" loading="lazy" data-guard></button>').join('') + '</div>' : '') +
+      '</div>';
+  }
+  /** Branche chaque galerie « grande photo + miniatures » d'un bloc, fond flouté compris. */
+  function bindStages(root) {
+    $$('[data-stage]', root).forEach((el) => {
+      window.BKUI.bindStage(el, el.dataset.name || '');
+      const main = $('[data-stage-main]', el), img = main && $('img', main);
+      if (img) new MutationObserver(() => main.style.setProperty('--stage-bg', 'url("' + img.src + '")')).observe(img, { attributes: true, attributeFilter: ['src'] });
+    });
+  }
+
+  const EYES_PLURAL = { vert: 'verts', bleu: 'bleus', jaune: 'jaunes', 'doré': 'dorés', noir: 'noirs' };
+  /** « Un British Shorthair bleu aux yeux orange, né le 3 juillet 2024. » : tiré des champs de l'API. */
+  function portraitSentence(cat) {
+    const female = cat.sex === 'female';
+    const robe = splitRobe(cat.robe).nom.toLowerCase();
+    const breed = cleanText(cat.breed) || 'British';
+    let eyes = cleanText(cat.eyeColor).toLowerCase();
+    if (/^vairons?/.test(eyes)) eyes = 'vairons' + eyes.replace(/^vairons?/, '');
+    else eyes = EYES_PLURAL[eyes] || eyes;
+    let s = (female ? 'Une ' : 'Un ') + breed + (robe ? ' ' + robe : '') + (eyes ? ' aux yeux ' + eyes : '');
+    if (cat.dateOfBirth) s += (female ? ', née le ' : ', né le ') + fmt.date(cat.dateOfBirth);
+    return s + '.';
+  }
+
+  function trait(ic, label, value, sub) {
+    return '<li class="trait"><span class="trait__icon">' + icon(ic, 20) + '</span>' +
+      '<span class="trait__text"><small>' + label + '</small><b>' + esc(value) + '</b>' + (sub ? '<em>' + esc(sub) + '</em>' : '') + '</span></li>';
+  }
+
   async function ficheChat() {
     const box = $('#cat-detail');
     const id = new URLSearchParams(location.search).get('id');
@@ -261,63 +318,103 @@
       if (!cat || !cat.id) { box.innerHTML = empty('Chat introuvable', 'Ce chat n’est plus présenté sur le site. Voir <a href="males.html">nos mâles</a> et <a href="femelles.html">nos femelles</a>.'); return; }
 
       const name = niceName(cat.name);
+      const female = cat.sex === 'female';
       document.title = name + ' — Chatterie British Kingdom';
       const bc = $('#cat-breadcrumb-name'); if (bc) bc.textContent = name;
-      const parentHref = cat.archivee ? 'retraites.html' : cat.sex === 'female' ? 'femelles.html' : 'males.html';
+      const parentHref = cat.archivee ? 'retraites.html' : female ? 'femelles.html' : 'males.html';
+      const parentLabel = cat.archivee ? 'Nos retraités' : female ? 'Nos femelles' : 'Nos mâles';
       const parentLink = $('#cat-breadcrumb-parent');
-      if (parentLink) { parentLink.href = parentHref; parentLink.textContent = cat.archivee ? 'Nos retraités' : cat.sex === 'female' ? 'Nos femelles' : 'Nos mâles'; }
+      if (parentLink) { parentLink.href = parentHref; parentLink.textContent = parentLabel; }
+      const back = $('#cat-back');
+      if (back) { back.href = parentHref; $('span', back).textContent = parentLabel; }
       markNav(parentHref);
 
       const r = splitRobe(cat.robe);
       const litters = portees.filter((p) => String(p.idPapa) === String(cat.id) || String(p.idMaman) === String(cat.id));
-      const female = cat.sex === 'female';
       const eyebrow = cat.archivee ? (female ? 'Notre retraitée' : 'Notre retraité') : (female ? 'Notre reproductrice' : 'Notre étalon');
+      const photos = [cat.photo].concat(cat.gallery);
+      const saillies = !female && !cat.archivee ? yesNo(cat.sailliesExterieures) : '';
 
-      const facts = [
-        ['Race', cleanText(cat.breed)],
-        ['Sexe', cat.sexLabel],
-        ['Robe', r.nom],
-        ['Code EMS', r.ems],
-        ['Yeux', cleanText(cat.eyeColor)],
-        ['Naissance', cat.dateOfBirth ? fmt.date(cat.dateOfBirth) : ''],
-        ['Âge', cat.dateOfBirth ? fmt.age(cat.dateOfBirth) : ''],
-        ['Saillies extérieures', !female && !cat.archivee ? yesNo(cat.sailliesExterieures) : '']
-      ].filter(([, v]) => v);
+      const traits = [
+        cat.sexLabel ? trait(female ? 'female' : 'male', 'Sexe', cat.sexLabel) : '',
+        r.nom ? trait('palette', 'Robe', r.nom, r.ems) : '',
+        cat.eyeColor ? trait('eye', 'Yeux', cleanText(cat.eyeColor)) : '',
+        cat.dateOfBirth ? trait('cake', 'Naissance', fmt.date(cat.dateOfBirth), fmt.age(cat.dateOfBirth)) : ''
+      ].join('');
+
+      const pills = [
+        shortBreed(cat.breed) ? '<span class="pill pill--breed">' + esc(cleanText(cat.breed)) + '</span>' : '',
+        saillies ? '<span class="pill ' + (saillies === 'Oui' ? 'pill--disponible' : 'pill--vendu') + '">Saillies extérieures : ' + saillies.toLowerCase() + '</span>' : '',
+        cat.archivee ? '<span class="pill pill--rester">À la retraite</span>' : ''
+      ].join('');
+
+      const parents = [[cat.father, 'Papa'], [cat.mother, 'Maman']].filter((x) => x[0]);
+
+      // Le portrait : le champ de l'API s'il existe, sinon le texte de js/descriptions.js
+      const extra = (window.BK_DESCRIPTIONS || {})[cat.id] || {};
+      const about = cleanText(cat.description) || extra.texte || '';
+      // Les citations entre guillemets passent en italique
+      const aboutHtml = esc(about).replace(/«\s*([^»]+?)\s*»/g, '«&nbsp;<em>$1</em>&nbsp;»');
+      const health = Array.isArray(extra.sante) ? extra.sante : [];
 
       box.innerHTML =
-        '<div class="split split--wide-text profile">' +
-          '<div class="reveal">' +
+        '<div class="profile">' +
+          '<div class="profile__gallery reveal">' + stage(photos, name, { eager: true }) + '</div>' +
+          '<div class="profile__info reveal" data-delay="1">' +
             '<p class="eyebrow">' + eyebrow + '</p>' +
-            '<h1>' + esc(name) + '</h1>' +
-            '<p class="lede">' + esc([r.nom, cleanText(cat.breed)].filter(Boolean).join(' · ')) + (cat.dateOfBirth ? ' · ' + esc(fmt.age(cat.dateOfBirth)) : '') + '</p>' +
-            '<div class="sheet"><dl class="facts">' +
-              facts.map(([k, v]) => '<div><dt>' + esc(k) + '</dt><dd>' + esc(v) + '</dd></div>').join('') +
-            '</dl></div>' +
-            (cat.pedigree ? '<p style="margin-top:1rem"><a class="link-arrow" href="' + esc(cat.pedigreeUrl) + '" target="_blank" rel="noopener">Voir le pedigree</a></p>' : '') +
+            '<h1 class="profile__name">' + esc(name) + '<span class="profile__paw" aria-hidden="true"></span></h1>' +
+            '<p class="profile__lede">' + esc(portraitSentence(cat)) + '</p>' +
+            (pills ? '<p class="profile__pills">' + pills + '</p>' : '') +
+            (traits ? '<ul class="traits">' + traits + '</ul>' : '') +
+            (cat.pedigree ? '<p class="profile__pedigree"><a class="link-arrow" href="' + esc(cat.pedigreeUrl) + '" target="_blank" rel="noopener">Voir le pedigree</a></p>' : '') +
+
+            (about ?
+              '<div class="profile__block"><h2 class="profile__h">Son portrait</h2>' +
+              '<div class="about-note"><p>' + aboutHtml + '</p></div></div>' : '') +
+
+            (health.length ?
+              '<div class="profile__block"><h2 class="profile__h">Santé</h2>' +
+              '<ul class="health">' + health.map((h) => '<li>' + icon('check', 16) + '<span>' + esc(h) + '</span></li>').join('') + '</ul>' +
+              (extra.source ? '<p class="health__source">' + esc(extra.source) + '.</p>' : '') + '</div>' : '') +
+
+            (parents.length ?
+              '<div class="profile__block"><h2 class="profile__h">Ses parents</h2>' +
+              '<div class="parents" data-parents>' + parents.map(([src, role], i) =>
+                '<button type="button" class="parent" data-index="' + i + '" data-full="' + esc(src) + '" data-alt="' + role + ' de ' + esc(name) + '" aria-label="Agrandir la photo : ' + role.toLowerCase() + ' de ' + esc(name) + '">' +
+                '<span class="parent__photo"><img src="' + esc(src) + '" alt="" loading="lazy" data-guard></span>' +
+                '<span class="parent__role">' + role + '</span></button>' +
+                (i === 0 && parents.length > 1 ? '<span class="couple__heart" aria-hidden="true">' + icon('heart', 16) + '</span>' : '')).join('') +
+              '</div></div>' : '') +
+
+            (litters.length ?
+              '<div class="profile__block"><h2 class="profile__h">' + (litters.length > 1 ? 'Ses portées' : 'Sa portée') + ' du moment</h2>' +
+              '<div class="profile__litters">' + litters.map((p) => litterCard(p, cats)).join('') + '</div></div>' : '') +
+
+            '<div class="actions">' +
+              '<a class="btn btn--primary" href="contact.html?sujet=' + encodeURIComponent('À propos de ' + name) + '">Nous écrire à propos de ' + esc(name) + '</a>' +
+              '<a class="btn btn--ghost" href="' + parentHref + '">' + parentLabel + '</a>' +
+            '</div>' +
           '</div>' +
-          '<div class="split__media reveal" data-delay="1"><figure class="frame-photo frame-photo--arch">' +
-            (cat.photo ? '<img src="' + esc(cat.photo) + '" alt="Portrait de ' + esc(name) + '" data-guard>' : '<div class="img-fallback" aria-hidden="true"></div>') +
-          '</figure></div>' +
-        '</div>' +
+        '</div>';
 
-        ((cat.mother || cat.father) ?
-          '<section class="tight reveal"><h2>Ses parents</h2><div class="family-tree">' +
-            (cat.father ? '<figure><span class="label">Père</span>' + archImg(cat.father, 'Père de ' + name, 'arch--round') + '</figure>' : '') +
-            (cat.mother ? '<figure><span class="label">Mère</span>' + archImg(cat.mother, 'Mère de ' + name, 'arch--round') + '</figure>' : '') +
-          '</div></section>' : '') +
-
-        (cat.gallery.length ?
-          '<section class="tight reveal"><h2>En images</h2><div class="gallery" id="cat-gallery">' +
-            cat.gallery.map((g, i) => '<button type="button" data-index="' + i + '" data-full="' + esc(g) + '" data-alt="' + esc(name) + '" aria-label="Agrandir la photo ' + (i + 1) + ' de ' + esc(name) + '"><img src="' + esc(g) + '" alt="' + esc(name + ', photo ' + (i + 1)) + '" loading="lazy" data-guard></button>').join('') +
-          '</div></section>' : '') +
-
-        (litters.length ?
-          '<section class="tight reveal"><h2>' + (litters.length > 1 ? 'Ses portées' : 'Sa portée') + ' du moment</h2><div class="couples">' +
-            litters.map((p) => litterCard(p, cats)).join('') +
-          '</div></section>' : '');
-
-      bindGallery($('#cat-gallery'));
+      bindStages(box);
+      bindGallery($('[data-parents]', box));
       guardImages(box); setupReveal(box);
+
+      // Les copains (ou les copines) de la chatterie, pour continuer la visite
+      const others = cats.filter((c) => String(c.id) !== String(cat.id) && !!c.archivee === !!cat.archivee && (cat.archivee || c.sex === cat.sex));
+      const section = $('#cat-others-section');
+      if (section && others.length) {
+        $('#cat-others-title').textContent = cat.archivee ? 'Nos autres retraités' : (female ? 'Les copines de ' : 'Les copains de ') + name;
+        $('#cat-others').innerHTML = others.map((c) =>
+          '<a class="friend reveal" href="chat.html?id=' + encodeURIComponent(c.id) + '">' +
+            '<span class="friend__photo">' + (c.photo ? '<img src="' + esc(c.photo) + '" alt="" loading="lazy" data-guard>' : '<span class="img-fallback" aria-hidden="true"></span>') + '</span>' +
+            '<span class="friend__name">' + esc(niceName(c.name)) + '</span>' +
+            '<span class="friend__robe">' + esc(splitRobe(c.robe).nom) + '</span>' +
+          '</a>').join('');
+        section.hidden = false;
+        guardImages(section); setupReveal(section);
+      }
     } catch (e) { fail(box, e); }
   }
 
@@ -432,7 +529,7 @@
         '</section>' +
         journal(weeks);
 
-      $$('.gallery', box).forEach(bindGallery);
+      bindStages(box);
       guardImages(box); setupReveal(box);
 
       if (location.hash) {
@@ -447,16 +544,11 @@
     const name = niceName(k.name) || 'Chaton';
     const photos = k.photos.length ? k.photos : (k.photo ? [k.photo] : []);
     return '<article class="kitten-detail reveal" id="chaton-' + esc(k.id) + '">' +
-      '<div class="card__media">' + archImg(photos[0], 'Chaton ' + name) +
-        '<div class="card__badges"><span class="pill pill--' + k.status + '">' + esc(k.statusLabel) + '</span></div>' +
-      '</div>' +
+      stage(photos, name, { cls: 'stage--kitten', badge: '<span class="stage__badge pill pill--' + k.status + '">' + esc(k.statusLabel) + '</span>' }) +
       '<div class="card__body">' +
         '<h3 class="card__title">' + esc(name) + '</h3>' +
         '<p class="card__meta">' + [k.sexLabel ? sexMark(k.sex) + esc(k.sexLabel) : '', esc(r.nom), esc(shortBreed(k.breed)), k.loof ? 'LOOF' : '']
           .filter(Boolean).map((x) => '<span>' + x + '</span>').join('') + '</p>' +
-        (photos.length > 1 ? '<div class="gallery gallery--mini">' +
-          photos.map((src, i) => '<button type="button" data-index="' + i + '" data-full="' + esc(src) + '" data-alt="' + esc(name) + '" aria-label="Agrandir la photo ' + (i + 1) + ' de ' + esc(name) + '"><img src="' + esc(src) + '" alt="" loading="lazy" data-guard></button>').join('') +
-        '</div>' : '') +
         (k.status === 'disponible'
           ? '<p class="kitten-detail__cta"><a class="btn btn--sm btn--primary" href="contact.html?sujet=' + encodeURIComponent('Chaton ' + name) + '">Se renseigner sur ' + esc(name) + '</a></p>'
           : '') +

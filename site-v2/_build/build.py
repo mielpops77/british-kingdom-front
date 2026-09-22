@@ -81,6 +81,7 @@ def crown_svg():
 
 ICON = {
     "menu": '<path d="M4 7h16M4 12h16M4 17h16"/>',
+    "close": '<path d="M18 6 6 18M6 6l12 12"/>',
     "sun": '<circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
     "moon": '<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/>',
     "phone": '<path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2Z"/>',
@@ -99,6 +100,7 @@ ICON = {
     "syringe": '<path d="m18 2 4 4M17 7l3-3M19 9 8.7 19.3a2 2 0 0 1-2.8 0l-1.2-1.2a2 2 0 0 1 0-2.8L15 5"/><path d="m9 11 4 4M5 19l-3 3M14 4l6 6"/>',
     "gift": '<rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 0 1 0 5"/>',
     "target": '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/>',
+    "back": '<path d="M19 12H5M11 18l-6-6 6-6"/>',
     "sparkle": '<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6.3 6.3l2.5 2.5M15.2 15.2l2.5 2.5M6.3 17.7l2.5-2.5M15.2 8.8l2.5-2.5"/>',
     "facebook": '<path d="M14 9h3V6h-3a4 4 0 0 0-4 4v2H8v3h2v7h3v-7h3l1-3h-4v-2a1 1 0 0 1 1-1Z"/>',
     "instagram": '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor"/>',
@@ -218,7 +220,12 @@ def header(active):
         <span class="brand__sub">Shorthair &amp; Longhair</span>
       </span>
     </a>
-    <div class="nav-panel"><nav class="nav" id="menu" aria-label="Navigation principale">%(links)s</nav></div>
+    <div class="nav-panel"><nav class="nav" id="menu" aria-label="Navigation principale">%(links)s
+      <div class="nav__extra">
+        <a class="btn btn--primary" href="chatons.html">Voir les chatons</a>
+        <a class="nav__tel" href="tel:%(tel_lien)s">%(phone)s %(tel)s</a>
+      </div>
+    </nav></div>
     <div class="header-actions">
       <a class="btn btn--sm btn--primary hide-sm" href="chatons.html">Voir les chatons</a>
       <button class="icon-btn theme-btn" type="button" aria-label="Changer de thème clair ou sombre">
@@ -232,7 +239,8 @@ def header(active):
 <main id="main">
 """ % {
         "links": links, "medallion": medallion("medallion--sm", eager=True, alt=""),
-        "sun": ico("sun", 18, "sun"), "moon": ico("moon", 18, "moon"), "menu": ico("menu", 20),
+        "sun": ico("sun", 18, "sun"), "moon": ico("moon", 18, "moon"), "menu": ico("menu", 20, "i-menu") + ico("close", 20, "i-close"),
+        "tel": SITE["tel"], "tel_lien": SITE["tel_lien"], "phone": ico("phone", 17),
     }
 
 

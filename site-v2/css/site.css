@@ -301,17 +301,24 @@ section[hidden] { display: none; }
    -------------------------------------------------------------------------- */
 .site-header {
   position: sticky; top: env(safe-area-inset-top, 0px); z-index: 50;
+  border-bottom: 1px solid transparent;
+  transition: border-color .3s var(--ease), box-shadow .3s var(--ease);
+}
+/* Le verre dépoli est porté par un calque à part. Posé sur l'en-tête lui-même,
+   un backdrop-filter ferait de l'en-tête le repère des éléments « fixed » qu'il
+   contient : le menu du téléphone serait coupé à la hauteur de l'en-tête. */
+.site-header::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
   background: color-mix(in srgb, var(--paper) 86%, transparent);
   backdrop-filter: blur(14px) saturate(150%);
   -webkit-backdrop-filter: blur(14px) saturate(150%);
-  border-bottom: 1px solid transparent;
-  transition: border-color .3s var(--ease), background .3s var(--ease), box-shadow .3s var(--ease);
+  transition: background .3s var(--ease);
 }
 .site-header.is-stuck {
   border-bottom-color: var(--line-soft);
-  background: color-mix(in srgb, var(--paper) 95%, transparent);
   box-shadow: 0 6px 24px -18px rgba(90, 30, 60, .5);
 }
+.site-header.is-stuck::before { background: color-mix(in srgb, var(--paper) 95%, transparent); }
 .site-header__inner { display: flex; align-items: center; gap: 1rem; min-height: 76px; }
 .brand { display: flex; align-items: center; gap: .7rem; text-decoration: none; color: var(--ink); flex: none; }
 .brand__text { display: flex; flex-direction: column; }
@@ -361,6 +368,7 @@ section[hidden] { display: none; }
 }
 
 .burger { display: none; }
+.nav__extra { display: none; } /* seulement dans le panneau du téléphone */
 @media (max-width: 1320px) {
   /* Le conteneur occupe exactement l'écran et découpe le panneau quand il est
      rangé : sans cela, le panneau hors écran ferait défiler la page en largeur. */
@@ -376,15 +384,36 @@ section[hidden] { display: none; }
     border-left: 1px solid var(--line);
     box-shadow: var(--shadow-l);
     transform: translateX(100%);
-    transition: transform .4s var(--ease);
+    /* Rangé, le panneau est aussi invisible pour le clavier et les lecteurs d'écran */
+    visibility: hidden;
+    transition: transform .4s var(--ease), visibility 0s linear .4s;
     overflow-y: auto;
+    overscroll-behavior: contain;
   }
   .nav a { padding: .78rem .9rem; font-size: 1.02rem; border-radius: var(--radius-s); }
   .nav a[aria-current="page"] { background: var(--rose-soft); }
   .nav a[aria-current="page"]::after { left: auto; right: 1rem; top: 50%; bottom: auto; transform: translateY(-50%); }
-  body.nav-open .nav { transform: translateX(0); }
+  body.nav-open .nav { transform: translateX(0); visibility: visible; transition: transform .4s var(--ease), visibility 0s; }
   body.nav-open { overflow: hidden; }
   .burger { display: grid; }
+  /* En bas du panneau : le bouton des chatons et le téléphone */
+  .nav .nav__extra {
+    display: grid; gap: .6rem; justify-items: stretch;
+    margin-top: 1rem; padding-top: 1.2rem; border-top: 1px dashed var(--line);
+  }
+  .nav .nav__extra a.btn {
+    padding: .86rem 1.4rem; border-radius: 999px; font-size: var(--t-sm);
+    color: var(--btn-fg); background: var(--btn-bg); justify-content: center;
+  }
+  .nav .nav__extra a.btn:hover { color: var(--btn-fg); background: var(--btn-bg); }
+  .nav a.nav__tel { display: flex; align-items: center; justify-content: center; gap: .5rem; font-weight: 700; color: var(--rose-ink); }
+  .nav a.nav__tel svg { width: 17px; height: 17px; }
+  /* Le thème et le bouton du menu restent au-dessus du panneau ouvert, pour le refermer */
+  .header-actions { position: relative; z-index: 46; }
+  .burger .i-close { display: none; }
+  .burger[aria-expanded="true"] .i-menu { display: none; }
+  .burger[aria-expanded="true"] .i-close { display: block; }
+  .burger[aria-expanded="true"] { color: var(--rose-ink); border-color: var(--rose); background: var(--rose-soft); }
   .nav-scrim {
     position: fixed; inset: 0; background: rgba(40, 15, 30, .42);
     opacity: 0; pointer-events: none; transition: opacity .3s var(--ease); z-index: 40;
@@ -591,8 +620,6 @@ section[hidden] { display: none; }
 }
 .frame-photo__badge svg { width: 30px; height: 26px; }
 .frame-photo--tilt { transform: rotate(-1.5deg); max-width: 420px; margin-inline: auto; }
-.frame-photo--arch img { border-radius: 50% 50% 30px 30px / 36% 36% 30px 30px; }
-.frame-photo--arch::after { border-radius: 50% 50% 38px 38px / 36% 36% 38px 38px; }
 .frame-photo .img-fallback { position: relative; aspect-ratio: 4 / 5; border-radius: 30px; }
 
 .banner-photo { margin: 0; }
@@ -743,7 +770,6 @@ a.couple__one:hover .couple__name { color: var(--rose-ink); }
 }
 .sheet h3 { font-size: 1.16rem; margin: .2rem 0 .9rem; color: var(--rose-ink); }
 .sheet--statuses { max-width: 620px; margin: 2.4rem auto 0; }
-.profile .sheet { margin-top: 1.6rem; }
 .facts { display: grid; margin: 0; }
 .facts div { display: flex; align-items: baseline; gap: .8rem; padding: .56rem 0; border-bottom: 1px dotted var(--line); }
 .facts div:last-child { border-bottom: 0; }
@@ -1061,8 +1087,6 @@ ul.pawed li:nth-child(3n+3)::before { background: var(--lilac); }
 .gallery button:hover { transform: translateY(-3px); box-shadow: var(--shadow-m); }
 .gallery--big { grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr)); gap: 1rem; }
 .gallery--big button { aspect-ratio: 3 / 4; border-width: 5px; border-radius: 22px; }
-.gallery--mini { margin-top: .9rem; grid-template-columns: repeat(auto-fill, minmax(62px, 1fr)); gap: .5rem; }
-.gallery--mini button { border-width: 3px; border-radius: 12px; }
 .gallery__caption {
   position: absolute; left: 0; right: 0; bottom: 0;
   padding: 1.8rem .8rem .6rem;
@@ -1073,20 +1097,249 @@ ul.pawed li:nth-child(3n+3)::before { background: var(--lilac); }
 .gallery--big button:hover .gallery__caption, .gallery--big button:focus-visible .gallery__caption { opacity: 1; }
 @media (hover: none) { .gallery__caption { opacity: 1; } }
 
+/* La visionneuse : photo en grand, zoom, miniatures */
 .lightbox {
   position: fixed; inset: 0; z-index: 100;
-  background: rgba(24, 10, 20, .94);
-  display: grid; place-items: center;
-  padding: clamp(1rem, 4vw, 3rem);
+  display: grid; grid-template-rows: auto minmax(0, 1fr) auto;
+  background: rgba(24, 10, 20, .97);
+  color: #fff;
 }
 .lightbox[hidden] { display: none; }
-.lightbox img { max-width: 100%; max-height: 82vh; object-fit: contain; border-radius: 12px; background: transparent; }
-.lightbox__bar { position: absolute; top: calc(1rem + env(safe-area-inset-top, 0px)); right: 1rem; display: flex; gap: .5rem; }
-.lightbox .icon-btn { color: #fff; border-color: rgba(255, 255, 255, .4); background: rgba(0, 0, 0, .35); }
-.lightbox .icon-btn:hover { background: rgba(255, 255, 255, .15); }
-.lightbox__nav { position: absolute; inset: 0; display: flex; align-items: center; justify-content: space-between; padding-inline: clamp(.5rem, 3vw, 2rem); pointer-events: none; }
-.lightbox__nav .icon-btn { pointer-events: auto; width: 50px; height: 50px; }
-.lightbox__caption { position: absolute; bottom: calc(1.2rem + env(safe-area-inset-bottom, 0px)); left: 0; right: 0; text-align: center; color: rgba(255, 255, 255, .86); font-size: var(--t-sm); }
+.lightbox__top {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  padding: calc(.8rem + env(safe-area-inset-top, 0px)) clamp(.8rem, 3vw, 1.6rem) .4rem;
+}
+.lightbox__count { font-size: var(--t-sm); font-weight: 700; letter-spacing: .04em; color: rgba(255, 255, 255, .88); }
+.lightbox__tools { display: flex; gap: .5rem; margin-left: auto; }
+.lightbox .icon-btn { color: #fff; border-color: rgba(255, 255, 255, .35); background: rgba(255, 255, 255, .08); }
+.lightbox .icon-btn:hover { color: #fff; background: rgba(255, 255, 255, .2); border-color: rgba(255, 255, 255, .65); }
+.lightbox__stage {
+  position: relative; min-height: 0; overflow: hidden;
+  display: grid; place-items: center;
+  padding: .2rem clamp(.4rem, 6vw, 5rem);
+  touch-action: none; cursor: zoom-in;
+}
+.lightbox.is-zoomed .lightbox__stage { cursor: grab; }
+.lightbox.is-dragging .lightbox__stage { cursor: grabbing; }
+.lightbox__img {
+  max-width: 100%; max-height: 100%; object-fit: contain;
+  border-radius: 14px; background: transparent;
+  transform-origin: center; transition: transform .3s var(--ease);
+  user-select: none; -webkit-user-drag: none; will-change: transform;
+}
+.lightbox__img.is-in { animation: lb-in .35s var(--ease); }
+@keyframes lb-in { from { opacity: 0; } to { opacity: 1; } }
+.lightbox__arrow { position: absolute; top: 50%; transform: translateY(-50%); z-index: 2; width: 52px; height: 52px; }
+.lightbox__arrow--prev { left: clamp(.4rem, 2vw, 1.4rem); }
+.lightbox__arrow--next { right: clamp(.4rem, 2vw, 1.4rem); }
+.lightbox__arrow[hidden] { display: none; }
+.lightbox.is-zoomed .lightbox__arrow { opacity: .3; }
+.lightbox__bottom { text-align: center; padding: .5rem 1rem calc(.9rem + env(safe-area-inset-bottom, 0px)); }
+.lightbox__caption { margin: 0; font-family: var(--font-display); font-size: 1.08rem; color: #fff; }
+.lightbox__hint { margin: .15rem 0 .65rem; font-size: var(--t-xs); color: rgba(255, 255, 255, .72); }
+.lightbox.is-zoomed .lightbox__hint { visibility: hidden; }
+.lightbox__thumbs { display: flex; gap: .45rem; overflow-x: auto; padding: .25rem .2rem .3rem; scrollbar-width: thin; }
+.lightbox__thumbs > :first-child { margin-left: auto; }
+.lightbox__thumbs > :last-child { margin-right: auto; }
+.lightbox__thumbs button {
+  flex: 0 0 56px; height: 56px; padding: 0; cursor: pointer;
+  border-radius: 12px; overflow: hidden; border: 2px solid transparent;
+  background: rgba(255, 255, 255, .08); opacity: .5;
+  transition: opacity .2s var(--ease), border-color .2s var(--ease), transform .25s var(--bounce);
+}
+.lightbox__thumbs button:hover { opacity: .9; transform: translateY(-2px); }
+.lightbox__thumbs button[aria-current="true"] { opacity: 1; border-color: #ff8fb1; }
+.lightbox__thumbs img { width: 100%; height: 100%; object-fit: cover; background: transparent; }
+@media (max-width: 560px) {
+  .lightbox__arrow { width: 42px; height: 42px; }
+  .lightbox__stage { padding-inline: .3rem; }
+  .lightbox__thumbs button { flex-basis: 46px; height: 46px; }
+}
+
+/* --------------------------------------------------------------------------
+   20 bis. La fiche d'un chat : grande photo et miniatures, cases nettes
+   -------------------------------------------------------------------------- */
+.page-head__row { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem 1.2rem; }
+.page-head__row .breadcrumb { margin: 0; }
+.back-pill {
+  display: inline-flex; align-items: center; gap: .45rem;
+  padding: .5rem 1.05rem .5rem .8rem; border-radius: 999px;
+  background: var(--card); border: 1px solid var(--line); box-shadow: var(--shadow-s);
+  color: var(--ink-2); font-size: var(--t-sm); font-weight: 700; text-decoration: none;
+  transition: color .2s var(--ease), border-color .2s var(--ease), transform .25s var(--bounce);
+}
+.back-pill:hover { color: var(--rose-ink); border-color: var(--rose); transform: translateX(-3px); }
+.back-pill svg { width: 18px; height: 18px; }
+
+/* minmax(0, 1fr) : sans cela, la rangée de miniatures élargirait la colonne sur téléphone */
+.profile { display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(1.8rem, 4.5vw, 4rem); align-items: start; }
+@media (min-width: 920px) {
+  .profile { grid-template-columns: minmax(0, 1.06fr) minmax(0, .94fr); }
+  .profile__gallery { position: sticky; top: 100px; }
+}
+.profile__name {
+  display: flex; align-items: center; gap: .55rem;
+  font-size: clamp(2.5rem, 3vw + 1.4rem, 3.6rem); margin: 0 0 .25rem;
+}
+.profile__paw {
+  width: .6em; height: .6em; flex: none;
+  background: var(--rose); opacity: .85; transform: rotate(14deg);
+  -webkit-mask: url("../img/paw.svg") no-repeat center / contain;
+  mask: url("../img/paw.svg") no-repeat center / contain;
+}
+.profile__lede { font-size: var(--t-md); color: var(--ink-2); line-height: 1.6; margin: 0 0 1.1rem; max-width: 46ch; }
+.profile__pills { display: flex; flex-wrap: wrap; gap: .45rem; margin: 0 0 1.4rem; }
+.profile__pedigree { margin: 1.3rem 0 0; }
+.profile__block { margin-top: 2.1rem; }
+.profile__h { display: flex; align-items: center; gap: .7rem; font-size: 1.35rem; margin: 0 0 1rem; }
+.profile__h::after { content: ""; flex: 1; height: 1.5px; background: linear-gradient(90deg, color-mix(in srgb, var(--gold) 60%, transparent), transparent); }
+.profile__litters .litter-card { max-width: 380px; }
+.profile .actions { margin-top: 2.2rem; }
+
+/* Son portrait : le texte de la chatterie, citations en italique */
+.about-note {
+  position: relative;
+  padding: 1.3rem 1.4rem 1.3rem 1.5rem;
+  background: var(--card); border: 1px solid var(--line-soft); border-radius: 22px;
+  box-shadow: var(--shadow-s);
+}
+.about-note::before {
+  content: "\201C"; position: absolute; left: .5rem; top: -1.3rem;
+  font-family: var(--font-display); font-size: 4rem; line-height: 1; color: var(--rose); opacity: .5;
+}
+.about-note p { margin: 0; color: var(--ink-2); font-size: 1.04rem; line-height: 1.72; }
+.about-note em { font-family: var(--font-display); font-style: italic; color: var(--ink); }
+.health { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .5rem; }
+.health li {
+  display: inline-flex; align-items: center; gap: .45rem;
+  padding: .45rem .85rem .45rem .6rem; border-radius: 999px;
+  background: var(--card); border: 1px solid var(--line-soft); box-shadow: var(--shadow-s);
+  font-size: var(--t-sm); font-weight: 600; color: var(--ink);
+}
+.health li svg { width: 16px; height: 16px; color: var(--rose-ink); flex: none; }
+.health__source { margin: .7rem 0 0; font-size: var(--t-xs); color: var(--ink-3); }
+
+.traits { list-style: none; margin: 0; padding: 0; display: grid; gap: .75rem; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.trait {
+  display: flex; align-items: center; gap: .85rem; min-width: 0;
+  padding: .9rem 1rem;
+  background: var(--card); border: 1px solid var(--line-soft); border-radius: 20px;
+  box-shadow: var(--shadow-s);
+}
+.trait__icon {
+  width: 44px; height: 44px; flex: none; border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--rose-soft); color: var(--rose-ink);
+}
+.trait:nth-child(4n+2) .trait__icon { background: var(--gold-soft); color: var(--gold-ink); }
+.trait:nth-child(4n+3) .trait__icon { background: var(--lilac-soft); color: var(--lilac-ink); }
+.trait__text { min-width: 0; }
+.trait small { display: block; font-size: .7rem; letter-spacing: .13em; text-transform: uppercase; font-weight: 700; color: var(--ink-3); }
+.trait b { display: block; font-family: var(--font-display); font-size: 1.14rem; font-weight: 600; line-height: 1.2; color: var(--ink); overflow-wrap: anywhere; }
+.trait em { display: block; margin-top: .1rem; font-style: normal; font-size: var(--t-xs); font-weight: 600; color: var(--ink-3); }
+
+.parents { display: flex; align-items: flex-start; gap: .4rem; }
+.parent {
+  display: flex; flex-direction: column; align-items: center; gap: .55rem;
+  padding: 0; border: 0; background: none; font: inherit; color: inherit; cursor: zoom-in;
+}
+.parent__photo {
+  width: 104px; aspect-ratio: 1; border-radius: 50%; overflow: hidden;
+  border: 4px solid var(--card); box-shadow: var(--ring), var(--shadow-s);
+  background: var(--paper-3); transition: transform .3s var(--bounce);
+}
+.parent:hover .parent__photo { transform: scale(1.06); }
+.parent__photo img { width: 100%; height: 100%; object-fit: cover; }
+.parent__role { font-size: .74rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--gold-ink); }
+.parents .couple__heart { margin-top: 33px; }
+
+/* La galerie « grande photo + miniatures » (fiche d'un chat, chatons d'une portée) */
+.stage { position: relative; min-width: 0; }
+.stage__main {
+  position: relative; isolation: isolate; overflow: hidden;
+  display: grid; place-items: center;
+  width: 100%; aspect-ratio: 4 / 5; max-height: min(74vh, 760px);
+  border-radius: 30px; border: 7px solid var(--card);
+  background: var(--paper-3); box-shadow: var(--shadow-l);
+  cursor: zoom-in;
+}
+.stage__main::before {
+  content: ""; position: absolute; inset: -30px; z-index: -1;
+  background: var(--stage-bg, none) center / cover no-repeat;
+  filter: blur(26px) saturate(1.15); opacity: .55; transform: scale(1.1);
+}
+.stage__main::after {
+  content: ""; position: absolute; inset: 6px; z-index: 1; pointer-events: none;
+  border-radius: 23px; border: 1.5px solid color-mix(in srgb, var(--gold) 70%, transparent);
+}
+.stage__main img { width: 100%; height: 100%; object-fit: contain; background: transparent; transition: transform .7s var(--ease); }
+.stage__main:hover img { transform: scale(1.02); }
+.stage__main img.is-in { animation: stage-in .45s var(--ease); }
+@keyframes stage-in { from { opacity: .15; transform: scale(.985); } to { opacity: 1; transform: none; } }
+.stage__main .img-fallback { border-radius: inherit; }
+.stage__count, .stage__badge { position: absolute; left: 14px; top: 14px; z-index: 2; }
+.stage__count {
+  padding: .28rem .72rem; border-radius: 999px;
+  background: color-mix(in srgb, var(--card) 90%, transparent); color: var(--ink);
+  font-size: var(--t-xs); font-weight: 700; box-shadow: var(--shadow-s);
+}
+.stage__zoom {
+  position: absolute; right: 14px; bottom: 14px; z-index: 2;
+  width: 42px; height: 42px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--card); color: var(--rose-ink); box-shadow: var(--shadow-m);
+  transition: transform .3s var(--bounce);
+}
+.stage__main:hover .stage__zoom { transform: scale(1.12); }
+.stage__nav {
+  position: absolute; top: 50%; z-index: 2; transform: translateY(-50%);
+  width: 42px; height: 42px; border-radius: 50%; border: 0; cursor: pointer;
+  display: grid; place-items: center;
+  background: color-mix(in srgb, var(--card) 92%, transparent); color: var(--ink); box-shadow: var(--shadow-m);
+  opacity: 0; transition: opacity .25s var(--ease), transform .25s var(--bounce), color .2s var(--ease);
+}
+.stage__nav--prev { left: 12px; }
+.stage__nav--next { right: 12px; }
+.stage__main:hover .stage__nav, .stage__main:focus-within .stage__nav { opacity: 1; }
+.stage__nav:hover { color: var(--rose-ink); transform: translateY(-50%) scale(1.08); }
+@media (hover: none) { .stage__nav { opacity: .92; width: 38px; height: 38px; } }
+.stage__thumbs { display: flex; gap: .6rem; overflow-x: auto; padding: 1rem .3rem .5rem; scrollbar-width: thin; }
+.stage__thumbs > :first-child { margin-left: auto; }
+.stage__thumbs > :last-child { margin-right: auto; }
+.stage__thumb {
+  flex: 0 0 74px; height: 74px; padding: 0; cursor: pointer;
+  border-radius: 18px; overflow: hidden; border: 3px solid var(--card);
+  background: var(--paper-3); box-shadow: var(--shadow-s); opacity: .6;
+  transition: opacity .25s var(--ease), transform .3s var(--bounce), border-color .25s var(--ease), box-shadow .25s var(--ease);
+}
+.stage__thumb:hover { opacity: 1; transform: translateY(-3px); }
+.stage__thumb[aria-current="true"] { opacity: 1; border-color: var(--rose); transform: translateY(-3px); box-shadow: var(--shadow-m); }
+.stage__thumb img { width: 100%; height: 100%; object-fit: cover; background: transparent; }
+
+/* Chatons d'une portée : cadre en arche, photo pleine, petites miniatures */
+.stage--kitten .stage__main { aspect-ratio: 4 / 5; max-height: none; border-radius: var(--arch); border-width: 5px; box-shadow: var(--shadow-m); }
+.stage--kitten .stage__main::before { display: none; }
+.stage--kitten .stage__main::after { inset: 0; border: 0; border-radius: inherit; box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--gold) 55%, transparent); }
+.stage--kitten .stage__main img { object-fit: cover; }
+.stage--kitten .stage__count { left: auto; right: 12px; }
+.stage--kitten .stage__zoom { width: 36px; height: 36px; right: 12px; bottom: 12px; }
+.stage--kitten .stage__thumbs { gap: .45rem; padding-top: .75rem; }
+.stage--kitten .stage__thumb { flex-basis: 54px; height: 54px; border-radius: 14px; border-width: 2px; }
+
+/* « Les copains de… » : les autres chats de la même rubrique */
+.friends { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.3rem 1.8rem; }
+.friend { display: flex; flex-direction: column; align-items: center; gap: .1rem; width: 136px; text-align: center; text-decoration: none; color: inherit; }
+.friend__photo {
+  position: relative; width: 112px; aspect-ratio: 1; margin-bottom: .6rem;
+  border-radius: 50%; overflow: hidden;
+  border: 4px solid var(--card); box-shadow: var(--ring), var(--shadow-m);
+  background: var(--paper-3); transition: transform .35s var(--bounce);
+}
+.friend:hover .friend__photo { transform: translateY(-4px) rotate(-3deg); }
+.friend__photo img { width: 100%; height: 100%; object-fit: cover; }
+.friend__name { font-family: var(--font-display); font-size: 1.1rem; font-weight: 600; transition: color .2s var(--ease); }
+.friend:hover .friend__name { color: var(--rose-ink); }
+.friend__robe { font-size: var(--t-xs); color: var(--ink-3); font-weight: 600; }
 
 /* --------------------------------------------------------------------------
    21. Filtres
@@ -1177,9 +1430,6 @@ img.img-missing { display: none; }
 .timeline li.is-now { background: var(--rose-soft); border-color: color-mix(in srgb, var(--rose) 45%, transparent); box-shadow: var(--shadow-s); }
 .timeline li.is-now .when::after { content: "En ce moment"; display: block; width: max-content; margin-top: .35rem; padding: .1rem .5rem; border-radius: 999px; background: var(--card); text-transform: none; letter-spacing: 0; font-weight: 700; }
 
-.family-tree { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 190px)); gap: 1.4rem; }
-.family-tree figure { margin: 0; text-align: center; }
-.family-tree .label { display: block; margin-bottom: .6rem; color: var(--gold-ink); }
 
 /* --------------------------------------------------------------------------
    24. Article
@@ -1284,11 +1534,18 @@ img.img-missing { display: none; }
   .kittens .card__badges, .cats .card__badges { left: .4rem; top: .45rem; }
   .kittens .pill, .cats .pill { font-size: .7rem; padding: .22rem .55rem; }
   .kittens .arch, .cats .arch { border-width: 4px; }
-  .kitten-detail .gallery--mini { grid-template-columns: repeat(3, 1fr); }
   .assurance__list li { display: grid; grid-template-columns: auto 1fr; column-gap: 1rem; padding: 1.1rem 1.1rem 1.05rem; }
   .assurance__list .assurance__icon { grid-row: span 2; width: 44px; height: 44px; }
   .assurance__list h3 { margin: .1rem 0 .25rem; }
   .facts div { flex-direction: column; gap: .1rem; align-items: stretch; }
+  .trait { padding: .75rem .8rem; gap: .65rem; }
+  .trait__icon { width: 38px; height: 38px; }
+  .trait b { font-size: 1.02rem; }
+  .parent__photo { width: 92px; }
+  .friends { gap: 1.1rem .9rem; }
+  .friend { width: 104px; }
+  .friend__photo { width: 92px; }
+  .stage__thumb { flex-basis: 62px; height: 62px; border-radius: 15px; }
   .facts dd { margin-left: 0; text-align: left; }
   .timeline li { grid-template-columns: 1fr; gap: .3rem; }
   .couple__photo { width: 84px; }

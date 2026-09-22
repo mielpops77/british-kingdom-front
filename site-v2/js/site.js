@@ -31,17 +31,24 @@
     const nav = $('.nav');
     const scrim = $('.nav-scrim');
     if (!burger || !nav) return;
-    const close = () => {
-      document.body.classList.remove('nav-open');
-      burger.setAttribute('aria-expanded', 'false');
-    };
-    burger.addEventListener('click', () => {
-      const open = document.body.classList.toggle('nav-open');
+    const set = (open) => {
+      document.body.classList.toggle('nav-open', open);
       burger.setAttribute('aria-expanded', String(open));
+      burger.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
+    };
+    const close = () => set(false);
+    burger.addEventListener('click', () => {
+      const open = !document.body.classList.contains('nav-open');
+      set(open);
+      if (open) { const first = $('a', nav); if (first) setTimeout(() => first.focus({ preventScroll: true }), 50); }
     });
     if (scrim) scrim.addEventListener('click', close);
-    nav.addEventListener('click', (e) => { if (e.target.tagName === 'A') close(); });
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+    nav.addEventListener('click', (e) => { if (e.target.closest('a')) close(); });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && document.body.classList.contains('nav-open')) { close(); burger.focus(); }
+    });
+    // Passé en affichage large (rotation d'une tablette), le menu ouvert se referme
+    window.matchMedia('(min-width: 1321px)').addEventListener('change', (m) => { if (m.matches) close(); });
 
     const header = $('.site-header');
     if (header) {
@@ -94,8 +101,17 @@
     });
   }
 
-  /* ---------- visionneuse d'images ---------- */
-  let lb = null, lbItems = [], lbIndex = 0;
+  /* ---------- visionneuse d'images, avec zoom ----------
+     Souris : un clic sur la photo zoome à l'endroit visé (un second clic
+     revient), la molette zoome, on glisse pour se déplacer. Doigts : double
+     touche pour zoomer, pincer pour agrandir, glisser pour se déplacer ou
+     pour changer de photo quand on n'est pas zoomé. Clavier : flèches,
+     + et - pour zoomer, 0 pour revenir, Échap pour fermer. */
+  const ZOOM_MAX = 4, ZOOM_CLICK = 2.5;
+  let lb = null, lbItems = [], lbIndex = 0, lbOpener = null;
+  let z = { s: 1, x: 0, y: 0 };
+  const coarse = window.matchMedia('(pointer: coarse)').matches;
+
   function ensureLightbox() {
     if (lb) return lb;
     lb = document.createElement('div');
@@ -105,14 +121,24 @@
     lb.setAttribute('aria-modal', 'true');
     lb.setAttribute('aria-label', 'Photo en grand');
     lb.innerHTML =
-      '<div class="lightbox__bar"><button class="icon-btn" data-lb="close" aria-label="Fermer">' + icon('close') + '</button></div>' +
-      '<img alt="">' +
-      '<div class="lightbox__nav">' +
-        '<button class="icon-btn" data-lb="prev" aria-label="Photo précédente">' + icon('left') + '</button>' +
-        '<button class="icon-btn" data-lb="next" aria-label="Photo suivante">' + icon('right') + '</button>' +
+      '<div class="lightbox__top">' +
+        '<span class="lightbox__count" aria-live="polite"></span>' +
+        '<div class="lightbox__tools">' +
+          '<button class="icon-btn" type="button" data-lb="zoomout" aria-label="Dézoomer">' + icon('zoomout') + '</button>' +
+          '<button class="icon-btn" type="button" data-lb="zoomin" aria-label="Zoomer">' + icon('zoomin') + '</button>' +
+          '<button class="icon-btn" type="button" data-lb="close" aria-label="Fermer">' + icon('close') + '</button>' +
+        '</div>' +
       '</div>' +
-      '<p class="lightbox__caption"></p>';
+      '<div class="lightbox__stage"><img class="lightbox__img" alt="" draggable="false"></div>' +
+      '<button class="icon-btn lightbox__arrow lightbox__arrow--prev" type="button" data-lb="prev" aria-label="Photo précédente">' + icon('left') + '</button>' +
+      '<button class="icon-btn lightbox__arrow lightbox__arrow--next" type="button" data-lb="next" aria-label="Photo suivante">' + icon('right') + '</button>' +
+      '<div class="lightbox__bottom">' +
+        '<p class="lightbox__caption"></p>' +
+        '<p class="lightbox__hint">' + (coarse ? 'Touchez deux fois ou pincez pour zoomer' : 'Cliquez sur la photo pour zoomer, molette pour ajuster') + '</p>' +
+        '<div class="lightbox__thumbs"></div>' +
+      '</div>';
     document.body.appendChild(lb);
+
     lb.addEventListener('click', (e) => {
       const act = e.target.closest('[data-lb]');
       if (act) {
@@ -120,29 +146,150 @@
         if (a === 'close') closeLb();
         if (a === 'prev') showLb(lbIndex - 1);
         if (a === 'next') showLb(lbIndex + 1);
+        if (a === 'zoomin') zoomAt(Math.min(ZOOM_MAX, z.s * 1.6));
+        if (a === 'zoomout') zoomAt(Math.max(1, z.s / 1.6));
         return;
       }
-      if (e.target === lb) closeLb();
+      const th = e.target.closest('[data-lb-thumb]');
+      if (th) { showLb(Number(th.dataset.lbThumb)); return; }
+      // Un clic à côté de la photo ferme la visionneuse. Un clic SUR la photo sert au zoom :
+      // la capture du pointeur fait arriver ce clic sur le cadre, d'où la mémoire du point de départ.
+      const stage = $('.lightbox__stage', lb);
+      if ((e.target === lb || e.target === stage) && stage.dataset.downOn !== 'img' && z.s === 1) closeLb();
     });
     document.addEventListener('keydown', (e) => {
       if (lb.hidden) return;
       if (e.key === 'Escape') closeLb();
-      if (e.key === 'ArrowLeft') showLb(lbIndex - 1);
-      if (e.key === 'ArrowRight') showLb(lbIndex + 1);
+      else if (e.key === 'ArrowLeft') showLb(lbIndex - 1);
+      else if (e.key === 'ArrowRight') showLb(lbIndex + 1);
+      else if (e.key === '+' || e.key === '=') zoomAt(Math.min(ZOOM_MAX, z.s * 1.6));
+      else if (e.key === '-') zoomAt(Math.max(1, z.s / 1.6));
+      else if (e.key === '0') zoomAt(1);
+      else if (e.key === 'Tab') { // la tabulation reste dans la visionneuse
+        const f = $$('button:not([hidden])', lb).filter((b) => b.offsetParent);
+        if (!f.length) return;
+        const i = f.indexOf(document.activeElement);
+        if (e.shiftKey && i <= 0) { e.preventDefault(); f[f.length - 1].focus(); }
+        else if (!e.shiftKey && i === f.length - 1) { e.preventDefault(); f[0].focus(); }
+      }
     });
+    window.addEventListener('resize', () => { if (!lb.hidden) applyZoom(); });
+    setupZoomGestures($('.lightbox__stage', lb), $('.lightbox__img', lb));
     return lb;
   }
+
+  /** Applique l'échelle et le décalage, sans laisser la photo quitter le cadre. */
+  function applyZoom(animate) {
+    const img = $('.lightbox__img', lb), stage = $('.lightbox__stage', lb);
+    const maxX = Math.max(0, (img.offsetWidth * z.s - stage.clientWidth) / 2);
+    const maxY = Math.max(0, (img.offsetHeight * z.s - stage.clientHeight) / 2);
+    z.x = Math.min(maxX, Math.max(-maxX, z.x));
+    z.y = Math.min(maxY, Math.max(-maxY, z.y));
+    img.style.transition = animate === false ? 'none' : '';
+    img.style.transform = 'translate(' + z.x + 'px, ' + z.y + 'px) scale(' + z.s + ')';
+    lb.classList.toggle('is-zoomed', z.s > 1.01);
+  }
+  /** Zoome vers l'échelle s en gardant immobile le point (px, py), relatif au centre du cadre. */
+  function zoomAt(s, px, py, animate) {
+    const old = z.s;
+    s = Math.min(ZOOM_MAX, Math.max(1, s));
+    px = px || 0; py = py || 0;
+    z.x = px - (s / old) * (px - z.x);
+    z.y = py - (s / old) * (py - z.y);
+    z.s = s;
+    if (s === 1) { z.x = 0; z.y = 0; }
+    applyZoom(animate);
+  }
+
+  function setupZoomGestures(stage, img) {
+    const pts = new Map();
+    let start = null, pinch = null, lastTap = 0, moved = false;
+    const rel = (e) => { const r = stage.getBoundingClientRect(); return { x: e.clientX - r.left - r.width / 2, y: e.clientY - r.top - r.height / 2 }; };
+
+    stage.addEventListener('pointerdown', (e) => {
+      if (e.target !== img && e.target !== stage) return;
+      stage.dataset.downOn = e.target === img ? 'img' : 'stage';
+      stage.setPointerCapture(e.pointerId);
+      pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      moved = false;
+      if (pts.size === 1) start = { x: e.clientX, y: e.clientY, zx: z.x, zy: z.y, t: Date.now(), type: e.pointerType, onImg: e.target === img };
+      if (pts.size === 2) {
+        const [a, b] = [...pts.values()];
+        const r = stage.getBoundingClientRect();
+        pinch = { d: Math.hypot(a.x - b.x, a.y - b.y), s: z.s,
+          cx: (a.x + b.x) / 2 - r.left - r.width / 2, cy: (a.y + b.y) / 2 - r.top - r.height / 2 };
+      }
+    });
+    stage.addEventListener('pointermove', (e) => {
+      if (!pts.has(e.pointerId)) return;
+      pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      if (pts.size === 2 && pinch) {
+        const [a, b] = [...pts.values()];
+        zoomAt(pinch.s * Math.hypot(a.x - b.x, a.y - b.y) / pinch.d, pinch.cx, pinch.cy, false);
+        moved = true;
+        return;
+      }
+      if (!start) return;
+      const dx = e.clientX - start.x, dy = e.clientY - start.y;
+      if (Math.abs(dx) + Math.abs(dy) > 6) moved = true;
+      if (z.s > 1) { z.x = start.zx + dx; z.y = start.zy + dy; applyZoom(false); lb.classList.add('is-dragging'); }
+    });
+    const end = (e) => {
+      if (!pts.has(e.pointerId)) return;
+      pts.delete(e.pointerId);
+      lb.classList.remove('is-dragging');
+      if (pts.size < 2) pinch = null;
+      if (pts.size > 0 || !start) return;
+      const dx = e.clientX - start.x, dy = e.clientY - start.y, dt = Date.now() - start.t;
+      const p = rel(e);
+      if (!moved && e.type === 'pointerup' && (start.onImg || z.s > 1)) {
+        if (start.type === 'mouse') zoomAt(z.s > 1 ? 1 : ZOOM_CLICK, p.x, p.y);
+        else if (Date.now() - lastTap < 320) { zoomAt(z.s > 1 ? 1 : ZOOM_CLICK, p.x, p.y); lastTap = 0; }
+        else lastTap = Date.now();
+      } else if (z.s === 1 && start.type !== 'mouse' && dt < 600 && Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.4) {
+        showLb(lbIndex + (dx < 0 ? 1 : -1)); // balayage : photo suivante ou précédente
+      }
+      start = null;
+    };
+    stage.addEventListener('pointerup', end);
+    stage.addEventListener('pointercancel', end);
+    stage.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const p = rel(e);
+      zoomAt(z.s * Math.exp(-e.deltaY * 0.0018), p.x, p.y, false);
+    }, { passive: false });
+  }
+
   function showLb(i) {
     if (!lbItems.length) return;
     lbIndex = (i + lbItems.length) % lbItems.length;
     const item = lbItems[lbIndex];
-    $('img', lb).src = item.src;
-    $('img', lb).alt = item.alt || '';
-    $('.lightbox__caption', lb).textContent = lbItems.length > 1 ? (lbIndex + 1) + ' / ' + lbItems.length + (item.alt ? ' — ' + item.alt : '') : (item.alt || '');
-    $('.lightbox__nav', lb).style.display = lbItems.length > 1 ? '' : 'none';
+    const img = $('.lightbox__img', lb);
+    z = { s: 1, x: 0, y: 0 };
+    img.style.transform = '';
+    lb.classList.remove('is-zoomed');
+    img.classList.remove('is-in'); void img.offsetWidth; img.classList.add('is-in');
+    img.src = item.src;
+    img.alt = item.alt || '';
+    const multi = lbItems.length > 1;
+    $('.lightbox__count', lb).textContent = multi ? (lbIndex + 1) + ' / ' + lbItems.length : '';
+    $('.lightbox__caption', lb).textContent = item.alt || '';
+    $$('.lightbox__arrow', lb).forEach((b) => { b.hidden = !multi; });
+    const strip = $('.lightbox__thumbs', lb);
+    if (strip.dataset.for !== String(lbItems.length) + lbItems[0].src) {
+      strip.dataset.for = String(lbItems.length) + lbItems[0].src;
+      strip.innerHTML = multi ? lbItems.map((it, k) => '<button type="button" data-lb-thumb="' + k + '" aria-label="Photo ' + (k + 1) + '"><img src="' + it.src + '" alt="" loading="lazy"></button>').join('') : '';
+    }
+    $$('[data-lb-thumb]', strip).forEach((b, k) => b.setAttribute('aria-current', String(k === lbIndex)));
+    const on = $$('[data-lb-thumb]', strip)[lbIndex];
+    if (on) strip.scrollTo({ left: on.offsetLeft - strip.clientWidth / 2 + on.clientWidth / 2, behavior: 'smooth' });
+    // On charge d'avance les photos voisines
+    [lbIndex + 1, lbIndex - 1].forEach((k) => { const it = lbItems[(k + lbItems.length) % lbItems.length]; if (it) { const pre = new Image(); pre.src = it.src; } });
   }
   function openLb(items, index) {
+    if (!items || !items.length) return;
     ensureLightbox();
+    lbOpener = document.activeElement;
     lbItems = items;
     lb.hidden = false;
     document.body.style.overflow = 'hidden';
@@ -153,6 +300,7 @@
     if (!lb) return;
     lb.hidden = true;
     document.body.style.overflow = '';
+    if (lbOpener && lbOpener.focus) lbOpener.focus();
   }
 
   /** Rend une grille de photos cliquables. */
@@ -164,6 +312,58 @@
       const items = $$('button[data-index]', container).map((b) => ({ src: b.dataset.full || $('img', b).src, alt: b.dataset.alt || '' }));
       openLb(items, Number(btn.dataset.index));
     });
+  }
+
+  /**
+   * Une photo principale et ses miniatures : la miniature touchée passe en
+   * grand ; la grande photo s'ouvre dans la visionneuse, où l'on peut zoomer.
+   * Sur téléphone, on glisse sur la grande photo pour passer à la suivante.
+   *   [data-stage] > [data-stage-main] img, [data-stage-thumb][data-full],
+   *   [data-stage-nav="-1|1"], [data-stage-count]
+   */
+  function bindStage(root, name) {
+    if (!root || root.dataset.bound) return;
+    root.dataset.bound = '1';
+    const main = $('[data-stage-main]', root);
+    const img = main && $('img', main);
+    if (!main || !img) return;
+    const thumbs = $$('[data-stage-thumb]', root);
+    const row = thumbs.length ? thumbs[0].parentElement : null;
+    const items = thumbs.length ? thumbs.map((t) => ({ src: t.dataset.full, alt: name || '' })) : [{ src: img.getAttribute('src'), alt: name || '' }];
+    const count = $('[data-stage-count]', root);
+    let cur = 0, swiped = false;
+    function show(i) {
+      cur = (i + items.length) % items.length;
+      img.classList.remove('is-in'); void img.offsetWidth; img.classList.add('is-in');
+      img.src = items[cur].src;
+      img.alt = (name ? name + ', photo ' : 'Photo ') + (cur + 1) + ' sur ' + items.length;
+      thumbs.forEach((t, k) => t.setAttribute('aria-current', String(k === cur)));
+      if (count) count.textContent = (cur + 1) + ' / ' + items.length;
+      const t = thumbs[cur];
+      if (t && row) row.scrollTo({ left: t.offsetLeft - row.clientWidth / 2 + t.clientWidth / 2, behavior: 'smooth' });
+    }
+    thumbs.forEach((t, k) => t.addEventListener('click', () => show(k)));
+    $$('[data-stage-nav]', root).forEach((b) => b.addEventListener('click', (e) => { e.stopPropagation(); show(cur + Number(b.dataset.stageNav)); }));
+    main.addEventListener('click', (e) => {
+      if (swiped || e.target.closest('[data-stage-nav]')) return;
+      openLb(items, cur);
+    });
+    main.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLb(items, cur); }
+      if (e.key === 'ArrowRight') show(cur + 1);
+      if (e.key === 'ArrowLeft') show(cur - 1);
+    });
+    let sx = null, sy = 0;
+    main.addEventListener('touchstart', (e) => { if (e.touches.length === 1) { sx = e.touches[0].clientX; sy = e.touches[0].clientY; } }, { passive: true });
+    main.addEventListener('touchend', (e) => {
+      if (sx == null || items.length < 2) return;
+      const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+      sx = null;
+      if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.4) {
+        show(cur + (dx < 0 ? 1 : -1));
+        swiped = true; setTimeout(() => { swiped = false; }, 450);
+      }
+    }, { passive: true });
   }
 
   /* ---------- pictogrammes en ligne ---------- */
@@ -186,6 +386,16 @@
     book: '<path d="M4 4h7a3 3 0 0 1 3 3v13a2.5 2.5 0 0 0-2.5-2.5H4Z"/><path d="M20 4h-3a3 3 0 0 0-3 3v13a2.5 2.5 0 0 1 2.5-2.5H20Z"/>',
     clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
     crown: '<path d="M3 18h18M4 15l-1-8 5 4 4-7 4 7 5-4-1 8Z" fill="currentColor" stroke-width="1.2"/>',
+    zoomin: '<circle cx="11" cy="11" r="7"/><path d="m20 20-4-4M11 8v6M8 11h6"/>',
+    zoomout: '<circle cx="11" cy="11" r="7"/><path d="m20 20-4-4M8 11h6"/>',
+    expand: '<path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>',
+    back: '<path d="M19 12H5M11 18l-6-6 6-6"/>',
+    doc: '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>',
+    palette: '<path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.8-.9 1.4-1.9l-.3-.8a1.6 1.6 0 0 1 1.5-2.3H17a4 4 0 0 0 4-4c0-5-4-9-9-9Z"/><circle cx="7.5" cy="11" r="1.1"/><circle cx="10" cy="7" r="1.1"/><circle cx="14.5" cy="7" r="1.1"/>',
+    eye: '<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/>',
+    cake: '<path d="M4 21h16M5 21v-6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v6M5 17c2 1.3 3.5 1.3 5 0s3-1.3 5 0 3 1.3 4 0M12 13V9"/><path d="M12 6.5c.9 0 1.5-.6 1.5-1.4S12 2.5 12 2.5s-1.5 1.8-1.5 2.6c0 .8.6 1.4 1.5 1.4Z"/>',
+    male: '<circle cx="10" cy="14" r="5"/><path d="m14 10 6-6M15 4h5v5"/>',
+    female: '<circle cx="12" cy="9" r="5"/><path d="M12 14v7M9 18h6"/>',
     facebook: '<path d="M14 9h3V6h-3a4 4 0 0 0-4 4v2H8v3h2v7h3v-7h3l1-3h-4v-2a1 1 0 0 1 1-1Z"/>',
     instagram: '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor"/>',
     youtube: '<rect x="2" y="5" width="20" height="14" rx="4"/><path d="m10 9 5 3-5 3Z" fill="currentColor"/>',
@@ -390,7 +600,7 @@
     if (window.BK) { window.BK.api.trackVisit(); window.BK.api.heartbeat(); }
   }
 
-  window.BKUI = { $, $$, icon, setupReveal, guardImages, bindGallery, openLb, toggleTheme };
+  window.BKUI = { $, $$, icon, setupReveal, guardImages, bindGallery, bindStage, openLb, toggleTheme };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
 })();
