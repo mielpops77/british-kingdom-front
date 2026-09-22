@@ -587,41 +587,57 @@
     $$('[data-consent-open]').forEach((b) => b.addEventListener('click', showConsent));
   }
 
-  /* ---------- palettes à l'essai : un bouton sur les aperçus, jamais sur le vrai site ---------- */
+  /* ---------- essais de palettes et de formes : un bouton sur les aperçus, jamais sur le vrai site ---------- */
   const PALETTES = [
     { key: 'framboise', name: 'Framboise', note: 'la palette actuelle', sw: ['#b0244f', '#c29a4e', '#9277c9', '#fff8f5'] },
     { key: 'royal', name: 'Bleu royal', note: 'les couleurs du logo', sw: ['#253d78', '#b8913f', '#a8475f', '#f9f7f2'] },
     { key: 'chocolat', name: 'Chocolat & rose poudré', note: 'la couleur de nos British', sw: ['#6f4431', '#c08a52', '#d48a9e', '#fdf8f4'] },
     { key: 'lavande', name: 'Lavande', note: 'violet tendre, rose et or', sw: ['#5b3ea3', '#c29a4e', '#d8648d', '#fbf9fd'] },
   ];
-  function setPalette(key) {
-    document.documentElement.setAttribute('data-palette', key);
-    try { localStorage.setItem('bk-palette', key); } catch (e) { /* non bloquant */ }
-    // L'adresse garde la palette : on peut l'envoyer telle quelle pour la montrer
-    try { const u = new URL(location.href); u.searchParams.set('palette', key); history.replaceState(history.state, '', u); } catch (e) { /* non bloquant */ }
+  const SHAPES = [
+    { key: 'arche', name: 'Arche', note: 'la forme actuelle' },
+    { key: 'medaillon', name: 'Médaillon', note: 'tout rond, comme le logo' },
+    { key: 'doux', name: 'Coins arrondis', note: 'simple et doux' },
+    { key: 'galet', name: 'Galet', note: 'tout en rondeurs, un peu différent pour chaque chat' },
+    { key: 'polaroid', name: 'Polaroïd', note: 'comme des photos souvenirs' },
+  ];
+  // Chaque essai : l'attribut posé sur <html>, sa mémoire et son nom dans l'adresse
+  const TRIALS = {
+    palette: { attr: 'data-palette', store: 'bk-palette', param: 'palette', def: 'framboise' },
+    forme: { attr: 'data-shape', store: 'bk-forme', param: 'forme', def: 'arche' },
+  };
+  function setTrial(kind, key) {
+    const t = TRIALS[kind];
+    document.documentElement.setAttribute(t.attr, key);
+    try { localStorage.setItem(t.store, key); } catch (e) { /* non bloquant */ }
+    // L'adresse garde le choix : on peut l'envoyer telle quelle pour le montrer
+    try { const u = new URL(location.href); u.searchParams.set(t.param, key); history.replaceState(history.state, '', u); } catch (e) { /* non bloquant */ }
   }
-  function setupPalettes() {
+  function setupTrials() {
     if (window.BK && window.BK.officiel) return;
+    const opt = (kind, key, swatch, name, note) =>
+      '<button type="button" class="palette-picker__opt" data-trial="' + kind + '" data-key="' + key + '" aria-pressed="false">' +
+      swatch + '<span><b>' + name + '</b><small>' + note + '</small></span></button>';
     const box = document.createElement('div');
     box.className = 'palette-picker';
     box.innerHTML =
-      '<button type="button" class="palette-picker__toggle" aria-expanded="false" aria-controls="palette-list">' + icon('palette', 18) + '<span>Palette</span></button>' +
-      '<div class="palette-picker__panel" id="palette-list" role="group" aria-label="Essayer une palette de couleurs" hidden>' +
-        '<p class="palette-picker__title">Essayer une palette</p>' +
-        PALETTES.map((p) => '<button type="button" class="palette-picker__opt" data-palette-key="' + p.key + '" aria-pressed="false">' +
-          '<span class="palette-picker__sw" aria-hidden="true">' + p.sw.map((c) => '<i style="background:' + c + '"></i>').join('') + '</span>' +
-          '<span><b>' + p.name + '</b><small>' + p.note + '</small></span></button>').join('') +
-        '<p class="palette-picker__hint">Le choix vous suit de page en page. Pour montrer une palette à quelqu\'un, envoyez l\'adresse de la page : elle la contient.</p>' +
+      '<button type="button" class="palette-picker__toggle" aria-expanded="false" aria-controls="trial-panel">' + icon('palette', 18) + '<span>Essayer</span></button>' +
+      '<div class="palette-picker__panel" id="trial-panel" role="group" aria-label="Essayer des couleurs et des formes" hidden>' +
+        '<p class="palette-picker__title">Les couleurs</p>' +
+        PALETTES.map((p) => opt('palette', p.key, '<span class="palette-picker__sw" aria-hidden="true">' + p.sw.map((c) => '<i style="background:' + c + '"></i>').join('') + '</span>', p.name, p.note)).join('') +
+        '<p class="palette-picker__title">La forme des photos</p>' +
+        SHAPES.map((s) => opt('forme', s.key, '<span class="shape-sw shape-sw--' + s.key + '" aria-hidden="true"></span>', s.name, s.note)).join('') +
+        '<p class="palette-picker__hint">Le choix vous suit de page en page. Pour le montrer à quelqu\'un, envoyez l\'adresse de la page : elle le contient.</p>' +
       '</div>';
     document.body.appendChild(box);
     const toggle = $('.palette-picker__toggle', box), panel = $('.palette-picker__panel', box);
-    const mark = () => {
-      const cur = document.documentElement.getAttribute('data-palette') || 'framboise';
-      $$('[data-palette-key]', box).forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.paletteKey === cur)));
-    };
+    const mark = () => $$('[data-trial]', box).forEach((b) => {
+      const t = TRIALS[b.dataset.trial];
+      b.setAttribute('aria-pressed', String(b.dataset.key === (document.documentElement.getAttribute(t.attr) || t.def)));
+    });
     const open = (on) => { panel.hidden = !on; toggle.setAttribute('aria-expanded', String(on)); if (on) mark(); };
     toggle.addEventListener('click', () => open(panel.hidden));
-    box.addEventListener('click', (e) => { const b = e.target.closest('[data-palette-key]'); if (b) { setPalette(b.dataset.paletteKey); mark(); } });
+    box.addEventListener('click', (e) => { const b = e.target.closest('[data-trial]'); if (b) { setTrial(b.dataset.trial, b.dataset.key); mark(); } });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !panel.hidden) { open(false); toggle.focus(); } });
     document.addEventListener('click', (e) => { if (!panel.hidden && !box.contains(e.target)) open(false); });
   }
@@ -634,7 +650,7 @@
     setupForms();
     setupHeroVideo();
     setupConsent();
-    setupPalettes();
+    setupTrials();
     const tb = $('.theme-btn');
     if (tb) tb.addEventListener('click', toggleTheme);
     $$('[data-icon]').forEach((el) => { el.innerHTML = icon(el.dataset.icon, el.dataset.iconSize || 24); });

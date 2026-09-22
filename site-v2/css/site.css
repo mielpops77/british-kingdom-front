@@ -2018,6 +2018,89 @@ img.img-missing { display: none; }
 .palette-picker__sw i { width: 20px; height: 20px; margin-left: -6px; border-radius: 50%; border: 2px solid var(--card); box-shadow: 0 0 0 1px var(--line); }
 .palette-picker__hint { margin: .5rem .3rem 0; font-size: var(--t-xs); line-height: 1.45; color: var(--ink-3); }
 @media print { .palette-picker { display: none; } }
+.palette-picker__panel { max-height: calc(100vh - 90px); max-height: calc(100dvh - 90px); overflow-y: auto; }
+.palette-picker__opt + .palette-picker__title { margin-top: .8rem; }
+/* Aperçu de chaque forme dans le menu */
+.shape-sw {
+  flex: none; width: 30px; height: 34px; margin: 0 7px 0 5px;
+  background: linear-gradient(140deg, var(--rose-soft), var(--rose));
+  border-radius: 50% 50% 6px 6px / 38% 38% 6px 6px;
+}
+.shape-sw--medaillon { height: 30px; border-radius: 50%; box-shadow: 0 0 0 1.5px var(--gold); }
+.shape-sw--doux { border-radius: 8px; }
+.shape-sw--galet { height: 31px; border-radius: 64% 36% 56% 44% / 47% 58% 42% 53%; }
+.shape-sw--polaroid {
+  padding: 3px 3px 8px; border-radius: 2px; transform: rotate(-5deg);
+  background: linear-gradient(140deg, var(--rose-soft), var(--rose)) content-box, var(--card);
+  box-shadow: 0 0 0 1px var(--line), var(--shadow-s);
+}
+
+/* --------------------------------------------------------------------------
+   Formes des photos à l'essai (html[data-shape])
+   L'arche reste la forme du site. Les autres s'essaient avec ?forme=medaillon,
+   doux, galet ou polaroid, ou avec le bouton « Essayer » des aperçus. Elles
+   touchent les portraits des chats et des chatons : cartes des pages Mâles,
+   Femelles, Retraités, Chatons, accueil, et photos des chatons d'une portée.
+   -------------------------------------------------------------------------- */
+/* Médaillon : tout rond, cerclé d'or, le prénom centré dessous */
+:root[data-shape="medaillon"] .card__media .arch {
+  aspect-ratio: 1; border-radius: 50%;
+  box-shadow: 0 0 0 1.5px var(--gold), var(--shadow-m);
+}
+:root[data-shape="medaillon"] .stage--kitten .stage__main { aspect-ratio: 1; border-radius: 50%; }
+
+/* Coins arrondis : simple et doux */
+:root[data-shape="doux"] .card__media .arch { aspect-ratio: 4 / 5; border-radius: 26px; }
+:root[data-shape="doux"] .stage--kitten .stage__main { border-radius: 26px; }
+
+/* Galet : des rondeurs un peu différentes d'une carte à l'autre, qui ondulent au survol */
+:root[data-shape="galet"] .card__media .arch,
+:root[data-shape="galet"] .stage--kitten .stage__main {
+  aspect-ratio: 1; border-radius: 64% 36% 56% 44% / 47% 58% 42% 53%;
+  transition: border-radius .9s var(--ease);
+}
+:root[data-shape="galet"] .card:nth-child(3n+2) .card__media .arch,
+:root[data-shape="galet"] .kitten-detail:nth-child(3n+2) .stage__main { border-radius: 38% 62% 40% 60% / 60% 40% 60% 40%; }
+:root[data-shape="galet"] .card:nth-child(3n+3) .card__media .arch,
+:root[data-shape="galet"] .kitten-detail:nth-child(3n+3) .stage__main { border-radius: 56% 44% 67% 33% / 41% 61% 39% 59%; }
+:root[data-shape="galet"] .card:hover .card__media .arch { border-radius: 46% 54% 42% 58% / 58% 45% 55% 42%; }
+
+/* Médaillon et galet : l'étiquette passe sous la photo, au milieu, et le texte se centre */
+:root[data-shape="medaillon"] .card__badges,
+:root[data-shape="galet"] .card__badges {
+  left: 50%; top: auto; bottom: -.55rem; transform: translateX(-50%);
+  flex-direction: row; align-items: center;
+}
+:root[data-shape="medaillon"] .card__media .arch img,
+:root[data-shape="galet"] .card__media .arch img { object-position: 50% 32%; }
+:root[data-shape="medaillon"] .cats .card__body, :root[data-shape="medaillon"] .kittens .card__body,
+:root[data-shape="galet"] .cats .card__body, :root[data-shape="galet"] .kittens .card__body { text-align: center; padding-top: 1.35rem; }
+:root[data-shape="medaillon"] .cats .card__meta, :root[data-shape="medaillon"] .kittens .card__meta,
+:root[data-shape="galet"] .cats .card__meta, :root[data-shape="galet"] .kittens .card__meta,
+:root[data-shape="medaillon"] .kitten-detail__cta, :root[data-shape="galet"] .kitten-detail__cta { justify-content: center; }
+:root[data-shape="medaillon"] .stage--kitten .stage__badge,
+:root[data-shape="galet"] .stage--kitten .stage__badge { left: 50%; bottom: 10px; transform: translateX(-50%); max-width: none; }
+:root[data-shape="medaillon"] .stage--kitten .stage__zoom,
+:root[data-shape="galet"] .stage--kitten .stage__zoom { display: none; }
+
+/* Polaroïd : un cadre blanc, plus large en bas, un peu penché, avec son ruban adhésif */
+:root[data-shape="polaroid"] .card__media .arch {
+  aspect-ratio: 1 / 1.1; border-radius: 4px;
+  border-width: 10px 10px 30px; box-shadow: var(--shadow-m);
+  transform: rotate(-2deg); transition: transform .45s var(--bounce);
+}
+:root[data-shape="polaroid"] .card:nth-child(2n) .card__media .arch { transform: rotate(1.6deg); }
+:root[data-shape="polaroid"] .card:nth-child(3n) .card__media .arch { transform: rotate(-.8deg); }
+:root[data-shape="polaroid"] .card:hover .card__media .arch { transform: rotate(0); }
+:root[data-shape="polaroid"] .card__media .arch::after { display: none; }
+:root[data-shape="polaroid"] .card__media::before {
+  content: ""; position: absolute; z-index: 2; top: -9px; left: 50%; width: 76px; height: 22px;
+  transform: translateX(-50%) rotate(-3deg); border-radius: 3px;
+  background: color-mix(in srgb, var(--rose) 30%, transparent);
+}
+:root[data-shape="polaroid"] .card__badges { left: 1.2rem; top: 1.2rem; }
+:root[data-shape="polaroid"] .stage--kitten .stage__main { border-radius: 4px; border-width: 9px 9px 26px; }
+:root[data-shape="polaroid"] .stage--kitten .stage__main::after { display: none; }
 
 /* --------------------------------------------------------------------------
    27. Divers et impression
