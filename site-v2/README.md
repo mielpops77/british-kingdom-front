@@ -211,6 +211,16 @@ par des commentaires `À COMPLÉTER` dans le code.
   localisation), qui part toujours au chargement : pour être dispensé de
   consentement, il doit rester strictement limité à la mesure d'audience.
   Le site actuel, lui, charge encore Google Analytics sans consentement.
+- **Photos trop petites dans l'administration** (relevé du 22/09/2026) :
+  l'ancienne administration, avant juillet 2026, réduisait chaque photo à
+  500 × 500 pour le profil et à 800 × 550 pour la galerie, recadrée en
+  paysage. La nouvelle garde la pleine qualité (Vesunna, Akira, les chatons :
+  1 200 × 1 600 et plus). À remettre en ligne depuis les originaux des
+  dossiers « Reproducteurs - … » : Apéricube (profil et 14 photos en
+  311 × 414), Voltaire (profil 387 × 516), les profils d'Eden, Tina, Spooky,
+  Wilson et Zara, les galeries d'Eden, Tina, Spooky, Wilson et Willy Wonka.
+  Le site n'agrandit plus inutilement ces photos : le grand cadre des fiches
+  prend la forme de chaque photo, du portrait au paysage.
 - **Dépistages réels** : les dates et laboratoires des tests (HCM, PKD, FIV,
   FeLV, groupes sanguins) ne sont pas encore affichés sur les fiches.
 

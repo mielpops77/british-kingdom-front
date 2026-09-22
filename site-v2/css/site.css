@@ -1446,6 +1446,7 @@ ul.pawed li:nth-child(3n+3)::before { background: var(--lilac); }
   border-radius: 30px; border: 7px solid var(--card);
   background: var(--paper-3); box-shadow: var(--shadow-l);
   cursor: zoom-in;
+  transition: aspect-ratio .4s var(--ease);
 }
 .stage__main::after {
   content: ""; position: absolute; inset: 6px; z-index: 1; pointer-events: none;

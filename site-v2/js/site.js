@@ -327,6 +327,18 @@
     const main = $('[data-stage-main]', root);
     const img = main && $('img', main);
     if (!main || !img) return;
+    // Le grand cadre prend la forme de la photo affichée, du portrait (4:5) au paysage (4:3) :
+    // une photo en paysage n'est plus rognée en portrait, donc plus agrandie que nécessaire.
+    // Les photos des chatons d'une portée gardent un cadre fixe, pour que les cartes restent alignées.
+    if (!root.classList.contains('stage--kitten')) {
+      const fit = () => {
+        if (!img.naturalWidth) return;
+        const r = Math.min(4 / 3, Math.max(4 / 5, img.naturalWidth / img.naturalHeight));
+        main.style.aspectRatio = r.toFixed(3);
+      };
+      img.addEventListener('load', fit);
+      if (img.complete) fit();
+    }
     const thumbs = $$('[data-stage-thumb]', root);
     const row = thumbs.length ? thumbs[0].parentElement : null;
     const items = thumbs.length ? thumbs.map((t) => ({ src: t.dataset.full, alt: name || '' })) : [{ src: img.getAttribute('src'), alt: name || '' }];
