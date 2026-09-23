@@ -68,17 +68,31 @@ def _table_hd():
         return {}
 
 
-def _descriptions():
-    """Les textes de js/descriptions.js, par identifiant de chat."""
+_CHAINE = r'"((?:[^"\\]|\\.)*)"'
+
+
+def _fiches():
+    """Les entrées de js/descriptions.js, par identifiant de chat : {texte, accroche, vitrine, …}."""
     try:
         with open(os.path.join(SITE_DIR, "js", "descriptions.js"), encoding="utf-8") as fh:
-            texte = fh.read()
+            source = fh.read()
     except OSError:
         return {}
+    lire = lambda s: s.replace('\\"', '"')
     out = {}
-    for m in re.finditer(r'(\d+)\s*:\s*\{[^{}]*?texte:\s*"((?:[^"\\]|\\.)*)"', texte, re.S):
-        out[int(m.group(1))] = m.group(2).replace('\\"', '"')
+    for m in re.finditer(r"(\d+)\s*:\s*\{([^{}]*)\}", source):
+        corps, fiche = m.group(2), {}
+        for cle, valeur in re.findall(r"(\w+)\s*:\s*" + _CHAINE, corps):
+            fiche[cle] = lire(valeur)
+        for cle, valeurs in re.findall(r"(\w+)\s*:\s*\[([^\]]*)\]", corps):
+            fiche[cle] = [lire(v) for v in re.findall(_CHAINE, valeurs)]
+        out[int(m.group(1))] = fiche
     return out
+
+
+def _descriptions():
+    """Les textes de js/descriptions.js, par identifiant de chat."""
+    return {cid: f["texte"] for cid, f in _fiches().items() if f.get("texte")}
 
 
 # --------------------------------------------------------------------------
@@ -104,10 +118,39 @@ def propre(s):
 
 
 def robe(s):
-    """« Bleu (BRI a) » → (« Bleu », « BRI a »)."""
+    """« Bleu (BRI a) » → (« Bleu », « BRI a ») ; le nom s'écrit comme une phrase (« Black golden shaded »)."""
     t = propre(s)
     m = re.match(r"^(.*?)\s*\(([^)]+)\)\s*$", t)
-    return (m.group(1).strip(), m.group(2).strip()) if m else (t, "")
+    phrase = lambda x: x[:1] + x[1:].lower()
+    return (phrase(m.group(1).strip()), m.group(2).strip()) if m else (phrase(t), "")
+
+
+YEUX_PLURIEL = {"vert": "verts", "bleu": "bleus", "jaune": "jaunes", "doré": "dorés", "noir": "noirs"}
+YEUX_COULEURS = [(r"orange|cuivr", "#e0892c"), (r"vert", "#7aa843"), (r"noisette", "#a8843a"),
+                 (r"jaune|dor|ambre", "#e2b134"), (r"bleu", "#5b93d6"), (r"marron|brun", "#8a5a2b")]
+
+
+def yeux(s):
+    """« Vairon Bleu/Marron » → (« Yeux vairons », une couleur par œil), comme eyes() de js/pages.js."""
+    t = propre(s).lower()
+    if not t:
+        return None
+    couleur = lambda x: next((c for motif, c in YEUX_COULEURS if re.search(motif, x)), "")
+    vairon = bool(re.match(r"^vairons?", t))
+    parts = [p for p in re.split(r"\s*(?:/|,|&|\bet\b)\s*", re.sub(r"^vairons?\s*", "", t)) if p]
+    c1 = couleur(parts[0] if parts else t)
+    c2 = couleur(parts[1]) if vairon and len(parts) > 1 else c1
+    return ("Yeux vairons" if vairon else "Yeux " + YEUX_PLURIEL.get(t, t)), c1, c2
+
+
+def ligne_yeux(s):
+    y = yeux(s)
+    if not y:
+        return ""
+    libelle, c1, c2 = y
+    pastilles = ('<span class="eyes" aria-hidden="true"><i style="--c:%s"></i><i style="--c:%s"></i></span>' % (c1, c2)
+                 if c1 and c2 else "")
+    return '<p class="card__eyes">%s%s</p>' % (pastilles, esc(libelle))
 
 
 def race_courte(s):
@@ -188,17 +231,63 @@ def _arch(src, alt, cls=""):
     return '<div class="arch %s"><img src="%s" alt="%s" loading="lazy" data-guard></div>' % (cls, esc(src), esc(alt))
 
 
-def carte_chat(c, photo, jour):
+def carte_chat(c, photo, jour, fiche=None, etiquette=""):
+    """La carte d'un reproducteur (catCard de js/pages.js) ; etiquette : « Papa en ce moment »… déjà mis en forme."""
     n = nom(c.get("name"))
     r, _ = robe(c.get("robe"))
     breed = race_courte(c.get("breed"))
-    return ('<a class="card reveal" href="chat.html?id=%s">' % c.get("id") +
+    accroche = (fiche or {}).get("accroche")
+    return ('<a class="card card--cat reveal" href="chat.html?id=%s">' % c.get("id") +
             '<div class="card__media">' + _arch(photo("CatsProfil", c.get("urlProfil")), "Portrait de " + n) +
             ('<div class="card__badges"><span class="pill pill--breed">%s</span></div>' % esc(breed) if breed else "") +
-            '</div><div class="card__body"><h3 class="card__title">%s</h3><p class="card__meta">' % esc(n) +
+            etiquette +
+            '</div><div class="card__body"><h3 class="card__title">%s</h3>' % esc(n) +
+            ('<p class="card__tagline">%s</p>' % esc(accroche) if accroche else "") +
+            '<p class="card__meta">' +
             ('<span>%s</span>' % esc(r) if r else "") +
             ('<span><b>%s</b></span>' % esc(age(c.get("dateOfBirth"), jour)) if c.get("dateOfBirth") else "") +
-            '</p></div></a>')
+            '</p>' + ligne_yeux(c.get("eyeColor")) + '</div></a>')
+
+
+def _galerie(c):
+    images = c.get("images") or []
+    if isinstance(images, str):
+        images = [i.strip() for i in images.split(",")]
+    return [i for i in images if i]
+
+
+def vitrine(c, fiche, photo):
+    """Les photos mises en avant (showcase() de js/pages.js) : celles de « vitrine » encore dans la galerie,
+    sinon les deux premières de la galerie."""
+    galerie = _galerie(c)
+    choisies = [f for f in (fiche or {}).get("vitrine", []) if f in galerie]
+    return [photo("CatsImages", f) for f in (choisies or galerie[:2])]
+
+
+def autocollants(sx, liste, parents, ico):
+    """Les autocollants du haut des pages Nos mâles / Nos femelles (sexStickers de js/pages.js)."""
+    male = sx == "male"
+    races = []
+    for c in liste:
+        r = propre(c.get("breed"))
+        if r and r not in races:
+            races.append(r)
+    items = [("crown", pluriel(len(liste), "mâle" if male else "femelle", "mâles" if male else "femelles"), "")]
+    if parents:
+        items.append(("heart", pluriel(parents, "papa" if male else "maman", "papas" if male else "mamans") + " en ce moment", "#sex-litters"))
+    if races:
+        items.append(("paw", " et ".join(race_courte(r) for r in races) if len(races) > 1 else races[0], ""))
+    return '<ul class="bh-stickers sex-head__stickers">%s</ul>' % "".join(
+        "<li>%s%s</li>" % (ico(i, 18), ('<a href="%s">%s</a>' % (lien, esc(t))) if lien else esc(t)) for i, t, lien in items)
+
+
+def eventail(choix):
+    """Les trois polaroïds du haut de la page (sexFan de js/pages.js) ; choix : [(chat, photo)]."""
+    if not choix:
+        return ""
+    return '<div class="fan">%s</div>' % "".join(
+        '<a class="fan__one" href="chat.html?id=%s" tabindex="-1"><img src="%s" alt="" data-guard>'
+        '<span class="fan__name">%s</span></a>' % (c.get("id"), esc(src), esc(nom(c.get("name")))) for c, src in choix)
 
 
 def _photo_chaton(k, photo):
@@ -287,9 +376,11 @@ def _note(d):
     return '<p class="small snapshot-note">Disponibilités au %s.</p>' % date_longue(d["jour"])
 
 
-def instantanes(d, coeur):
-    """{fichier: {conteneur: html}} pour les pages qui affichent des données de l'API."""
+def instantanes(d, ico):
+    """{fichier: {conteneur: html}} pour les pages qui affichent des données de l'API ; ico : les pictogrammes du site."""
     photo = Photos()
+    fiches = _fiches()
+    coeur = ico("heart", 18)
     jour = d["jour"]
     actifs = [c for c in d["cats"] if c and not c.get("archivee")]
     retraites = sorted([c for c in d["cats"] if c and c.get("archivee")], key=lambda c: str(c.get("dateOfBirth") or ""))
@@ -299,14 +390,30 @@ def instantanes(d, coeur):
 
     for fichier, sx in (("males.html", "male"), ("femelles.html", "female")):
         liste = [c for c in actifs if sexe(c.get("sex")) == sx]
-        if liste:
-            grille = "grid-4" if len(liste) == 4 or len(liste) > 6 else "grid-3"
-            out[fichier] = {"cats-list": '<div data-snapshot><div class="grid %s cats">%s</div></div>' % (
-                grille, "".join(carte_chat(c, photo, jour) for c in liste))}
+        if not liste:
+            continue
+        # Les parents d'une portée en ligne portent l'étiquette « Papa (ou Maman) en ce moment »
+        cle = "idPapa" if sx == "male" else "idMaman"
+        parents = {str(p.get(cle)) for p in portees}
+        est_parent = lambda c: str(c.get("id")) in parents
+        etiquette = '<span class="card__sticker">%s%s</span>' % (ico("heart", 14), "Papa en ce moment" if sx == "male" else "Maman en ce moment")
+        grille = "grid-4" if len(liste) == 4 or len(liste) > 6 else "grid-3"
+        vedettes = [c for c in liste if est_parent(c)] + [c for c in liste if not est_parent(c)]
+        choix = []
+        for c in vedettes:
+            src = (vitrine(c, fiches.get(c.get("id")), photo) or [""])[0] or photo("CatsProfil", c.get("urlProfil"))
+            if src:
+                choix.append((c, src))
+        out[fichier] = {
+            "cats-list": '<div data-snapshot><div class="grid %s cats">%s</div></div>' % (grille, "".join(
+                carte_chat(c, photo, jour, fiches.get(c.get("id")), etiquette if est_parent(c) else "") for c in liste)),
+            "cats-stickers": '<div data-snapshot>%s</div>' % autocollants(sx, liste, sum(1 for c in liste if est_parent(c)), ico),
+            "cats-fan": '<div data-snapshot>%s</div>' % eventail(choix[:3]),
+        }
 
     if retraites:
         out["retraites.html"] = {"retired-list": '<div data-snapshot><div class="grid grid-3 cats">%s</div></div>' % "".join(
-            carte_chat(c, photo, jour) for c in retraites)}
+            carte_chat(c, photo, jour, fiches.get(c.get("id"))) for c in retraites)}
 
     if portees:
         blocs = []
@@ -355,11 +462,11 @@ def instantanes(d, coeur):
     return out
 
 
-def injecter(pages, d, coeur):
-    """Écrit les instantanés dans les conteneurs vides des pages (<div id="…"></div>)."""
+def injecter(pages, d, ico):
+    """Écrit les instantanés dans les conteneurs vides des pages (<div id="…"></div>) ; ico : les pictogrammes du site."""
     if not d:
         return 0
-    tout, n = instantanes(d, coeur), 0
+    tout, n = instantanes(d, ico), 0
     for page in pages:
         for cid, contenu in tout.get(page["file"], {}).items():
             vide = '<div id="%s"></div>' % cid

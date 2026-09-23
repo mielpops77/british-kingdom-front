@@ -2107,6 +2107,122 @@ img.img-missing { display: none; }
 :root[data-shape="polaroid"] .stage--kitten .stage__main::after { display: none; }
 
 /* --------------------------------------------------------------------------
+   26 ter. Pages Nos mâles / Nos femelles
+   -------------------------------------------------------------------------- */
+/* L'ouverture : le titre, sa ligne manuscrite, les autocollants et trois polaroïds en éventail */
+.sex-head { overflow: hidden; padding-bottom: clamp(1.2rem, 3vw, 2.2rem); }
+.sex-head__grid { display: grid; gap: clamp(1.2rem, 4vw, 3rem); align-items: center; }
+@media (min-width: 900px) { .sex-head__grid { grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); } }
+.sex-head h1 { margin-bottom: .05em; }
+.sex-head__script {
+  margin: 0 0 1rem; font-family: var(--font-hand); font-weight: 700; line-height: 1;
+  font-size: clamp(1.65rem, 2.2vw + 1rem, 2.5rem); color: var(--rose-ink);
+  transform: rotate(-2deg); transform-origin: 0 50%;
+}
+.sex-head .lede { margin-bottom: 1.3rem; }
+/* « 2 papas en ce moment » mène aux portées : tout l'autocollant se touche */
+.sex-head__stickers li { position: relative; }
+.sex-head__stickers a { color: inherit; text-decoration: none; }
+.sex-head__stickers a::after { content: ""; position: absolute; inset: 0; border-radius: inherit; }
+.sex-head__stickers li:has(a) { transition: rotate .3s var(--bounce), border-color .2s var(--ease); }
+.sex-head__stickers li:has(a):hover { border-color: var(--rose); rotate: 1.4deg; }
+.sex-head__stickers a:focus-visible { outline: none; }
+.sex-head__stickers li:has(a:focus-visible) { outline: 2px solid var(--rose-ink); outline-offset: 3px; }
+
+.fan { display: flex; justify-content: center; align-items: flex-start; padding: 1.2rem 0 1.4rem; }
+.fan__one {
+  --w: clamp(104px, 29vw, 196px);
+  position: relative; flex: none; width: var(--w); margin-inline: calc(var(--w) * -.09);
+  padding: .5rem .5rem 0; border-radius: 8px;
+  background: var(--card); box-shadow: var(--shadow-m); color: inherit; text-decoration: none;
+  rotate: -7deg; translate: 0 14px;
+  transition: rotate .45s var(--bounce), translate .45s var(--bounce), box-shadow .3s var(--ease);
+  animation: fan-in .7s var(--bounce) both;
+}
+@media (min-width: 900px) { .fan__one { --w: clamp(150px, 14.5vw, 196px); } }
+.fan__one:nth-child(2) { z-index: 2; rotate: 2deg; translate: 0 -6px; animation-delay: .08s; }
+.fan__one:nth-child(3) { z-index: 1; rotate: 8deg; translate: 0 18px; animation-delay: .16s; }
+.fan__one:hover { z-index: 3; rotate: 0deg; translate: 0 -8px; box-shadow: var(--shadow-l); }
+/* un petit morceau de ruban adhésif, d'une couleur différente sur chaque photo */
+.fan__one::before {
+  content: ""; position: absolute; z-index: 1; top: -10px; left: 50%; width: 58%; height: 20px;
+  transform: translateX(-50%) rotate(-4deg); border-radius: 3px;
+  background: color-mix(in srgb, var(--rose) 30%, transparent);
+}
+.fan__one:nth-child(2)::before { transform: translateX(-50%) rotate(3deg); background: color-mix(in srgb, var(--gold) 42%, transparent); }
+.fan__one:nth-child(3)::before { background: color-mix(in srgb, var(--lilac) 34%, transparent); }
+.fan__one img {
+  display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; object-position: 50% 30%;
+  border-radius: 4px; background: var(--paper-3);
+}
+.fan__name {
+  display: block; padding: .3rem .2rem .5rem; text-align: center; line-height: 1.1;
+  font-family: var(--font-hand); font-size: clamp(1.1rem, .9vw + .8rem, 1.45rem); font-weight: 700; color: var(--rose-ink);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+@keyframes fan-in { from { opacity: 0; scale: .86; } to { opacity: 1; scale: 1; } }
+@media (prefers-reduced-motion: reduce) { .fan__one { animation: none; transition: none; } }
+
+.sex-cats { padding-top: clamp(.4rem, 1.5vw, 1rem); }
+/* Quatre chats sur tablette : deux par ligne plutôt que trois et un tout seul */
+@media (min-width: 561px) and (max-width: 1023px) {
+  .grid.cats:has(> .card:nth-child(4):last-child) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* Les cartes des reproducteurs : une accroche manuscrite, la couleur des yeux, « Papa en ce moment » */
+.card__tagline {
+  margin: .1rem 0 .4rem; font-family: var(--font-hand); font-weight: 700;
+  font-size: 1.3rem; line-height: 1.08; color: var(--rose-ink);
+}
+.card__eyes {
+  display: flex; align-items: center; gap: .45rem; margin: .45rem 0 0;
+  font-size: var(--t-xs); font-weight: 700; letter-spacing: .02em; color: var(--ink-2);
+}
+.eyes { display: inline-flex; flex: none; gap: 3px; }
+.eyes i {
+  position: relative; width: 13px; height: 13px; border-radius: 50%;
+  background: radial-gradient(circle at 30% 28%, rgba(255, 255, 255, .75) 0 1.3px, transparent 1.8px), var(--c);
+  box-shadow: inset 0 0 0 1px rgba(40, 20, 30, .22);
+}
+/* la pupille, fendue comme celle d'un chat */
+.eyes i::after {
+  content: ""; position: absolute; left: 50%; top: 50%; width: 2.6px; height: 8px;
+  transform: translate(-50%, -50%); border-radius: 50%; background: #2b1d27;
+}
+.card__sticker {
+  position: absolute; z-index: 1; right: .65rem; bottom: .85rem;
+  display: inline-flex; align-items: center; gap: .35rem;
+  padding: .32rem .75rem .34rem .6rem; border-radius: 999px;
+  background: var(--rose-deep); color: var(--on-accent); box-shadow: var(--shadow-m);
+  font-size: var(--t-xs); font-weight: 700; letter-spacing: .02em; line-height: 1.2; white-space: nowrap;
+  rotate: -4deg;
+}
+.card__sticker svg { width: 14px; height: 14px; flex: none; fill: currentColor; }
+.card:hover .card__sticker { animation: sticker-beat .9s var(--ease); }
+@keyframes sticker-beat { 0%, 100% { scale: 1; } 30% { scale: 1.08; } 55% { scale: .97; } }
+@media (prefers-reduced-motion: reduce) { .card:hover .card__sticker { animation: none; } }
+:root[data-shape="medaillon"] .cats .card__eyes, :root[data-shape="galet"] .cats .card__eyes { justify-content: center; }
+
+/* Les photos mises en avant : le prénom reste affiché, écrit à la main */
+.mosaic--named .mosaic__caption {
+  opacity: 1; transform: rotate(-2deg);
+  padding: 0 .65rem .1rem; box-shadow: var(--shadow-s);
+  font-family: var(--font-hand); font-size: 1.2rem; line-height: 1.25; color: var(--rose-ink);
+}
+.mosaic--named .mosaic__tile:hover .mosaic__caption { transform: rotate(-2deg); }
+
+@media (max-width: 560px) {
+  .sex-head__stickers { gap: .5rem; }
+  .sex-head__stickers li { gap: .38rem; padding: .4rem .85rem .4rem .65rem; font-size: .84rem; }
+  .sex-head__stickers svg { width: 16px; height: 16px; }
+  .cats .card__tagline { font-size: 1.12rem; margin-bottom: .3rem; }
+  .cats .card__eyes { font-size: .72rem; gap: .35rem; margin-top: .35rem; }
+  .cats .card__sticker { right: .4rem; bottom: .5rem; gap: .25rem; padding: .22rem .55rem .24rem .45rem; font-size: .66rem; }
+  .cats .card__sticker svg { width: 11px; height: 11px; }
+  .mosaic--named .mosaic__caption { font-size: 1.05rem; }
+}
+
+/* --------------------------------------------------------------------------
    27. Divers et impression
    -------------------------------------------------------------------------- */
 .skip {
