@@ -60,3 +60,11 @@
 .etats-saving { font-size: .8rem; color: var(--ink-3); }
 
 .attente-mail { margin: .9rem 0 0; font-size: .82rem; color: var(--ink-3); }
+
+/* Le formulaire d'ajout à la main */
+.header-right { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; }
+.ajout-card { margin-bottom: 1.2rem; }
+.ajout-card h2 { margin: 0 0 .3rem; }
+.help-text { margin: 0 0 1.1rem; font-size: .88rem; color: var(--ink-3); }
+.ajout-actions { display: flex; gap: .6rem; flex-wrap: wrap; align-items: center; margin-top: .3rem; }
+.ajout-actions .btn-gold { width: auto; flex: 1 1 200px; }

@@ -4,8 +4,62 @@
       <p class="eyebrow-label">Les familles qui attendent</p>
       <h1>Liste d'attente</h1>
     </div>
-    <span class="pill pill--ok" *ngIf="countNouvelles">{{ countNouvelles }} nouvelle{{ countNouvelles > 1 ? 's' : '' }} demande{{ countNouvelles > 1 ? 's' : '' }}</span>
+    <div class="header-right">
+      <span class="pill pill--ok" *ngIf="countNouvelles">{{ countNouvelles }} nouvelle{{ countNouvelles > 1 ? 's' : '' }} demande{{ countNouvelles > 1 ? 's' : '' }}</span>
+      <button type="button" class="add-btn" (click)="ouvrirAjout()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        Ajouter une famille
+      </button>
+    </div>
   </div>
+
+  <!-- Une famille qui a appelé ou écrit sur les réseaux : on l'inscrit ici, elle rejoint la même liste -->
+  <section class="form-card ajout-card" *ngIf="ajoutOuvert">
+    <h2>Ajouter une famille à la main</h2>
+    <p class="help-text">Pour quelqu'un qui vous a appelé, croisé à une exposition ou écrit sur Instagram.</p>
+    <form #ajoutForm="ngForm" (ngSubmit)="ajouter(ajoutForm)" class="form">
+      <div class="form-grid">
+        <div class="field">
+          <label class="field-label" for="attente-nom">Nom de la famille</label>
+          <input id="attente-nom" type="text" name="name" required [(ngModel)]="nouvelle.name" placeholder="Camille Laurent">
+        </div>
+        <div class="field">
+          <label class="field-label" for="attente-tel">Téléphone</label>
+          <input id="attente-tel" type="text" name="num" [(ngModel)]="nouvelle.num" placeholder="06 12 34 56 78">
+        </div>
+        <div class="field">
+          <label class="field-label" for="attente-mail">E-mail</label>
+          <input id="attente-mail" type="email" name="email" [(ngModel)]="nouvelle.email" placeholder="famille@exemple.fr">
+        </div>
+        <div class="field">
+          <label class="field-label" for="attente-sexe">Chaton recherché</label>
+          <select id="attente-sexe" name="sexe" [(ngModel)]="nouvelle.sexe">
+            <option value="Peu importe">Peu importe</option>
+            <option value="Un mâle">Un mâle</option>
+            <option value="Une femelle">Une femelle</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="field-label" for="attente-robe">Robe souhaitée</label>
+          <input id="attente-robe" type="text" name="robe" [(ngModel)]="nouvelle.robe" placeholder="Chocolat, silver shaded…">
+        </div>
+        <div class="field wide">
+          <label class="field-label" for="attente-mot">Note</label>
+          <textarea id="attente-mot" name="mot" rows="3" [(ngModel)]="nouvelle.mot"
+                    placeholder="Ce dont vous vous souvenez : appel du 12 mars, deux enfants, déjà un chat…"></textarea>
+        </div>
+      </div>
+
+      <div *ngIf="ajoutErreur" class="error-message">{{ ajoutErreur }}</div>
+
+      <div class="ajout-actions">
+        <button type="submit" class="btn-gold" [disabled]="ajoutEnCours">
+          {{ ajoutEnCours ? 'Enregistrement…' : 'Ajouter à la liste' }}
+        </button>
+        <button type="button" class="ghost-btn" (click)="ouvrirAjout()">Annuler</button>
+      </div>
+    </form>
+  </section>
 
   <div class="tabs">
     <button class="tab-btn" [class.active]="activeTab === 'encours'" (click)="activeTab = 'encours'">
@@ -27,7 +81,7 @@
   <div class="empty-card" *ngIf="!loading && !displayedDemandes.length">
     <strong>{{ demandes.length ? 'Rien dans cet onglet' : 'Personne sur la liste pour le moment' }}</strong>
     <span *ngIf="!demandes.length">Les inscriptions envoyées depuis la page « Liste d'attente » du site arrivent ici,
-      avec le sexe et la robe souhaités.</span>
+      avec le sexe et la robe souhaités — et vous pouvez ajouter à la main une famille qui vous a appelé.</span>
   </div>
 
   <div class="attente-list" *ngIf="!loading && displayedDemandes.length">

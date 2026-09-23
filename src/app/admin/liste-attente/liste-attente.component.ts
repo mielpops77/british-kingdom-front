@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DatePipe, NgFor, NgIf } from '@angular/common';
+import { FormsModule, NgForm } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { ContactService } from '../../components/Services/contact.service';
@@ -41,7 +42,7 @@ interface Correspondance {
   templateUrl: './liste-attente.component.html',
   styleUrls: ['./liste-attente.component.css'],
   standalone: true,
-  imports: [NgFor, NgIf, DatePipe, RouterLink],
+  imports: [NgFor, NgIf, DatePipe, RouterLink, FormsModule],
 })
 export class AdminListeAttenteComponent implements OnInit {
   demandes: Demande[] = [];
@@ -59,7 +60,58 @@ export class AdminListeAttenteComponent implements OnInit {
     { cle: 'terminee', libelle: 'Terminée' },
   ];
 
+  /** Le formulaire d'ajout à la main (une famille qui a appelé, écrit sur Instagram…). */
+  ajoutOuvert = false;
+  ajoutEnCours = false;
+  ajoutErreur = '';
+  nouvelle = { name: '', num: '', email: '', sexe: 'Peu importe', robe: '', mot: '' };
+
   constructor(private contactService: ContactService, private catService: CatService) { }
+
+  ouvrirAjout(): void {
+    this.ajoutOuvert = !this.ajoutOuvert;
+    this.ajoutErreur = '';
+  }
+
+  /** Enregistre la famille comme si elle s'était inscrite depuis le site : même sujet, mêmes souhaits. */
+  ajouter(form: NgForm): void {
+    const n = this.nouvelle;
+    if (!n.name.trim()) { this.ajoutErreur = 'Il manque le nom de la famille.'; return; }
+    if (!n.num.trim() && !n.email.trim()) { this.ajoutErreur = 'Indiquez au moins un téléphone ou un e-mail.'; return; }
+
+    const souhaits = [n.sexe ? 'Chaton recherché : ' + n.sexe : '', n.robe.trim() ? 'Robe souhaitée : ' + n.robe.trim() : '']
+      .filter(Boolean).join('\n');
+    const maintenant = new Date();
+    const deuxChiffres = (x: number) => String(x).padStart(2, '0');
+    const contact: any = {
+      profilId: environment.id,
+      name: n.name.trim(),
+      email: n.email.trim(),
+      num: n.num.trim(),
+      subject: SUJET,
+      message: (souhaits ? souhaits + '\n\n' : '') + (n.mot.trim() || 'Inscription ajoutée à la main depuis l’espace de gestion.'),
+      vue: true,
+      dateofCrea: maintenant.getFullYear() + '-' + deuxChiffres(maintenant.getMonth() + 1) + '-' + deuxChiffres(maintenant.getDate()),
+      hour: deuxChiffres(maintenant.getHours()) + ':' + deuxChiffres(maintenant.getMinutes()),
+    };
+
+    this.ajoutEnCours = true;
+    this.ajoutErreur = '';
+    this.contactService.createContact(contact).subscribe({
+      next: (cree: any) => {
+        this.demandes = [this.lire({ ...contact, id: (cree && cree.id) || Date.now() })].concat(this.demandes);
+        this.nouvelle = { name: '', num: '', email: '', sexe: 'Peu importe', robe: '', mot: '' };
+        form.resetForm({ sexe: 'Peu importe' });
+        this.ajoutOuvert = false;
+        this.ajoutEnCours = false;
+        this.activeTab = 'encours';
+      },
+      error: () => {
+        this.ajoutErreur = "L'enregistrement a échoué. Réessayez dans un instant.";
+        this.ajoutEnCours = false;
+      },
+    });
+  }
 
   ngOnInit(): void {
     this.catService.portee$.subscribe(portees => {
