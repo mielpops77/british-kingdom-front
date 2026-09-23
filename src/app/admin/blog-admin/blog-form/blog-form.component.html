@@ -1,51 +1,71 @@
 <div class="admin-page">
-  <a routerLink="/admin/blog" class="back-link">← Retour</a>
-  <p class="eyebrow-label">{{ isEdit ? 'Modifier' : 'Ajouter' }}</p>
-  <h1>{{ isEdit ? title : 'Nouvel article' }}</h1>
+  <a routerLink="/admin/blog" class="back-link">← Tous les articles</a>
+  <div class="page-header">
+    <div>
+      <p class="eyebrow-label">{{ isEdit ? 'Modifier l\'article' : 'Nouvel article' }}</p>
+      <h1>{{ isEdit ? title : 'Nouvel article' }}</h1>
+    </div>
+    <a class="ghost-btn" *ngIf="isEdit && slug" [href]="'https://chatterie-british-kingdom.fr/article.html?slug=' + slug"
+       target="_blank" rel="noopener">Voir sur le site</a>
+  </div>
 
   <form #blogForm="ngForm" (ngSubmit)="onSubmit(blogForm)" class="form">
 
-    <div class="cover-upload">
-      <img *ngIf="coverImage" [src]="coverImage" class="preview-cover">
-      <div *ngIf="!coverImage" class="preview-placeholder">Photo de couverture</div>
-      <label class="upload-btn">
-        {{ uploadingCover ? 'Envoi...' : (coverImage ? 'Changer la photo' : 'Ajouter une photo') }}
-        <input type="file" accept="image/*" (change)="onCoverSelected($event)" [disabled]="uploadingCover">
-      </label>
-    </div>
+    <section class="form-card">
+      <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg> La couverture et le titre</h2>
+      <div class="cover-row">
+        <div class="cover-upload">
+          <img *ngIf="coverImage" [src]="coverImage" class="preview-cover" alt="">
+          <div *ngIf="!coverImage" class="preview-cover preview-placeholder">Photo de couverture</div>
+          <label class="upload-btn">
+            {{ uploadingCover ? 'Envoi…' : (coverImage ? 'Changer la photo' : 'Ajouter une photo') }}
+            <input type="file" accept="image/*" (change)="onCoverSelected($event)" [disabled]="uploadingCover">
+          </label>
+        </div>
 
-    <label class="field-label">Titre</label>
-    <input type="text" name="title" required [(ngModel)]="title" (ngModelChange)="onTitleChange()">
-
-    <label class="field-label">Lien (slug)</label>
-    <input type="text" name="slug" required [(ngModel)]="slug" (ngModelChange)="onSlugEdited()">
-
-    <label class="field-label">Catégorie</label>
-    <input type="text" name="category" required placeholder="Adoption, Santé, Race..." [(ngModel)]="category">
-
-    <label class="field-label">Extrait (résumé court)</label>
-    <input type="text" name="excerpt" required [(ngModel)]="excerpt">
-
-    <div class="field-row">
-      <div class="field-col">
-        <label class="field-label">Date</label>
-        <input type="date" name="date" [(ngModel)]="date">
+        <div class="form-grid cover-fields">
+          <div class="field wide">
+            <label class="field-label" for="blog-titre">Titre</label>
+            <input id="blog-titre" type="text" name="title" required [(ngModel)]="title" (ngModelChange)="onTitleChange()">
+          </div>
+          <div class="field wide">
+            <label class="field-label" for="blog-slug">Adresse de l'article</label>
+            <input id="blog-slug" type="text" name="slug" required [(ngModel)]="slug" (ngModelChange)="onSlugEdited()">
+          </div>
+          <div class="field">
+            <label class="field-label" for="blog-categorie">Catégorie</label>
+            <input id="blog-categorie" type="text" name="category" required placeholder="Adoption, Santé, Race…" [(ngModel)]="category">
+          </div>
+          <div class="field">
+            <label class="field-label" for="blog-date">Date</label>
+            <input id="blog-date" type="date" name="date" [(ngModel)]="date">
+          </div>
+          <div class="field">
+            <label class="field-label" for="blog-lecture">Temps de lecture (min)</label>
+            <input id="blog-lecture" type="number" name="readingTime" min="1" [(ngModel)]="readingTime">
+          </div>
+          <div class="field wide">
+            <label class="field-label" for="blog-extrait">Extrait (résumé court)</label>
+            <input id="blog-extrait" type="text" name="excerpt" required [(ngModel)]="excerpt">
+          </div>
+        </div>
       </div>
-      <div class="field-col">
-        <label class="field-label">Temps de lecture (min)</label>
-        <input type="number" name="readingTime" min="1" [(ngModel)]="readingTime">
-      </div>
-    </div>
+    </section>
 
-    <label class="field-label">Contenu de l'article</label>
-    <p class="help-text">Astuce : une ligne vide sépare les paragraphes. Commence une ligne par
-      <code>## </code> pour un sous-titre, ou par <code>&gt; </code> pour une citation mise en avant.</p>
-    <textarea name="contentText" rows="14" [(ngModel)]="contentText" required></textarea>
+    <section class="form-card">
+      <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg> Le texte de l'article</h2>
+      <p class="help-text">Une ligne vide sépare les paragraphes. Commencez une ligne par
+        <code>## </code> pour un sous-titre, ou par <code>&gt; </code> pour une citation mise en avant.</p>
+      <textarea name="contentText" rows="16" [(ngModel)]="contentText" required></textarea>
+    </section>
 
     <div *ngIf="error" class="error-message">{{ error }}</div>
 
-    <button type="submit" class="btn-gold" [disabled]="saving">
-      {{ saving ? 'Enregistrement...' : (isEdit ? 'Enregistrer' : 'Publier') }}
-    </button>
+    <div class="form-actions">
+      <button type="submit" class="btn-gold" [disabled]="saving">
+        {{ saving ? 'Enregistrement…' : (isEdit ? 'Enregistrer' : 'Publier') }}
+      </button>
+      <a class="ghost-btn" routerLink="/admin/blog">Annuler</a>
+    </div>
   </form>
 </div>

@@ -27,8 +27,20 @@ export class AdminChatsComponent implements OnInit {
     });
   }
 
-  get displayedCats(): Cat[] {
+  recherche = '';
+
+  private get onglet(): Cat[] {
     return this.cats.filter(c => this.activeTab === 'anciens' ? c.archivee : !c.archivee);
+  }
+
+  get countActifs(): number { return this.cats.filter(c => !c.archivee).length; }
+  get countAnciens(): number { return this.cats.filter(c => c.archivee).length; }
+
+  get displayedCats(): Cat[] {
+    const q = this.recherche.trim().toLowerCase();
+    if (!q) return this.onglet;
+    return this.onglet.filter(c => [c.name, c.robe, c.breed, c.sex]
+      .some(v => (v || '').toString().toLowerCase().includes(q)));
   }
 
   toggleArchive(cat: Cat): void {

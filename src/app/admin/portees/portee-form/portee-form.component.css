@@ -1,342 +1,44 @@
-.admin-page {
-  padding: 20px 20px 40px;
-  max-width: 480px;
-  margin: 0 auto;
+/* Portée : les parents et les dates, puis une carte par chaton. */
+.optional { font-family: var(--font-body); font-size: .85rem; font-weight: 600; color: var(--ink-3); }
+.help-text { margin: -.4rem 0 1rem; font-size: .88rem; color: var(--ink-3); }
+.help-text code { background: var(--paper-2); border-radius: 6px; padding: .05rem .35rem; font-size: .85em; }
+.gallery-add {
+  display: grid; place-items: center; text-align: center; aspect-ratio: 1;
+  border-radius: var(--radius-s); padding: .5rem; font-size: .82rem; line-height: 1.25;
 }
 
-.back-link {
-  display: inline-block;
-  font-family: "Work Sans", sans-serif;
-  font-size: 0.82rem;
-  color: var(--ink-soft, #93798D);
-  text-decoration: none;
-  margin-bottom: 14px;
-}
-
-.eyebrow-label {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-family: "Work Sans", sans-serif;
-  font-size: 0.76rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--blush-deep, #B8637B);
-  margin: 0 0 6px;
-  font-weight: 600;
-}
-
-.eyebrow-label::before {
-  content: "♥\FE0E";
-  font-family: "Work Sans", sans-serif;
-  font-size: 0.78rem;
-  color: var(--gold-soft, #BE9445) !important;
-}
-
-h1 {
-  font-family: "Fraunces", serif;
-  color: var(--ink, #4A3245);
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin: 0 0 20px;
-}
-
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.field-label {
-  font-family: "Work Sans", sans-serif;
-  font-size: 0.76rem;
-  font-weight: 600;
-  color: var(--ink, #4A3245);
-  margin: 14px 0 6px;
-}
-
-input[type="text"], input[type="date"], select {
-  box-sizing: border-box;
-  width: 100%;
-  padding: 12px 14px;
-  font-family: "Work Sans", sans-serif;
-  font-size: 0.95rem;
-  color: var(--ink, #4A3245);
-  background: var(--bg-panel, #FFFFFF);
-  border: 1.5px solid rgba(74, 50, 69, 0.14);
-  border-radius: 12px;
-}
-
-input:focus, select:focus {
-  outline: none;
-  border-color: var(--blush, #D98CA0);
-}
-
-.father-toggle {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 10px;
-}
-
+.father-toggle { display: flex; gap: .4rem; margin-bottom: .5rem; flex-wrap: wrap; }
 .toggle-btn {
-  flex: 1;
-  font-family: "Work Sans", sans-serif;
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: var(--ink-soft, #93798D);
-  background: var(--bg-panel, #FFFFFF);
-  border: 1.5px solid rgba(74, 50, 69, 0.14);
-  border-radius: 999px;
-  padding: 8px 12px;
-  cursor: pointer;
+  flex: 1 1 auto; background: var(--card); border-color: var(--line); color: var(--ink-2);
+  padding: .5rem .9rem; font-size: .84rem;
 }
-
-.toggle-btn.active {
-  color: #fff;
-  background: var(--blush, #D98CA0);
-  border-color: var(--blush, #D98CA0);
-}
-
-.checkbox-label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-family: "Work Sans", sans-serif;
-  font-size: 0.9rem;
-  color: var(--ink, #4A3245);
-  margin-top: 16px;
-}
-
-.checkbox-label.small {
-  font-size: 0.8rem;
-  margin-top: 10px;
-}
-
-.checkbox-label input {
-  width: 18px;
-  height: 18px;
-}
-
-.section-divider {
-  font-family: "Work Sans", sans-serif;
-  font-size: 0.72rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--ink-soft, #93798D);
-  border-top: 1px dashed rgba(74, 50, 69, 0.2);
-  padding-top: 20px;
-  margin-top: 24px;
-}
+.toggle-btn:hover { border-color: var(--rose); color: var(--rose-ink); }
+.toggle-btn.active { background: var(--rose-deep); color: var(--on-accent); border-color: var(--rose-deep); }
+.external-father { align-items: flex-start; margin-top: .6rem; }
 
 .chaton-card {
-  background: var(--bg-panel, #FFFFFF);
-  border-radius: 16px;
-  padding: 14px;
-  margin-top: 14px;
-  box-shadow: 0 10px 22px -18px rgba(74, 50, 69, 0.3);
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  background: var(--paper); border: 1px solid var(--line-soft); border-radius: var(--radius);
+  padding: 1rem; margin-bottom: 1rem;
 }
-
-.chaton-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.chaton-header { display: flex; gap: 1rem; align-items: flex-start; flex-wrap: wrap; margin-bottom: .9rem; }
+.chaton-head-fields { flex: 1 1 260px; display: grid; gap: .5rem; }
+.chaton-row { display: grid; gap: .5rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)); }
+.chaton-card input, .chaton-card select {
+  width: 100%; box-sizing: border-box; padding: .6rem .85rem;
+  border: 1.5px solid var(--line); border-radius: var(--radius-s); background: var(--card); color: var(--ink); font-weight: 600;
 }
-
-.chaton-row {
-  display: flex;
-  gap: 8px;
-}
-
-.chaton-row select {
-  flex: 1;
-}
-
+.chaton-card input:focus, .chaton-card select:focus { outline: none; border-color: var(--rose); box-shadow: 0 0 0 4px var(--rose-soft); }
+.checkbox-label.small { padding: .45rem .7rem; font-size: .85rem; align-self: end; }
+.checkbox-label.small input { width: 18px; height: 18px; }
 .remove-chaton-btn {
-  font-family: "Work Sans", sans-serif;
-  font-size: 0.74rem;
-  font-weight: 600;
-  color: var(--blush-deep, #B8637B);
-  background: var(--blush-tint, #F7E1E6);
-  border: none;
-  border-radius: 999px;
-  padding: 6px 12px;
-  cursor: pointer;
+  margin-left: auto; background: var(--card); border: 1.5px solid var(--line); border-radius: 999px;
+  color: var(--ink-2); font-weight: 700; font-size: .8rem; padding: .4rem .9rem; cursor: pointer;
 }
-
+.remove-chaton-btn:hover { border-color: var(--rose); color: var(--rose-ink); background: var(--rose-soft); }
+.gallery-label { font-size: .8rem; font-weight: 700; color: var(--ink-3); margin-bottom: .5rem; }
 .add-chaton-btn {
-  font-family: "Work Sans", sans-serif;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--blush-deep, #B8637B);
-  background: none;
-  border: 1.5px dashed var(--blush, #D98CA0);
-  border-radius: 14px;
-  padding: 12px;
-  cursor: pointer;
-  margin-top: 16px;
+  width: 100%; background: var(--card); border: 1.5px dashed var(--rose); border-radius: var(--radius-s);
+  color: var(--rose-ink); font-weight: 700; padding: .8rem 1rem; cursor: pointer;
+  transition: background .2s var(--ease), transform .25s var(--bounce);
 }
-
-.photo-upload {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-}
-
-.preview-round {
-  width: 96px;
-  height: 96px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid #fff;
-  outline: 1.5px solid var(--gold-soft, #BE9445);
-}
-
-.preview-round.small {
-  width: 52px;
-  height: 52px;
-}
-
-.preview-placeholder {
-  width: 96px;
-  height: 96px;
-  border-radius: 50%;
-  background: var(--blush-tint, #F7E1E6);
-  color: var(--blush-deep, #B8637B);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: "Work Sans", sans-serif;
-  font-size: 0.78rem;
-}
-
-.preview-placeholder.small {
-  width: 52px;
-  height: 52px;
-  font-size: 0.62rem;
-}
-
-.upload-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-family: "Work Sans", sans-serif;
-  font-size: 0.76rem;
-  font-weight: 600;
-  color: var(--blush-deep, #B8637B);
-  background: var(--blush-tint, #F7E1E6);
-  border-radius: 999px;
-  padding: 8px 16px;
-  cursor: pointer;
-}
-
-.upload-btn.small {
-  font-size: 0.66rem;
-  padding: 5px 12px;
-  margin-top: 8px;
-}
-
-.upload-btn input[type="file"] {
-  display: none;
-}
-
-.gallery-label {
-  font-family: "Work Sans", sans-serif;
-  font-size: 0.7rem;
-  color: var(--ink-soft, #93798D);
-  margin-top: 14px;
-  margin-bottom: 6px;
-}
-
-.gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-}
-
-.gallery-item {
-  position: relative;
-  aspect-ratio: 1;
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.gallery-item img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.remove-btn {
-  position: absolute;
-  top: 4px;
-  right: 4px;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  border: none;
-  background: rgba(74, 50, 69, 0.75);
-  color: #fff;
-  font-size: 0.9rem;
-  line-height: 1;
-  cursor: pointer;
-  z-index: 1;
-}
-
-.reorder-btns {
-  position: absolute;
-  bottom: 4px;
-  left: 4px;
-  right: 4px;
-  display: flex;
-  justify-content: space-between;
-}
-
-.reorder-btn {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  border: none;
-  background: rgba(74, 50, 69, 0.75);
-  color: #fff;
-  font-size: 1rem;
-  font-weight: 700;
-  line-height: 1;
-  cursor: pointer;
-}
-
-.reorder-btn:disabled {
-  opacity: 0.35;
-  cursor: not-allowed;
-}
-
-.error-message {
-  color: var(--blush-deep, #B8637B);
-  font-family: "Work Sans", sans-serif;
-  font-size: 0.85rem;
-  margin-top: 16px;
-  text-align: center;
-}
-
-.btn-gold {
-  font-family: "Work Sans", sans-serif;
-  font-weight: 600;
-  font-size: 0.95rem;
-  padding: 14px;
-  border: none;
-  cursor: pointer;
-  border-radius: 999px;
-  background: var(--blush, #D98CA0);
-  color: #fff;
-  box-shadow: 0 10px 24px -12px var(--blush-deep, #B8637B);
-  margin-top: 24px;
-}
-
-.btn-gold:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
+.add-chaton-btn:hover { background: var(--rose-soft); transform: translateY(-2px); }

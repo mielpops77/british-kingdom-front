@@ -1,36 +1,42 @@
 <div class="admin-page">
   <div class="page-header">
     <div>
-      <p class="eyebrow-label">Gestion</p>
+      <p class="eyebrow-label">Boîte aux lettres</p>
       <h1>Messages</h1>
     </div>
-    <span class="unread-badge" *ngIf="unreadCount">{{ unreadCount }} non lu(s)</span>
+    <span class="pill pill--ok unread-badge" *ngIf="unreadCount">{{ unreadCount }} non lu{{ unreadCount > 1 ? 's' : '' }}</span>
   </div>
 
-  <p *ngIf="loading" class="hint">Chargement...</p>
-  <p *ngIf="!loading && !contacts.length" class="hint">Aucun message reçu pour l'instant.</p>
+  <p *ngIf="loading" class="hint">Chargement…</p>
+  <div class="empty-card" *ngIf="!loading && !contacts.length">
+    <strong>Aucun message pour l'instant</strong>
+    <span>Les demandes envoyées depuis le site arrivent ici.</span>
+  </div>
 
   <div class="message-list" *ngIf="!loading && contacts.length">
-    <div class="message-row" *ngFor="let contact of contacts" [class.unread]="!contact.vue" (click)="toggleExpand(contact)">
+    <article class="message-row" *ngFor="let contact of contacts" [class.unread]="!contact.vue"
+             [class.open]="expandedId === contact.id" (click)="toggleExpand(contact)">
       <div class="message-top">
         <div class="message-who">
-          <span class="unread-dot" *ngIf="!contact.vue"></span>
+          <span class="unread-dot" *ngIf="!contact.vue" aria-hidden="true"></span>
           <span class="message-name">{{ contact.name }}</span>
         </div>
         <span class="message-date">{{ contact.dateofCrea | date: 'dd/MM/yyyy à HH:mm':'Europe/Paris' }}</span>
       </div>
       <span class="message-subject">{{ contact.subject }}</span>
+      <span class="message-preview" *ngIf="expandedId !== contact.id">{{ contact.message }}</span>
 
-      <div class="message-details" *ngIf="expandedId === contact.id">
+      <div class="message-details" *ngIf="expandedId === contact.id" (click)="$event.stopPropagation()">
         <p class="message-body">{{ contact.message }}</p>
-        <div class="message-contact-info">
-          <a [href]="'mailto:' + contact.email">{{ contact.email }}</a>
-          <a [href]="'tel:' + contact.num">{{ contact.num }}</a>
+        <div class="message-actions">
+          <a class="add-btn" [href]="'mailto:' + contact.email + '?subject=' + encodeSujet(contact)">Répondre par e-mail</a>
+          <a class="ghost-btn" [href]="'tel:' + contact.num" *ngIf="contact.num">{{ contact.num }}</a>
+          <button class="delete-btn" (click)="confirmDelete(contact, $event)" [disabled]="deletingId === contact.id">
+            {{ deletingId === contact.id ? '…' : 'Supprimer' }}
+          </button>
         </div>
-        <button class="delete-btn" (click)="confirmDelete(contact, $event)" [disabled]="deletingId === contact.id">
-          {{ deletingId === contact.id ? '...' : 'Supprimer' }}
-        </button>
+        <p class="message-mail">{{ contact.email }}</p>
       </div>
-    </div>
+    </article>
   </div>
 </div>

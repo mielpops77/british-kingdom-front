@@ -1,18 +1,27 @@
 <div class="login-page">
   <div class="login-card">
-    <img src="assets/logo.png" alt="British Kingdom" class="logo">
-    <h1>Espace admin</h1>
+    <span class="login-logo"><img src="assets/logo.png" alt="Chatterie British Kingdom"></span>
+    <p class="login-hello">Bonjour&nbsp;!</p>
+    <h1>Espace de gestion</h1>
     <p class="subtitle">Chatterie British Kingdom</p>
 
-    <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
-      <input type="email" name="email" placeholder="Email" required [(ngModel)]="email">
-      <input type="password" name="password" placeholder="Mot de passe" required [(ngModel)]="password">
+    <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)" class="form">
+      <div class="field">
+        <label class="field-label" for="login-email">Adresse e-mail</label>
+        <input id="login-email" type="email" name="email" autocomplete="username" required [(ngModel)]="email">
+      </div>
+      <div class="field">
+        <label class="field-label" for="login-password">Mot de passe</label>
+        <input id="login-password" type="password" name="password" autocomplete="current-password" required [(ngModel)]="password">
+      </div>
 
       <div *ngIf="error" class="error-message">{{ error }}</div>
 
       <button type="submit" class="btn-gold" [disabled]="loginForm.invalid || loading">
-        {{ loading ? 'Connexion...' : 'Se connecter' }}
+        {{ loading ? 'Connexion…' : 'Se connecter' }}
       </button>
     </form>
+
+    <a class="login-back" href="https://chatterie-british-kingdom.fr/">← Retour au site</a>
   </div>
 </div>

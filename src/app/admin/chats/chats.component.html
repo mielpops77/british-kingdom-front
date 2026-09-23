@@ -1,42 +1,68 @@
 <div class="admin-page">
   <div class="page-header">
     <div>
-      <p class="eyebrow-label">Gestion</p>
+      <p class="eyebrow-label">La chatterie</p>
       <h1>Nos chats</h1>
     </div>
-    <a routerLink="/admin/chats/new" class="add-btn">+ Ajouter</a>
+    <a routerLink="/admin/chats/new" class="add-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+      Ajouter un chat
+    </a>
   </div>
 
-  <div class="tabs">
-    <button class="tab-btn" [class.active]="activeTab === 'actifs'" (click)="activeTab = 'actifs'">
-      Chats actifs
-    </button>
-    <button class="tab-btn" [class.active]="activeTab === 'anciens'" (click)="activeTab = 'anciens'">
-      Anciens chats
-    </button>
+  <div class="list-tools">
+    <div class="tabs">
+      <button class="tab-btn" [class.active]="activeTab === 'actifs'" (click)="activeTab = 'actifs'">
+        Chats actifs <span class="count">{{ countActifs }}</span>
+      </button>
+      <button class="tab-btn" [class.active]="activeTab === 'anciens'" (click)="activeTab = 'anciens'">
+        Anciens chats <span class="count">{{ countAnciens }}</span>
+      </button>
+    </div>
+    <label class="search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input type="search" placeholder="Rechercher un chat…" [value]="recherche"
+             (input)="recherche = $any($event.target).value" aria-label="Rechercher un chat">
+    </label>
   </div>
 
-  <div class="cat-list">
-    <div class="cat-row" *ngFor="let cat of displayedCats">
-      <a [routerLink]="['/admin/chats', cat.id, 'edit']" class="cat-row-link">
-        <img [src]="url.apiUrlImgProfilCat + cat.urlProfil" [alt]="cat.name" class="cat-photo">
-        <div class="cat-info">
-          <span class="cat-name">{{ cat.name }}</span>
-          <span class="cat-meta">{{ cat.sex }} · {{ cat.robe }}</span>
-        </div>
+  <div class="list">
+    <article class="row-card" *ngFor="let cat of displayedCats">
+      <a [routerLink]="['/admin/chats', cat.id, 'edit']" class="row-card__link">
+        <img *ngIf="cat.urlProfil" [src]="url.apiUrlImgProfilCat + cat.urlProfil" [alt]="cat.name" class="row-card__photo row-card__photo--round">
+        <span *ngIf="!cat.urlProfil" class="row-card__photo row-card__photo--round photo-placeholder">
+          <svg viewBox="0 0 64 64" aria-hidden="true"><ellipse cx="32" cy="42" rx="15" ry="12"/><ellipse cx="14" cy="24" rx="7" ry="8.5"/><ellipse cx="30" cy="14" rx="7" ry="8.5"/><ellipse cx="47" cy="18" rx="7" ry="8.5"/><ellipse cx="54" cy="33" rx="6.5" ry="8"/></svg>
+        </span>
+        <span class="row-card__info">
+          <span class="row-card__name">{{ cat.name }}</span>
+          <span class="row-card__meta">
+            <span>{{ cat.sex }}</span>
+            <span *ngIf="cat.robe">{{ cat.robe }}</span>
+          </span>
+          <span class="row-card__pills">
+            <span class="pill pill--breed" *ngIf="cat.breed">{{ cat.breed }}</span>
+            <span class="pill pill--muted" *ngIf="cat.archivee">À la retraite</span>
+          </span>
+        </span>
       </a>
-      <div class="cat-actions">
+      <div class="row-card__actions">
+        <a class="ghost-btn icon-only" [href]="'https://chatterie-british-kingdom.fr/chat.html?id=' + cat.id"
+           target="_blank" rel="noopener" title="Voir sa fiche sur le site" aria-label="Voir sa fiche sur le site">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+        </a>
         <button class="archive-btn" (click)="toggleArchive(cat)" [disabled]="archivingId === cat.id">
-          {{ archivingId === cat.id ? '...' : (cat.archivee ? 'Réactiver' : 'Archiver') }}
+          {{ archivingId === cat.id ? '…' : (cat.archivee ? 'Réactiver' : 'Archiver') }}
         </button>
         <button class="delete-btn" (click)="confirmDelete(cat)" [disabled]="deletingId === cat.id">
-          {{ deletingId === cat.id ? '...' : 'Supprimer' }}
+          {{ deletingId === cat.id ? '…' : 'Supprimer' }}
         </button>
       </div>
-    </div>
+    </article>
   </div>
 
-  <p *ngIf="!displayedCats.length" class="hint">
-    {{ activeTab === 'anciens' ? 'Aucun ancien chat archivé.' : 'Aucun chat actif pour le moment.' }}
-  </p>
+  <div class="empty-card" *ngIf="!displayedCats.length">
+    <strong>{{ recherche ? 'Aucun chat à ce nom' : (activeTab === 'anciens' ? 'Aucun chat à la retraite' : 'Aucun chat pour le moment') }}</strong>
+    <span *ngIf="!recherche && activeTab === 'actifs'">Ajoutez votre premier chat avec le bouton « Ajouter un chat ».</span>
+    <span *ngIf="recherche">Essayez un autre prénom.</span>
+  </div>
 </div>

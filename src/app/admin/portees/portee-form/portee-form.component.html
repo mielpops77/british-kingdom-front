@@ -1,109 +1,145 @@
 <div class="admin-page">
-  <a routerLink="/admin/portees" class="back-link">← Retour</a>
-  <p class="eyebrow-label">{{ isEdit ? 'Modifier' : 'Ajouter' }}</p>
-  <h1>{{ isEdit ? model.name : 'Nouvelle portée' }}</h1>
+  <a routerLink="/admin/portees" class="back-link">← Toutes les portées</a>
+  <div class="page-header">
+    <div>
+      <p class="eyebrow-label">{{ isEdit ? 'Modifier la portée' : 'Nouvelle portée' }}</p>
+      <h1>{{ isEdit ? model.name : 'Nouvelle portée' }}</h1>
+    </div>
+    <a class="ghost-btn" *ngIf="isEdit" [href]="'https://chatterie-british-kingdom.fr/portee.html?id=' + model.id"
+       target="_blank" rel="noopener">Voir sur le site</a>
+  </div>
 
   <form #porteeForm="ngForm" (ngSubmit)="onSubmit(porteeForm)" class="form">
 
-    <label class="field-label">Nom de la portée</label>
-    <input type="text" name="name" required [(ngModel)]="model.name">
+    <section class="form-card">
+      <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1L12 21l7.7-7.6 1.1-1a5.5 5.5 0 0 0 0-7.8Z"/></svg> Les parents et les dates</h2>
 
-    <label class="field-label">Père</label>
-    <div class="father-toggle">
-      <button type="button" class="toggle-btn" [class.active]="!fatherIsExternal" (click)="toggleFatherMode(false)">Un de mes chats</button>
-      <button type="button" class="toggle-btn" [class.active]="fatherIsExternal" (click)="toggleFatherMode(true)">Saillie extérieure</button>
-    </div>
+      <div class="field wide">
+        <label class="field-label" for="portee-nom">Nom de la portée</label>
+        <input id="portee-nom" type="text" name="name" required placeholder="Zara &amp; Willy Wonka" [(ngModel)]="model.name">
+      </div>
 
-    <select *ngIf="!fatherIsExternal" name="idPapa" required [(ngModel)]="model.idPapa">
-      <option [ngValue]="0" disabled>Choisir un père</option>
-      <option *ngFor="let cat of males" [ngValue]="cat.id">{{ cat.name }}</option>
-    </select>
+      <div class="form-grid">
+        <div class="field">
+          <label class="field-label">Père</label>
+          <div class="father-toggle">
+            <button type="button" class="toggle-btn" [class.active]="!fatherIsExternal" (click)="toggleFatherMode(false)">Un de mes chats</button>
+            <button type="button" class="toggle-btn" [class.active]="fatherIsExternal" (click)="toggleFatherMode(true)">Saillie extérieure</button>
+          </div>
+          <select *ngIf="!fatherIsExternal" name="idPapa" required [(ngModel)]="model.idPapa">
+            <option [ngValue]="0" disabled>Choisir un père</option>
+            <option *ngFor="let cat of males" [ngValue]="cat.id">{{ cat.name }}</option>
+          </select>
+          <ng-container *ngIf="fatherIsExternal">
+            <input type="text" name="externalFatherName" placeholder="Nom du père" required [(ngModel)]="model.externalFatherName">
+            <div class="photo-upload external-father">
+              <img *ngIf="model.externalFatherPhoto" [src]="url.apiUrlImgParentsCat + model.externalFatherPhoto" class="preview-round small" alt="">
+              <div *ngIf="!model.externalFatherPhoto" class="preview-placeholder round small">Photo</div>
+              <label class="upload-btn small">
+                {{ uploadingExternalFather ? 'Envoi…' : 'Photo (facultatif)' }}
+                <input type="file" accept="image/*" (change)="onExternalFatherPhotoSelected($event)" [disabled]="uploadingExternalFather">
+              </label>
+            </div>
+          </ng-container>
+        </div>
 
-    <ng-container *ngIf="fatherIsExternal">
-      <input type="text" name="externalFatherName" placeholder="Nom du père" required [(ngModel)]="model.externalFatherName">
-      <div class="photo-upload">
-        <img *ngIf="model.externalFatherPhoto" [src]="url.apiUrlImgParentsCat + model.externalFatherPhoto" class="preview-round small">
-        <div *ngIf="!model.externalFatherPhoto" class="preview-placeholder round small">Photo</div>
-        <label class="upload-btn small">
-          {{ uploadingExternalFather ? '...' : 'Photo (optionnel)' }}
-          <input type="file" accept="image/*" (change)="onExternalFatherPhotoSelected($event)" [disabled]="uploadingExternalFather">
+        <div class="field">
+          <label class="field-label" for="portee-mere">Mère</label>
+          <select id="portee-mere" name="idMaman" required [(ngModel)]="model.idMaman">
+            <option [ngValue]="0" disabled>Choisir une mère</option>
+            <option *ngFor="let cat of females" [ngValue]="cat.id">{{ cat.name }}</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="portee-naissance">Date de naissance</label>
+          <input id="portee-naissance" type="date" name="dateOfBirth" [(ngModel)]="model.dateOfBirth">
+        </div>
+        <div class="field">
+          <label class="field-label" for="portee-depart">Date de départ possible</label>
+          <input id="portee-depart" type="date" name="dateOfSell" [(ngModel)]="model.dateOfSell">
+        </div>
+
+        <label class="checkbox-label wide">
+          <input type="checkbox" name="disponible" [(ngModel)]="model.disponible">
+          Montrer cette portée sur le site
         </label>
       </div>
-    </ng-container>
+    </section>
 
-    <label class="field-label">Mère</label>
-    <select name="idMaman" required [(ngModel)]="model.idMaman">
-      <option [ngValue]="0" disabled>Choisir une mère</option>
-      <option *ngFor="let cat of females" [ngValue]="cat.id">{{ cat.name }}</option>
-    </select>
+    <section class="form-card">
+      <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="4" r="2"/><circle cx="18" cy="8" r="2"/><circle cx="20" cy="16" r="2"/><path d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.05Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z"/></svg> Les chatons <span class="optional">({{ model.chatons.length }})</span></h2>
 
-    <label class="field-label">Date de naissance</label>
-    <input type="date" name="dateOfBirth" [(ngModel)]="model.dateOfBirth">
-
-    <label class="field-label">Date de vente</label>
-    <input type="date" name="dateOfSell" [(ngModel)]="model.dateOfSell">
-
-    <label class="checkbox-label">
-      <input type="checkbox" name="disponible" [(ngModel)]="model.disponible">
-      Portée disponible sur le site
-    </label>
-
-    <div class="section-divider">Chatons ({{ model.chatons.length }})</div>
-
-    <div class="chaton-card" *ngFor="let chaton of model.chatons; let i = index">
-      <div class="chaton-header">
-        <div class="photo-upload">
-          <img *ngIf="chaton.urlProfil" [src]="url.apiUrlImgChaton + chaton.urlProfil" class="preview-round small">
-          <div *ngIf="!chaton.urlProfil" class="preview-placeholder round small">Photo</div>
-        </div>
-        <button type="button" class="remove-chaton-btn" (click)="removeChaton(i)">Retirer</button>
-      </div>
-
-      <input type="text" name="chatonName{{i}}" placeholder="Nom" [(ngModel)]="chaton.name">
-
-      <div class="chaton-row">
-        <select name="chatonSex{{i}}" [(ngModel)]="chaton.sex">
-          <option value="Mâle">Mâle</option>
-          <option value="Femelle">Femelle</option>
-        </select>
-        <select name="chatonStatus{{i}}" [(ngModel)]="chaton.status">
-          <option value="disponible">Disponible</option>
-          <option value="reserve">Réservé</option>
-          <option value="rester">Reste à la chatterie</option>
-          <option value="vendu">Vendu</option>
-        </select>
-      </div>
-
-      <input type="text" name="chatonRobe{{i}}" placeholder="Robe" [(ngModel)]="chaton.robe">
-
-      <label class="checkbox-label small">
-        <input type="checkbox" name="chatonLoof{{i}}" [(ngModel)]="chaton.loof">
-        LOOF
-      </label>
-
-      <div class="gallery-label">Photos ({{ chaton.photos.length }}) — la première est utilisée comme photo de couverture</div>
-      <div class="gallery-grid">
-        <div class="gallery-item" *ngFor="let photo of chaton.photos; let p = index">
-          <img [src]="url.apiUrlImgChaton + photo">
-          <button type="button" class="remove-btn" (click)="removeChatonGalleryPhoto(i, p)">×</button>
-          <div class="reorder-btns">
-            <button type="button" class="reorder-btn" (click)="moveChatonGalleryPhoto(i, p, -1)" [disabled]="p === 0">‹</button>
-            <button type="button" class="reorder-btn" (click)="moveChatonGalleryPhoto(i, p, 1)" [disabled]="p === chaton.photos.length - 1">›</button>
+      <div class="chaton-card" *ngFor="let chaton of model.chatons; let i = index">
+        <div class="chaton-header">
+          <div class="photo-upload">
+            <img *ngIf="chaton.urlProfil" [src]="url.apiUrlImgChaton + chaton.urlProfil" class="preview-round small" alt="">
+            <div *ngIf="!chaton.urlProfil" class="preview-placeholder round small">Photo</div>
           </div>
+          <div class="chaton-head-fields">
+            <div class="field">
+              <label class="field-label" [attr.for]="'chaton-nom-' + i">Prénom</label>
+              <input [id]="'chaton-nom-' + i" type="text" name="chatonName{{i}}" placeholder="Prénom du chaton" [(ngModel)]="chaton.name">
+            </div>
+            <div class="chaton-row">
+              <div class="field">
+                <label class="field-label" [attr.for]="'chaton-sexe-' + i">Sexe</label>
+                <select [id]="'chaton-sexe-' + i" name="chatonSex{{i}}" [(ngModel)]="chaton.sex">
+                  <option value="Mâle">Mâle</option>
+                  <option value="Femelle">Femelle</option>
+                </select>
+              </div>
+              <div class="field">
+                <label class="field-label" [attr.for]="'chaton-statut-' + i">Statut</label>
+                <select [id]="'chaton-statut-' + i" name="chatonStatus{{i}}" [(ngModel)]="chaton.status">
+                  <option value="disponible">Disponible</option>
+                  <option value="reserve">Réservé</option>
+                  <option value="rester">Reste à la chatterie</option>
+                  <option value="vendu">Vendu</option>
+                </select>
+              </div>
+            </div>
+            <div class="chaton-row">
+              <div class="field">
+                <label class="field-label" [attr.for]="'chaton-robe-' + i">Robe</label>
+                <input [id]="'chaton-robe-' + i" type="text" name="chatonRobe{{i}}" placeholder="Chocolat, cinnamon…" [(ngModel)]="chaton.robe">
+              </div>
+              <label class="checkbox-label small">
+                <input type="checkbox" name="chatonLoof{{i}}" [(ngModel)]="chaton.loof">
+                Inscrit au LOOF
+              </label>
+            </div>
+          </div>
+          <button type="button" class="remove-chaton-btn" (click)="removeChaton(i)">Retirer</button>
+        </div>
+
+        <div class="gallery-label">Ses photos ({{ chaton.photos.length }}) — la première sert de photo principale</div>
+        <div class="gallery-grid">
+          <div class="gallery-item" *ngFor="let photo of chaton.photos; let p = index">
+            <img [src]="url.apiUrlImgChaton + photo" alt="">
+            <button type="button" class="remove-btn" (click)="removeChatonGalleryPhoto(i, p)" aria-label="Retirer cette photo">×</button>
+            <div class="reorder-btns">
+              <button type="button" class="reorder-btn" (click)="moveChatonGalleryPhoto(i, p, -1)" [disabled]="p === 0" aria-label="Vers la gauche">‹</button>
+              <button type="button" class="reorder-btn" (click)="moveChatonGalleryPhoto(i, p, 1)" [disabled]="p === chaton.photos.length - 1" aria-label="Vers la droite">›</button>
+            </div>
+          </div>
+          <label class="upload-btn gallery-add">
+            {{ uploadingChatonGalleryIndex === i ? 'Envoi…' : '+ Ajouter des photos' }}
+            <input type="file" accept="image/*" multiple (change)="onChatonGalleryPhotosSelected($event, i)" [disabled]="uploadingChatonGalleryIndex === i">
+          </label>
         </div>
       </div>
-      <label class="upload-btn small">
-        {{ uploadingChatonGalleryIndex === i ? 'Envoi...' : '+ Ajouter des photos' }}
-        <input type="file" accept="image/*" multiple (change)="onChatonGalleryPhotosSelected($event, i)" [disabled]="uploadingChatonGalleryIndex === i">
-      </label>
-    </div>
 
-    <button type="button" class="add-chaton-btn" (click)="addChaton()">+ Ajouter un chaton</button>
+      <button type="button" class="add-chaton-btn" (click)="addChaton()">+ Ajouter un chaton</button>
+    </section>
 
     <div *ngIf="error" class="error-message">{{ error }}</div>
 
-    <button type="submit" class="btn-gold" [disabled]="saving">
-      {{ saving ? 'Enregistrement...' : (isEdit ? 'Enregistrer' : 'Créer') }}
-    </button>
+    <div class="form-actions">
+      <button type="submit" class="btn-gold" [disabled]="saving">
+        {{ saving ? 'Enregistrement…' : (isEdit ? 'Enregistrer' : 'Créer la portée') }}
+      </button>
+      <a class="ghost-btn" routerLink="/admin/portees">Annuler</a>
+    </div>
   </form>
 </div>

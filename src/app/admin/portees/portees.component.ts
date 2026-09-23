@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NgFor, NgIf } from '@angular/common';
+import { DatePipe, NgFor, NgIf } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { CatService } from '../../components/Services/catService';
 import { Portee } from '../../models/portee';
@@ -11,7 +11,7 @@ import { environment } from 'src/environments/environment';
   templateUrl: './portees.component.html',
   styleUrls: ['./portees.component.css'],
   standalone: true,
-  imports: [NgFor, NgIf, RouterLink]
+  imports: [NgFor, NgIf, RouterLink, DatePipe]
 })
 export class AdminPorteesComponent implements OnInit {
   portees: Portee[] = [];
@@ -33,8 +33,25 @@ export class AdminPorteesComponent implements OnInit {
     });
   }
 
-  get displayedPortees(): Portee[] {
+  recherche = '';
+
+  private get onglet(): Portee[] {
     return this.portees.filter(p => this.activeTab === 'anciennes' ? p.archivee : !p.archivee);
+  }
+
+  get countActives(): number { return this.portees.filter(p => !p.archivee).length; }
+  get countAnciennes(): number { return this.portees.filter(p => p.archivee).length; }
+
+  /** Combien de chatons sont encore disponibles dans cette portée. */
+  disponibles(portee: Portee): number {
+    return (portee.chatons || []).filter(c => (c.status || '').toLowerCase().startsWith('dispo')).length;
+  }
+
+  get displayedPortees(): Portee[] {
+    const q = this.recherche.trim().toLowerCase();
+    if (!q) return this.onglet;
+    return this.onglet.filter(p => (p.name || '').toLowerCase().includes(q)
+      || (p.chatons || []).some(c => (c.name || '').toLowerCase().includes(q)));
   }
 
   motherPhoto(portee: Portee): string | undefined {

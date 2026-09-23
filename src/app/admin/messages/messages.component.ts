@@ -44,6 +44,11 @@ export class AdminMessagesComponent implements OnInit {
     }
   }
 
+  /** Le sujet de la réponse, repris du message reçu. */
+  encodeSujet(contact: any): string {
+    return encodeURIComponent('Re : ' + (contact.subject || 'votre message'));
+  }
+
   confirmDelete(contact: Contact, event: Event): void {
     event.stopPropagation();
     if (!confirm(`Supprimer le message de "${contact.name}" ?`)) return;

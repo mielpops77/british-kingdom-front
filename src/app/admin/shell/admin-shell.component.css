@@ -1,79 +1,82 @@
+/* La coquille de l'espace de gestion : bandeau du haut, menu, contenu.
+   Sur téléphone le menu est une barre en bas (à portée de pouce) ;
+   à partir d'une tablette, il devient une colonne à gauche. */
 .admin-shell {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: var(--bg-cream, #FCF3EC);
+  background:
+    radial-gradient(760px 320px at 0% 0%, var(--rose-soft) 0%, transparent 70%),
+    radial-gradient(620px 300px at 100% 0%, var(--gold-soft) 0%, transparent 70%),
+    var(--paper);
 }
 
+/* ---------- bandeau du haut ---------- */
 .admin-topbar {
+  position: sticky; top: 0; z-index: 20;
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  padding: .7rem clamp(.9rem, 2.5vw, 1.6rem);
+  background: color-mix(in srgb, var(--card) 88%, transparent);
+  backdrop-filter: saturate(180%) blur(12px);
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.brand { display: flex; align-items: center; gap: .7rem; text-decoration: none; color: inherit; min-width: 0; }
+.brand__logo {
+  width: 42px; height: 42px; flex: none; border-radius: 50%; overflow: hidden;
+  background: var(--ink); box-shadow: var(--ring), var(--shadow-s);
+}
+.brand__logo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.brand__text { display: flex; flex-direction: column; line-height: 1.05; min-width: 0; }
+.brand__text b { font-family: var(--font-display); font-weight: 600; font-size: 1.02rem; color: var(--ink); }
+.brand__text em { font-family: var(--font-hand); font-style: normal; font-size: 1.05rem; color: var(--rose-ink); }
+
+.admin-topbar__right { display: flex; align-items: center; gap: .5rem; }
+.admin-topbar__right .ghost-btn { padding: .5rem 1rem; font-size: .85rem; }
+.admin-topbar__right svg { width: 16px; height: 16px; flex: none; }
+.logout-btn { background: var(--rose-soft); border-color: transparent; }
+@media (max-width: 560px) {
+  .see-site span, .logout-btn span { display: none; }
+  .admin-topbar__right .ghost-btn { padding: .55rem; border-radius: 50%; }
+  .brand__logo { width: 38px; height: 38px; }
+}
+
+/* ---------- corps : menu + contenu ---------- */
+.admin-body { flex: 1; display: flex; align-items: flex-start; gap: 0; }
+.admin-content { flex: 1; min-width: 0; padding-bottom: 86px; }
+
+.admin-nav {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 20;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px 20px;
-  background: var(--bg-panel, #FFFFFF);
-  border-bottom: 0.5px solid rgba(74, 50, 69, 0.14);
+  background: color-mix(in srgb, var(--card) 92%, transparent);
+  backdrop-filter: saturate(180%) blur(12px);
+  border-top: 1px solid var(--line-soft);
+  box-shadow: 0 -10px 24px -20px rgba(120, 50, 80, .5);
+  padding: .35rem .3rem calc(.35rem + env(safe-area-inset-bottom, 0px));
 }
-
-.brand {
-  font-family: "Fraunces", serif;
-  font-weight: 600;
-  color: var(--ink, #4A3245);
-  font-size: 0.95rem;
+.admin-nav a {
+  flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .15rem;
+  padding: .45rem .2rem .4rem; border-radius: 16px;
+  text-decoration: none; color: var(--ink-3);
+  transition: color .2s var(--ease), background .2s var(--ease);
 }
+.admin-nav a:hover { color: var(--rose-ink); }
+.admin-nav a.active { color: var(--rose-ink); background: var(--rose-soft); }
+.admin-nav .icon { display: grid; place-items: center; transition: transform .3s var(--bounce); }
+.admin-nav .icon svg { width: 22px; height: 22px; }
+.admin-nav a.active .icon { transform: translateY(-1px) scale(1.08); }
+.admin-nav .label { font-size: .68rem; font-weight: 700; letter-spacing: .02em; }
 
-.logout-btn {
-  font-family: "Work Sans", sans-serif;
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: var(--blush-deep, #B8637B);
-  background: var(--blush-tint, #F7E1E6);
-  border: none;
-  border-radius: 999px;
-  padding: 8px 16px;
-  cursor: pointer;
-}
-
-.admin-content {
-  flex: 1;
-  padding-bottom: 76px;
-}
-
-.admin-bottomnav {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  background: var(--bg-panel, #FFFFFF);
-  border-top: 0.5px solid rgba(74, 50, 69, 0.14);
-  box-shadow: 0 -8px 20px -16px rgba(74, 50, 69, 0.3);
-  padding-bottom: env(safe-area-inset-bottom, 0);
-}
-
-.admin-bottomnav a {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 3px;
-  padding: 10px 0 8px;
-  text-decoration: none;
-  color: var(--ink-soft, #93798D);
-  font-family: "Work Sans", sans-serif;
-}
-
-.admin-bottomnav a.active {
-  color: var(--blush-deep, #B8637B);
-}
-
-.admin-bottomnav .icon {
-  font-size: 1.3rem;
-  line-height: 1;
-}
-
-.admin-bottomnav .label {
-  font-size: 0.68rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
+@media (min-width: 860px) {
+  .admin-nav {
+    position: sticky; top: 76px; bottom: auto; left: auto; right: auto;
+    flex-direction: column; gap: .25rem; align-self: flex-start;
+    width: 218px; margin: 1.4rem 0 1.4rem clamp(.8rem, 2vw, 1.4rem);
+    padding: .6rem; border: 1px solid var(--line-soft);
+    border-radius: var(--radius); background: var(--card); box-shadow: var(--shadow-s);
+    backdrop-filter: none;
+  }
+  .admin-nav a { flex-direction: row; justify-content: flex-start; gap: .7rem; padding: .7rem .9rem; }
+  .admin-nav .label { font-size: .95rem; letter-spacing: 0; }
+  .admin-content { padding-bottom: 2rem; }
 }

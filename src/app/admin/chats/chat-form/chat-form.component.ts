@@ -61,10 +61,13 @@ export class ChatFormComponent implements OnInit {
       this.catId = Number(idParam);
       this.catService.getCatById(idParam).subscribe({
         next: (cat: any) => {
+          const saillies = (cat.sailliesExterieures || '').toString().trim().toLowerCase();
           this.model = {
             ...cat,
             dateOfBirth: cat.dateOfBirth ? cat.dateOfBirth.substring(0, 10) : '',
             images: cat.images || [],
+            // « oui », « OUI »… : le menu déroulant n'accepte que « Oui » ou « Non »
+            sailliesExterieures: saillies.startsWith('o') ? 'Oui' : 'Non',
           };
         },
         error: () => this.error = "Impossible de charger ce chat."

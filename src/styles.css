@@ -1,45 +1,354 @@
-/* You can add global styles to this file, and also import other style files */
+/* ==========================================================================
+   Espace de gestion — Chatterie British Kingdom
+   --------------------------------------------------------------------------
+   Les mêmes couleurs, polices et formes que le site public (site-v2/css/site.css),
+   pour que l'espace de gestion soit dans le même esprit : doux, arrondi, lisible.
+
+   1. Jetons (couleurs, polices, ombres)
+   2. Base
+   3. Boutons, pastilles et champs
+   4. Cartes, listes et en-têtes de page
+   5. Formulaires
+   6. Écrans particuliers (coquille, connexion, tableau de bord)
+   ========================================================================== */
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
 @import "~@fortawesome/fontawesome-free/css/all.css";
 
+/* --------------------------------------------------------------------------
+   1. Jetons
+   -------------------------------------------------------------------------- */
 :root {
-  --ink: #4A3245;
-  --blush: #D98CA0;
-  --blush-deep: #B8637B;
-  --blush-tint: #F7E1E6;
-  --powder: #A9BEDC;
-  --powder-tint: #E9EFF8;
-  --sage: #9CB08A;
-  --sage-tint: #EAF0E3;
-  --gold-soft: #BE9445;
-  --ink-soft: #93798D;
-  --bg-cream: #FCF3EC;
-  --bg-panel: #FFFFFF;
+  --paper:      #fff8f5;   /* papier crème rosé, fond de page */
+  --paper-2:    #fdeff1;   /* panneau rose poudré */
+  --paper-3:    #fae3e8;   /* aplat plus soutenu (silhouettes, chargement) */
+  --champagne:  #f8efe4;
+  --lavender:   #f3edfa;
+  --card:       #ffffff;
+  --line:       #efd8de;
+  --line-soft:  #f6e7eb;
+
+  --ink:        #3d2335;   /* prune profonde : texte principal */
+  --ink-2:      #634a5c;   /* texte secondaire */
+  --ink-3:      #75596d;   /* légendes, mentions */
+
+  --rose:       #d94d78;   /* framboise : décor, bordures */
+  --rose-ink:   #b0244f;   /* framboise lisible sur le papier */
+  --rose-deep:  #b0244f;   /* fond des boutons, texte blanc dessus */
+  --rose-soft:  #ffe5ed;
+  --gold:       #c29a4e;
+  --gold-ink:   #86621b;
+  --gold-soft:  #f7ecd8;
+  --lilac:      #9277c9;
+  --lilac-ink:  #6a4aa3;
+  --lilac-soft: #efe7fb;
+  --on-accent:  #ffffff;
+
+  --shadow-s: 0 1px 2px rgba(120, 50, 80, .06), 0 4px 14px rgba(120, 50, 80, .07);
+  --shadow-m: 0 2px 6px rgba(120, 50, 80, .07), 0 14px 34px rgba(120, 50, 80, .11);
+  --shadow-l: 0 6px 16px rgba(120, 50, 80, .10), 0 30px 64px rgba(120, 50, 80, .16);
+  --ring: 0 0 0 1.5px var(--gold);
+
+  --font-display: "Fraunces", "Iowan Old Style", Georgia, serif;
+  --font-body: "Quicksand", ui-rounded, "Segoe UI", system-ui, Helvetica, Arial, sans-serif;
+  --font-hand: "Caveat", "Segoe Script", cursive;
+
+  --radius: 22px;
+  --radius-s: 14px;
+  --ease: cubic-bezier(.22, 1, .36, 1);
+  --bounce: cubic-bezier(.34, 1.56, .64, 1);
+
+  /* anciens noms, encore utilisés par quelques écrans du site Angular */
+  --blush: var(--rose); --blush-deep: var(--rose-ink); --blush-tint: var(--rose-soft);
+  --ink-soft: var(--ink-3); --bg-cream: var(--paper); --bg-panel: var(--card);
+  --powder: #a9bedc; --powder-tint: #e9eff8; --sage: #9cb08a; --sage-tint: #eaf0e3;
 }
 
+/* --------------------------------------------------------------------------
+   2. Base
+   -------------------------------------------------------------------------- */
 html, body {
-  background: var(--bg-cream);
   margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
 }
 
-.custom-dialog-container .mat-dialog-container {
-    padding: 0;
-    border-radius: 18px;
-    overflow: hidden;
-  }
-  
+h1, h2, h3 { font-family: var(--font-display); font-weight: 600; color: var(--ink); line-height: 1.15; margin: 0; }
+h1 { font-size: clamp(1.9rem, 1.2vw + 1.6rem, 2.5rem); letter-spacing: -.01em; }
+h2 { font-size: clamp(1.25rem, .6vw + 1.1rem, 1.5rem); }
+h3 { font-size: 1.1rem; }
+a { color: var(--rose-ink); }
 
+/* Le petit intitulé manuscrit au-dessus des titres */
+.eyebrow-label {
+  font-family: var(--font-hand); font-size: 1.35rem; font-weight: 700; line-height: 1;
+  color: var(--rose-ink); margin: 0 0 .15rem; text-transform: none; letter-spacing: 0;
+  display: flex; align-items: center; gap: .5rem;
+}
+.eyebrow-label::before { content: ""; width: 26px; height: 2px; border-radius: 2px; background: var(--gold); }
 
-  
+.hint { color: var(--ink-3); font-size: .95rem; margin: 1rem 0; }
+.muted { color: var(--ink-3); }
 
-  /* .info-button {
-    font-family: "Signika", sans-serif;
-    background-color: #565451;
-    color: #fff;
+.error-message {
+  background: var(--rose-soft); color: var(--rose-ink); border: 1px solid var(--rose);
+  border-radius: var(--radius-s); padding: .7rem 1rem; font-weight: 600; font-size: .92rem;
 }
 
-.info-button:hover {
-    background-color: #666;
-    transform: scale(1.05);
-    transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
-} */
+/* --------------------------------------------------------------------------
+   3. Boutons, pastilles et champs
+   -------------------------------------------------------------------------- */
+button, input, select, textarea { font: inherit; }
+
+.btn-gold, .add-btn, .toggle-btn, .tab-btn, .archive-btn, .delete-btn, .upload-btn, .icon-btn, .ghost-btn {
+  font-family: var(--font-body); font-weight: 700; cursor: pointer;
+  border-radius: 999px; border: 1.5px solid transparent;
+  transition: transform .25s var(--bounce), background .2s var(--ease), color .2s var(--ease), border-color .2s var(--ease), box-shadow .2s var(--ease);
+}
+.btn-gold:disabled, .add-btn:disabled, .archive-btn:disabled, .delete-btn:disabled, .upload-btn:disabled { opacity: .55; cursor: not-allowed; }
+
+/* Bouton principal (Enregistrer, Se connecter) */
+.btn-gold {
+  display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+  background: var(--rose-deep); color: var(--on-accent);
+  padding: .85rem 1.8rem; font-size: 1rem; box-shadow: 0 10px 24px -14px var(--rose-deep);
+  width: 100%;
+}
+.btn-gold:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 14px 28px -14px var(--rose-deep); }
+
+/* Bouton « + Ajouter » des listes */
+.add-btn {
+  display: inline-flex; align-items: center; gap: .45rem; white-space: nowrap;
+  background: var(--rose-deep); color: var(--on-accent); text-decoration: none;
+  padding: .6rem 1.15rem; font-size: .92rem; box-shadow: 0 8px 20px -14px var(--rose-deep);
+}
+.add-btn:hover { transform: translateY(-2px); color: var(--on-accent); text-decoration: none; }
+
+.ghost-btn {
+  background: var(--card); color: var(--rose-ink); border-color: var(--line);
+  padding: .6rem 1.15rem; font-size: .92rem; text-decoration: none; display: inline-flex; align-items: center; gap: .45rem;
+}
+.ghost-btn:hover { border-color: var(--rose); transform: translateY(-2px); }
+
+/* Onglets (chats actifs / anciens) */
+.tabs { display: flex; gap: .5rem; flex-wrap: wrap; margin: 0 0 1.2rem; }
+.tab-btn {
+  background: var(--card); color: var(--ink-2); border-color: var(--line);
+  padding: .55rem 1.2rem; font-size: .92rem;
+}
+.tab-btn:hover { border-color: var(--rose); color: var(--rose-ink); }
+.tab-btn.active { background: var(--rose-deep); color: var(--on-accent); border-color: var(--rose-deep); box-shadow: 0 8px 18px -12px var(--rose-deep); }
+.tab-btn .count { opacity: .7; font-weight: 600; }
+
+/* Petits boutons d'action d'une ligne */
+.archive-btn, .delete-btn {
+  background: var(--card); border-color: var(--line); color: var(--ink-2);
+  padding: .42rem .9rem; font-size: .82rem;
+}
+.archive-btn:hover:not(:disabled) { border-color: var(--gold); color: var(--gold-ink); background: var(--gold-soft); }
+.delete-btn:hover:not(:disabled) { border-color: var(--rose); color: var(--rose-ink); background: var(--rose-soft); }
+
+.pill {
+  display: inline-flex; align-items: center; gap: .4rem;
+  padding: .28rem .75rem .3rem; border-radius: 999px;
+  font-size: .78rem; font-weight: 700; letter-spacing: .02em; line-height: 1.3;
+  background: var(--card); color: var(--ink-2); border: 1px solid var(--line); white-space: nowrap;
+}
+.pill::before { content: ""; width: .45rem; height: .45rem; border-radius: 50%; background: currentColor; flex: none; }
+.pill--ok { background: var(--rose-soft); color: var(--rose-ink); border-color: color-mix(in srgb, var(--rose) 45%, transparent); }
+.pill--warn { background: var(--gold-soft); color: var(--gold-ink); border-color: color-mix(in srgb, var(--gold) 55%, transparent); }
+.pill--muted { background: var(--paper-2); color: var(--ink-3); }
+.pill--lilac { background: var(--lilac-soft); color: var(--lilac-ink); border-color: color-mix(in srgb, var(--lilac) 45%, transparent); }
+.pill--breed::before { display: none; }
+.pill--breed { color: var(--gold-ink); border-color: color-mix(in srgb, var(--gold) 55%, transparent); }
+
+/* Champ de recherche des listes */
+.search {
+  position: relative; flex: 1 1 220px; max-width: 340px;
+}
+.search input {
+  width: 100%; padding: .62rem 1rem .62rem 2.4rem;
+  border: 1.5px solid var(--line); border-radius: 999px; background: var(--card); color: var(--ink);
+}
+.search svg { position: absolute; left: .85rem; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; color: var(--ink-3); pointer-events: none; }
+.search input:focus { outline: none; border-color: var(--rose); box-shadow: 0 0 0 4px var(--rose-soft); }
+
+/* --------------------------------------------------------------------------
+   4. Cartes, listes et en-têtes de page
+   -------------------------------------------------------------------------- */
+.admin-page, .dashboard {
+  max-width: 1100px; margin: 0 auto;
+  padding: clamp(1.1rem, 3vw, 2rem) clamp(1rem, 3vw, 2rem) 2.5rem;
+}
+
+.page-header {
+  display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem;
+  flex-wrap: wrap; margin-bottom: 1.4rem;
+}
+.page-header h1 { margin: 0; }
+
+.list { display: grid; gap: .9rem; }
+@media (min-width: 760px) { .list { grid-template-columns: repeat(auto-fill, minmax(min(100%, 430px), 1fr)); } }
+
+/* Une ligne : photo, informations, actions */
+.row-card {
+  display: flex; align-items: center; gap: .9rem; flex-wrap: wrap;
+  background: var(--card); border: 1px solid var(--line-soft); border-radius: var(--radius);
+  padding: .8rem .9rem; box-shadow: var(--shadow-s);
+  transition: transform .3s var(--bounce), box-shadow .3s var(--ease), border-color .2s var(--ease);
+}
+.row-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-m); border-color: var(--line); }
+.row-card__link { display: flex; align-items: center; gap: .85rem; flex: 1 1 180px; min-width: 0; text-decoration: none; color: inherit; }
+.row-card__photo {
+  width: 64px; height: 64px; flex: none; border-radius: 18px;
+  object-fit: cover; object-position: 50% 30%;
+  background: var(--paper-3); box-shadow: var(--ring);
+}
+.row-card__photo--round { border-radius: 50%; }
+.row-card__info { min-width: 0; display: flex; flex-direction: column; gap: .15rem; }
+.row-card__name { font-family: var(--font-display); font-size: 1.12rem; font-weight: 600; color: var(--ink); }
+.row-card__meta { font-size: .85rem; color: var(--ink-3); display: flex; flex-wrap: wrap; gap: .1rem .6rem; }
+.row-card__actions { display: flex; gap: .4rem; margin-left: auto; }
+.row-card__pills { display: flex; gap: .35rem; flex-wrap: wrap; margin-top: .25rem; }
+
+/* Silhouette quand il n'y a pas de photo */
+.photo-placeholder {
+  display: grid; place-items: center; background: var(--paper-3); color: var(--rose);
+}
+.photo-placeholder svg { width: 55%; height: 55%; fill: currentColor; opacity: .5; }
+
+/* Message quand une liste est vide */
+.empty-card {
+  background: var(--card); border: 1px dashed var(--line); border-radius: var(--radius);
+  padding: 2rem 1.4rem; text-align: center; color: var(--ink-3);
+}
+.empty-card strong { display: block; font-family: var(--font-display); font-size: 1.15rem; color: var(--ink); margin-bottom: .3rem; }
+
+/* --------------------------------------------------------------------------
+   5. Formulaires
+   -------------------------------------------------------------------------- */
+.form { display: flex; flex-direction: column; gap: 1.1rem; }
+
+.form-card {
+  background: var(--card); border: 1px solid var(--line-soft); border-radius: var(--radius);
+  box-shadow: var(--shadow-s); padding: clamp(1.1rem, 2.5vw, 1.6rem);
+}
+.form-card > h2 { display: flex; align-items: center; gap: .55rem; margin: 0 0 1rem; font-size: 1.2rem; }
+.form-card > h2 svg { width: 20px; height: 20px; color: var(--rose-ink); flex: none; }
+.form-grid { display: grid; gap: 1rem; }
+@media (min-width: 720px) { .form-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .form-grid .wide { grid-column: 1 / -1; } }
+
+.field { display: flex; flex-direction: column; gap: .3rem; }
+.field-label, .form label.field-label {
+  font-size: .78rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--ink-3); margin: 0;
+}
+.form input[type="text"], .form input[type="date"], .form input[type="number"], .form input[type="email"],
+.form input[type="password"], .form select, .form textarea,
+.field input, .field select, .field textarea {
+  width: 100%; box-sizing: border-box;
+  padding: .7rem .95rem; border: 1.5px solid var(--line); border-radius: var(--radius-s);
+  background: var(--card); color: var(--ink); font-weight: 600;
+  transition: border-color .2s var(--ease), box-shadow .2s var(--ease);
+}
+.form textarea, .field textarea { font-weight: 500; line-height: 1.6; resize: vertical; min-height: 120px; }
+.form input:focus, .form select:focus, .form textarea:focus,
+.field input:focus, .field select:focus, .field textarea:focus {
+  outline: none; border-color: var(--rose); box-shadow: 0 0 0 4px var(--rose-soft);
+}
+.form select, .field select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2375596d' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right .8rem center; background-size: 18px; padding-right: 2.4rem;
+}
+
+.checkbox-label {
+  display: flex; align-items: center; gap: .6rem; font-weight: 600; color: var(--ink-2);
+  background: var(--paper-2); border-radius: var(--radius-s); padding: .7rem .9rem; cursor: pointer;
+}
+.checkbox-label input { width: 20px; height: 20px; accent-color: var(--rose-deep); }
+
+.section-divider {
+  display: flex; align-items: center; gap: .6rem; margin: .4rem 0 0;
+  font-family: var(--font-hand); font-size: 1.3rem; font-weight: 700; color: var(--rose-ink);
+  letter-spacing: 0; text-transform: none;
+}
+.section-divider::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+
+/* Photos : dépôt, aperçus, galerie */
+.upload-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+  background: var(--card); color: var(--rose-ink); border: 1.5px dashed var(--rose);
+  padding: .6rem 1.1rem; font-size: .88rem; text-align: center;
+}
+.upload-btn:hover { background: var(--rose-soft); transform: translateY(-2px); }
+.upload-btn input[type="file"] { display: none; }
+.upload-btn.small { padding: .45rem .9rem; font-size: .8rem; }
+
+.photo-upload { display: flex; flex-direction: column; align-items: center; gap: .6rem; }
+.preview-round {
+  width: 116px; height: 116px; border-radius: 50%; object-fit: cover;
+  box-shadow: var(--ring), var(--shadow-m); background: var(--paper-3);
+}
+.preview-round.small { width: 78px; height: 78px; }
+.preview-placeholder {
+  width: 116px; height: 116px; display: grid; place-items: center; text-align: center;
+  background: var(--paper-2); color: var(--ink-3); font-size: .8rem; font-weight: 700;
+  border: 1.5px dashed var(--line); box-shadow: none;
+}
+.preview-placeholder.round { border-radius: 50%; }
+.preview-placeholder.small { width: 78px; height: 78px; font-size: .72rem; }
+
+.gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: .6rem; }
+.gallery-item {
+  position: relative; border-radius: var(--radius-s); overflow: hidden; background: var(--paper-3);
+  box-shadow: var(--shadow-s); aspect-ratio: 1;
+}
+.gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.gallery-item .remove-btn {
+  position: absolute; top: .35rem; right: .35rem; width: 26px; height: 26px; line-height: 1;
+  border: none; border-radius: 50%; background: rgba(61, 35, 53, .72); color: #fff;
+  font-size: 1rem; cursor: pointer; display: grid; place-items: center;
+}
+.gallery-item .remove-btn:hover { background: var(--rose-deep); }
+.gallery-item .reorder-btns { position: absolute; left: 0; right: 0; bottom: 0; display: flex; justify-content: space-between; }
+.gallery-item .reorder-btn {
+  width: 32px; height: 28px; border: none; background: rgba(61, 35, 53, .55); color: #fff;
+  font-size: 1rem; cursor: pointer;
+}
+.gallery-item .reorder-btn:disabled { opacity: .25; cursor: not-allowed; }
+.gallery-item .reorder-btn:hover:not(:disabled) { background: var(--rose-deep); }
+
+/* La barre d'enregistrement, toujours à portée de pouce */
+.form-actions {
+  position: sticky; bottom: clamp(.6rem, 2vw, 1rem); z-index: 5;
+  display: flex; gap: .7rem; align-items: center; flex-wrap: wrap;
+  margin: .6rem 0 calc(.4rem + env(safe-area-inset-bottom, 0px));
+  padding: .7rem .8rem; border-radius: 999px;
+  background: color-mix(in srgb, var(--card) 94%, transparent);
+  backdrop-filter: saturate(180%) blur(10px);
+  border: 1px solid var(--line-soft); box-shadow: var(--shadow-m);
+}
+.form-actions .btn-gold { width: auto; flex: 1 1 220px; }
+/* sur téléphone, le menu occupe le bas de l'écran : la barre se pose juste au-dessus */
+@media (max-width: 859px) { .form-actions { bottom: calc(74px + env(safe-area-inset-bottom, 0px)); } }
+.form-actions .ghost-btn { flex: 0 0 auto; }
+
+.back-link {
+  display: inline-flex; align-items: center; gap: .4rem; margin-bottom: .8rem;
+  color: var(--ink-3); text-decoration: none; font-weight: 700; font-size: .9rem;
+}
+.back-link:hover { color: var(--rose-ink); }
+
+/* --------------------------------------------------------------------------
+   6. Boîtes de dialogue de Material (quand elles servent encore)
+   -------------------------------------------------------------------------- */
+.custom-dialog-container .mat-dialog-container { padding: 0; border-radius: 18px; overflow: hidden; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}

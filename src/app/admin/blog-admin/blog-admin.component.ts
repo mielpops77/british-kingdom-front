@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NgFor, NgIf } from '@angular/common';
+import { DatePipe, NgFor, NgIf } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { BlogService } from '../../components/Services/blogService';
 import { BlogPost } from '../../models/blog-post';
@@ -9,7 +9,7 @@ import { BlogPost } from '../../models/blog-post';
   templateUrl: './blog-admin.component.html',
   styleUrls: ['./blog-admin.component.css'],
   standalone: true,
-  imports: [NgFor, NgIf, RouterLink]
+  imports: [NgFor, NgIf, RouterLink, DatePipe]
 })
 export class BlogAdminComponent implements OnInit {
   posts: BlogPost[] = [];
@@ -26,6 +26,14 @@ export class BlogAdminComponent implements OnInit {
       },
       error: () => this.loading = false
     });
+  }
+
+  recherche = '';
+
+  get displayedPosts(): any[] {
+    const q = this.recherche.trim().toLowerCase();
+    if (!q) return this.posts;
+    return this.posts.filter((p: any) => [p.title, p.category].some((v: any) => (v || '').toLowerCase().includes(q)));
   }
 
   confirmDelete(post: BlogPost): void {

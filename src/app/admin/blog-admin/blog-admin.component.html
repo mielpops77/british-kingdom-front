@@ -1,26 +1,43 @@
 <div class="admin-page">
   <div class="page-header">
     <div>
-      <p class="eyebrow-label">Gestion</p>
+      <p class="eyebrow-label">Conseils</p>
       <h1>Articles du blog</h1>
     </div>
-    <a routerLink="/admin/blog/new" class="add-btn">+ Ajouter</a>
+    <a routerLink="/admin/blog/new" class="add-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg> Écrire un article</a>
   </div>
 
-  <div class="post-list">
-    <div class="post-row" *ngFor="let post of posts">
-      <a [routerLink]="['/admin/blog', post.slug, 'edit']" class="post-row-link">
-        <img [src]="post.coverImage" [alt]="post.title" class="post-photo">
-        <div class="post-info">
-          <span class="post-title">{{ post.title }}</span>
-          <span class="post-meta">{{ post.category }} · {{ post.date }}</span>
-        </div>
+  <div class="list-tools">
+    <label class="search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input type="search" placeholder="Rechercher un article…" [value]="recherche"
+             (input)="recherche = $any($event.target).value" aria-label="Rechercher un article">
+    </label>
+  </div>
+
+  <div class="list list--wide">
+    <article class="row-card" *ngFor="let post of displayedPosts">
+      <a [routerLink]="['/admin/blog', post.slug, 'edit']" class="row-card__link">
+        <img [src]="post.coverImage" [alt]="post.title" class="row-card__photo row-card__photo--wide">
+        <span class="row-card__info">
+          <span class="row-card__name">{{ post.title }}</span>
+          <span class="row-card__meta"><span *ngIf="post.date">{{ post.date | date: 'dd/MM/yyyy' }}</span></span>
+          <span class="row-card__pills"><span class="pill pill--breed" *ngIf="post.category">{{ post.category }}</span></span>
+        </span>
       </a>
-      <button class="delete-btn" (click)="confirmDelete(post)" [disabled]="deletingId === post.id">
-        {{ deletingId === post.id ? '...' : 'Supprimer' }}
-      </button>
-    </div>
+      <div class="row-card__actions">
+        <a class="ghost-btn icon-only" [href]="'https://chatterie-british-kingdom.fr/article.html?slug=' + post.slug"
+           target="_blank" rel="noopener" title="Voir l'article sur le site" aria-label="Voir l'article sur le site"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg></a>
+        <button class="delete-btn" (click)="confirmDelete(post)" [disabled]="deletingId === post.id">
+          {{ deletingId === post.id ? '…' : 'Supprimer' }}
+        </button>
+      </div>
+    </article>
   </div>
 
-  <p *ngIf="!loading && !posts.length" class="hint">Aucun article pour le moment.</p>
+  <p *ngIf="loading" class="hint">Chargement…</p>
+  <div class="empty-card" *ngIf="!loading && !displayedPosts.length">
+    <strong>{{ recherche ? 'Aucun article à ce titre' : 'Aucun article pour le moment' }}</strong>
+    <span *ngIf="!recherche">Le bouton « Écrire un article » ouvre une page blanche.</span>
+  </div>
 </div>
