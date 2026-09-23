@@ -1,5 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { NgIf, NgFor, DatePipe } from '@angular/common';
+import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { NgIf, NgFor, DatePipe, isPlatformBrowser } from '@angular/common';
+import { MARQUE_MAISON } from '../shell/admin-shell.component';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { StatistiqueService } from '../../components/Services/statistique.service';
@@ -41,9 +42,28 @@ export class DashboardComponent implements OnInit, OnDestroy {
   loadingOnline = true;
   private onlineInterval: any;
 
-  constructor(private http: HttpClient, private statistiqueService: StatistiqueService) { }
+  /** Les visites de ce navigateur sont-elles mises de côté ? */
+  mesVisitesComptees = false;
+
+  constructor(
+    private http: HttpClient,
+    private statistiqueService: StatistiqueService,
+    @Inject(PLATFORM_ID) private platformId: Object,
+  ) { }
+
+  /** Compter (ou non) les visites faites depuis ce navigateur. */
+  basculerMesVisites(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+    try {
+      localStorage.setItem(MARQUE_MAISON, this.mesVisitesComptees ? '1' : '0');
+      this.mesVisitesComptees = !this.mesVisitesComptees;
+    } catch (e) { /* stockage refusé */ }
+  }
 
   ngOnInit(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      try { this.mesVisitesComptees = localStorage.getItem(MARQUE_MAISON) === '0'; } catch (e) { /* stockage refusé */ }
+    }
     this.refreshOnlineCount();
     this.onlineInterval = setInterval(() => this.refreshOnlineCount(), 20000);
 

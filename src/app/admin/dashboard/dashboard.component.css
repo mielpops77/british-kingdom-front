@@ -31,6 +31,10 @@
   padding: clamp(1.1rem, 2.5vw, 1.6rem); box-shadow: var(--shadow-s); margin-bottom: 1.2rem;
 }
 .panel-card h2 { margin: 0 0 1.1rem; }
+.note-approx {
+  margin: -.7rem 0 1.1rem; font-size: .85rem; line-height: 1.55; color: var(--ink-3);
+  background: var(--paper); border-left: 3px solid var(--gold); border-radius: 0 12px 12px 0; padding: .6rem .9rem;
+}
 
 /* Le petit graphique des 14 derniers jours */
 .bar-chart { display: flex; align-items: flex-end; gap: clamp(.25rem, 1.2vw, .6rem); height: 190px; }
@@ -63,3 +67,9 @@
 .visit-date { font-weight: 700; font-size: .9rem; }
 .visit-location { font-size: .85rem; color: var(--ink-2); }
 .visit-ip { font-size: .75rem; color: var(--ink-3); }
+
+.link-btn {
+  background: none; border: none; padding: 0; cursor: pointer;
+  font: inherit; font-weight: 700; color: var(--rose-ink); text-decoration: underline;
+}
+.link-btn:hover { color: var(--ink); }

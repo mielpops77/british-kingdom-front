@@ -47,6 +47,9 @@
 
   <section class="panel-card">
     <h2>D'où viennent vos visiteurs</h2>
+    <p class="note-approx">Ces villes viennent de l'adresse internet du visiteur : c'est l'endroit où sa connexion
+      sort du réseau de son fournisseur d'accès, souvent à quelques dizaines de kilomètres de chez lui (et parfois
+      dans une autre région depuis un téléphone).</p>
     <p *ngIf="loadingLocations" class="hint">Chargement…</p>
     <p *ngIf="!loadingLocations && topLocations.length === 0" class="hint">Pas encore assez de données.</p>
     <div class="location-list" *ngIf="!loadingLocations && topLocations.length > 0">
@@ -64,6 +67,13 @@
 
   <section class="panel-card">
     <h2>Dernières visites</h2>
+    <p class="note-approx">La ville affichée est approximative (voir ci-dessus).
+      <span *ngIf="!mesVisitesComptees">Vos propres passages sur le site ne sont pas comptés depuis ce navigateur.</span>
+      <span *ngIf="mesVisitesComptees">Vos propres passages sur le site sont comptés comme ceux des visiteurs.</span>
+      <button type="button" class="link-btn" (click)="basculerMesVisites()">
+        {{ mesVisitesComptees ? 'ne plus compter mes visites' : 'les compter quand même' }}
+      </button>
+    </p>
     <p *ngIf="loadingVisits" class="hint">Chargement…</p>
     <p *ngIf="!loadingVisits && recentVisits.length === 0" class="hint">Aucune visite enregistrée pour l'instant.</p>
     <ul class="visit-list" *ngIf="!loadingVisits && recentVisits.length > 0">

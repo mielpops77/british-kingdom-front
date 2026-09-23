@@ -15,6 +15,11 @@
   const PROFIL_ID = 1;
   // Le vrai site (chatterie-british-kingdom.fr) : le seul qui compte les visites
   const OFFICIEL = /(^|\.)chatterie-british-kingdom\.fr$/i.test(location.hostname);
+  /** Vrai si ce navigateur est celui de la chatterie : l'espace de gestion y a posé sa marque,
+      les visites faites depuis ce navigateur ne sont donc pas comptées. */
+  function maison() {
+    try { return localStorage.getItem('bk_maison') === '1'; } catch (e) { return false; }
+  }
 
   const IMG = {
     catProfil: BLOB + 'CatsProfil/',
@@ -364,9 +369,11 @@
     /**
      * Statistiques de visite (mêmes appels que le site actuel), silencieux en cas d'échec.
      * Seules les visites du vrai site comptent : un aperçu (Netlify, ordinateur) n'envoie rien.
+     * Et pas celles de la maison : passer par l'espace de gestion pose la marque « bk_maison »
+     * dans le navigateur, ce qui met ses visites de côté (réglage réversible depuis /admin).
      */
     trackVisit: () => {
-      if (demoActive || !OFFICIEL) return;
+      if (demoActive || !OFFICIEL || maison()) return;
       try {
         if (sessionStorage.getItem('bk_visit')) return;
         sessionStorage.setItem('bk_visit', '1');
@@ -374,7 +381,7 @@
       http('statistique', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ profilId: PROFIL_ID }) }).catch(() => {});
     },
     heartbeat: () => {
-      if (demoActive || !OFFICIEL) return;
+      if (demoActive || !OFFICIEL || maison()) return;
       const send = () => http('statistique/heartbeat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ profilId: PROFIL_ID }) }).catch(() => {});
       send();
       setInterval(send, 30000);
