@@ -1450,7 +1450,7 @@ PAGES = [
     {"file": "chatons.html", "body": CHATONS, "freq": "weekly", "prio": "0.9",
      "title": "Chatons British Shorthair et Longhair à adopter — Seine-et-Marne (77)",
      "desc": "Nos portées en cours : chatons British Shorthair et Longhair LOOF, leurs parents, leur âge et leur disponibilité. Départ vers 12 semaines depuis Othis, près de Roissy.",
-     "scripts": '<script>BKPages.chatons();</script>'},
+     "scripts": '<script src="js/vedettes.js"></script>\n<script>BKPages.chatons();</script>'},
 
     {"file": "chaton.html", "body": FICHE_CHATON, "sitemap": False, "nav": "chatons.html",
      "title": "Fiche d'un chaton — Chatterie British Kingdom",

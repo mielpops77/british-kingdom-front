@@ -19,6 +19,7 @@ import html
 import json
 import os
 import re
+import unicodedata
 import urllib.parse
 import urllib.request
 
@@ -323,6 +324,36 @@ def eventail(choix):
         '<span class="fan__name">%s</span></a>' % (href, esc(src), esc(n)) for href, src, n in choix)
 
 
+def vedettes():
+    """Les prénoms de js/vedettes.js : les chatons mis en avant en haut de la page Chatons."""
+    try:
+        with open(os.path.join(SITE_DIR, "js", "vedettes.js"), encoding="utf-8") as fh:
+            source = fh.read()
+    except OSError:
+        return []
+    m = re.search(r"window\.BK_VEDETTES\s*=\s*\[([^\]]*)\]", source)
+    return re.findall(r"""['\"]([^'\"]+)['\"]""", m.group(1)) if m else []
+
+
+def _sans_accent(s):
+    return re.sub(r"[\u0300-\u036f]", "", unicodedata.normalize("NFD", str(s or "").strip().lower()))
+
+
+def chatons_vedettes(portees, photo):
+    """Les trois chatons des polaroïds (chatonsVedettes de js/pages.js)."""
+    tous = chatons_melanges(portees, photo)
+    choisis = []
+    for prenom in vedettes():
+        for k in tous:
+            if _sans_accent(k.get("name")) == _sans_accent(prenom) and k not in choisis:
+                choisis.append(k)
+                break
+    for k in tous:
+        if len(choisis) < 3 and k not in choisis:
+            choisis.append(k)
+    return choisis[:3]
+
+
 def chatons_melanges(portees, photo=None):
     """Un chaton de chaque portée à tour de rôle, les disponibles d'abord (chatonsMelanges de js/pages.js)."""
     listes = []
@@ -486,7 +517,7 @@ def instantanes(d, ico):
                      else ("heart", "Tous réservés pour le moment", "liste-attente.html"))
         if depart:
             items.append(("clock", "Premiers départs le " + date_longue(depart[0]), ""))
-        trois = chatons_melanges(portees, photo)[:3]
+        trois = chatons_vedettes(portees, photo)
         out["chatons.html"] = {
             "litters": '<div data-snapshot>%s%s</div>' % (_note(d), "".join(blocs)),
             "kittens-stickers": '<div data-snapshot>%s</div>' % autocollants(items, ico),

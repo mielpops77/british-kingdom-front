@@ -605,7 +605,20 @@
       .slice().sort((a, b) => (a.status === 'disponible' ? 0 : 1) - (b.status === 'disponible' ? 0 : 1))));
   }
 
-  /** Le haut de la page Chatons : les autocollants et trois polaroïds, un par portée. */
+  /** Les trois chatons des polaroïds : ceux de js/vedettes.js s'ils sont encore là, puis un par portée. */
+  function chatonsVedettes(portees) {
+    const tous = chatonsMelanges(portees, (k) => k.photo);
+    const sansAccent = (s) => String(s || '').trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+    const choisis = [];
+    (window.BK_VEDETTES || []).forEach((prenom) => {
+      const k = tous.find((x) => sansAccent(x.name) === sansAccent(prenom) && choisis.indexOf(x) === -1);
+      if (k) choisis.push(k);
+    });
+    tous.forEach((k) => { if (choisis.length < 3 && choisis.indexOf(k) === -1) choisis.push(k); });
+    return choisis.slice(0, 3);
+  }
+
+  /** Le haut de la page Chatons : les autocollants et trois polaroïds. */
   function chatonsEnTete(portees) {
     const stickers = $('#kittens-stickers');
     const fan = $('#kittens-fan');
@@ -620,7 +633,7 @@
       ].filter(Boolean));
     }
     if (fan) {
-      fan.innerHTML = eventail(chatonsMelanges(portees, (k) => k.photo).slice(0, 3)
+      fan.innerHTML = eventail(chatonsVedettes(portees)
         .map((k) => ['chaton.html?id=' + encodeURIComponent(k.id), k.photo, niceName(k.name) || 'Chaton']));
       guardImages(fan);
     }
