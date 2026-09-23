@@ -6,7 +6,7 @@
    milieu, devant les deux autres.
 
    - 'Bagheera'                     : sa photo principale.
-   - { nom: 'Balthazar', photo: 6 } : sa 6e photo, comme elles sont numérotées
+   - { nom: 'Bulle', photo: 6 }     : sa 6e photo, comme elles sont numérotées
                                       sur sa fiche (la 1re est sa photo
                                       principale, les suivantes sont les
                                       vignettes, dans l'ordre).
@@ -18,4 +18,4 @@
    Les prénoms s'écrivent comme dans l'espace de gestion (les majuscules et
    les accents n'ont pas d'importance).
    ========================================================================== */
-window.BK_VEDETTES = ['Bagheera', { nom: 'Balthazar', photo: 6 }, 'Bergamote'];
+window.BK_VEDETTES = ['Bagheera', 'Balthazar', 'Bergamote'];
