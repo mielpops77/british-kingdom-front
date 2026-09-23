@@ -149,6 +149,7 @@
       mother: parentPhoto(pick(c, ['urlProfilMother'], '')),
       father: parentPhoto(pick(c, ['urlProfilFather'], '')),
       gallery: gallery.map((g) => join(IMG.catGallery, g)),
+      galleryFiles: gallery,
       sailliesExterieures: pick(c, ['sailliesExterieures'], ''),
       // Champ facultatif : s'il apparaît un jour dans l'API, il remplace le texte de js/descriptions.js
       description: pick(c, ['description'], ''),

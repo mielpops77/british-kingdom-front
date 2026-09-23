@@ -20,11 +20,13 @@
   /** « Willy wonka » devient « Willy Wonka ». */
   const niceName = (s) => String(s || '').replace(/\s+/g, ' ').trim().replace(/(^|[\s-])(\p{Ll})/gu, (m, a, b) => a + b.toUpperCase());
 
-  /** Extrait un code EMS entre parenthèses : "Bleu (BRI a)" -> { nom:"Bleu", ems:"BRI a" } */
+  /** Extrait un code EMS entre parenthèses : "Bleu (BRI a)" -> { nom:"Bleu", ems:"BRI a" }.
+      Le nom de la robe s'écrit comme une phrase : « Black Golden Shaded » devient « Black golden shaded ». */
   function splitRobe(robe) {
     const t = cleanText(robe);
     const m = t.match(/^(.*?)\s*\(([^)]+)\)\s*$/);
-    return m ? { nom: m[1].trim(), ems: m[2].trim() } : { nom: t, ems: '' };
+    const phrase = (s) => s.charAt(0) + s.slice(1).toLowerCase();
+    return m ? { nom: phrase(m[1].trim()), ems: m[2].trim() } : { nom: phrase(t), ems: '' };
   }
   const shortBreed = (b) => cleanText(b).replace(/^British\s+/i, '');
   const yesNo = (v) => { const s = String(v || '').trim().toLowerCase(); return s.startsWith('o') ? 'Oui' : s.startsWith('n') ? 'Non' : ''; };
@@ -107,20 +109,51 @@
     }
   }
 
+  /* ---------- la couleur des yeux, en deux petites pastilles ---------- */
+  const EYES_PLURAL = { vert: 'verts', bleu: 'bleus', jaune: 'jaunes', 'doré': 'dorés', noir: 'noirs' };
+  const EYE_COLORS = [[/orange|cuivr/, '#e0892c'], [/vert/, '#7aa843'], [/noisette/, '#a8843a'], [/jaune|dor|ambre/, '#e2b134'], [/bleu/, '#5b93d6'], [/marron|brun/, '#8a5a2b']];
+  /** « Vairon Bleu/Marron » → « Yeux vairons », une pastille bleue et une marron (un œil chacune). */
+  function eyes(raw) {
+    const t = cleanText(raw).toLowerCase();
+    if (!t) return null;
+    const color = (s) => { const hit = EYE_COLORS.find((c) => c[0].test(s)); return hit ? hit[1] : ''; };
+    const odd = /^vairons?/.test(t);
+    const parts = t.replace(/^vairons?\s*/, '').split(/\s*(?:\/|,|&|\bet\b)\s*/).filter(Boolean);
+    const c1 = color(parts[0] || t);
+    return { label: odd ? 'Yeux vairons' : 'Yeux ' + (EYES_PLURAL[t] || t), c1, c2: odd && parts[1] ? color(parts[1]) : c1 };
+  }
+  function eyesLine(raw) {
+    const e = eyes(raw);
+    if (!e) return '';
+    return '<p class="card__eyes">' +
+      (e.c1 && e.c2 ? '<span class="eyes" aria-hidden="true"><i style="--c:' + e.c1 + '"></i><i style="--c:' + e.c2 + '"></i></span>' : '') +
+      esc(e.label) + '</p>';
+  }
+
+  /** Ce que js/descriptions.js dit d'un chat (texte, accroche, photos mises en avant). */
+  const described = (id) => (window.BK_DESCRIPTIONS || {})[id] || {};
+
   /* ---------- cartes ---------- */
-  function catCard(cat) {
+  /** Carte d'un reproducteur : son accroche manuscrite, sa robe, son âge, ses yeux ;
+      opts.parent (« Papa en ce moment »…) pose une étiquette sur la photo. */
+  function catCard(cat, opts) {
+    const o = opts || {};
     const r = splitRobe(cat.robe);
     const breed = shortBreed(cat.breed);
-    return '<a class="card reveal" href="chat.html?id=' + encodeURIComponent(cat.id) + '">' +
+    const accroche = described(cat.id).accroche;
+    return '<a class="card card--cat reveal" href="chat.html?id=' + encodeURIComponent(cat.id) + '">' +
       '<div class="card__media">' + archImg(cat.photo, 'Portrait de ' + niceName(cat.name)) +
         (breed ? '<div class="card__badges"><span class="pill pill--breed">' + esc(breed) + '</span></div>' : '') +
+        (o.parent ? '<span class="card__sticker">' + icon('heart', 14) + esc(o.parent) + '</span>' : '') +
       '</div>' +
       '<div class="card__body">' +
         '<h3 class="card__title">' + esc(niceName(cat.name)) + '</h3>' +
+        (accroche ? '<p class="card__tagline">' + esc(accroche) + '</p>' : '') +
         '<p class="card__meta">' +
           (r.nom ? '<span>' + esc(r.nom) + '</span>' : '') +
           (cat.dateOfBirth ? '<span><b>' + esc(fmt.age(cat.dateOfBirth)) + '</b></span>' : '') +
         '</p>' +
+        eyesLine(cat.eyeColor) +
       '</div></a>';
   }
 
@@ -245,21 +278,106 @@
 
   /* ======================================================================
      NOS MÂLES / NOS FEMELLES
+     Les polaroïds du haut de la page, les cartes, les portées du moment,
+     les photos mises en avant (« vitrine » de js/descriptions.js) et le
+     texte de l'administration. _build/donnees.py écrit les mêmes cartes,
+     autocollants et polaroïds dans la page (instantané pour les robots).
      ====================================================================== */
+  /** Les photos mises en avant d'un chat, encore présentes dans sa galerie ; à défaut, ses deux premières. */
+  function showcase(cat) {
+    const files = cat.galleryFiles || [];
+    const chosen = (described(cat.id).vitrine || []).filter((f) => files.indexOf(f) !== -1);
+    return chosen.length ? chosen.map((f) => window.BK.img.gallery(f)) : cat.gallery.slice(0, 2);
+  }
+
+  /** Les autocollants du haut de la page : combien ils sont, combien de papas (ou de mamans) en ce moment, la race. */
+  function sexStickers(sex, list, parents) {
+    const male = sex === 'male';
+    const breeds = list.map((c) => cleanText(c.breed)).filter((b, i, a) => b && a.indexOf(b) === i);
+    const items = [
+      ['crown', plural(list.length, male ? 'mâle' : 'femelle', male ? 'mâles' : 'femelles')],
+      parents ? ['heart', plural(parents, male ? 'papa' : 'maman', male ? 'papas' : 'mamans') + ' en ce moment', '#sex-litters'] : null,
+      breeds.length ? ['paw', breeds.length > 1 ? breeds.map(shortBreed).join(' et ') : breeds[0]] : null
+    ].filter(Boolean);
+    return '<ul class="bh-stickers sex-head__stickers">' + items.map((it) =>
+      '<li>' + icon(it[0], 18) + (it[2] ? '<a href="' + it[2] + '">' + esc(it[1]) + '</a>' : esc(it[1])) + '</li>').join('') + '</ul>';
+  }
+
+  /** Trois polaroïds en éventail, les parents du moment d'abord, chacun avec sa première photo mise en avant. */
+  const fanPicks = (stars) => stars.map((c) => ({ c, src: showcase(c)[0] || c.photo })).filter((x) => x.src).slice(0, 3);
+  function sexFan(picks) {
+    return picks.length ? '<div class="fan">' + picks.map((x) =>
+      '<a class="fan__one" href="chat.html?id=' + encodeURIComponent(x.c.id) + '" tabindex="-1">' +
+        '<img src="' + esc(x.src) + '" alt="" data-guard>' +
+        '<span class="fan__name">' + esc(niceName(x.c.name)) + '</span></a>').join('') + '</div>' : '';
+  }
+
+  /** Les photos mises en avant, un chat à tour de rôle, sans celles des polaroïds ; des rangées toujours pleines. */
+  function sexPhotos(list, used) {
+    const section = $('#sex-photos');
+    const grid = $('#sex-photos-grid');
+    if (!section || !grid) return;
+    const lists = list.map((c) => showcase(c).filter((src) => used.indexOf(src) === -1).map((src) => ({ src, alt: niceName(c.name) })));
+    const photos = [];
+    for (let i = 0; lists.some((l) => l[i]); i++) lists.forEach((l) => { if (l[i]) photos.push(l[i]); });
+    const perRow = window.matchMedia('(max-width: 699px)').matches ? 2 : 4;
+    const n = Math.min(8, photos.length - (photos.length % perRow));
+    if (n < 2) return;
+    grid.innerHTML = photos.slice(0, n).map((p, i) =>
+      '<button type="button" class="mosaic__tile reveal" data-mosaic="' + i + '" aria-label="Agrandir la photo : ' + esc(p.alt) + '">' +
+      '<img src="' + esc(p.src) + '" alt="' + esc(p.alt) + '" loading="lazy" data-guard>' +
+      '<span class="mosaic__caption" aria-hidden="true">' + esc(p.alt) + '</span></button>').join('');
+    // La visionneuse parcourt toutes les photos mises en avant, même celles qui n'ont pas de case
+    grid.addEventListener('click', (e) => {
+      const t = e.target.closest('[data-mosaic]');
+      if (t) window.BKUI.openLb(photos, Number(t.dataset.mosaic));
+    });
+    section.hidden = false;
+    guardImages(section); setupReveal(section);
+  }
+
+  function renderSex(sex, list, all, portees, box) {
+    const male = sex === 'male';
+    // Les portées en ligne dont l'un de ces chats est le papa (ou la maman)
+    const key = male ? 'idPapa' : 'idMaman';
+    const mine = portees.filter((p) => list.some((c) => String(c.id) === String(p[key])));
+    const isParent = (c) => mine.some((p) => String(p[key]) === String(c.id));
+    const parentLabel = male ? 'Papa en ce moment' : 'Maman en ce moment';
+
+    box.innerHTML = '<div class="grid ' + (list.length === 4 || list.length > 6 ? 'grid-4' : 'grid-3') + ' cats">' +
+      list.map((c) => catCard(c, { parent: isParent(c) ? parentLabel : '' })).join('') + '</div>';
+    guardImages(box); setupReveal(box);
+
+    const stickers = $('#cats-stickers');
+    if (stickers) stickers.innerHTML = sexStickers(sex, list, list.filter(isParent).length);
+    const picks = fanPicks(list.filter(isParent).concat(list.filter((c) => !isParent(c))));
+    const fan = $('#cats-fan');
+    if (fan) { fan.innerHTML = sexFan(picks); guardImages(fan); }
+
+    const litters = $('#sex-litters');
+    if (litters && mine.length) {
+      $('#sex-litters-list').innerHTML = '<div class="couples">' + mine.map((p) => litterCard(p, all)).join('') + '</div>';
+      litters.hidden = false;
+      guardImages(litters); setupReveal(litters);
+    }
+    sexPhotos(list, picks.map((x) => x.src));
+  }
+
   async function sexPage(sex) {
+    const male = sex === 'male';
     const box = $('#cats-list');
-    const note = $('#cats-count');
     loading(box, skeletons(3, true));
     try {
-      const cats = await api.cats();
+      const [all, portees] = await Promise.all([api.allCats(), api.portees().catch(() => [])]);
       // L'ordre est celui de l'administration, comme sur le site actuel
-      const list = cats.filter((c) => c.sex === sex);
-      if (note) note.textContent = list.length ? plural(list.length, sex === 'male' ? 'mâle' : 'femelle', sex === 'male' ? 'mâles' : 'femelles') : '';
-      box.innerHTML = list.length
-        ? '<div class="grid ' + (list.length === 4 || list.length > 6 ? 'grid-4' : 'grid-3') + ' cats">' + list.map(catCard).join('') + '</div>'
-        : empty(sex === 'male' ? 'Nos mâles arrivent bientôt sur le site' : 'Nos femelles arrivent bientôt sur le site',
-            'Les fiches sont en cours de mise à jour.');
-      guardImages(box); setupReveal(box);
+      const list = all.filter((c) => c && !c.archivee && c.sex === sex);
+      if (list.length) renderSex(sex, list, all, portees, box);
+      else {
+        box.innerHTML = empty(male ? 'Nos mâles arrivent bientôt sur le site' : 'Nos femelles arrivent bientôt sur le site',
+          'Les fiches sont en cours de mise à jour.');
+        const art = $('#cats-fan');
+        if (art) art.innerHTML = '';
+      }
     } catch (e) { fail(box, e); }
 
     // Le texte de présentation saisi dans l'administration (le même que sur le site actuel)
@@ -311,7 +429,6 @@
     $$('[data-stage]', root).forEach((el) => window.BKUI.bindStage(el, el.dataset.name || ''));
   }
 
-  const EYES_PLURAL = { vert: 'verts', bleu: 'bleus', jaune: 'jaunes', 'doré': 'dorés', noir: 'noirs' };
   /** « Un British Shorthair bleu aux yeux orange, né le 3 juillet 2024. » : tiré des champs de l'API. */
   function portraitSentence(cat) {
     const female = cat.sex === 'female';
@@ -805,7 +922,7 @@
         return;
       }
       list.sort((a, b) => (fmt.parseDate(a.dateOfBirth) || 0) - (fmt.parseDate(b.dateOfBirth) || 0));
-      box.innerHTML = '<div class="grid grid-3 cats">' + list.map(catCard).join('') + '</div>';
+      box.innerHTML = '<div class="grid grid-3 cats">' + list.map((c) => catCard(c)).join('') + '</div>';
       guardImages(box); setupReveal(box);
     } catch (e) { fail(box, e); }
   }

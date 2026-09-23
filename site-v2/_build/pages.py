@@ -563,21 +563,72 @@ LE_BRITISH = """
 # NOS MÂLES / NOS FEMELLES
 # ==========================================================================
 def sex_page(male):
-    other = ("femelles.html", "Voir nos femelles") if male else ("males.html", "Voir nos mâles")
-    return page_head_block(
-        "La chatterie",
-        "Nos mâles" if male else "Nos femelles",
-        ("Nos étalons, leur robe, la couleur de leurs yeux et leur âge. Cliquez sur l'un d'eux pour voir sa fiche, ses photos et ses portées."
-         if male else
-         "Nos reproductrices, leur robe, la couleur de leurs yeux et leur âge. Cliquez sur l'une d'elles pour voir sa fiche, ses photos et ses portées."),
-        [("index.html", "Accueil"), (None, "Nos mâles" if male else "Nos femelles")],
-        '<p class="count-note" id="cats-count"></p>',
-    ) + """
-<section class="tight" style="padding-top:0">
-  <div class="wrap"><div id="cats-list"></div></div>
+    t = {
+        "titre": "Nos mâles" if male else "Nos femelles",
+        "script": "les rois du royaume" if male else "les reines du royaume",
+        "lede": ("Les papas de nos chatons : une stature imposante, un flegme tout britannique… et un cœur de nounours. "
+                 "Cliquez sur l'un d'eux pour découvrir sa fiche, ses photos et ses portées."
+                 if male else
+                 "Les mamans de nos chatons : toute la douceur et la gentillesse du British, et des regards à faire fondre. "
+                 "Cliquez sur l'une d'elles pour découvrir sa fiche, ses photos et ses portées."),
+        "liste": "Tous nos mâles" if male else "Toutes nos femelles",
+        "portees_h2": "Papas en ce moment" if male else "Mamans en ce moment",
+        "portees_script": "et fiers de l'être" if male else "et aux petits soins",
+        "portees_lede": ("Leurs derniers chatons grandissent à la maison, auprès de leur maman. Touchez une portée pour les découvrir."
+                         if male else
+                         "Leurs derniers chatons grandissent à la maison, auprès d'elles. Touchez une portée pour les découvrir."),
+        "photos_h2": "La bande des garçons" if male else "La bande des filles",
+        "eyebrow": "Nos mâles" if male else "Nos femelles",
+        "autre_href": "femelles.html" if male else "males.html",
+        "autre": "nos femelles" if male else "nos mâles",
+        "logo_cta": medallion("medallion--md", alt=""),
+    }
+    return """
+<section class="page-head sex-head">
+  <div class="wrap sex-head__grid">
+    <div class="sex-head__text">
+      <nav class="breadcrumb" aria-label="Fil d'Ariane"><span><a href="index.html">Accueil</a></span><span>%(titre)s</span></nav>
+      <p class="eyebrow">La chatterie</p>
+      <h1>%(titre)s</h1>
+      <p class="sex-head__script">%(script)s</p>
+      <p class="lede">%(lede)s</p>
+      <div id="cats-stickers"></div>
+    </div>
+    <div class="sex-head__art" aria-hidden="true"><div id="cats-fan"></div></div>
+  </div>
 </section>
 
-<section class="panel panel--blush" id="sex-about" hidden>
+<section class="tight sex-cats">
+  <div class="wrap">
+    <h2 class="visually-hidden">%(liste)s</h2>
+    <div id="cats-list"></div>
+  </div>
+</section>
+
+<section class="panel panel--blush" id="sex-litters" hidden>
+  <div class="wrap">
+    <div class="section-head center">
+      <p class="eyebrow center">En ce moment à la maison</p>
+      <h2>%(portees_h2)s <span class="bh-h2-script">%(portees_script)s</span></h2>
+      <p class="lede">%(portees_lede)s</p>
+    </div>
+    <div id="sex-litters-list"></div>
+    <div class="actions center"><a class="btn btn--ghost" href="chatons.html">Tous nos chatons</a></div>
+  </div>
+</section>
+
+<section id="sex-photos" hidden>
+  <div class="wrap">
+    <div class="section-head center">
+      <p class="eyebrow center">En images</p>
+      <h2>%(photos_h2)s</h2>
+      <p class="lede">Jeux, frimousses et petites bêtises. Touchez une photo pour l'agrandir.</p>
+    </div>
+    <div class="mosaic mosaic--named" id="sex-photos-grid"></div>
+  </div>
+</section>
+
+<section class="panel panel--champagne" id="sex-about" hidden>
   <div class="wrap wrap--narrow">
     <article class="about-card reveal">
       <p class="eyebrow">%(eyebrow)s</p>
@@ -587,16 +638,19 @@ def sex_page(male):
   </div>
 </section>
 
-<section class="tight">
-  <div class="wrap center">
+<section class="cta-band">
+  <div class="wrap wrap--narrow center">
+    %(logo_cta)s
+    <h2>Un coup de cœur ?</h2>
+    <p class="lede">Nos chatons naissent et grandissent à la maison, auprès de leur maman. Découvrez ceux du moment, ou inscrivez-vous sur la liste d'attente pour être prévenu des prochaines naissances.</p>
     <div class="actions center">
-      <a class="btn btn--primary" href="%(other_href)s">%(other_label)s</a>
-      <a class="btn btn--ghost" href="chatons.html">Les chatons</a>
-      <a class="btn btn--ghost" href="retraites.html">Nos retraités</a>
+      <a class="btn btn--primary" href="chatons.html">Voir les chatons</a>
+      <a class="btn btn--ghost" href="liste-attente.html">La liste d'attente</a>
     </div>
+    <p class="small">Voir aussi <a href="%(autre_href)s">%(autre)s</a> et <a href="retraites.html">nos retraités</a>.</p>
   </div>
 </section>
-""" % {"eyebrow": "Nos mâles" if male else "Nos femelles", "other_href": other[0], "other_label": other[1]}
+""" % t
 
 
 MALES = sex_page(True)
@@ -1345,12 +1399,12 @@ PAGES = [
     {"file": "males.html", "body": MALES, "prio": "0.8",
      "title": "Mâles British Shorthair et Longhair LOOF — Chatterie British Kingdom",
      "desc": "Nos étalons British Shorthair et British Longhair : robe, couleur des yeux, âge, photos et portées. Élevage familial LOOF à Othis, en Seine-et-Marne (77).",
-     "scripts": '<script>BKPages.sexPage("male");</script>'},
+     "scripts": '<script src="js/descriptions.js"></script>\n<script>BKPages.sexPage("male");</script>'},
 
     {"file": "femelles.html", "body": FEMELLES, "prio": "0.8",
      "title": "Femelles British Shorthair et Longhair LOOF — Chatterie British Kingdom",
      "desc": "Nos reproductrices British Shorthair et British Longhair : robe, couleur des yeux, âge, photos et portées. Élevage familial LOOF à Othis, en Seine-et-Marne (77).",
-     "scripts": '<script>BKPages.sexPage("female");</script>'},
+     "scripts": '<script src="js/descriptions.js"></script>\n<script>BKPages.sexPage("female");</script>'},
 
     {"file": "chat.html", "body": FICHE_CHAT, "sitemap": False,
      "title": "Fiche d'un chat — Chatterie British Kingdom",
@@ -1375,7 +1429,7 @@ PAGES = [
     {"file": "retraites.html", "body": RETRAITES, "prio": "0.5",
      "title": "Nos retraités — Chatterie British Kingdom",
      "desc": "Nos anciens reproducteurs, stérilisés, qui profitent d'une retraite tranquille et heureuse.",
-     "scripts": '<script>BKPages.retraites();</script>'},
+     "scripts": '<script src="js/descriptions.js"></script>\n<script>BKPages.retraites();</script>'},
 
     {"file": "conseils.html", "body": CONSEILS, "prio": "0.6",
      "title": "Conseils d'éleveur pour votre British — Chatterie British Kingdom",
@@ -1412,7 +1466,7 @@ if __name__ == "__main__":
     # Les chats, portées et articles du moment, écrits dans les pages pour les robots qui
     # n'exécutent pas JavaScript (assistants d'IA notamment), puis le plan du site et llms.txt
     DONNEES = donnees.charger()
-    ECRITES = donnees.injecter(PAGES, DONNEES, ico("heart", 18))
+    ECRITES = donnees.injecter(PAGES, DONNEES, ico)
     print("  instantané des données de l'API : %d listes écrites dans les pages" % ECRITES)
     build(PAGES, DONNEES["jour"].isoformat() if DONNEES else MISE_A_JOUR, donnees.adresses_fiches(DONNEES, SITE["domaine"]))
     with open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "llms.txt"), "w",
