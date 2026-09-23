@@ -605,16 +605,20 @@
       .slice().sort((a, b) => (a.status === 'disponible' ? 0 : 1) - (b.status === 'disponible' ? 0 : 1))));
   }
 
+  /** Les photos d'un chaton, dans l'ordre de sa fiche (la 1re est sa photo principale). */
+  const photosChaton = (k) => [k.photo].concat(k.photos).filter(Boolean).filter((p, i, a) => a.indexOf(p) === i);
+
   /** Les trois chatons des polaroïds : ceux de js/vedettes.js s'ils sont encore là, puis un par portée. */
   function chatonsVedettes(portees) {
     const tous = chatonsMelanges(portees, (k) => k.photo);
     const sansAccent = (s) => String(s || '').trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
     const choisis = [];
-    (window.BK_VEDETTES || []).forEach((prenom) => {
-      const k = tous.find((x) => sansAccent(x.name) === sansAccent(prenom) && choisis.indexOf(x) === -1);
-      if (k) choisis.push(k);
+    (window.BK_VEDETTES || []).forEach((v) => {
+      const nom = typeof v === 'string' ? v : (v && v.nom);
+      const k = tous.find((x) => sansAccent(x.name) === sansAccent(nom) && !choisis.some((c) => c.k === x));
+      if (k) choisis.push({ k, src: photosChaton(k)[((v && v.photo) || 1) - 1] || k.photo });
     });
-    tous.forEach((k) => { if (choisis.length < 3 && choisis.indexOf(k) === -1) choisis.push(k); });
+    tous.forEach((k) => { if (choisis.length < 3 && !choisis.some((c) => c.k === k)) choisis.push({ k, src: k.photo }); });
     return choisis.slice(0, 3);
   }
 
@@ -634,7 +638,7 @@
     }
     if (fan) {
       fan.innerHTML = eventail(chatonsVedettes(portees)
-        .map((k) => ['chaton.html?id=' + encodeURIComponent(k.id), k.photo, niceName(k.name) || 'Chaton']));
+        .map((x) => ['chaton.html?id=' + encodeURIComponent(x.k.id), x.src, niceName(x.k.name) || 'Chaton']));
       guardImages(fan);
     }
   }

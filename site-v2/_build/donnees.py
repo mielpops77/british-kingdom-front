@@ -324,33 +324,51 @@ def eventail(choix):
         '<span class="fan__name">%s</span></a>' % (href, esc(src), esc(n)) for href, src, n in choix)
 
 
+_VEDETTE = re.compile(r"""\{\s*nom\s*:\s*['\"]([^'\"]+)['\"]\s*(?:,\s*photo\s*:\s*(\d+)\s*)?\}|['\"]([^'\"]+)['\"]""")
+
+
 def vedettes():
-    """Les prénoms de js/vedettes.js : les chatons mis en avant en haut de la page Chatons."""
+    """js/vedettes.js : les chatons mis en avant en haut de la page Chatons, [(prénom, n° de photo)]."""
     try:
         with open(os.path.join(SITE_DIR, "js", "vedettes.js"), encoding="utf-8") as fh:
             source = fh.read()
     except OSError:
         return []
     m = re.search(r"window\.BK_VEDETTES\s*=\s*\[([^\]]*)\]", source)
-    return re.findall(r"""['\"]([^'\"]+)['\"]""", m.group(1)) if m else []
+    if not m:
+        return []
+    return [(v[0] or v[2], int(v[1] or 1)) for v in _VEDETTE.findall(m.group(1))]
 
 
 def _sans_accent(s):
     return re.sub(r"[\u0300-\u036f]", "", unicodedata.normalize("NFD", str(s or "").strip().lower()))
 
 
+def _photos_chaton(k, photo):
+    """Les photos d'un chaton, dans l'ordre de sa fiche (photosChaton de js/pages.js)."""
+    photos = k.get("photos") or []
+    if isinstance(photos, str):
+        photos = [p.strip() for p in photos.split(",")]
+    vues = []
+    for src in [_photo_chaton(k, photo)] + [photo("Chatons", f) for f in photos if f]:
+        if src and src not in vues:
+            vues.append(src)
+    return vues
+
+
 def chatons_vedettes(portees, photo):
-    """Les trois chatons des polaroïds (chatonsVedettes de js/pages.js)."""
+    """Les trois chatons des polaroïds, avec leur photo (chatonsVedettes de js/pages.js) : [(chaton, photo)]."""
     tous = chatons_melanges(portees, photo)
     choisis = []
-    for prenom in vedettes():
+    for prenom, numero in vedettes():
         for k in tous:
-            if _sans_accent(k.get("name")) == _sans_accent(prenom) and k not in choisis:
-                choisis.append(k)
+            if _sans_accent(k.get("name")) == _sans_accent(prenom) and not any(c[0] is k for c in choisis):
+                photos = _photos_chaton(k, photo)
+                choisis.append((k, photos[numero - 1] if 0 < numero <= len(photos) else _photo_chaton(k, photo)))
                 break
     for k in tous:
-        if len(choisis) < 3 and k not in choisis:
-            choisis.append(k)
+        if len(choisis) < 3 and not any(c[0] is k for c in choisis):
+            choisis.append((k, _photo_chaton(k, photo)))
     return choisis[:3]
 
 
@@ -522,7 +540,7 @@ def instantanes(d, ico):
             "litters": '<div data-snapshot>%s%s</div>' % (_note(d), "".join(blocs)),
             "kittens-stickers": '<div data-snapshot>%s</div>' % autocollants(items, ico),
             "kittens-fan": '<div data-snapshot>%s</div>' % eventail(
-                [("chaton.html?id=%s" % k.get("id"), _photo_chaton(k, photo), nom(k.get("name")) or "Chaton") for k in trois]),
+                [("chaton.html?id=%s" % k.get("id"), src, nom(k.get("name")) or "Chaton") for k, src in trois]),
         }
 
         # Accueil : les portées, puis huit chatons, un de chaque portée à tour de rôle
