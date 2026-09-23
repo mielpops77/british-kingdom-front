@@ -836,12 +836,14 @@ html.js .snapshot-note { display: none; }
 a.couple__one:hover .couple__name { color: var(--rose-ink); }
 .couple__photo {
   position: relative; display: block;
-  width: 96px; aspect-ratio: 1; border-radius: 50%; overflow: hidden;
+  width: clamp(96px, 7.5vw, 112px); aspect-ratio: 1; border-radius: 50%; overflow: hidden;
   border: 4px solid var(--card);
   box-shadow: var(--ring), var(--shadow-s);
   background: var(--paper-3);
 }
-.couple__photo img { width: 100%; height: 100%; object-fit: cover; }
+/* Le rond cadre sur la tête : les photos de profil montrent souvent le chat assis en entier,
+   et au milieu du cadre on ne voyait que son poitrail. */
+.couple__photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 22%; }
 .couple__role {
   margin-top: .65rem;
   font-size: .72rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--gold-ink);
