@@ -11,6 +11,7 @@ Aucune dépendance : python3 _build/pages.py
 Le site produit fonctionne sans ce script : il n'est là que pour éviter de
 recopier l'en-tête et le pied de page dans chaque fichier.
 """
+import hashlib
 import json
 import os
 import re
@@ -414,8 +415,34 @@ def typo_fr(html):
     return "".join(out)
 
 
+_EMPREINTES = {}
+_FICHIER_SERVI = re.compile(r'(href|src)="((?:css|js)/[A-Za-z0-9_.-]+\.(?:css|js))"')
+
+
+def _empreinte(rel):
+    """Le début de l'empreinte d'un fichier du site, ou rien s'il est introuvable."""
+    if rel not in _EMPREINTES:
+        try:
+            with open(os.path.join(OUT, rel), "rb") as fh:
+                _EMPREINTES[rel] = hashlib.sha1(fh.read()).hexdigest()[:8]
+        except OSError:
+            _EMPREINTES[rel] = ""
+    return _EMPREINTES[rel]
+
+
+def versionner(html):
+    """Ajoute l'empreinte du fichier aux styles et aux scripts (css/site.css?v=1a2b3c4d).
+
+    Sans cela, une page toute neuve peut être servie avec l'ancien CSS ou l'ancien JavaScript gardés
+    en cache par Cloudflare (4 h) ou par le navigateur du visiteur. Le fichier change, l'adresse
+    change, tout le monde reçoit la nouvelle version tout de suite."""
+    return _FICHIER_SERVI.sub(
+        lambda m: '%s="%s%s"' % (m.group(1), m.group(2), ("?v=" + _empreinte(m.group(2))) if _empreinte(m.group(2)) else ""),
+        html)
+
+
 def write(page):
-    html = typo_fr(head(page) + header(page.get("nav", page["file"])) + page["body"] + footer(page.get("scripts", "")))
+    html = versionner(typo_fr(head(page) + header(page.get("nav", page["file"])) + page["body"] + footer(page.get("scripts", ""))))
     path = os.path.join(OUT, page["file"])
     with open(path, "w", encoding="utf-8", newline="\n") as fh:
         fh.write(html)
