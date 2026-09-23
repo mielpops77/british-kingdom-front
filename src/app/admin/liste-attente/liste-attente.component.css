@@ -1,0 +1,62 @@
+/* La liste d'attente : une carte par famille, ses souhaits en pastilles,
+   les chatons qui correspondent et l'état d'avancement. */
+.attente-list { display: grid; gap: .8rem; }
+
+.attente-row {
+  display: flex; flex-direction: column; gap: .45rem; cursor: pointer;
+  background: var(--card); border: 1px solid var(--line-soft); border-radius: var(--radius);
+  padding: 1rem 1.1rem; box-shadow: var(--shadow-s);
+  transition: transform .3s var(--bounce), box-shadow .3s var(--ease), border-color .2s var(--ease);
+}
+.attente-row:hover { transform: translateY(-2px); box-shadow: var(--shadow-m); }
+.attente-row.nouvelle { border-color: color-mix(in srgb, var(--rose) 40%, transparent); background: linear-gradient(180deg, var(--rose-soft) 0%, var(--card) 42%); }
+
+.attente-top { display: flex; align-items: center; justify-content: space-between; gap: .8rem; flex-wrap: wrap; }
+.attente-who { display: flex; align-items: center; gap: .5rem; min-width: 0; }
+.unread-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--rose-deep); flex: none; box-shadow: 0 0 0 4px var(--rose-soft); }
+.attente-name { font-family: var(--font-display); font-size: 1.1rem; font-weight: 600; }
+.attente-date { font-size: .8rem; color: var(--ink-3); font-weight: 600; white-space: nowrap; }
+
+.attente-souhaits { display: flex; gap: .4rem; flex-wrap: wrap; }
+.attente-preview {
+  color: var(--ink-3); font-size: .92rem;
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden;
+}
+
+.attente-details { margin-top: .6rem; border-top: 1px dashed var(--line); padding-top: .9rem; cursor: default; }
+.attente-mot { margin: 0 0 1.1rem; white-space: pre-line; color: var(--ink-2); line-height: 1.65; }
+
+/* Les chatons du moment qui collent au souhait */
+.attente-match h3 { font-size: 1rem; margin: 0 0 .6rem; }
+.match-list { display: flex; gap: .6rem; flex-wrap: wrap; margin-bottom: 1.1rem; }
+.match {
+  display: flex; flex-direction: column; gap: .1rem; min-width: 150px;
+  background: var(--paper); border: 1px solid var(--line-soft); border-radius: var(--radius-s);
+  padding: .6rem .8rem; text-decoration: none; color: inherit;
+  transition: transform .25s var(--bounce), border-color .2s var(--ease);
+}
+.match:hover { transform: translateY(-2px); border-color: var(--rose); }
+.match b { font-family: var(--font-display); font-size: 1.02rem; font-weight: 600; }
+.match span { font-size: .82rem; color: var(--ink-3); }
+.match em { font-style: normal; font-size: .75rem; color: var(--gold-ink); font-weight: 700; }
+.attente-nomatch { margin: 0 0 1.1rem; font-size: .9rem; color: var(--ink-3); }
+
+.attente-actions { display: flex; gap: .5rem; flex-wrap: wrap; align-items: center; }
+.attente-actions .delete-btn { margin-left: auto; }
+
+.attente-etats {
+  display: flex; gap: .4rem; flex-wrap: wrap; align-items: center;
+  margin-top: 1rem; padding-top: .9rem; border-top: 1px dashed var(--line);
+}
+.etats-label { font-size: .78rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); margin-right: .2rem; }
+.toggle-btn {
+  background: var(--card); border: 1.5px solid var(--line); border-radius: 999px; cursor: pointer;
+  color: var(--ink-2); font-weight: 700; font-size: .82rem; padding: .4rem .9rem;
+  transition: all .2s var(--ease);
+}
+.toggle-btn:hover:not(:disabled) { border-color: var(--rose); color: var(--rose-ink); }
+.toggle-btn.active { background: var(--rose-deep); color: var(--on-accent); border-color: var(--rose-deep); }
+.toggle-btn:disabled { opacity: .6; cursor: wait; }
+.etats-saving { font-size: .8rem; color: var(--ink-3); }
+
+.attente-mail { margin: .9rem 0 0; font-size: .82rem; color: var(--ink-3); }

@@ -1,0 +1,102 @@
+<div class="admin-page">
+  <div class="page-header">
+    <div>
+      <p class="eyebrow-label">Les familles qui attendent</p>
+      <h1>Liste d'attente</h1>
+    </div>
+    <span class="pill pill--ok" *ngIf="countNouvelles">{{ countNouvelles }} nouvelle{{ countNouvelles > 1 ? 's' : '' }} demande{{ countNouvelles > 1 ? 's' : '' }}</span>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn" [class.active]="activeTab === 'encours'" (click)="activeTab = 'encours'">
+      En cours <span class="count">{{ countEnCours }}</span>
+    </button>
+    <button class="tab-btn" [class.active]="activeTab === 'reservees'" (click)="activeTab = 'reservees'">
+      Réservées <span class="count">{{ countReservees }}</span>
+    </button>
+    <button class="tab-btn" [class.active]="activeTab === 'terminees'" (click)="activeTab = 'terminees'">
+      Terminées <span class="count">{{ countTerminees }}</span>
+    </button>
+    <button class="tab-btn" [class.active]="activeTab === 'toutes'" (click)="activeTab = 'toutes'">
+      Toutes <span class="count">{{ demandes.length }}</span>
+    </button>
+  </div>
+
+  <p *ngIf="loading" class="hint">Chargement…</p>
+
+  <div class="empty-card" *ngIf="!loading && !displayedDemandes.length">
+    <strong>{{ demandes.length ? 'Rien dans cet onglet' : 'Personne sur la liste pour le moment' }}</strong>
+    <span *ngIf="!demandes.length">Les inscriptions envoyées depuis la page « Liste d'attente » du site arrivent ici,
+      avec le sexe et la robe souhaités.</span>
+  </div>
+
+  <div class="attente-list" *ngIf="!loading && displayedDemandes.length">
+    <article class="attente-row" *ngFor="let demande of displayedDemandes"
+             [class.nouvelle]="demande.etat === 'nouvelle'"
+             [class.open]="expandedId === demande.contact.id"
+             (click)="toggleExpand(demande)">
+      <div class="attente-top">
+        <div class="attente-who">
+          <span class="unread-dot" *ngIf="demande.etat === 'nouvelle'" aria-hidden="true"></span>
+          <span class="attente-name">{{ demande.contact.name }}</span>
+        </div>
+        <span class="attente-date">{{ demande.contact.dateofCrea | date: 'dd/MM/yyyy':'Europe/Paris' }}</span>
+      </div>
+
+      <div class="attente-souhaits">
+        <span class="pill pill--lilac" *ngIf="demande.sexe">{{ demande.sexe }}</span>
+        <span class="pill pill--breed" *ngIf="demande.robe">Robe : {{ demande.robe }}</span>
+        <span class="pill" [class.pill--ok]="demande.etat === 'reservee'"
+              [class.pill--warn]="demande.etat === 'contactee'"
+              [class.pill--muted]="demande.etat === 'terminee' || demande.etat === 'nouvelle'">
+          {{ libelle(demande.etat) }}
+        </span>
+      </div>
+
+      <span class="attente-preview" *ngIf="expandedId !== demande.contact.id && demande.mot">{{ demande.mot }}</span>
+
+      <div class="attente-details" *ngIf="expandedId === demande.contact.id" (click)="$event.stopPropagation()">
+        <p class="attente-mot" *ngIf="demande.mot">{{ demande.mot }}</p>
+
+        <div class="attente-match" *ngIf="demande.chatons.length">
+          <h3>Chatons disponibles qui correspondent</h3>
+          <div class="match-list">
+            <a class="match" *ngFor="let chaton of demande.chatons"
+               [href]="'https://chatterie-british-kingdom.fr/chaton.html?id=' + chaton.id" target="_blank" rel="noopener">
+              <b>{{ chaton.nom }}</b>
+              <span>{{ chaton.sexe }}<span *ngIf="chaton.robe"> · {{ chaton.robe }}</span></span>
+              <em *ngIf="chaton.portee">{{ chaton.portee }}</em>
+            </a>
+          </div>
+        </div>
+        <p class="attente-nomatch" *ngIf="!demande.chatons.length">
+          Aucun chaton disponible ne correspond à ce souhait pour l'instant.
+        </p>
+
+        <div class="attente-actions">
+          <a class="add-btn" [href]="'mailto:' + demande.contact.email + '?subject=' + sujetReponse(demande)">Répondre par e-mail</a>
+          <a class="ghost-btn" [href]="'tel:' + demande.contact.num" *ngIf="demande.contact.num">{{ demande.contact.num }}</a>
+          <button class="delete-btn" (click)="confirmDelete(demande, $event)" [disabled]="deletingId === demande.contact.id">
+            {{ deletingId === demande.contact.id ? '…' : 'Retirer' }}
+          </button>
+        </div>
+
+        <div class="attente-etats">
+          <span class="etats-label">Où en êtes-vous ?</span>
+          <button type="button" class="toggle-btn" *ngFor="let e of etats"
+                  [class.active]="demande.etat === e.cle"
+                  [disabled]="enregistrementId === demande.contact.id"
+                  (click)="changerEtat(demande, e.cle, $event)">{{ e.libelle }}</button>
+          <span class="etats-saving" *ngIf="enregistrementId === demande.contact.id">enregistrement…</span>
+        </div>
+
+        <p class="attente-mail">{{ demande.contact.email }}</p>
+      </div>
+    </article>
+  </div>
+
+  <p class="legal-note" *ngIf="!loading && demandes.length">
+    Ces demandes viennent du formulaire « Liste d'attente » du site. L'état choisi est enregistré avec la demande :
+    vous le retrouvez sur vos autres appareils.
+  </p>
+</div>
