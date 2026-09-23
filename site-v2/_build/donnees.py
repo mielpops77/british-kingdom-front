@@ -193,6 +193,34 @@ def pluriel(n, un, plusieurs):
     return "%d %s" % (n, plusieurs if n > 1 else un)
 
 
+def age_chaton(v, jour):
+    """En semaines tant qu'il est à la chatterie, en mois ensuite (ageChaton de js/pages.js)."""
+    sem = semaines(v, jour)
+    return pluriel(sem, "semaine", "semaines") if sem is not None and 1 <= sem < 16 else age(v, jour)
+
+
+# Les mêmes textes que ETAPES de js/pages.js
+ETAPES = [
+    (0, "Naissance", "Les chatons naissent les yeux fermés, blottis contre leur mère. On les pèse chaque jour."),
+    (2, "Les yeux s\u2019ouvrent", "D\u2019abord bleus chez tous les chatons. Les premiers pas, un peu hésitants, arrivent."),
+    (4, "Les découvertes", "Premiers repas solides, apprentissage de la litière, premiers jeux avec la fratrie."),
+    (8, "Identification et vaccins", "Puce électronique et premières vaccinations, avec le carnet de santé."),
+    (10, "La vie de famille", "Visiteurs, bruits de la maison, câlins : le chaton s\u2019habitue à tout ce qu\u2019il retrouvera chez vous."),
+    (12, "Le départ", "Vers douze semaines, avec son certificat LOOF, son carnet de santé et un peu de nourriture pour les premiers jours."),
+]
+
+
+def etape_ligne(sem, ico):
+    """« Où en sont-ils ? » : l'étape du moment, en une ligne (etapeLigne de js/pages.js)."""
+    if sem is None or sem < 0:
+        return ""
+    en = None
+    for e in ETAPES:
+        if sem >= e[0]:
+            en = e
+    return ('<p class="litter__stage">%s<span><b>%s</b> %s</span></p>' % (ico("paw", 16), esc(en[1]), esc(en[2]))) if en else ""
+
+
 def statut(v):
     s = str(v or "").lower()
     s = s.replace("é", "e").replace("è", "e")
@@ -264,8 +292,14 @@ def vitrine(c, fiche, photo):
     return [photo("CatsImages", f) for f in (choisies or galerie[:2])]
 
 
-def autocollants(sx, liste, parents, ico):
-    """Les autocollants du haut des pages Nos mâles / Nos femelles (sexStickers de js/pages.js)."""
+def autocollants(items, ico):
+    """Les autocollants du haut d'une page : [(pictogramme, texte, lien)] (autocollants de js/pages.js)."""
+    return '<ul class="bh-stickers intro__stickers">%s</ul>' % "".join(
+        "<li>%s%s</li>" % (ico(i, 18), ('<a href="%s">%s</a>' % (lien, esc(t))) if lien else esc(t)) for i, t, lien in items)
+
+
+def autocollants_sexe(sx, liste, parents):
+    """Ce que dit le haut des pages Nos mâles / Nos femelles (sexStickers de js/pages.js)."""
     male = sx == "male"
     races = []
     for c in liste:
@@ -277,17 +311,29 @@ def autocollants(sx, liste, parents, ico):
         items.append(("heart", pluriel(parents, "papa" if male else "maman", "papas" if male else "mamans") + " en ce moment", "#sex-litters"))
     if races:
         items.append(("paw", " et ".join(race_courte(r) for r in races) if len(races) > 1 else races[0], ""))
-    return '<ul class="bh-stickers sex-head__stickers">%s</ul>' % "".join(
-        "<li>%s%s</li>" % (ico(i, 18), ('<a href="%s">%s</a>' % (lien, esc(t))) if lien else esc(t)) for i, t, lien in items)
+    return items
 
 
 def eventail(choix):
-    """Les trois polaroïds du haut de la page (sexFan de js/pages.js) ; choix : [(chat, photo)]."""
+    """Les polaroïds du haut d'une page : [(adresse, photo, prénom)] (eventail de js/pages.js)."""
     if not choix:
         return ""
     return '<div class="fan">%s</div>' % "".join(
-        '<a class="fan__one" href="chat.html?id=%s" tabindex="-1"><img src="%s" alt="" data-guard>'
-        '<span class="fan__name">%s</span></a>' % (c.get("id"), esc(src), esc(nom(c.get("name")))) for c, src in choix)
+        '<a class="fan__one" href="%s" tabindex="-1"><img src="%s" alt="" data-guard>'
+        '<span class="fan__name">%s</span></a>' % (href, esc(src), esc(n)) for href, src, n in choix)
+
+
+def chatons_melanges(portees, photo=None):
+    """Un chaton de chaque portée à tour de rôle, les disponibles d'abord (chatonsMelanges de js/pages.js)."""
+    listes = []
+    for p in portees:
+        ks = [k for k in (p.get("chatons") or []) if photo is None or _photo_chaton(k, photo)]
+        listes.append(sorted(ks, key=lambda k: 0 if statut(k.get("status")) == "disponible" else 1))
+    out, i = [], 0
+    while any(len(l) > i for l in listes):
+        out += [l[i] for l in listes if len(l) > i]
+        i += 1
+    return out
 
 
 def _photo_chaton(k, photo):
@@ -312,7 +358,7 @@ def carte_chaton(k, photo, jour):
             '<div class="card__body"><h3 class="card__title">%s</h3><p class="card__meta">' % esc(n) +
             ('<span>%s%s</span>' % (marque, libelle) if libelle else "") +
             ('<span>%s</span>' % esc(r) if r else "") + '</p>' +
-            ('<p class="card__sub">%s%s</p>' % (esc(age(k.get("dateOfBirth"), jour)), (" · " + esc(breed)) if breed else "") if k.get("dateOfBirth") else "") +
+            ('<p class="card__sub">%s%s</p>' % (esc(age_chaton(k.get("dateOfBirth"), jour)), (" · " + esc(breed)) if breed else "") if k.get("dateOfBirth") else "") +
             '</div></a>')
 
 
@@ -403,11 +449,11 @@ def instantanes(d, ico):
         for c in vedettes:
             src = (vitrine(c, fiches.get(c.get("id")), photo) or [""])[0] or photo("CatsProfil", c.get("urlProfil"))
             if src:
-                choix.append((c, src))
+                choix.append(("chat.html?id=%s" % c.get("id"), src, nom(c.get("name"))))
         out[fichier] = {
             "cats-list": '<div data-snapshot><div class="grid %s cats">%s</div></div>' % (grille, "".join(
                 carte_chat(c, photo, jour, fiches.get(c.get("id")), etiquette if est_parent(c) else "") for c in liste)),
-            "cats-stickers": '<div data-snapshot>%s</div>' % autocollants(sx, liste, sum(1 for c in liste if est_parent(c)), ico),
+            "cats-stickers": '<div data-snapshot>%s</div>' % autocollants(autocollants_sexe(sx, liste, sum(1 for c in liste if est_parent(c))), ico),
             "cats-fan": '<div data-snapshot>%s</div>' % eventail(choix[:3]),
         }
 
@@ -426,14 +472,27 @@ def instantanes(d, ico):
                 meta += "<span>Départ à partir du %s</span>" % date_longue(p["dateOfSell"])
             chatons = p.get("chatons") or []
             blocs.append(
-                '<article class="litter reveal"><header class="litter__head">' + couple(p, d["cats"], photo, True, coeur) +
+                '<article class="litter reveal" data-delay="%d"><header class="litter__head">' % (i % 3) + couple(p, d["cats"], photo, True, coeur) +
                 '<div class="litter__info"><p class="eyebrow">Portée %d sur %d</p><h2>%s</h2>' % (i + 1, len(portees), esc(p.get("name") or "Portée")) +
-                '<p class="litter__meta">%s</p>' % meta +
+                '<p class="litter__meta">%s</p>' % meta + etape_ligne(sem, ico) +
                 '<p class="litter__actions">%s<a class="link-arrow" href="portee.html?id=%s">La portée en détail</a></p></div></header>' % (_etat_portee(p), p.get("id")) +
                 ('<div class="grid grid-4 kittens">%s</div>' % "".join(carte_chaton(k, photo, jour) for k in chatons) if chatons
                  else '<p class="small">Les chatons seront présentés ici dès les premières photos.</p>') +
                 '</article>')
-        out["chatons.html"] = {"litters": '<div data-snapshot>%s%s</div>' % (_note(d), "".join(blocs))}
+        depart = sorted(p["dateOfSell"] for p in portees if p.get("dateOfSell"))
+        dispo = sum(len(_disponibles(p)) for p in portees)
+        items = [("crown", pluriel(len(portees), "portée à la maison", "portées à la maison"), "")]
+        items.append(("heart", pluriel(dispo, "chaton disponible", "chatons disponibles"), "#litters") if dispo
+                     else ("heart", "Tous réservés pour le moment", "liste-attente.html"))
+        if depart:
+            items.append(("clock", "Premiers départs le " + date_longue(depart[0]), ""))
+        trois = chatons_melanges(portees, photo)[:3]
+        out["chatons.html"] = {
+            "litters": '<div data-snapshot>%s%s</div>' % (_note(d), "".join(blocs)),
+            "kittens-stickers": '<div data-snapshot>%s</div>' % autocollants(items, ico),
+            "kittens-fan": '<div data-snapshot>%s</div>' % eventail(
+                [("chaton.html?id=%s" % k.get("id"), _photo_chaton(k, photo), nom(k.get("name")) or "Chaton") for k in trois]),
+        }
 
         # Accueil : les portées, puis huit chatons, un de chaque portée à tour de rôle
         cartes = "".join(

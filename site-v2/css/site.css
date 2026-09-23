@@ -2107,27 +2107,27 @@ img.img-missing { display: none; }
 :root[data-shape="polaroid"] .stage--kitten .stage__main::after { display: none; }
 
 /* --------------------------------------------------------------------------
-   26 ter. Pages Nos mâles / Nos femelles
+   26 ter. Ouverture des pages Nos mâles, Nos femelles et Nos chatons
    -------------------------------------------------------------------------- */
 /* L'ouverture : le titre, sa ligne manuscrite, les autocollants et trois polaroïds en éventail */
-.sex-head { overflow: hidden; padding-bottom: clamp(1.2rem, 3vw, 2.2rem); }
-.sex-head__grid { display: grid; gap: clamp(1.2rem, 4vw, 3rem); align-items: center; }
-@media (min-width: 900px) { .sex-head__grid { grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); } }
-.sex-head h1 { margin-bottom: .05em; }
-.sex-head__script {
+.intro { overflow: hidden; padding-bottom: clamp(1.2rem, 3vw, 2.2rem); }
+.intro__grid { display: grid; gap: clamp(1.2rem, 4vw, 3rem); align-items: center; }
+@media (min-width: 900px) { .intro__grid { grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); } }
+.intro h1 { margin-bottom: .05em; }
+.intro__script {
   margin: 0 0 1rem; font-family: var(--font-hand); font-weight: 700; line-height: 1;
   font-size: clamp(1.65rem, 2.2vw + 1rem, 2.5rem); color: var(--rose-ink);
   transform: rotate(-2deg); transform-origin: 0 50%;
 }
-.sex-head .lede { margin-bottom: 1.3rem; }
+.intro .lede { margin-bottom: 1.3rem; }
 /* « 2 papas en ce moment » mène aux portées : tout l'autocollant se touche */
-.sex-head__stickers li { position: relative; }
-.sex-head__stickers a { color: inherit; text-decoration: none; }
-.sex-head__stickers a::after { content: ""; position: absolute; inset: 0; border-radius: inherit; }
-.sex-head__stickers li:has(a) { transition: rotate .3s var(--bounce), border-color .2s var(--ease); }
-.sex-head__stickers li:has(a):hover { border-color: var(--rose); rotate: 1.4deg; }
-.sex-head__stickers a:focus-visible { outline: none; }
-.sex-head__stickers li:has(a:focus-visible) { outline: 2px solid var(--rose-ink); outline-offset: 3px; }
+.intro__stickers li { position: relative; }
+.intro__stickers a { color: inherit; text-decoration: none; }
+.intro__stickers a::after { content: ""; position: absolute; inset: 0; border-radius: inherit; }
+.intro__stickers li:has(a) { transition: rotate .3s var(--bounce), border-color .2s var(--ease); }
+.intro__stickers li:has(a):hover { border-color: var(--rose); rotate: 1.4deg; }
+.intro__stickers a:focus-visible { outline: none; }
+.intro__stickers li:has(a:focus-visible) { outline: 2px solid var(--rose-ink); outline-offset: 3px; }
 
 .fan { display: flex; justify-content: center; align-items: flex-start; padding: 1.2rem 0 1.4rem; }
 .fan__one {
@@ -2164,6 +2164,20 @@ img.img-missing { display: none; }
 @media (prefers-reduced-motion: reduce) { .fan__one { animation: none; transition: none; } }
 
 .sex-cats { padding-top: clamp(.4rem, 1.5vw, 1rem); }
+
+/* Une portée de cinq chatons tient sur une ligne sur grand écran, plutôt que quatre et un tout seul */
+@media (min-width: 1100px) {
+  .litter .grid.kittens:has(> :nth-child(5):last-child) { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+}
+
+/* « Où en sont-ils ? » : l'étape du moment, sous les dates d'une portée */
+.litter__stage {
+  display: flex; align-items: flex-start; gap: .5rem; margin: .1rem 0 .9rem;
+  font-size: var(--t-sm); color: var(--ink-2); line-height: 1.5; max-width: 52ch;
+}
+.litter__stage svg { flex: none; margin-top: .25rem; color: var(--rose-ink); }
+.litter__stage b { color: var(--ink); }
+@media (max-width: 759px) { .litter__stage { justify-content: center; margin-inline: auto; } }
 /* Quatre chats sur tablette : deux par ligne plutôt que trois et un tout seul */
 @media (min-width: 561px) and (max-width: 1023px) {
   .grid.cats:has(> .card:nth-child(4):last-child) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -2212,9 +2226,9 @@ img.img-missing { display: none; }
 .mosaic--named .mosaic__tile:hover .mosaic__caption { transform: rotate(-2deg); }
 
 @media (max-width: 560px) {
-  .sex-head__stickers { gap: .5rem; }
-  .sex-head__stickers li { gap: .38rem; padding: .4rem .85rem .4rem .65rem; font-size: .84rem; }
-  .sex-head__stickers svg { width: 16px; height: 16px; }
+  .intro__stickers { gap: .5rem; }
+  .intro__stickers li { gap: .38rem; padding: .4rem .85rem .4rem .65rem; font-size: .84rem; }
+  .intro__stickers svg { width: 16px; height: 16px; }
   .cats .card__tagline { font-size: 1.12rem; margin-bottom: .3rem; }
   .cats .card__eyes { font-size: .72rem; gap: .35rem; margin-top: .35rem; }
   .cats .card__sticker { right: .4rem; bottom: .5rem; gap: .25rem; padding: .22rem .55rem .24rem .45rem; font-size: .66rem; }

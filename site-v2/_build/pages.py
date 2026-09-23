@@ -584,17 +584,17 @@ def sex_page(male):
         "logo_cta": medallion("medallion--md", alt=""),
     }
     return """
-<section class="page-head sex-head">
-  <div class="wrap sex-head__grid">
-    <div class="sex-head__text">
+<section class="page-head intro">
+  <div class="wrap intro__grid">
+    <div class="intro__text">
       <nav class="breadcrumb" aria-label="Fil d'Ariane"><span><a href="index.html">Accueil</a></span><span>%(titre)s</span></nav>
       <p class="eyebrow">La chatterie</p>
       <h1>%(titre)s</h1>
-      <p class="sex-head__script">%(script)s</p>
+      <p class="intro__script">%(script)s</p>
       <p class="lede">%(lede)s</p>
       <div id="cats-stickers"></div>
     </div>
-    <div class="sex-head__art" aria-hidden="true"><div id="cats-fan"></div></div>
+    <div class="intro__art" aria-hidden="true"><div id="cats-fan"></div></div>
   </div>
 </section>
 
@@ -719,12 +719,22 @@ FICHE_CHATON = """
 # ==========================================================================
 # CHATONS
 # ==========================================================================
-CHATONS = page_head_block(
-    "Chatons",
-    "Nos chatons",
-    "Nés et élevés à la maison, à Othis. Chaque portée avec ses parents, l'âge des chatons et leur disponibilité. Un chaton réservé reste affiché : c'est la vie de la chatterie.",
-    [("index.html", "Accueil"), (None, "Chatons")],
-) + """
+CHATONS = """
+<section class="page-head intro">
+  <div class="wrap intro__grid">
+    <div class="intro__text">
+      <nav class="breadcrumb" aria-label="Fil d'Ariane"><span><a href="index.html">Accueil</a></span><span>Chatons</span></nav>
+      <p class="eyebrow">Chatons</p>
+      <h1>Nos chatons</h1>
+      <p class="intro__script">petits princes et princesses</p>
+      <p class="lede">Nés et élevés à la maison, à Othis, au milieu de la famille. Chaque portée avec ses parents,
+        l'âge des chatons et leur disponibilité. Un chaton réservé reste affiché : c'est la vie de la chatterie.</p>
+      <div id="kittens-stickers"></div>
+    </div>
+    <div class="intro__art" aria-hidden="true"><div id="kittens-fan"></div></div>
+  </div>
+</section>
+
 <section class="tight" style="padding-top:0">
   <div class="wrap">
     <div class="filters" id="kitten-filters">
@@ -736,6 +746,17 @@ CHATONS = page_head_block(
     <div id="litters"></div>
     <p class="legal-note">Chatons proposés par un élevage déclaré : AMIEL Zeitoun, %(ville)s, SIREN %(siren)s.
       Chatons inscrits au LOOF, identifiés et vaccinés. <a href="mentions-legales.html">Mentions légales</a></p>
+  </div>
+</section>
+
+<section id="kittens-photos" hidden>
+  <div class="wrap">
+    <div class="section-head center">
+      <p class="eyebrow center">En images</p>
+      <h2>La vie des chatons</h2>
+      <p class="lede">Leurs premières bêtises, leurs siestes et leurs frimousses. Touchez une photo pour l'agrandir.</p>
+    </div>
+    <div class="mosaic mosaic--named" id="kittens-photos-grid"></div>
   </div>
 </section>
 
@@ -769,8 +790,23 @@ CHATONS = page_head_block(
     </div>
   </div>
 </section>
+
+<section class="cta-band">
+  <div class="wrap wrap--narrow center">
+    %(logo_cta)s
+    <h2>Un chaton vous a fait craquer ?</h2>
+    <p class="lede">Écrivez-nous pour faire connaissance : nous répondons à toutes vos questions et vous parlons
+      du caractère de chacun. Les visites se font sur rendez-vous, à la maison.</p>
+    <div class="actions center">
+      <a class="btn btn--primary" href="contact.html">Nous écrire</a>
+      <a class="btn btn--ghost" href="liste-attente.html">Rejoindre la liste d'attente</a>
+    </div>
+    <p class="small">Voir aussi <a href="males.html">nos mâles</a> et <a href="femelles.html">nos femelles</a>.</p>
+  </div>
+</section>
 """ % {"doc": ico("doc", 22), "chip": ico("chip", 22), "syringe": ico("syringe", 22), "heart": ico("heart", 22),
-       "check": ico("check", 22), "gift": ico("gift", 22), "ville": SITE["ville"], "siren": SITE["siren"]}
+       "check": ico("check", 22), "gift": ico("gift", 22), "ville": SITE["ville"], "siren": SITE["siren"],
+       "logo_cta": medallion("medallion--md", alt="")}
 
 # ==========================================================================
 # PORTÉE

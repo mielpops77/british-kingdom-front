@@ -159,6 +159,34 @@
 
   const sexMark = (sex) => sex === 'male' ? '<span class="sex sex--m" aria-hidden="true">♂</span>' : sex === 'female' ? '<span class="sex sex--f" aria-hidden="true">♀</span>' : '';
 
+  /** L'âge d'un chaton : en semaines tant qu'il est à la chatterie, en mois ensuite. */
+  function ageChaton(date) {
+    const w = fmt.ageWeeks(date);
+    return (w != null && w >= 1 && w < 16) ? plural(w, 'semaine', 'semaines') : fmt.age(date);
+  }
+
+  /** Les grandes étapes d'une portée (journal de la portée, « où en sont-ils » sur la page Chatons). */
+  const ETAPES = [
+    [0, 'Naissance', 'Les chatons naissent les yeux fermés, blottis contre leur mère. On les pèse chaque jour.'],
+    [2, 'Les yeux s’ouvrent', 'D’abord bleus chez tous les chatons. Les premiers pas, un peu hésitants, arrivent.'],
+    [4, 'Les découvertes', 'Premiers repas solides, apprentissage de la litière, premiers jeux avec la fratrie.'],
+    [8, 'Identification et vaccins', 'Puce électronique et premières vaccinations, avec le carnet de santé.'],
+    [10, 'La vie de famille', 'Visiteurs, bruits de la maison, câlins : le chaton s’habitue à tout ce qu’il retrouvera chez vous.'],
+    [12, 'Le départ', 'Vers douze semaines, avec son certificat LOOF, son carnet de santé et un peu de nourriture pour les premiers jours.']
+  ];
+  /** L'étape que vivent les chatons à cet âge (en semaines). */
+  function etapeEnCours(weeks) {
+    if (weeks == null || weeks < 0) return null;
+    let en = null;
+    ETAPES.forEach((s) => { if (weeks >= s[0]) en = s; });
+    return en;
+  }
+  /** « Où en sont-ils ? » : l'étape du moment, en une ligne. */
+  function etapeLigne(weeks) {
+    const e = etapeEnCours(weeks);
+    return e ? '<p class="litter__stage">' + icon('paw', 16) + '<span><b>' + esc(e[1]) + '</b> ' + esc(e[2]) + '</span></p>' : '';
+  }
+
   function kittenCard(k) {
     const r = splitRobe(k.robe);
     return '<a class="card card--kitten reveal" href="chaton.html?id=' + encodeURIComponent(k.id) + '">' +
@@ -171,7 +199,7 @@
           (k.sexLabel ? '<span>' + sexMark(k.sex) + esc(k.sexLabel) + '</span>' : '') +
           (r.nom ? '<span>' + esc(r.nom) + '</span>' : '') +
         '</p>' +
-        (k.dateOfBirth ? '<p class="card__sub">' + esc(fmt.age(k.dateOfBirth)) + (shortBreed(k.breed) ? ' · ' + esc(shortBreed(k.breed)) : '') + '</p>' : '') +
+        (k.dateOfBirth ? '<p class="card__sub">' + esc(ageChaton(k.dateOfBirth)) + (shortBreed(k.breed) ? ' · ' + esc(shortBreed(k.breed)) : '') + '</p>' : '') +
       '</div></a>';
   }
 
@@ -290,6 +318,40 @@
     return chosen.length ? chosen.map((f) => window.BK.img.gallery(f)) : cat.gallery.slice(0, 2);
   }
 
+  /** Les autocollants du haut d'une page : [pictogramme, texte, lien facultatif]. */
+  const autocollants = (items) => '<ul class="bh-stickers intro__stickers">' + items.map((it) =>
+    '<li>' + icon(it[0], 18) + (it[2] ? '<a href="' + it[2] + '">' + esc(it[1]) + '</a>' : esc(it[1])) + '</li>').join('') + '</ul>';
+
+  /** Les polaroïds en éventail du haut d'une page : [adresse, photo, prénom]. */
+  const eventail = (picks) => picks.length ? '<div class="fan">' + picks.map((x) =>
+    '<a class="fan__one" href="' + x[0] + '" tabindex="-1"><img src="' + esc(x[1]) + '" alt="" data-guard>' +
+    '<span class="fan__name">' + esc(x[2]) + '</span></a>').join('') + '</div>' : '';
+
+  /** Une mosaïque de photos (rangées toujours pleines) ; la visionneuse parcourt tout, même les photos sans case. */
+  function mosaique(section, grid, photos) {
+    if (!section || !grid || photos.length < 2) return;
+    const perRow = window.matchMedia('(max-width: 699px)').matches ? 2 : 4;
+    const n = Math.min(8, photos.length - (photos.length % perRow));
+    if (n < 2) return;
+    grid.innerHTML = photos.slice(0, n).map((p, i) =>
+      '<button type="button" class="mosaic__tile reveal" data-mosaic="' + i + '" aria-label="Agrandir la photo : ' + esc(p.alt) + '">' +
+      '<img src="' + esc(p.src) + '" alt="' + esc(p.alt) + '" loading="lazy" data-guard>' +
+      '<span class="mosaic__caption" aria-hidden="true">' + esc(p.alt) + '</span></button>').join('');
+    grid.addEventListener('click', (e) => {
+      const t = e.target.closest('[data-mosaic]');
+      if (t) window.BKUI.openLb(photos, Number(t.dataset.mosaic));
+    });
+    section.hidden = false;
+    guardImages(section); setupReveal(section);
+  }
+
+  /** Une photo de chacun, à tour de rôle : la mosaïque ne commence pas par tout le même. */
+  function tourDeRole(listes) {
+    const out = [];
+    for (let i = 0; listes.some((l) => l[i]); i++) listes.forEach((l) => { if (l[i]) out.push(l[i]); });
+    return out;
+  }
+
   /** Les autocollants du haut de la page : combien ils sont, combien de papas (ou de mamans) en ce moment, la race. */
   function sexStickers(sex, list, parents) {
     const male = sex === 'male';
@@ -299,41 +361,17 @@
       parents ? ['heart', plural(parents, male ? 'papa' : 'maman', male ? 'papas' : 'mamans') + ' en ce moment', '#sex-litters'] : null,
       breeds.length ? ['paw', breeds.length > 1 ? breeds.map(shortBreed).join(' et ') : breeds[0]] : null
     ].filter(Boolean);
-    return '<ul class="bh-stickers sex-head__stickers">' + items.map((it) =>
-      '<li>' + icon(it[0], 18) + (it[2] ? '<a href="' + it[2] + '">' + esc(it[1]) + '</a>' : esc(it[1])) + '</li>').join('') + '</ul>';
+    return autocollants(items);
   }
 
   /** Trois polaroïds en éventail, les parents du moment d'abord, chacun avec sa première photo mise en avant. */
   const fanPicks = (stars) => stars.map((c) => ({ c, src: showcase(c)[0] || c.photo })).filter((x) => x.src).slice(0, 3);
-  function sexFan(picks) {
-    return picks.length ? '<div class="fan">' + picks.map((x) =>
-      '<a class="fan__one" href="chat.html?id=' + encodeURIComponent(x.c.id) + '" tabindex="-1">' +
-        '<img src="' + esc(x.src) + '" alt="" data-guard>' +
-        '<span class="fan__name">' + esc(niceName(x.c.name)) + '</span></a>').join('') + '</div>' : '';
-  }
+  const sexFan = (picks) => eventail(picks.map((x) => ['chat.html?id=' + encodeURIComponent(x.c.id), x.src, niceName(x.c.name)]));
 
-  /** Les photos mises en avant, un chat à tour de rôle, sans celles des polaroïds ; des rangées toujours pleines. */
+  /** Les photos mises en avant, un chat à tour de rôle, sans celles des polaroïds. */
   function sexPhotos(list, used) {
-    const section = $('#sex-photos');
-    const grid = $('#sex-photos-grid');
-    if (!section || !grid) return;
-    const lists = list.map((c) => showcase(c).filter((src) => used.indexOf(src) === -1).map((src) => ({ src, alt: niceName(c.name) })));
-    const photos = [];
-    for (let i = 0; lists.some((l) => l[i]); i++) lists.forEach((l) => { if (l[i]) photos.push(l[i]); });
-    const perRow = window.matchMedia('(max-width: 699px)').matches ? 2 : 4;
-    const n = Math.min(8, photos.length - (photos.length % perRow));
-    if (n < 2) return;
-    grid.innerHTML = photos.slice(0, n).map((p, i) =>
-      '<button type="button" class="mosaic__tile reveal" data-mosaic="' + i + '" aria-label="Agrandir la photo : ' + esc(p.alt) + '">' +
-      '<img src="' + esc(p.src) + '" alt="' + esc(p.alt) + '" loading="lazy" data-guard>' +
-      '<span class="mosaic__caption" aria-hidden="true">' + esc(p.alt) + '</span></button>').join('');
-    // La visionneuse parcourt toutes les photos mises en avant, même celles qui n'ont pas de case
-    grid.addEventListener('click', (e) => {
-      const t = e.target.closest('[data-mosaic]');
-      if (t) window.BKUI.openLb(photos, Number(t.dataset.mosaic));
-    });
-    section.hidden = false;
-    guardImages(section); setupReveal(section);
+    mosaique($('#sex-photos'), $('#sex-photos-grid'), tourDeRole(
+      list.map((c) => showcase(c).filter((src) => used.indexOf(src) === -1).map((src) => ({ src, alt: niceName(c.name) })))));
   }
 
   function renderSex(sex, list, all, portees, box) {
@@ -561,6 +599,42 @@
   /* ======================================================================
      CHATONS ET PORTÉES
      ====================================================================== */
+  /** Un chaton de chaque portée à tour de rôle, les disponibles d'abord. */
+  function chatonsMelanges(portees, garde) {
+    return tourDeRole(portees.map((p) => p.chatons.filter(garde || (() => true))
+      .slice().sort((a, b) => (a.status === 'disponible' ? 0 : 1) - (b.status === 'disponible' ? 0 : 1))));
+  }
+
+  /** Le haut de la page Chatons : les autocollants et trois polaroïds, un par portée. */
+  function chatonsEnTete(portees) {
+    const stickers = $('#kittens-stickers');
+    const fan = $('#kittens-fan');
+    const dispo = portees.reduce((n, p) => n + p.available, 0);
+    const depart = portees.map((p) => p.dateOfSell).filter(Boolean).sort()[0];
+    if (stickers) {
+      stickers.innerHTML = autocollants([
+        ['crown', plural(portees.length, 'portée à la maison', 'portées à la maison')],
+        dispo ? ['heart', plural(dispo, 'chaton disponible', 'chatons disponibles'), '#litters']
+              : ['heart', 'Tous réservés pour le moment', 'liste-attente.html'],
+        depart ? ['clock', 'Premiers départs le ' + fmt.date(depart)] : null
+      ].filter(Boolean));
+    }
+    if (fan) {
+      fan.innerHTML = eventail(chatonsMelanges(portees, (k) => k.photo).slice(0, 3)
+        .map((k) => ['chaton.html?id=' + encodeURIComponent(k.id), k.photo, niceName(k.name) || 'Chaton']));
+      guardImages(fan);
+    }
+  }
+
+  /** « Les chatons en images » : leurs autres photos, un chaton à tour de rôle. */
+  function chatonsPhotos(portees) {
+    const couvertures = {};
+    portees.forEach((p) => p.chatons.forEach((k) => { if (k.photo) couvertures[k.photo] = true; }));
+    mosaique($('#kittens-photos'), $('#kittens-photos-grid'), tourDeRole(
+      chatonsMelanges(portees).map((k) => k.photos.filter((src) => !couvertures[src])
+        .map((src) => ({ src, alt: niceName(k.name) || 'Chaton' })))));
+  }
+
   async function chatons() {
     const box = $('#litters');
     const summary = $('#kittens-summary');
@@ -571,6 +645,14 @@
     function render() {
       const shown = portees.map((p) => ({ p, list: current === 'tous' ? p.chatons : p.chatons.filter((k) => k.status === current) }))
         .filter((x) => x.list.length || current === 'tous');
+      // Le compte suit le filtre choisi (le haut de page annonce, lui, les chatons disponibles)
+      const combien = shown.reduce((n, x) => n + x.list.length, 0);
+      const total = portees.reduce((n, p) => n + p.chatons.length, 0);
+      if (summary && total) {
+        summary.textContent = current === 'tous' ? plural(total, 'chaton à la maison', 'chatons à la maison')
+          : current === 'disponible' ? plural(combien, 'chaton disponible', 'chatons disponibles')
+          : plural(combien, 'chaton réservé', 'chatons réservés');
+      }
       if (!shown.length) {
         box.innerHTML = empty(current === 'disponible' ? 'Aucun chaton disponible pour le moment' : 'Aucun chaton réservé pour le moment',
           'Inscrivez-vous sur la liste d’attente : vous serez prévenu dès qu’un chaton correspondant à vos critères est disponible.',
@@ -590,6 +672,7 @@
                 (p.dateOfBirth ? '<span>Nés le ' + esc(fmt.date(p.dateOfBirth)) + (weeks != null && weeks >= 0 ? ' · ' + plural(weeks, 'semaine', 'semaines') : '') + '</span>' : '') +
                 (departure ? '<span>Départ à partir du ' + esc(departure) + '</span>' : '') +
               '</p>' +
+              etapeLigne(weeks) +
               '<p class="litter__actions">' + litterStatus(p) + '<a class="link-arrow" href="portee.html?id=' + encodeURIComponent(p.id) + '">La portée en détail</a></p>' +
             '</div>' +
           '</header>' +
@@ -608,11 +691,14 @@
           'Nos portées sont planifiées à l’avance. Inscrivez-vous sur la liste d’attente pour être prévenu des prochaines naissances.',
           '<a class="btn btn--primary" href="liste-attente.html">Rejoindre la liste d’attente</a>');
         if (filters) filters.hidden = true;
+        const stickers = $('#kittens-stickers'), fan = $('#kittens-fan');
+        if (stickers) stickers.innerHTML = autocollants([['heart', 'Prochaines naissances à venir', 'liste-attente.html']]);
+        if (fan) fan.innerHTML = '';
         return;
       }
-      const totalAvailable = portees.reduce((n, p) => n + p.available, 0);
-      if (summary) summary.textContent = totalAvailable ? plural(totalAvailable, 'chaton disponible', 'chatons disponibles') : 'Tous nos chatons sont réservés';
       render();
+      chatonsEnTete(portees);
+      chatonsPhotos(portees);
       if (filters) {
         filters.addEventListener('click', (e) => {
           const chip = e.target.closest('.chip');
@@ -790,6 +876,8 @@
             '<p class="profile__lede">' + esc(lede) + '</p>' +
             '<p class="profile__pills">' + pills + '</p>' +
             (traits ? '<ul class="traits">' + traits + '</ul>' : '') +
+            // Ce que vivent les chatons à son âge (les mêmes étapes que le journal de la portée)
+            etapeLigne(weeks) +
 
             ((mother || father || p.externalFatherName) ?
               '<div class="profile__block"><h2 class="profile__h">Ses parents</h2>' + couple(p, cats, true) + '</div>' : '') +
@@ -833,14 +921,7 @@
   /** Journal de la portée : les grandes étapes, situées par rapport à l'âge réel des chatons. */
   function journal(weeks) {
     if (weeks == null || weeks < 0) return '';
-    const steps = [
-      [0, 'Naissance', 'Les chatons naissent les yeux fermés, blottis contre leur mère. On les pèse chaque jour.'],
-      [2, 'Les yeux s’ouvrent', 'D’abord bleus chez tous les chatons. Les premiers pas, un peu hésitants, arrivent.'],
-      [4, 'Les découvertes', 'Premiers repas solides, apprentissage de la litière, premiers jeux avec la fratrie.'],
-      [8, 'Identification et vaccins', 'Puce électronique et premières vaccinations, avec le carnet de santé.'],
-      [10, 'La vie de famille', 'Visiteurs, bruits de la maison, câlins : le chaton s’habitue à tout ce qu’il retrouvera chez vous.'],
-      [12, 'Le départ', 'Vers douze semaines, avec son certificat LOOF, son carnet de santé et un peu de nourriture pour les premiers jours.']
-    ];
+    const steps = ETAPES;
     return '<section class="tight journal">' +
       '<div class="section-head"><p class="eyebrow">Semaine après semaine</p><h2 class="reveal">Le journal de la portée</h2>' +
       '<p class="lede reveal">Ce que vivent les chatons jusqu’à leur départ. L’étape en cours est mise en valeur.</p></div>' +
