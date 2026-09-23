@@ -836,14 +836,18 @@ html.js .snapshot-note { display: none; }
 a.couple__one:hover .couple__name { color: var(--rose-ink); }
 .couple__photo {
   position: relative; display: block;
-  width: clamp(96px, 7.5vw, 112px); aspect-ratio: 1; border-radius: 50%; overflow: hidden;
+  width: clamp(104px, 8vw, 124px); aspect-ratio: 1; border-radius: 50%; overflow: hidden;
   border: 4px solid var(--card);
   box-shadow: var(--ring), var(--shadow-s);
   background: var(--paper-3);
 }
 /* Le rond cadre sur la tête : les photos de profil montrent souvent le chat assis en entier,
-   et au milieu du cadre on ne voyait que son poitrail. */
-.couple__photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 22%; }
+   et au milieu du cadre on ne voyait que son poitrail. Le léger grossissement (1.12, pris vers
+   le haut) rapproche encore la frimousse, sans couper les oreilles des photos déjà serrées. */
+.couple__photo img {
+  width: 100%; height: 100%; object-fit: cover; object-position: 50% 22%;
+  scale: 1.12; transform-origin: 50% 32%;
+}
 .couple__role {
   margin-top: .65rem;
   font-size: .72rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--gold-ink);
