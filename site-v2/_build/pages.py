@@ -1395,6 +1395,10 @@ CONFIDENTIALITE = page_head_block(
       changer à tout moment grâce au lien « Cookies » en bas de chaque page.</p>
     <p>Le site garde aussi dans votre navigateur votre préférence de thème, clair ou sombre. Ce réglage ne
       sert qu'à l'affichage et ne nécessite pas votre accord.</p>
+    <p>Enfin, si vous arrivez par un lien que nous avons publié sur Instagram, TikTok, Facebook ou YouTube,
+      votre navigateur retient le nom de ce réseau. Il est ajouté au bas de votre message si vous nous
+      écrivez, pour que nous sachions par où vous êtes arrivé. Ce nom reste dans votre navigateur, ne sert
+      qu'à cela et ne permet pas de vous identifier : effacer les données du site l'efface aussi.</p>
     <!-- À VÉRIFIER : l'enregistrement des visites par l'API (adresse IP, localisation) se déclenche
          sans consentement ; il doit rester strictement limité à la mesure d'audience pour en être dispensé. -->
 

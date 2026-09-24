@@ -481,6 +481,8 @@
         const wish = [val('sexe') ? 'Chaton recherché : ' + val('sexe') : '', val('robe') ? 'Robe souhaitée : ' + val('robe') : ''].filter(Boolean).join('\n');
         message = (wish ? wish + '\n\n' : '') + message;
       }
+      const venu = provenance();
+      if (venu) message += '\n\nArrivé par : ' + venu;
       try {
         await window.BK.api.contact({ name: val('name'), email: val('email'), num: val('num'), subject, message });
         out.className = 'notice notice--ok';
@@ -518,6 +520,47 @@
         entries.forEach((en) => (en.isIntersecting ? play() : video.pause()));
       }, { threshold: 0.15 }).observe(video);
     } else { play(); }
+  }
+
+  /* ---------- par où la personne est arrivée ----------
+     Les liens posés sur Instagram, TikTok, Facebook ou YouTube portent une
+     étiquette (…?utm_source=tiktok). On retient ce nom une fois pour toutes
+     dans ce navigateur et on l'ajoute au bas du message si la personne nous
+     écrit : l'espace de gestion sait alors d'où vient chaque demande.
+     Rien d'autre n'est gardé : pas de cookie, pas de suivi d'un site à l'autre. */
+  const SOURCE_KEY = 'bk-provenance';
+  const RESEAUX = [
+    [/instagram/, 'Instagram'],
+    [/facebook|fb\.(me|com)/, 'Facebook'],
+    [/tiktok/, 'TikTok'],
+    [/youtube|youtu\.be/, 'YouTube'],
+    [/eleveur.?connect/, 'Éleveur Connect'],
+    [/leboncoin/, 'Le Bon Coin'],
+    [/pinterest/, 'Pinterest'],
+    [/google/, 'Recherche Google'],
+    [/bing/, 'Recherche Bing'],
+    [/yahoo|duckduckgo|ecosia|qwant|brave/, 'Autre moteur de recherche'],
+  ];
+  function nomReseau(v) {
+    const s = String(v || '').toLowerCase();
+    for (let i = 0; i < RESEAUX.length; i++) if (RESEAUX[i][0].test(s)) return RESEAUX[i][1];
+    return '';
+  }
+  /** À chaque page : si on sait d'où vient la personne et qu'on ne le savait pas encore, on le note. */
+  function retenirProvenance() {
+    try {
+      let nom = '';
+      const etiquette = new URLSearchParams(location.search).get('utm_source');
+      if (etiquette) nom = nomReseau(etiquette) || etiquette.replace(/[^\w .-]/g, '').slice(0, 30);
+      if (!nom && document.referrer) {
+        const hote = new URL(document.referrer).hostname.replace(/^www\./, '');
+        if (!/(^|\.)chatterie-british-kingdom\.fr$/.test(hote)) nom = nomReseau(hote) || hote.slice(0, 40);
+      }
+      if (nom && !localStorage.getItem(SOURCE_KEY)) localStorage.setItem(SOURCE_KEY, nom);
+    } catch (e) { /* adresse ou stockage illisible : tant pis */ }
+  }
+  function provenance() {
+    try { return localStorage.getItem(SOURCE_KEY) || ''; } catch (e) { return ''; }
   }
 
   /* ---------- consentement aux cookies de mesure d'audience ----------
@@ -657,6 +700,7 @@
 
   /* ---------- assemblage ---------- */
   function boot() {
+    retenirProvenance();
     setupNav();
     setupReveal();
     guardImages();

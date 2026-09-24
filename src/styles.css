@@ -165,6 +165,9 @@ button, input, select, textarea { font: inherit; }
 .pill--lilac { background: var(--lilac-soft); color: var(--lilac-ink); border-color: color-mix(in srgb, var(--lilac) 45%, transparent); }
 .pill--breed::before { display: none; }
 .pill--breed { color: var(--gold-ink); border-color: color-mix(in srgb, var(--gold) 55%, transparent); }
+.pill--source::before { display: none; }
+.pill--source { background: var(--lilac-soft); color: var(--lilac-ink); border-color: color-mix(in srgb, var(--lilac) 45%, transparent); }
+.pill--source svg { width: .8em; height: .8em; flex: none; }
 
 /* Champ de recherche des listes */
 .search {

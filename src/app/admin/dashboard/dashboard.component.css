@@ -73,3 +73,16 @@
   font: inherit; font-weight: 700; color: var(--rose-ink); text-decoration: underline;
 }
 .link-btn:hover { color: var(--ink); }
+
+/* Les liens à poser sur les réseaux */
+.sous-titre { margin: 1.6rem 0 .8rem; font-size: 1.02rem; }
+.lien-list { list-style: none; margin: 0 0 1.1rem; padding: 0; display: grid; gap: .6rem; }
+.lien-list li {
+  display: flex; align-items: center; justify-content: space-between; gap: .9rem; flex-wrap: wrap;
+  background: var(--paper); border-radius: var(--radius-s); padding: .7rem .9rem;
+}
+.lien-texte { display: flex; flex-direction: column; gap: .15rem; min-width: 0; }
+.lien-reseau { font-weight: 700; font-size: .92rem; color: var(--ink); }
+.lien-ou { font-weight: 600; font-size: .8rem; color: var(--ink-3); }
+.lien-url { font-size: .82rem; color: var(--ink-2); word-break: break-all; }
+.lien-copier { flex: none; }

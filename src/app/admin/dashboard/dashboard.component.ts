@@ -4,6 +4,8 @@ import { MARQUE_MAISON } from '../shell/admin-shell.component';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { StatistiqueService } from '../../components/Services/statistique.service';
+import { ContactService } from '../../components/Services/contact.service';
+import { provenanceDe } from '../services/provenance';
 
 interface Stats {
   nbrVisitesTotal: number;
@@ -20,6 +22,20 @@ interface LocationStat {
   location: string;
   count: number;
   percent: number;
+}
+
+/** Un réseau et le nombre de demandes qui en viennent. */
+interface SourceStat {
+  nom: string;
+  count: number;
+  percent: number;
+}
+
+/** Un lien étiqueté à poser sur un réseau. */
+interface LienReseau {
+  reseau: string;
+  ou: string;
+  lien: string;
 }
 
 @Component({
@@ -45,11 +61,63 @@ export class DashboardComponent implements OnInit, OnDestroy {
   /** Les visites de ce navigateur sont-elles mises de côté ? */
   mesVisitesComptees = false;
 
+  /** Par quel réseau les familles qui écrivent sont arrivées. */
+  sources: SourceStat[] = [];
+  demandesAvecProvenance = 0;
+  demandesTotal = 0;
+  loadingSources = true;
+
+  /** Les liens à poser sur chaque réseau : courts, jolis, et étiquetés. */
+  readonly liens: LienReseau[] = [
+    { reseau: 'Instagram', ou: 'dans la bio', lien: 'https://chatterie-british-kingdom.fr/instagram' },
+    { reseau: 'TikTok', ou: 'dans la bio', lien: 'https://chatterie-british-kingdom.fr/tiktok' },
+    { reseau: 'Facebook', ou: 'sur la page', lien: 'https://chatterie-british-kingdom.fr/facebook' },
+    { reseau: 'YouTube', ou: 'sous les vidéos', lien: 'https://chatterie-british-kingdom.fr/youtube' },
+  ];
+  lienCopie = '';
+
   constructor(
     private http: HttpClient,
     private statistiqueService: StatistiqueService,
+    private contactService: ContactService,
     @Inject(PLATFORM_ID) private platformId: Object,
   ) { }
+
+  /** Le lien sans le « https:// », plus court à lire. */
+  affiche(lien: string): string {
+    return lien.replace(/^https?:\/\//, '');
+  }
+
+  /** Copie le lien pour le coller dans la bio du réseau. */
+  copier(l: LienReseau): void {
+    const fini = () => {
+      this.lienCopie = l.reseau;
+      setTimeout(() => { if (this.lienCopie === l.reseau) this.lienCopie = ''; }, 2500);
+    };
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(l.lien).then(fini, () => this.copierAutrement(l.lien, fini));
+        return;
+      }
+    } catch (e) { /* presse-papier refusé */ }
+    this.copierAutrement(l.lien, fini);
+  }
+
+  /** Repli pour les navigateurs qui refusent le presse-papier moderne. */
+  private copierAutrement(texte: string, fini: () => void): void {
+    try {
+      const champ = document.createElement('textarea');
+      champ.value = texte;
+      champ.setAttribute('readonly', '');
+      champ.style.position = 'fixed';
+      champ.style.opacity = '0';
+      document.body.appendChild(champ);
+      champ.select();
+      document.execCommand('copy');
+      document.body.removeChild(champ);
+      fini();
+    } catch (e) { /* tant pis : le lien reste lisible à l'écran */ }
+  }
 
   /** Compter (ou non) les visites faites depuis ce navigateur. */
   basculerMesVisites(): void {
@@ -99,6 +167,27 @@ export class DashboardComponent implements OnInit, OnDestroy {
       },
       error: () => {
         this.loadingDaily = false;
+      }
+    });
+
+    this.contactService.getAllContacts(environment.id).subscribe({
+      next: (contacts) => {
+        const compte = new Map<string, number>();
+        contacts.forEach(c => {
+          const nom = provenanceDe(c.message);
+          if (nom) compte.set(nom, (compte.get(nom) || 0) + 1);
+        });
+        const total = Array.from(compte.values()).reduce((a, b) => a + b, 0);
+        const max = Math.max(1, ...compte.values());
+        this.sources = Array.from(compte.entries())
+          .map(([nom, count]) => ({ nom, count, percent: Math.round((count / max) * 100) }))
+          .sort((a, b) => b.count - a.count);
+        this.demandesAvecProvenance = total;
+        this.demandesTotal = contacts.length;
+        this.loadingSources = false;
+      },
+      error: () => {
+        this.loadingSources = false;
       }
     });
 

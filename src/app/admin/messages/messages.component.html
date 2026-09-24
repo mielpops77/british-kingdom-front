@@ -23,11 +23,17 @@
         </div>
         <span class="message-date">{{ contact.dateofCrea | date: 'dd/MM/yyyy à HH:mm':'Europe/Paris' }}</span>
       </div>
-      <span class="message-subject">{{ contact.subject }}</span>
-      <span class="message-preview" *ngIf="expandedId !== contact.id">{{ contact.message }}</span>
+      <div class="message-subject-row">
+        <span class="message-subject">{{ contact.subject }}</span>
+        <span class="pill pill--source" *ngIf="provenance(contact)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          {{ provenance(contact) }}
+        </span>
+      </div>
+      <span class="message-preview" *ngIf="expandedId !== contact.id">{{ corps(contact) }}</span>
 
       <div class="message-details" *ngIf="expandedId === contact.id" (click)="$event.stopPropagation()">
-        <p class="message-body">{{ contact.message }}</p>
+        <p class="message-body">{{ corps(contact) }}</p>
         <div class="message-actions">
           <a class="add-btn" [href]="'mailto:' + contact.email + '?subject=' + encodeSujet(contact)">Répondre par e-mail</a>
           <a class="ghost-btn" [href]="'tel:' + contact.num" *ngIf="contact.num">{{ contact.num }}</a>

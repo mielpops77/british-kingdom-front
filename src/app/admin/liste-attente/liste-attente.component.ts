@@ -7,6 +7,7 @@ import { ContactService } from '../../components/Services/contact.service';
 import { CatService } from '../../components/Services/catService';
 import { Contact } from '../../models/contact';
 import { Portee } from '../../models/portee';
+import { provenanceDe } from '../services/provenance';
 
 /** L'état d'une demande, rangé à la fin du sujet : « Liste d'attente · contacté ». */
 export type EtatAttente = 'nouvelle' | 'contactee' | 'reservee' | 'terminee';
@@ -25,7 +26,8 @@ interface Demande {
   etat: EtatAttente;
   sexe: string;          // « Un mâle », « Une femelle », « Peu importe »
   robe: string;          // ce que la famille a écrit
-  mot: string;           // son message, sans les deux lignes de souhaits
+  mot: string;           // son message, sans les lignes de souhaits ni la provenance
+  venu: string;          // le réseau par lequel elle est arrivée, s'il est connu
   chatons: Correspondance[];
 }
 
@@ -157,7 +159,9 @@ export class AdminListeAttenteComponent implements OnInit {
       : sujet.includes('contact') ? 'contactee'
       : 'nouvelle';
 
-    const demande: Demande = { contact, etat, sexe, robe, mot: reste.join('\n').trim(), chatons: [] };
+    const venu = provenanceDe(contact.message);
+    const corps = reste.filter(l => !/^[ \t]*Arriv[ée] par[ \t]*:/i.test(l)).join('\n').trim();
+    const demande: Demande = { contact, etat, sexe, robe, mot: corps, venu, chatons: [] };
     demande.chatons = this.correspondances(demande);
     return demande;
   }

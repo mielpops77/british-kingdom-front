@@ -3,6 +3,7 @@ import { NgFor, NgIf, DatePipe } from '@angular/common';
 import { environment } from 'src/environments/environment';
 import { ContactService } from '../../components/Services/contact.service';
 import { Contact } from '../../models/contact';
+import { provenanceDe, sansProvenance } from '../services/provenance';
 
 @Component({
   selector: 'app-admin-messages',
@@ -29,6 +30,16 @@ export class AdminMessagesComponent implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  /** Le réseau par lequel la personne est arrivée sur le site, s'il est connu. */
+  provenance(contact: Contact): string {
+    return provenanceDe(contact.message);
+  }
+
+  /** Le message sans la ligne de provenance, qui s'affiche déjà à part. */
+  corps(contact: Contact): string {
+    return sansProvenance(contact.message);
   }
 
   get unreadCount(): number {

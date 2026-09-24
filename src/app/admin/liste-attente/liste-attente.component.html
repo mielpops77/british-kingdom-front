@@ -105,6 +105,10 @@
               [class.pill--muted]="demande.etat === 'terminee' || demande.etat === 'nouvelle'">
           {{ libelle(demande.etat) }}
         </span>
+        <span class="pill pill--source" *ngIf="demande.venu" title="Le lien par lequel cette famille est arrivée sur le site">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          {{ demande.venu }}
+        </span>
       </div>
 
       <span class="attente-preview" *ngIf="expandedId !== demande.contact.id && demande.mot">{{ demande.mot }}</span>

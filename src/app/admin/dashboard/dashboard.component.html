@@ -46,7 +46,56 @@
   </section>
 
   <section class="panel-card">
-    <h2>D'où viennent vos visiteurs</h2>
+    <h2>Par quel réseau ils arrivent</h2>
+    <p class="note-approx">Les liens posés sur vos réseaux portent une étiquette invisible. Quand une personne
+      arrive par l'un d'eux et vous écrit ensuite, sa demande dit d'où elle vient — ici, et sur chaque message.
+      Les demandes reçues avant la mise en place de ces liens ne le disent pas.</p>
+
+    <p *ngIf="loadingSources" class="hint">Chargement…</p>
+    <p *ngIf="!loadingSources && !sources.length" class="hint">
+      Aucune demande ne dit encore par où elle est passée. C'est normal juste après la mise en place :
+      la première personne qui vous écrira depuis un de vos liens apparaîtra ici.
+    </p>
+    <div class="location-list" *ngIf="!loadingSources && sources.length">
+      <div class="location-row" *ngFor="let s of sources">
+        <div class="location-top">
+          <span class="location-name">{{ s.nom }}</span>
+          <span class="location-count">{{ s.count }}</span>
+        </div>
+        <div class="location-bar-track">
+          <div class="location-bar-fill" [style.width.%]="s.percent"></div>
+        </div>
+      </div>
+    </div>
+    <p class="hint" *ngIf="!loadingSources && sources.length">
+      <ng-container *ngIf="demandesAvecProvenance > 1">{{ demandesAvecProvenance }} demandes sur {{ demandesTotal }} disent d'où elles viennent.</ng-container>
+      <ng-container *ngIf="demandesAvecProvenance === 1">1 demande sur {{ demandesTotal }} dit d'où elle vient.</ng-container>
+    </p>
+
+    <h3 class="sous-titre">Les liens à poser sur chaque réseau</h3>
+    <ul class="lien-list">
+      <li *ngFor="let l of liens">
+        <div class="lien-texte">
+          <span class="lien-reseau">{{ l.reseau }} <span class="lien-ou">{{ l.ou }}</span></span>
+          <code class="lien-url">{{ affiche(l.lien) }}</code>
+        </div>
+        <button type="button" class="ghost-btn lien-copier" (click)="copier(l)">
+          {{ lienCopie === l.reseau ? 'Copié !' : 'Copier' }}
+        </button>
+      </li>
+    </ul>
+    <p class="note-approx">Pour envoyer directement vers les chatons, ajoutez <code>/chatons</code> à la fin :
+      <code>chatterie-british-kingdom.fr/instagram/chatons</code>.</p>
+
+    <p class="note-approx">Le compteur de visites, lui, ne sait pas par quel réseau chaque visite arrive :
+      il ne retient que la ville et l'appareil. Pour voir <em>toutes</em> les visites classées par provenance,
+      c'est dans Google Analytics, rubrique Rapports › Acquisition › Acquisition de trafic.
+      <a href="https://analytics.google.com/" target="_blank" rel="noopener" class="link-btn">ouvrir Google Analytics</a>
+    </p>
+  </section>
+
+  <section class="panel-card">
+    <h2>De quelles villes ils viennent</h2>
     <p class="note-approx">Ces villes viennent de l'adresse internet du visiteur : c'est l'endroit où sa connexion
       sort du réseau de son fournisseur d'accès, souvent à quelques dizaines de kilomètres de chez lui (et parfois
       dans une autre région depuis un téléphone).</p>
