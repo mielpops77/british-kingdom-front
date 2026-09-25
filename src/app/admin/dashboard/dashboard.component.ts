@@ -16,6 +16,9 @@ interface DailyBar {
   date: Date;
   count: number;
   heightPercent: number;
+  jourCourt: string;   // « lun »
+  numero: number;      // 22
+  aujourdhui: boolean;
 }
 
 interface LocationStat {
@@ -53,6 +56,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
   loadingVisits = true;
   dailyBars: DailyBar[] = [];
   loadingDaily = true;
+
+  /** De quoi lire le graphique d'un coup d'œil. */
+  totalPeriode = 0;
+  moyenneParJour = 0;
+  meilleurJour: { count: number; jour: string; aujourdhui: boolean } | null = null;
+  total7 = 0;
+  tendance: number | null = null;   // en % par rapport aux 14 jours d'avant
+
+  /** Les visites du quotidien : les robots et les adresses techniques restent de côté. */
+  afficherRobots = false;
+  afficherIp = false;
+
+  private readonly JOURS = ['dim', 'lun', 'mar', 'mer', 'jeu', 'ven', 'sam'];
+  private readonly JOURS_LONGS = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
+  private readonly MOIS = ['janv.', 'févr.', 'mars', 'avril', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.'];
   topLocations: LocationStat[] = [];
   loadingLocations = true;
   onlineCount = 0;
@@ -88,6 +106,28 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private contactService: ContactService,
     @Inject(PLATFORM_ID) private platformId: Object,
   ) { }
+
+  /** « aujourd'hui à 07:47 », « hier à 22:14 », sinon « lun 22 sept. à 14:03 ». */
+  dateLisible(d: Date): string {
+    const heure = String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
+    const jour = new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+    const aujourdhui = new Date();
+    const zeroAujourdhui = new Date(aujourdhui.getFullYear(), aujourdhui.getMonth(), aujourdhui.getDate()).getTime();
+    const ecart = Math.round((zeroAujourdhui - jour) / 86400000);
+
+    if (ecart === 0) return 'aujourd\'hui à ' + heure;
+    if (ecart === 1) return 'hier à ' + heure;
+    return this.JOURS[d.getDay()] + ' ' + d.getDate() + ' ' + this.MOIS[d.getMonth()] + ' à ' + heure;
+  }
+
+  /** Les visites montrées dans la liste : sans les robots, sauf si on les demande. */
+  get visitesAffichees() {
+    return this.afficherRobots ? this.recentVisits : this.recentVisits.filter(v => !v.isBot);
+  }
+
+  get nbRobots(): number {
+    return this.recentVisits.filter(v => v.isBot).length;
+  }
 
   /** Le lien sans le « https:// », plus court à lire. */
   affiche(lien: string): string {
@@ -161,14 +201,45 @@ export class DashboardComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.statistiqueService.getDailyStats(environment.id, 14).subscribe({
+    // On demande quatre semaines : deux pour le graphique, deux pour la comparaison.
+    this.statistiqueService.getDailyStats(environment.id, 28).subscribe({
       next: (days) => {
-        const maxCount = Math.max(1, ...days.map(d => d.count));
-        this.dailyBars = days.map(d => ({
-          date: new Date(d.date),
-          count: d.count,
-          heightPercent: Math.round((d.count / maxCount) * 100)
-        }));
+        const quinzaine = days.slice(-14);
+        const precedente = days.slice(0, Math.max(0, days.length - 14));
+        const maxCount = Math.max(1, ...quinzaine.map(d => d.count));
+        const aujourdhui = new Date().toDateString();
+
+        this.dailyBars = quinzaine.map(d => {
+          const date = new Date(d.date);
+          return {
+            date,
+            count: d.count,
+            heightPercent: Math.round((d.count / maxCount) * 100),
+            jourCourt: this.JOURS[date.getDay()],
+            numero: date.getDate(),
+            aujourdhui: date.toDateString() === aujourdhui,
+          };
+        });
+
+        const somme = (liste: { count: number }[]) => liste.reduce((t, d) => t + d.count, 0);
+        this.totalPeriode = somme(quinzaine);
+        this.moyenneParJour = quinzaine.length ? Math.round(this.totalPeriode / quinzaine.length) : 0;
+        this.total7 = somme(quinzaine.slice(-7));
+
+        const champion = this.dailyBars.reduce<DailyBar | null>((meilleur, b) => (!meilleur || b.count > meilleur.count ? b : meilleur), null);
+        this.meilleurJour = champion && champion.count > 0
+          ? {
+              count: champion.count,
+              jour: this.JOURS_LONGS[champion.date.getDay()] + ' ' + champion.date.getDate(),
+              aujourdhui: champion.aujourdhui,
+            }
+          : null;
+
+        const avant = somme(precedente);
+        this.tendance = precedente.length === 14 && avant > 0
+          ? Math.round(((this.totalPeriode - avant) / avant) * 100)
+          : null;
+
         this.loadingDaily = false;
       },
       error: () => {

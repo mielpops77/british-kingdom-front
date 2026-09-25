@@ -26,23 +26,42 @@
       <span class="stat-value">{{ stats.nbrVisitesJour }}</span>
       <span class="stat-label">visites aujourd'hui</span>
     </div>
+    <div class="stat-card stat-card--semaine" *ngIf="!loadingDaily && total7">
+      <span class="stat-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 11h18"/></svg>
+      </span>
+      <span class="stat-value">{{ total7 }}</span>
+      <span class="stat-label">visites sur les 7 derniers jours</span>
+    </div>
   </div>
 
   <p *ngIf="loading" class="hint">Chargement…</p>
   <p *ngIf="!loading && !stats" class="hint">Impossible de charger les statistiques pour le moment.</p>
 
   <section class="panel-card">
-    <h2>Les 14 derniers jours</h2>
+    <div class="panel-head">
+      <h2>Les 14 derniers jours</h2>
+      <span class="pill" *ngIf="tendance !== null"
+            [class.pill--ok]="tendance > 0" [class.pill--muted]="tendance <= 0"
+            title="Comparé aux quatorze jours précédents">
+        {{ tendance > 0 ? '+' : '' }}{{ tendance }} % sur deux semaines
+      </span>
+    </div>
     <p *ngIf="loadingDaily" class="hint">Chargement…</p>
     <div class="bar-chart" *ngIf="!loadingDaily && dailyBars.length">
-      <div class="bar-col" *ngFor="let bar of dailyBars">
+      <div class="bar-col" *ngFor="let bar of dailyBars" [class.bar-col--today]="bar.aujourdhui">
         <span class="bar-count">{{ bar.count }}</span>
         <div class="bar-track">
           <div class="bar-fill" [style.height.%]="bar.heightPercent" [title]="bar.count + ' visite(s)'"></div>
         </div>
-        <span class="bar-label">{{ bar.date | date: 'dd/MM' }}</span>
+        <span class="bar-label"><span class="bar-jour">{{ bar.jourCourt }}</span>{{ bar.numero }}</span>
       </div>
     </div>
+    <p class="chart-note" *ngIf="!loadingDaily && dailyBars.length">
+      {{ totalPeriode }} visites en deux semaines, soit {{ moyenneParJour }} par jour en moyenne.
+      <ng-container *ngIf="meilleurJour && meilleurJour.aujourdhui">Et c'est aujourd'hui votre meilleur jour, avec {{ meilleurJour.count }} visites.</ng-container>
+      <ng-container *ngIf="meilleurJour && !meilleurJour.aujourdhui">Votre meilleur jour : {{ meilleurJour.jour }}, avec {{ meilleurJour.count }} visites.</ng-container>
+    </p>
   </section>
 
   <section class="panel-card">
@@ -137,12 +156,23 @@
         {{ mesVisitesComptees ? 'ne plus compter mes visites' : 'les compter quand même' }}
       </button>
     </p>
+    <p class="visit-reglages" *ngIf="!loadingVisits && recentVisits.length > 0">
+      <button type="button" class="link-btn" (click)="afficherRobots = !afficherRobots" *ngIf="nbRobots">
+        {{ afficherRobots ? 'masquer les robots' : 'voir aussi les ' + nbRobots + ' passages de robots' }}
+      </button>
+      <button type="button" class="link-btn" (click)="afficherIp = !afficherIp">
+        {{ afficherIp ? 'masquer les adresses techniques' : 'voir les adresses techniques' }}
+      </button>
+    </p>
     <p *ngIf="loadingVisits" class="hint">Chargement…</p>
     <p *ngIf="!loadingVisits && recentVisits.length === 0" class="hint">Aucune visite enregistrée pour l'instant.</p>
-    <ul class="visit-list" *ngIf="!loadingVisits && recentVisits.length > 0">
-      <li *ngFor="let visit of recentVisits" [class.is-bot]="visit.isBot">
+    <p *ngIf="!loadingVisits && recentVisits.length > 0 && visitesAffichees.length === 0" class="hint">
+      Les dernières visites sont toutes des robots.
+    </p>
+    <ul class="visit-list" *ngIf="!loadingVisits && visitesAffichees.length > 0">
+      <li *ngFor="let visit of visitesAffichees" [class.is-bot]="visit.isBot">
         <div class="visit-top">
-          <span class="visit-date">{{ visit.visitedAt | date: 'dd/MM/yyyy à HH:mm':'Europe/Paris' }}</span>
+          <span class="visit-date">{{ dateLisible(visit.visitedAt) }}</span>
           <span class="pill pill--muted" *ngIf="visit.isBot">Robot</span>
         </div>
         <span class="visit-location">{{ visit.device }} · {{ visit.location || 'Localisation inconnue' }}</span>
@@ -150,7 +180,7 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
           venu de {{ visit.source }}
         </span>
-        <span class="visit-ip">{{ visit.visitorIp }}</span>
+        <span class="visit-ip" *ngIf="afficherIp">{{ visit.visitorIp }}</span>
       </li>
     </ul>
   </section>

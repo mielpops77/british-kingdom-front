@@ -103,3 +103,38 @@
 .lien-etat { margin-left: auto; font-size: .74rem; font-weight: 700; color: var(--rose-ink); }
 .lien-icone { margin-left: auto; width: 15px; height: 15px; color: var(--ink-3); flex: none; align-self: center; }
 .lien-puce:hover .lien-icone { color: var(--gold-ink); }
+
+/* Le titre d'un panneau, avec sa pastille de tendance */
+.panel-head { display: flex; align-items: center; justify-content: space-between; gap: .8rem; flex-wrap: wrap; margin-bottom: 1.1rem; }
+.panel-head h2 { margin: 0; }
+
+/* La carte de la semaine, et la lecture du graphique */
+.stat-card--semaine .stat-icon { background: var(--lilac-soft); color: var(--lilac-ink); }
+.chart-note { margin: .9rem 0 0; font-size: .86rem; color: var(--ink-3); }
+.bar-col--today .bar-fill { background: linear-gradient(180deg, var(--gold) 0%, var(--rose) 100%); }
+.bar-col--today .bar-count,
+.bar-col--today .bar-label { color: var(--rose-ink); font-weight: 700; }
+
+/* Les deux petits réglages de la liste des visites */
+.visit-reglages { display: flex; gap: 1rem; flex-wrap: wrap; margin: -.4rem 0 1rem; font-size: .85rem; }
+
+/* Téléphone : les cartes de chiffres se couchent, l'icône à gauche du nombre */
+.bar-jour { margin-right: .28em; }
+
+@media (max-width: 660px) {
+  /* Plus la place d'écrire le jour sous chaque barre : le numéro suffit */
+  .bar-jour { display: none; }
+}
+
+@media (max-width: 560px) {
+  .stat-grid { gap: .6rem; margin-bottom: 1.1rem; }
+  .stat-card {
+    display: grid; grid-template-columns: auto 1fr;
+    grid-template-areas: "icone valeur" "icone libelle";
+    align-items: center; column-gap: .85rem; padding: .8rem 1rem;
+  }
+  .stat-icon { grid-area: icone; width: 38px; height: 38px; margin-bottom: 0; }
+  .stat-icon svg { width: 19px; height: 19px; }
+  .stat-value { grid-area: valeur; align-self: end; font-size: 1.6rem; }
+  .stat-label { grid-area: libelle; align-self: start; font-size: .82rem; }
+}
