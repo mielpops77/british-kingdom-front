@@ -27,7 +27,12 @@ export class StatistiqueService {
   }
 
   getRecentVisits(profilId: number, limit = 20) {
-    return this.http.get<{ visitedAt: string; location: string | null; device: string; isBot: boolean; visitorIp: string | null }[]>(`${this.baseUrl}/recent/${profilId}?limit=${limit}`);
+    return this.http.get<{ visitedAt: string; location: string | null; device: string; isBot: boolean; visitorIp: string | null; source?: string | null }[]>(`${this.baseUrl}/recent/${profilId}?limit=${limit}`);
+  }
+
+  /** Par quel réseau les visiteurs sont arrivés (vide tant qu'aucune visite étiquetée n'est arrivée). */
+  getTopSources(profilId: number, days = 30, limit = 8) {
+    return this.http.get<{ source: string; count: number }[]>(`${this.baseUrl}/sources/${profilId}?days=${days}&limit=${limit}`);
   }
 
   getDailyStats(profilId: number, days = 14) {

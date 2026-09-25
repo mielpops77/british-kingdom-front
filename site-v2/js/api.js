@@ -378,7 +378,13 @@
         if (sessionStorage.getItem('bk_visit')) return;
         sessionStorage.setItem('bk_visit', '1');
       } catch (e) { /* stockage indisponible : on enregistre quand même */ }
-      http('statistique', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ profilId: PROFIL_ID }) }).catch(() => {});
+      // Par où la personne est arrivée, si js/site.js l'a retenu : l'espace de gestion l'affiche
+      // à côté de la ville, dans « Dernières visites ».
+      const visite = { profilId: PROFIL_ID };
+      let venu = '';
+      try { venu = localStorage.getItem('bk-provenance') || ''; } catch (e) { /* stockage refusé */ }
+      if (venu) visite.source = venu;
+      http('statistique', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(visite) }).catch(() => {});
     },
     heartbeat: () => {
       if (demoActive || !OFFICIEL || maison()) return;

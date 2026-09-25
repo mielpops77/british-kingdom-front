@@ -47,13 +47,31 @@
 
   <section class="panel-card">
     <h2>Par quel réseau ils arrivent</h2>
-    <p class="note-approx">Quand une personne arrive par un de vos liens et vous écrit ensuite, sa demande dit
-      d'où elle vient — ici et sur chaque message. Les demandes plus anciennes ne le disent pas.</p>
+    <p class="note-approx">Le lien posé sur chaque réseau porte une étiquette : le site reconnaît par où la
+      personne arrive, aussi bien pour sa visite que pour sa demande. Seul ce qui s'est passé depuis la mise
+      en place est compté.</p>
 
+    <h3 class="sous-titre sous-titre--premier">Les visites des 30 derniers jours</h3>
+    <p *ngIf="loadingVisiteurs" class="hint">Chargement…</p>
+    <p *ngIf="!loadingVisiteurs && !visiteurs.length" class="hint">
+      Rien encore. Dès qu'une personne arrivera par un de vos liens, elle apparaîtra ici.
+    </p>
+    <div class="location-list" *ngIf="!loadingVisiteurs && visiteurs.length">
+      <div class="location-row" *ngFor="let v of visiteurs">
+        <div class="location-top">
+          <span class="location-name">{{ v.nom }}</span>
+          <span class="location-count">{{ v.count }}</span>
+        </div>
+        <div class="location-bar-track">
+          <div class="location-bar-fill" [style.width.%]="v.percent"></div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="sous-titre">Les familles qui vous écrivent</h3>
     <p *ngIf="loadingSources" class="hint">Chargement…</p>
     <p *ngIf="!loadingSources && !sources.length" class="hint">
-      Aucune demande ne dit encore par où elle est passée. C'est normal juste après la mise en place :
-      la première personne qui vous écrira depuis un de vos liens apparaîtra ici.
+      Aucune demande ne dit encore par où elle est passée.
     </p>
     <div class="location-list" *ngIf="!loadingSources && sources.length">
       <div class="location-row" *ngFor="let s of sources">
@@ -85,9 +103,9 @@
         </button>
       </li>
     </ul>
-    <p class="lien-intro">Le compteur de visites, lui, ne connaît pas le réseau d'origine.
+    <p class="lien-intro">Pour le détail page par page et l'historique d'avant,
       <a href="https://analytics.google.com/" target="_blank" rel="noopener" class="link-btn">Google Analytics</a>
-      le montre pour toutes les visites (Rapports › Acquisition).</p>
+      reste là (Rapports › Acquisition).</p>
   </section>
 
   <section class="panel-card">
@@ -128,6 +146,10 @@
           <span class="pill pill--muted" *ngIf="visit.isBot">Robot</span>
         </div>
         <span class="visit-location">{{ visit.device }} · {{ visit.location || 'Localisation inconnue' }}</span>
+        <span class="visit-source" *ngIf="visit.source">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          venu de {{ visit.source }}
+        </span>
         <span class="visit-ip">{{ visit.visitorIp }}</span>
       </li>
     </ul>

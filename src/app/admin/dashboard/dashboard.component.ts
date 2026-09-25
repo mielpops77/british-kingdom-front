@@ -49,7 +49,7 @@ interface LienReseau {
 export class DashboardComponent implements OnInit, OnDestroy {
   stats: Stats | undefined;
   loading = true;
-  recentVisits: { visitedAt: Date; location: string | null; device: string; isBot: boolean; visitorIp: string | null }[] = [];
+  recentVisits: { visitedAt: Date; location: string | null; device: string; isBot: boolean; visitorIp: string | null; source: string | null }[] = [];
   loadingVisits = true;
   dailyBars: DailyBar[] = [];
   loadingDaily = true;
@@ -61,6 +61,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   /** Les visites de ce navigateur sont-elles mises de côté ? */
   mesVisitesComptees = false;
+
+  /** Par quel réseau les visiteurs sont arrivés (toutes les visites des 30 derniers jours). */
+  visiteurs: SourceStat[] = [];
+  loadingVisiteurs = true;
 
   /** Par quel réseau les familles qui écrivent sont arrivées. */
   sources: SourceStat[] = [];
@@ -149,7 +153,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     this.statistiqueService.getRecentVisits(environment.id).subscribe({
       next: (visits) => {
-        this.recentVisits = visits.map(v => ({ visitedAt: new Date(v.visitedAt), location: v.location, device: v.device, isBot: v.isBot, visitorIp: v.visitorIp }));
+        this.recentVisits = visits.map(v => ({ visitedAt: new Date(v.visitedAt), location: v.location, device: v.device, isBot: v.isBot, visitorIp: v.visitorIp, source: v.source || null }));
         this.loadingVisits = false;
       },
       error: () => {
@@ -169,6 +173,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
       },
       error: () => {
         this.loadingDaily = false;
+      }
+    });
+
+    this.statistiqueService.getTopSources(environment.id, 30, 8).subscribe({
+      next: (sources) => {
+        const max = Math.max(1, ...sources.map(s => s.count));
+        this.visiteurs = sources.map(s => ({ nom: s.source, count: s.count, percent: Math.round((s.count / max) * 100) }));
+        this.loadingVisiteurs = false;
+      },
+      error: () => {
+        this.loadingVisiteurs = false;
       }
     });
 
