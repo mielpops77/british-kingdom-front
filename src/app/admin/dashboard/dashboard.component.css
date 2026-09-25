@@ -74,15 +74,24 @@
 }
 .link-btn:hover { color: var(--ink); }
 
-/* Les liens à poser sur les réseaux */
-.sous-titre { margin: 1.6rem 0 .8rem; font-size: 1.02rem; }
-.lien-list { list-style: none; margin: 0 0 1.1rem; padding: 0; display: grid; gap: .6rem; }
-.lien-list li {
-  display: flex; align-items: center; justify-content: space-between; gap: .9rem; flex-wrap: wrap;
-  background: var(--paper); border-radius: var(--radius-s); padding: .7rem .9rem;
+/* Les liens à poser sur les réseaux : une puce par réseau, le domaine dit une seule fois */
+.sous-titre { margin: 1.4rem 0 .4rem; font-size: 1.02rem; }
+.lien-intro { margin: 0 0 .8rem; font-size: .84rem; line-height: 1.5; color: var(--ink-3); }
+.lien-intro code { font-size: .82rem; color: var(--ink-2); }
+.lien-list {
+  list-style: none; margin: 0 0 1rem; padding: 0;
+  display: grid; gap: .5rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
 }
-.lien-texte { display: flex; flex-direction: column; gap: .15rem; min-width: 0; }
-.lien-reseau { font-weight: 700; font-size: .92rem; color: var(--ink); }
-.lien-ou { font-weight: 600; font-size: .8rem; color: var(--ink-3); }
-.lien-url { font-size: .82rem; color: var(--ink-2); word-break: break-all; }
-.lien-copier { flex: none; }
+.lien-puce {
+  width: 100%; display: flex; align-items: baseline; gap: .4rem; flex-wrap: nowrap;
+  background: var(--paper); border: 1px solid transparent; border-radius: var(--radius-s);
+  padding: .5rem .7rem; cursor: pointer; text-align: left; font: inherit;
+  transition: border-color .2s var(--ease), background .2s var(--ease);
+}
+.lien-puce:hover { border-color: var(--gold); background: var(--gold-soft); }
+.lien-puce.copie { border-color: var(--rose); background: var(--rose-soft); }
+.lien-reseau { font-weight: 700; font-size: .88rem; color: var(--ink); }
+.lien-chemin { font-size: .8rem; color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.lien-etat { margin-left: auto; font-size: .74rem; font-weight: 700; color: var(--rose-ink); }
+.lien-icone { margin-left: auto; width: 15px; height: 15px; color: var(--ink-3); flex: none; align-self: center; }
+.lien-puce:hover .lien-icone { color: var(--gold-ink); }

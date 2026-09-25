@@ -35,6 +35,7 @@ interface SourceStat {
 interface LienReseau {
   reseau: string;
   ou: string;
+  chemin: string;
   lien: string;
 }
 
@@ -68,11 +69,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
   loadingSources = true;
 
   /** Les liens à poser sur chaque réseau : courts, jolis, et étiquetés. */
+  readonly domaine = 'chatterie-british-kingdom.fr';
   readonly liens: LienReseau[] = [
-    { reseau: 'Instagram', ou: 'dans la bio', lien: 'https://chatterie-british-kingdom.fr/instagram' },
-    { reseau: 'TikTok', ou: 'dans la bio', lien: 'https://chatterie-british-kingdom.fr/tiktok' },
-    { reseau: 'Facebook', ou: 'sur la page', lien: 'https://chatterie-british-kingdom.fr/facebook' },
-    { reseau: 'YouTube', ou: 'sous les vidéos', lien: 'https://chatterie-british-kingdom.fr/youtube' },
+    { reseau: 'Instagram', ou: 'bio', chemin: '/instagram', lien: 'https://chatterie-british-kingdom.fr/instagram' },
+    { reseau: 'TikTok', ou: 'bio', chemin: '/tiktok', lien: 'https://chatterie-british-kingdom.fr/tiktok' },
+    { reseau: 'Facebook', ou: 'page', chemin: '/facebook', lien: 'https://chatterie-british-kingdom.fr/facebook' },
+    { reseau: 'YouTube', ou: 'vidéos', chemin: '/youtube', lien: 'https://chatterie-british-kingdom.fr/youtube' },
   ];
   lienCopie = '';
 

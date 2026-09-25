@@ -47,9 +47,8 @@
 
   <section class="panel-card">
     <h2>Par quel réseau ils arrivent</h2>
-    <p class="note-approx">Les liens posés sur vos réseaux portent une étiquette invisible. Quand une personne
-      arrive par l'un d'eux et vous écrit ensuite, sa demande dit d'où elle vient — ici, et sur chaque message.
-      Les demandes reçues avant la mise en place de ces liens ne le disent pas.</p>
+    <p class="note-approx">Quand une personne arrive par un de vos liens et vous écrit ensuite, sa demande dit
+      d'où elle vient — ici et sur chaque message. Les demandes plus anciennes ne le disent pas.</p>
 
     <p *ngIf="loadingSources" class="hint">Chargement…</p>
     <p *ngIf="!loadingSources && !sources.length" class="hint">
@@ -72,26 +71,23 @@
       <ng-container *ngIf="demandesAvecProvenance === 1">1 demande sur {{ demandesTotal }} dit d'où elle vient.</ng-container>
     </p>
 
-    <h3 class="sous-titre">Les liens à poser sur chaque réseau</h3>
+    <h3 class="sous-titre">Vos liens à poser sur les réseaux</h3>
+    <p class="lien-intro">Tous commencent par <code>{{ domaine }}</code> — touchez-en un pour le copier.
+      Ajoutez <code>/chatons</code> à la fin pour ouvrir directement la page des chatons.</p>
     <ul class="lien-list">
       <li *ngFor="let l of liens">
-        <div class="lien-texte">
-          <span class="lien-reseau">{{ l.reseau }} <span class="lien-ou">{{ l.ou }}</span></span>
-          <code class="lien-url">{{ affiche(l.lien) }}</code>
-        </div>
-        <button type="button" class="ghost-btn lien-copier" (click)="copier(l)">
-          {{ lienCopie === l.reseau ? 'Copié !' : 'Copier' }}
+        <button type="button" class="lien-puce" [class.copie]="lienCopie === l.reseau"
+                (click)="copier(l)" [title]="'Copier ' + affiche(l.lien)">
+          <span class="lien-reseau">{{ l.reseau }}</span>
+          <code class="lien-chemin">{{ l.chemin }}</code>
+          <span class="lien-etat" *ngIf="lienCopie === l.reseau">copié !</span>
+          <svg class="lien-icone" *ngIf="lienCopie !== l.reseau" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M5 15V5.5A2.5 2.5 0 0 1 7.5 3H15"/></svg>
         </button>
       </li>
     </ul>
-    <p class="note-approx">Pour envoyer directement vers les chatons, ajoutez <code>/chatons</code> à la fin :
-      <code>chatterie-british-kingdom.fr/instagram/chatons</code>.</p>
-
-    <p class="note-approx">Le compteur de visites, lui, ne sait pas par quel réseau chaque visite arrive :
-      il ne retient que la ville et l'appareil. Pour voir <em>toutes</em> les visites classées par provenance,
-      c'est dans Google Analytics, rubrique Rapports › Acquisition › Acquisition de trafic.
-      <a href="https://analytics.google.com/" target="_blank" rel="noopener" class="link-btn">ouvrir Google Analytics</a>
-    </p>
+    <p class="lien-intro">Le compteur de visites, lui, ne connaît pas le réseau d'origine.
+      <a href="https://analytics.google.com/" target="_blank" rel="noopener" class="link-btn">Google Analytics</a>
+      le montre pour toutes les visites (Rapports › Acquisition).</p>
   </section>
 
   <section class="panel-card">
