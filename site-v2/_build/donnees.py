@@ -695,3 +695,228 @@ def llms(d, site, pages):
             L += ["", "### " + q, r]
     L += ["", "---", "Dernière mise à jour : %s. Source : %s" % (date_longue(j), dom + "/")]
     return "\n".join(L) + "\n"
+
+
+# --------------------------------------------------------------------------
+# Une page par fiche : ce que voit un moteur de recherche sans JavaScript
+# --------------------------------------------------------------------------
+# chat.html, chaton.html, portee.html et article.html sont des pages vides que
+# JavaScript remplit une fois le chat (ou le chaton…) connu. Un moteur de
+# recherche qui n'exécute pas JavaScript voyait donc la même page vide pour tous.
+# On écrit ici une page par animal, avec son titre, sa description et son texte ;
+# le serveur la sert à la place de la page vide (voir _deploy/web.config).
+
+def _coupe(texte, n=155):
+    """Un texte de description qui tient dans les résultats de recherche, coupé à un mot."""
+    t = re.sub(r"\s+", " ", str(texte or "")).strip()
+    if len(t) <= n:
+        return t
+    court = t[:n]
+    point = max(court.rfind(". "), court.rfind(" ! "), court.rfind(" ? "))
+    if point > n * 0.55:
+        return court[:point + 1].strip()
+    return court[:court.rfind(" ")].rstrip(" ,;:") + "…"
+
+
+def _phrase_chat(c, jour):
+    """« Une British Shorthair chocolat aux yeux vairons, née le 16 juin 2024. »"""
+    fem = sexe(c.get("sex")) == "female"
+    r, _ = robe(c.get("robe"))
+    y = yeux(c.get("eyeColor"))
+    bout = []
+    bout.append(("Une " if fem else "Un ") + propre(c.get("breed") or "British Shorthair"))
+    if r:
+        bout.append(r.lower())
+    phrase = " ".join(bout)
+    if y:
+        phrase += " aux " + y[0].lower()
+    if c.get("dateOfBirth"):
+        phrase += (", née le " if fem else ", né le ") + date_longue(c.get("dateOfBirth"))
+    return phrase + "."
+
+
+def _photos_fiche(sources, alt):
+    """Les photos d'une fiche, en pleine largeur, avec leur texte de remplacement."""
+    if not sources:
+        return ""
+    return '<div class="grid grid-3">%s</div>' % "".join(
+        '<figure class="arch">%s</figure>' % _arch(src, alt).replace('<div class="arch ">', '<div class="arch">')
+        for src in sources[:6])
+
+
+def _snap(contenu):
+    return '<div data-snapshot>%s</div>' % contenu
+
+
+def _fiche_chat(c, fiches, photo, jour, domaine):
+    n = nom(c.get("name"))
+    r, _ = robe(c.get("robe"))
+    race = race_courte(c.get("breed")) or "Shorthair"
+    fiche = fiches.get(c.get("id")) or {}
+    texte = fiche.get("texte") or ""
+    phrase = _phrase_chat(c, jour)
+    images = [photo("CatsProfil", c.get("urlProfil"))] + vitrine(c, fiche, photo)
+    images = [i for i in dict.fromkeys(images) if i]
+
+    titre = "%s, British %s %s" % (n, race, (r or "").lower())
+    titre = re.sub(r"\s+", " ", titre).strip().rstrip(",")
+    if len(titre) <= 36:
+        titre += " — Chatterie British Kingdom"
+    desc = _coupe(texte) or _coupe(
+        "%s %s Photos, origines et portées, à la Chatterie British Kingdom, à Othis (77)." % (phrase, ""))
+
+    corps = ("<h1>%s</h1><p class=\"lede\">%s</p>" % (esc(n), esc(phrase)) +
+             ("<p>%s</p>" % esc(texte) if texte else "") +
+             _photos_fiche(images, "Photo de " + n))
+    return {"cible": "cat-detail", "nom": n, "titre": titre, "desc": desc, "corps": _snap(corps),
+            "image": images[0] if images else "", "canon": "%s/chat.html?id=%s" % (domaine, c.get("id")),
+            "fichier": "f-chat-%s.html" % c.get("id"), "base": "chat.html",
+            "fil": ("cat-breadcrumb-name", n)}
+
+
+def _fiche_chaton(k, p, cats, photo, jour, domaine):
+    n = nom(k.get("name"))
+    r, _ = robe(k.get("robe"))
+    race = race_courte(k.get("breed")) or "Shorthair"
+    fem = sexe(k.get("sex")) == "female"
+    etat = statut(k.get("status"))
+    dit = {"disponible": "disponible", "reserve": "réservée" if fem else "réservé",
+           "vendu": "adoptée" if fem else "adopté", "rester": "restée à la maison" if fem else "resté à la maison"}.get(etat, "")
+    pere = nom((cats.get(str(p.get("idPapa"))) or {}).get("name") or p.get("externalFatherName") or "")
+    mere = nom((cats.get(str(p.get("idMaman"))) or {}).get("name") or "")
+    naissance = date_longue(k.get("dateOfBirth")) if k.get("dateOfBirth") else ""
+
+    phrase = ("Une petite " if fem else "Un petit ") + "British " + race
+    if r:
+        phrase += " " + r.lower()
+    if naissance:
+        phrase += (", née le " if fem else ", né le ") + naissance
+    phrase += "."
+
+    titre = "%s, chaton British %s %s" % (n, race, (r or "").lower())
+    titre = re.sub(r"\s+", " ", titre).strip().rstrip(",")
+    parents = (" Fils de %s et %s." if not fem else " Fille de %s et %s.") % (pere, mere) if pere and mere else ""
+    desc = _coupe("%s%s %s Élevage familial LOOF à Othis (77)." % (
+        phrase, parents, ("Chaton " + dit + ".") if dit else ""))
+
+    images = [photo("Chatons", f) for f in (k.get("photos") or []) if f][:6]
+    corps = ("<h1>%s</h1><p class=\"lede\">%s</p>" % (esc(n), esc(phrase)) +
+             ("<p>%s</p>" % esc(parents.strip()) if parents else "") +
+             ("<p>Chaton %s.</p>" % esc(dit) if dit else "") +
+             ('<p>Portée : <a href="portee.html?id=%s">%s</a></p>' % (p.get("id"), esc(nom(p.get("name")))) if p.get("id") else "") +
+             _photos_fiche(images, "Photo du chaton " + n))
+    return {"cible": "kitten-detail", "nom": n, "titre": titre, "desc": desc, "corps": _snap(corps),
+            "image": images[0] if images else "", "canon": "%s/chaton.html?id=%s" % (domaine, k.get("id")),
+            "fichier": "f-chaton-%s.html" % k.get("id"), "base": "chaton.html",
+            "fil": ("kitten-breadcrumb-name", n)}
+
+
+def _fiche_portee(p, cats, photo, jour, domaine):
+    n = nom(p.get("name"))
+    pere = nom((cats.get(str(p.get("idPapa"))) or {}).get("name") or p.get("externalFatherName") or "")
+    mere = nom((cats.get(str(p.get("idMaman"))) or {}).get("name") or "")
+    chatons = [k for k in (p.get("chatons") or []) if k]
+    prenoms = ", ".join(nom(k.get("name")) for k in chatons if k.get("name"))
+    naissance = date_longue(p.get("dateOfBirth")) if p.get("dateOfBirth") else ""
+    dispo = len([k for k in chatons if statut(k.get("status")) == "disponible"])
+
+    titre = "Portée %s — %s chatons British" % (n, len(chatons)) if chatons else "Portée %s" % n
+    phrase = "%s chaton%s British%s%s." % (len(chatons), "s" if len(chatons) > 1 else "",
+                                           (" de " + pere + " et " + mere) if pere and mere else "",
+                                           (", nés le " + naissance) if naissance else "")
+    desc = _coupe("%s %s %s" % (phrase, (prenoms + ".") if prenoms else "",
+                                ("%d encore disponible%s." % (dispo, "s" if dispo > 1 else "")) if dispo else
+                                "Tous ont trouvé leur famille."))
+
+    images = [photo("CatsProfil", (cats.get(str(p.get("idMaman"))) or {}).get("urlProfil"))]
+    corps = ("<h1>%s</h1><p class=\"lede\">%s</p>" % (esc(n), esc(phrase)) +
+             ("<p>%s</p>" % esc(prenoms) if prenoms else "") +
+             "".join('<p><a href="chaton.html?id=%s">%s</a></p>' % (k.get("id"), esc(nom(k.get("name")))) for k in chatons))
+    return {"cible": "litter-detail", "nom": n, "titre": titre, "desc": desc, "corps": _snap(corps),
+            "image": images[0] if images and images[0] else "", "canon": "%s/portee.html?id=%s" % (domaine, p.get("id")),
+            "fichier": "f-portee-%s.html" % p.get("id"), "base": "portee.html",
+            "fil": ("litter-breadcrumb-name", n)}
+
+
+_BALISES = {"h2": "h2", "h3": "h3", "p": "p", "quote": "blockquote", "li": "li", "lead": "p"}
+
+
+def _corps_article(a):
+    blocs = a.get("content")
+    if not isinstance(blocs, list):
+        return ""
+    out, liste = [], False
+    for b in blocs:
+        if not isinstance(b, dict):
+            continue
+        t = _BALISES.get(str(b.get("type") or "").lower())
+        texte = re.sub(r"\s+", " ", str(b.get("text") or "")).strip()
+        if not t or not texte:
+            continue
+        if t == "li" and not liste:
+            out.append("<ul>")
+            liste = True
+        elif t != "li" and liste:
+            out.append("</ul>")
+            liste = False
+        out.append("<%s>%s</%s>" % (t, esc(texte), t))
+    if liste:
+        out.append("</ul>")
+    return "".join(out)
+
+
+def _fiche_article(a, photo, domaine):
+    titre = propre(a.get("title"))
+    desc = _coupe(a.get("excerpt") or "")
+    corps = ("<h1>%s</h1>" % esc(titre) +
+             ("<p class=\"lede\">%s</p>" % esc(a.get("excerpt")) if a.get("excerpt") else "") +
+             _corps_article(a))
+    return {"cible": "article-body", "nom": titre, "titre": _coupe(titre, 62), "desc": desc, "corps": _snap(corps),
+            "image": a.get("coverImage") or "", "canon": "%s/article.html?slug=%s" % (domaine, a.get("slug")),
+            "fichier": "f-article-%s.html" % re.sub(r"[^a-z0-9-]+", "-", str(a.get("slug") or "").lower()),
+            "base": "article.html", "fil": ("article-breadcrumb-name", titre)}
+
+
+def pages_fiches(d, gabarits, domaine):
+    """Les pages pré-remplies, prêtes pour build() : une par chat, chaton, portée et article.
+    gabarits : {fichier de base: descripteur de page} pour reprendre le corps et les scripts."""
+    if not d:
+        return []
+    photo, jour = Photos(), d["jour"]
+    fiches = _fiches()
+    cats = {str(c.get("id")): c for c in d["cats"] if c}
+    items = []
+
+    for c in d["cats"]:
+        if c and c.get("id") is not None:
+            items.append(_fiche_chat(c, fiches, photo, jour, domaine))
+    for p in _portees_en_ligne(d):
+        items.append(_fiche_portee(p, cats, photo, jour, domaine))
+        for k in p.get("chatons") or []:
+            if k and k.get("id") is not None:
+                items.append(_fiche_chaton(k, p, cats, photo, jour, domaine))
+    for a in d["posts"]:
+        if a and a.get("slug"):
+            items.append(_fiche_article(a, photo, domaine))
+
+    out = []
+    for it in items:
+        base = gabarits.get(it["base"])
+        if not base:
+            continue
+        # Le conteneur vide peut être un <div> ou un <article> selon la page
+        corps, rempli = base["body"], False
+        for balise in ("div", "article"):
+            vide = '<%s id="%s"></%s>' % (balise, it["cible"], balise)
+            if vide in corps:
+                corps = corps.replace(vide, '<%s id="%s">%s</%s>' % (balise, it["cible"], it["corps"], balise), 1)
+                rempli = True
+                break
+        if not rempli:
+            continue
+        cle, valeur = it["fil"]
+        corps = corps.replace('<span id="%s">' % cle, '<span id="%s">%s' % (cle, esc(valeur)), 1)
+        out.append({"file": it["fichier"], "body": corps, "sitemap": False,
+                    "nav": base.get("nav", it["base"]), "scripts": base.get("scripts", ""),
+                    "title": it["titre"], "desc": it["desc"], "canon": it["canon"], "image": it["image"]})
+    return out

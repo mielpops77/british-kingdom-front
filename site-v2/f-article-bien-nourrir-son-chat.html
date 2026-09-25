@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <script>
+    /* Thème et palette mémorisés, posés avant l'affichage : pas de changement de couleur au chargement.
+       La palette à l'essai vient de l'adresse (?palette=royal) ou du dernier choix. */
+    try {
+      var bkRoot = document.documentElement, bkTheme = localStorage.getItem('bk-theme');
+      if (bkTheme === 'dark' || bkTheme === 'light') bkRoot.setAttribute('data-theme', bkTheme);
+      var bkQuery = new URLSearchParams(location.search);
+      var bkPalette = bkQuery.get('palette');
+      if (bkPalette !== null) localStorage.setItem('bk-palette', bkPalette); else bkPalette = localStorage.getItem('bk-palette');
+      if (bkPalette && /^[a-z]{3,20}$/.test(bkPalette)) bkRoot.setAttribute('data-palette', bkPalette);
+      var bkShape = bkQuery.get('forme');
+      if (bkShape !== null) localStorage.setItem('bk-forme', bkShape); else bkShape = localStorage.getItem('bk-forme');
+      if (bkShape && /^[a-z]{3,20}$/.test(bkShape)) bkRoot.setAttribute('data-shape', bkShape);
+    } catch (e) { /* stockage indisponible : palette et thème par défaut */ }
+  </script>
+  <title>Guide complet sur l’alimentation du chat</title>
+  <meta name="description" content="Pâtée, croquettes, protéines, phosphore, BARF, légumes… Il est parfois difficile de savoir ce qui est réellement adapté au chat.">
+  <link rel="canonical" href="https://chatterie-british-kingdom.fr/article.html?slug=bien-nourrir-son-chat">
+  <meta property="og:url" content="https://chatterie-british-kingdom.fr/article.html?slug=bien-nourrir-son-chat">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="geo.region" content="FR-77">
+  <meta name="geo.placename" content="Othis">
+  <meta name="theme-color" content="#fff8f5" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#22161f" media="(prefers-color-scheme: dark)">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Chatterie British Kingdom">
+  <meta property="og:title" content="Guide complet sur l’alimentation du chat">
+  <meta property="og:description" content="Pâtée, croquettes, protéines, phosphore, BARF, légumes… Il est parfois difficile de savoir ce qui est réellement adapté au chat.">
+  <meta property="og:image" content="https://stockagebackkingdom.blob.core.windows.net/conteneurkingdom/Blog/7adf0221-76a4-458a-b19e-37ae63bc83c1.webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Quatre British de la Chatterie British Kingdom côte à côte">
+  <meta property="og:locale" content="fr_FR">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="assets/logo-160.png" type="image/png">
+  <link rel="apple-touch-icon" href="assets/logo-160.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..700,0..100,0..1;1,9..144,300..700,0..100,0..1&family=Quicksand:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="css/site.css?v=ffb9151e">
+
+  <script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "LocalBusiness",
+   "@id": "https://chatterie-british-kingdom.fr/#chatterie",
+   "name": "Chatterie British Kingdom",
+   "alternateName": "British Kingdom",
+   "description": "Élevage familial de British Shorthair et de British Longhair inscrits au LOOF à Othis (Seine-et-Marne), à 20 minutes de l'aéroport Paris-Charles de Gaulle. Chatons élevés à la maison, départ vers 12 semaines, livraison en France, en Belgique et en Suisse.",
+   "slogan": "élevés à la maison, avec tendresse",
+   "url": "https://chatterie-british-kingdom.fr/",
+   "logo": "https://chatterie-british-kingdom.fr/assets/logo.png",
+   "image": [
+    "https://chatterie-british-kingdom.fr/assets/og-image.jpg",
+    "https://chatterie-british-kingdom.fr/assets/logo.png"
+   ],
+   "telephone": "+33661654998",
+   "email": "chatterie.british.kingdom@gmail.com",
+   "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "12 bis rue des Suisses",
+    "postalCode": "77280",
+    "addressLocality": "Othis",
+    "addressRegion": "Île-de-France",
+    "addressCountry": "FR"
+   },
+   "hasMap": "https://www.google.com/maps/search/?api=1&query=12%20bis%20rue%20des%20Suisses%2C%2077280%20Othis",
+   "areaServed": [
+    {
+     "@type": "Country",
+     "name": "France"
+    },
+    {
+     "@type": "Country",
+     "name": "Belgique"
+    },
+    {
+     "@type": "Country",
+     "name": "Suisse"
+    }
+   ],
+   "knowsAbout": [
+    "British Shorthair",
+    "British Longhair",
+    "Élevage de chats de race",
+    "Chatons inscrits au LOOF"
+   ],
+   "identifier": {
+    "@type": "PropertyValue",
+    "propertyID": "SIRET",
+    "value": "84406443600026"
+   },
+   "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+33661654998",
+    "email": "chatterie.british.kingdom@gmail.com",
+    "contactType": "customer service",
+    "availableLanguage": "fr",
+    "areaServed": [
+     "FR",
+     "BE",
+     "CH"
+    ]
+   },
+   "sameAs": [
+    "https://www.facebook.com/people/Chatterie-British-kingdom/61558762891533/",
+    "https://www.instagram.com/chatterie_britishkingdom/",
+    "https://www.tiktok.com/@elevage_british_kingdom",
+    "https://www.youtube.com/@chatterie_british_kingdom"
+   ]
+  },
+  {
+   "@type": "WebSite",
+   "@id": "https://chatterie-british-kingdom.fr/#site",
+   "url": "https://chatterie-british-kingdom.fr/",
+   "name": "Chatterie British Kingdom",
+   "inLanguage": "fr-FR",
+   "publisher": {
+    "@id": "https://chatterie-british-kingdom.fr/#chatterie"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "@id": "https://chatterie-british-kingdom.fr/article.html?slug=bien-nourrir-son-chat#fil",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Accueil",
+     "item": "https://chatterie-british-kingdom.fr/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "Guide complet sur l’alimentation du chat",
+     "item": "https://chatterie-british-kingdom.fr/article.html?slug=bien-nourrir-son-chat"
+    }
+   ]
+  },
+  {
+   "@type": "WebPage",
+   "@id": "https://chatterie-british-kingdom.fr/article.html?slug=bien-nourrir-son-chat#page",
+   "url": "https://chatterie-british-kingdom.fr/article.html?slug=bien-nourrir-son-chat",
+   "name": "Guide complet sur l’alimentation du chat",
+   "description": "Pâtée, croquettes, protéines, phosphore, BARF, légumes… Il est parfois difficile de savoir ce qui est réellement adapté au chat.",
+   "inLanguage": "fr-FR",
+   "isPartOf": {
+    "@id": "https://chatterie-british-kingdom.fr/#site"
+   },
+   "about": {
+    "@id": "https://chatterie-british-kingdom.fr/#chatterie"
+   },
+   "breadcrumb": {
+    "@id": "https://chatterie-british-kingdom.fr/article.html?slug=bien-nourrir-son-chat#fil"
+   }
+  }
+ ]
+}
+  </script>
+  <!-- Google Analytics ne se charge qu'après « Accepter » dans le bandeau des cookies (js/site.js) -->
+  <meta name="bk-ga" content="G-J3VHVLP0EY">
+</head>
+<body>
+<a class="skip" href="#main">Aller au contenu</a>
+<p class="demo-banner">Aperçu hors ligne&nbsp;: les chats et chatons affichés reprennent le site officiel du 22 septembre 2026 et ont pu changer depuis.</p>
+<header class="site-header">
+  <div class="wrap wrap--header site-header__inner">
+    <a class="brand" href="index.html" aria-label="Chatterie British Kingdom, accueil">
+      <span class="medallion medallion--sm"><img src="assets/logo.webp" alt="" width="512" height="512"></span>
+      <span class="brand__text">
+        <span class="brand__name">British Kingdom</span>
+        <span class="brand__sub">Shorthair &amp; Longhair</span>
+      </span>
+    </a>
+    <div class="nav-panel"><nav class="nav" id="menu" aria-label="Navigation principale"><a href="index.html">Accueil</a><a href="le-british.html">Le British</a><a href="males.html">Mâles</a><a href="femelles.html">Femelles</a><a href="chatons.html">Chatons</a><a href="retraites.html">Retraités</a><a href="conseils.html" aria-current="page">Conseils</a><a href="liste-attente.html">Liste d'attente</a><a href="contact.html">Contact</a>
+      <div class="nav__extra">
+        <a class="btn btn--primary" href="chatons.html">Voir les chatons</a>
+        <a class="nav__tel" href="tel:+33661654998"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2Z"/></svg> 06 61 65 49 98</a>
+      </div>
+    </nav></div>
+    <div class="header-actions">
+      <a class="btn btn--sm btn--primary hide-sm" href="chatons.html">Voir les chatons</a>
+      <button class="icon-btn theme-btn" type="button" aria-label="Changer de thème clair ou sombre">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="sun"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="moon"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+      </button>
+      <button class="icon-btn burger" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="menu"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="i-menu"><path d="M4 7h16M4 12h16M4 17h16"/></svg><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="i-close"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    </div>
+  </div>
+</header>
+<div class="nav-scrim"></div>
+<main id="main">
+
+<section class="page-head page-head--compact">
+  <div class="wrap">
+    <nav class="breadcrumb" aria-label="Fil d'Ariane">
+      <span><a href="index.html">Accueil</a></span>
+      <span><a href="conseils.html">Conseils</a></span>
+      <span id="article-breadcrumb-name">Guide complet sur l’alimentation du chatArticle</span>
+    </nav>
+  </div>
+</section>
+<section class="tight" style="padding-top:0">
+  <div class="wrap wrap--narrow"><article id="article-body"><div data-snapshot><h1>Guide complet sur l’alimentation du chat</h1><p class="lede">Pâtée, croquettes, protéines, phosphore, BARF, légumes… Il est parfois difficile de savoir ce qui est réellement adapté au chat.  Dans ce nouvel article, nous faisons le point sur ses besoins de carnivore strict, les limites des croquettes, l’intérêt de l’alimentation humide et les précautions à prendre avec le cru.  Un guide complet pour mieux comprendre les étiquettes et faire des choix plus éclairés pour la santé de son chat.</p><p>Contrairement au chien, domestiqué et sélectionné par l’être humain depuis des millénaires, le chat s’est rapproché plus spontanément des premières communautés humaines, attiré par les rongeurs présents autour des réserves de nourriture.</p><blockquote>Cette domestication plus récente et moins poussée explique qu’il ait conservé de nombreuses particularités physiologiques liées à son statut de carnivore strict.</blockquote><p>Le chat dépend notamment de plusieurs nutriments qu’il ne peut pas fabriquer lui-même en quantité suffisante, comme la taurine, l’acide arachidonique ou la vitamine A sous sa forme active. Son alimentation doit donc être formulée avec davantage de précision que celle de nombreuses autres espèces.</p><p>Le British Shorthair possède par ailleurs une morphologie naturellement robuste et peut facilement prendre du poids lorsque ses apports dépassent ses besoins. Une alimentation complète et adaptée, des portions contrôlées ainsi qu’une surveillance régulière de sa silhouette sont donc essentielles pour préserver sa santé sur le long terme.</p><h2>Privilégier une alimentation humide de qualité</h2><p>Il est recommandé d’accorder une place importante à une pâtée complète de bonne qualité, riche en protéines d’origine animale et adaptée à l’âge, au poids et au niveau d’activité du chat.</p><p>Vérifiez toujours la présence de la mention «&nbsp;aliment complet&nbsp;». Contrairement à un aliment complémentaire, une pâtée complète est formulée pour apporter l’ensemble des nutriments essentiels lorsqu’elle est donnée dans les quantités recommandées.</p><p>La pâtée contient généralement entre 70 et 80 % d’eau, contre environ 8 à 10 % pour les croquettes. Elle contribue donc directement à l’hydratation du chat et permet généralement d’augmenter davantage son apport total en eau qu’une alimentation exclusivement sèche.</p><p>Le chat est un animal dont les ancêtres vivaient dans des milieux arides. Il a évolué en obtenant une grande partie de son eau à travers ses proies et possède une sensation de soif peu développée.</p><blockquote>Même si un chat nourri aux croquettes est régulièrement vu en train de boire, il ne compense pas entièrement la faible teneur en eau de son alimentation.</blockquote><p>La pâtée est également moins dense en calories que les croquettes à poids égal, puisqu’une grande partie de son volume est constituée d’eau. Elle peut ainsi aider à rassasier le chat tout en facilitant le contrôle de ses apports énergétiques.</p><h2>Les limites des croquettes</h2><p>Les croquettes peuvent constituer un aliment complet, mais leur fabrication impose certaines contraintes techniques. Pour pouvoir être extrudées, conserver leur forme et présenter une texture stable, elles nécessitent une certaine proportion d’amidon.</p><p>La cuisson à haute température peut également modifier certains nutriments sensibles. Les fabricants compensent normalement ces pertes en ajustant la formulation ou en ajoutant certains nutriments après la cuisson. Cela ne signifie donc pas que toutes les croquettes sont mauvaises ou carencées, mais leur qualité varie considérablement selon les matières premières et la formulation employées.</p><p>Les aliments secs sont aussi très concentrés en énergie.</p><blockquote>Quelques grammes supplémentaires chaque jour peuvent favoriser progressivement une prise de poids.</blockquote><h2>Les types de protéines</h2><p>Un taux élevé de «&nbsp;protéines brutes&nbsp;» ne garantit pas qu’un aliment contienne beaucoup de viande. Une partie peut provenir du pois, du soja, du maïs ou d’autres végétaux. Ces protéines peuvent augmenter le chiffre affiché sur l’étiquette, mais elles n’apportent pas naturellement le même profil d’acides aminés que les tissus animaux, notamment la taurine, essentielle au chat, carnivore strict. Elles peuvent participer à une recette correctement formulée et complémentée, mais le pourcentage total de protéines ne permet donc pas à lui seul d’en juger la qualité ou l’origine.</p><h2>La proportion réelle de viande</h2><p>Il faut également interpréter avec prudence les pourcentages de «&nbsp;viande fraîche&nbsp;» indiqués sur les croquettes. La viande fraîche contient beaucoup d’eau et son pourcentage est très souvent annoncé avant la cuisson, tandis que les autres ingrédients sont incorporés sous une forme déjà déshydratée. Après l’extrusion et le séchage, la viande perd une grande partie de son poids. Sa proportion réelle dans la croquette finie est donc nettement plus faible que le chiffre initial peut le laisser penser.</p><p>À titre d’exemple, 40 % de poulet frais indiqués sur l’emballage d’un paquet de croquettes ne correspondent qu’à environ 12 % de matière sèche issue du poulet après déshydratation.</p><blockquote>Une viande déshydratée placée plus bas dans la liste peut ainsi apporter davantage de matière animale réelle qu’un fort pourcentage de viande fraîche.</blockquote><h2>Le phosphore&nbsp;: un élément à surveiller</h2><p>Le phosphore est un minéral indispensable au fonctionnement de l’organisme, mais une quantité excessive peut être problématique, particulièrement lorsque le rapport entre le calcium et le phosphore est déséquilibré.</p><p>Les ingrédients d’origine animale apportent naturellement du phosphore. Les matières contenant une proportion importante d’os comme la VSM peuvent notamment en augmenter fortement la teneur. Certains aliments contiennent également des phosphates inorganiques ajoutés. Ces formes sont généralement très assimilables et peuvent augmenter rapidement l’apport réellement absorbé par le chat.</p><p>À l’inverse, les recettes utilisant davantage de pois, de soja ou d’autres sources végétales peuvent contenir moins de phosphore d’origine animale. Mais cela ne suffit toutefois pas à déterminer leur qualité nutritionnelle.</p><blockquote>Une faible teneur en phosphore ne compense pas nécessairement une proportion insuffisante de protéines animales.</blockquote><p>Il faut donc considérer à la fois la quantité totale de phosphore, son origine, sa biodisponibilité et le rapport calcium/phosphore.</p><p>Malheureusement, la teneur exacte en phosphore n’est pas toujours indiquée sur les emballages.</p><h2>Viande fraîche la VSM</h2><p>Les termes utilisés sur les emballages peuvent donner l’impression que les croquettes contiennent des morceaux de viande comparables à ceux utilisés dans l’alimentation humaine. En réalité, les matières animales employées sont très différentes.</p><p>La viande séparée mécaniquement (VSM) est obtenue en récupérant, à l’aide de procédés mécaniques, les tissus restant attachés aux os après le désossage ou sur les carcasses de volailles. Elle ne possède donc ni la même structure, ni exactement la même composition qu’un morceau de viande musculaire entier.</p><p>Les aliments pour chats peuvent également contenir des abats, des protéines animales déshydratées ou d’autres matières animales transformées. Ces ingrédients ne sont pas dépourvus d’intérêt nutritionnel, mais leur qualité, leur digestibilité et leur teneur en minéraux peuvent varier considérablement.</p><blockquote>Après le broyage, la cuisson, l’extrusion et le séchage, la viande ne se retrouve de toute façon plus dans la croquette sous la forme d’un véritable morceau de muscle.</blockquote><p>Les mentions générales telles que «&nbsp;viandes et sous-produits animaux&nbsp;» ne permettent pas toujours de connaître précisément la nature, la proportion et la qualité des tissus utilisés.</p><blockquote>Une liste d’ingrédients détaillée, indiquant clairement les espèces animales et la nature des matières premières, offre davantage de transparence qu’une simple mention générale de «&nbsp;viande&nbsp;».</blockquote><h2>Les oméga-3</h2><p>Les matières grasses apportent des acides gras indispensables au fonctionnement de l’organisme. Les recommandations nutritionnelles de la FEDIAF prévoient notamment des apports minimaux en acide linoléique et en acide arachidonique, deux oméga-6 essentiels au chat.</p><p>En revanche, aucun apport minimal en EPA et en DHA, deux oméga-3 principalement présents dans les poissons gras, n’est actuellement fixé pour l’entretien du chat adulte. Ces acides gras sont toutefois recommandés pendant la croissance et la reproduction.</p><blockquote>Une alimentation industrielle complète pour chat peut donc respecter les recommandations sans contenir une quantité importante d’EPA et de DHA.</blockquote><p>L’huile de poisson constitue une source concentrée d’EPA et de DHA, mais elle apporte rapidement beaucoup de calories. Une quantité ajoutée au hasard peut augmenter les apports énergétiques, modifier l’équilibre entre les différents acides gras et déséquilibrer la ration.</p><p>Il est également possible de proposer occasionnellement une petite quantité de poisson gras, comme de la sardine, du sprat ou du saumon, de préférence nature et sans sel ajouté. Le poisson reste cependant un aliment complémentaire, sa quantité doit être prise en compte dans les calories quotidiennes et rester limitée afin de ne pas déséquilibrer l’alimentation principale.</p><h2>Carnivore strict ne signifie pas exclusivement carnivore</h2><p>Le chat est un carnivore strict. Cela signifie que son organisme dépend de certains nutriments naturellement présents dans les tissus animaux, comme la taurine, l’acide arachidonique ou la vitamine A sous sa forme active.</p><p>Cette particularité ne signifie toutefois pas qu’il soit incapable de digérer ou de consommer des ingrédients d’origine végétale. Lorsqu’ils sont correctement cuits et intégrés à une recette équilibrée, les chats peuvent notamment digérer une partie des glucides et utiliser certains nutriments provenant des végétaux.</p><blockquote>Les pois, le soja, le maïs ou le riz ne sont donc pas dangereux par nature. Leur présence ne suffit pas à elle seule à déterminer si une alimentation est bonne ou mauvaise.</blockquote><p>Une recette contenant des protéines végétales peut être correctement équilibrée lorsqu’elle apporte suffisamment de protéines animales et qu’elle est complémentée avec tous les acides aminés, vitamines, minéraux et acides gras indispensables au chat. À l’inverse, une liste d’ingrédients donnant une place importante à la viande ne garantit pas automatiquement que les proportions de tous les nutriments soient adaptées, notamment le phosphore.</p><p>Certaines croquettes peuvent ainsi contenir une proportion notable de pois, de céréales ou d’autres végétaux tout en constituant une alimentation complète. C’est notamment le cas de plusieurs aliments formulés par des marques comme Royal Canin.</p><h2>Les fibres et les légumes</h2><p>Dans la nature, un chat qui consomme une proie entière n’ingère pas uniquement de la viande musculaire. Il avale également des matières peu digestibles, comme les poils, les plumes, la peau, les tendons ou le cartilage. Ces éléments peuvent jouer un rôle comparable à celui des fibres en participant au volume et à la consistance des selles ainsi qu’au fonctionnement du transit intestinal.</p><p>Dans les aliments industriels, différentes fibres végétales sont donc utilisées pour remplir certaines fonctions similaires. Elles ne reproduisent pas exactement la composition d’une proie entière, mais elles peuvent contribuer à la qualité des selles, à la satiété, à l’élimination des poils ingérés et au maintien du microbiote intestinal.</p><p>Une quantité excessive peut, à l’inverse, provoquer des selles plus volumineuses, des gaz ou diminuer la digestibilité de certains nutriments.</p><p>Il est également possible de proposer occasionnellement de petites quantités de légumes adaptés au chat, par exemple de la courgette cuite et réduite en purée. Leur forte teneur en eau peut contribuer à l’hydratation et leur faible densité calorique peut être intéressante pour certains chats ayant tendance à prendre du poids.</p><p>Ces légumes restent néanmoins des aliments complémentaires. Ils doivent être donnés en petites quantités afin de ne pas déséquilibrer la ration principale.</p><h2>Peser les croquettes</h2><p>Il est préférable de peser précisément les croquettes plutôt que de remplir la gamelle à volonté. Un chat castré vivant en intérieur peut avoir des besoins énergétiques relativement faibles, tout en conservant un appétit important.</p><p>Lorsqu’il manque d’activité ou de stimulation, il peut également retourner régulièrement à sa gamelle par ennui. Les conditions de vie d’un chat domestique sont très différentes de celles d’un chat qui doit chercher, poursuivre et capturer plusieurs petites proies au cours de la journée.</p><p>Pour limiter le grignotage, il est possible de répartir la ration en 3 à 5 petits repas ou d’utiliser des gamelles ludiques et des jouets distributeurs.</p><p>Peser les aliments permet aussi de connaître précisément la quantité réellement consommée. Une baisse inhabituelle de l’appétit peut alors être repérée plus rapidement et révéler un problème de santé.</p><p>Les indications inscrites sur les emballages constituent seulement un point de départ. La ration doit ensuite être ajustée selon le poids, l’âge, la stérilisation, l’activité physique et l’évolution de la silhouette du chat.</p><blockquote>À son poids idéal, les côtes du chat doivent pouvoir être senties facilement sous une fine couche de graisse, sans être fortement visibles.</blockquote><h2>L’eau reste indispensable</h2><p>Même lorsqu’il reçoit beaucoup de pâtée, le chat doit toujours disposer d’eau propre et fraîche. Il est préférable de proposer plusieurs points d’eau dans des endroits calmes, suffisamment éloignés de la litière et de la nourriture. Certains chats apprécient les récipients larges qui évitent que leurs moustaches touchent les bords.</p><blockquote>Une fontaine peut encourager les chats attirés par l’eau en mouvement, mais elle ne remplace pas l’apport hydrique fourni par une alimentation humide.</blockquote><h2>Le BARF et l’alimentation crue</h2><p>Le BARF est une alimentation composée de produits animaux crus, tels que de la viande musculaire, des abats et des os charnus. Elle doit également contenir les compléments nécessaires pour couvrir tous les besoins nutritionnels du chat.</p><p>Lorsqu’elle est parfaitement formulée, une ration crue peut être adaptée aux besoins individuels du chat et présenter une excellente digestibilité. Certaines personnes constatent également de petites selles, une belle qualité de pelage ou des dents moins chargées en dépôts.</p><blockquote>Le simple fait qu’un aliment soit composé de viande ne suffit pas à le rendre complet.</blockquote><h2>Une recette obligatoirement équilibrée</h2><blockquote>Une ration BARF ne doit pas être préparée à partir de proportions trouvées au hasard sur Internet.</blockquote><p>Elle doit être formulée spécifiquement pour le chat par un vétérinaire spécialisé en nutrition ou par un professionnel réellement qualifié en nutrition féline.</p><p>Une ration uniquement composée de viande musculaire est gravement déséquilibrée. Elle est notamment riche en phosphore et très pauvre en calcium.</p><p>À l’inverse, une quantité excessive d’os, de calcium, de foie ou de certains compléments peut entraîner des excès tout aussi dangereux que les carences. Le foie, par exemple, est extrêmement riche en vitamine A et ne doit pas être ajouté au hasard ou donné en grande quantité.</p><p>Les besoins varient également selon l’âge, le poids, la stérilisation, l’activité, les maladies éventuelles et l’état corporel du chat. La recette d’un chat adulte en bonne santé ne doit donc pas être utilisée pour un chaton, une femelle gestante ou un chat souffrant d’une maladie rénale, digestive ou urinaire.</p><h2>Une hygiène irréprochable</h2><p>La viande crue peut contenir des bactéries, des parasites ou d’autres agents pathogènes. La congélation peut réduire certains risques parasitaires, mais elle ne détruit pas les bactéries ni les virus.</p><p>Une prudence renforcée est nécessaire dans les foyers comportant de jeunes enfants, des personnes âgées, des femmes enceintes ou des personnes immunodéprimées.</p><blockquote>Un chat peut parfois transporter certaines bactéries sans présenter lui-même de symptômes.</blockquote><h2>Peut-on simplement ajouter de la viande&nbsp;?</h2><p>Lorsqu’une alimentation BARF complète n’est pas possible, il est possible de proposer quelques morceaux de viande fraîche, comme du bœuf ou du poulet, en complément d’une alimentation complète.</p><p>La viande seule n’est toutefois pas un repas équilibré.</p><blockquote>Pour ne pas déséquilibrer la ration principale, l’ensemble des aliments complémentaires ne doit pas représenter plus de 10 % des calories quotidiennes.</blockquote><p>Les os cuits ne doivent jamais être proposés, car ils peuvent se fragmenter et provoquer des blessures ou une obstruction digestive.</p><p>Les abats ne doivent pas être utilisés comme de simples friandises régulières. Le foie contient notamment beaucoup de vitamine A, tandis que d’autres organes peuvent modifier fortement les apports en cuivre, en phosphore ou en autres micronutriments.</p><h2>Pour conclure</h2><blockquote>Il n’existe pas une seule alimentation parfaite pour tous les chats.</blockquote><p>Une pâtée complète de qualité constitue une excellente base grâce à son importante teneur en eau et à sa densité calorique généralement modérée. Les croquettes peuvent compléter la ration, mais elles doivent être pesées et sélectionnées avec attention.</p><p>Une ration BARF peut également être envisagée, mais seulement si elle est formulée avec précision, correctement complémentée et préparée dans des conditions d’hygiène irréprochables. Une alimentation crue improvisée peut entraîner de graves carences, des excès nutritionnels ou des contaminations.</p></div></article>
+    <p style="margin-top:2.6rem"><a class="link-arrow" href="conseils.html">Tous nos conseils</a></p>
+  </div>
+</section>
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <span class="medallion medallion--md"><img src="assets/logo.webp" alt="" width="512" height="512" loading="lazy"></span>
+      <div>
+        <p class="footer-name">Chatterie British Kingdom</p>
+        <p class="footer-slogan">élevés à la maison, avec tendresse</p>
+      </div>
+      <ul class="socials"><li><a href="https://www.facebook.com/people/Chatterie-British-kingdom/61558762891533/" target="_blank" rel="noopener" aria-label="Facebook (nouvel onglet)"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 9h3V6h-3a4 4 0 0 0-4 4v2H8v3h2v7h3v-7h3l1-3h-4v-2a1 1 0 0 1 1-1Z"/></svg></a></li><li><a href="https://www.instagram.com/chatterie_britishkingdom/" target="_blank" rel="noopener" aria-label="Instagram (nouvel onglet)"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor"/></svg></a></li><li><a href="https://www.tiktok.com/@elevage_british_kingdom" target="_blank" rel="noopener" aria-label="TikTok (nouvel onglet)"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 4c.6 2.5 2.2 3.8 4.5 4v3c-1.7 0-3.3-.5-4.5-1.5V15a5.5 5.5 0 1 1-5.5-5.5c.3 0 .7 0 1 .1v3.1a2.5 2.5 0 1 0 1.5 2.3V4Z"/></svg></a></li><li><a href="https://www.youtube.com/@chatterie_british_kingdom" target="_blank" rel="noopener" aria-label="YouTube (nouvel onglet)"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="4"/><path d="m10 9 5 3-5 3Z" fill="currentColor"/></svg></a></li></ul>
+    </div>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <h4>La chatterie</h4>
+        <p>Élevage familial de British Shorthair et British Longhair à Othis, en Seine-et-Marne, à vingt minutes
+          de l'aéroport Paris-Charles de Gaulle. Chatons inscrits au LOOF, nés et élevés à la maison.</p>
+      </div>
+      <div>
+        <h4>Le site</h4>
+        <ul><li><a href="le-british.html">Le British</a></li><li><a href="males.html">Mâles</a></li><li><a href="femelles.html">Femelles</a></li><li><a href="chatons.html">Chatons</a></li><li><a href="retraites.html">Retraités</a></li><li><a href="conseils.html">Conseils</a></li><li><a href="liste-attente.html">Liste d'attente</a></li><li><a href="contact.html">Contact</a></li></ul>
+      </div>
+      <div>
+        <h4>Nous joindre</h4>
+        <ul>
+          <li><a href="tel:+33661654998">06 61 65 49 98</a></li>
+          <li><a href="mailto:chatterie.british.kingdom@gmail.com">chatterie.<wbr>british.<wbr>kingdom<wbr>@gmail.<wbr>com</a></li>
+          <li>12 bis rue des Suisses<br>77280 Othis</li>
+          <li>Visites sur rendez-vous</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Informations</h4>
+        <ul>
+          <li><a href="liste-attente.html#sante">Santé et dépistages</a></li>
+          <li><a href="liste-attente.html#faq">Questions fréquentes</a></li>
+          <li><a href="mentions-legales.html">Mentions légales</a></li>
+          <li><a href="politique-confidentialite.html">Confidentialité</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Chatterie British Kingdom</span>
+      <span>SIREN 844 064 436 · SIRET 84406443600026</span>
+      <span>Chatons inscrits au LOOF</span>
+      <span class="spacer"></span>
+      <button type="button" class="link-btn" data-consent-open>Cookies</button>
+      <span>Site créé par <a href="https://www.eleveur-connect.fr/" target="_blank" rel="noopener">Eleveur-Connect</a></span>
+    </div>
+  </div>
+</footer>
+<script src="js/demo-data.js?v=57f4eab0"></script>
+<script src="js/photos-hd.js?v=8b52c1f5"></script>
+<script src="js/api.js?v=444c3ef8"></script>
+<script src="js/site.js?v=6a4698e3"></script>
+<script src="js/pages.js?v=6d57f3fc"></script>
+<script>BKPages.article();</script>
+</body>
+</html>

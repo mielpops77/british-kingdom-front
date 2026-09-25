@@ -1537,7 +1537,13 @@ if __name__ == "__main__":
     DONNEES = donnees.charger()
     ECRITES = donnees.injecter(PAGES, DONNEES, ico)
     print("  instantané des données de l'API : %d listes écrites dans les pages" % ECRITES)
-    build(PAGES, DONNEES["jour"].isoformat() if DONNEES else MISE_A_JOUR, donnees.adresses_fiches(DONNEES, SITE["domaine"]))
+    # Une page pré-remplie par chat, chaton, portée et article : le serveur la sert à la place
+    # de la page vide (chat.html?id=118…), pour que les moteurs de recherche et les assistants
+    # d'IA lisent un vrai contenu. Voir donnees.pages_fiches et _deploy/web.config.
+    GABARITS = {p["file"]: p for p in PAGES if p["file"] in ("chat.html", "chaton.html", "portee.html", "article.html")}
+    FICHES = donnees.pages_fiches(DONNEES, GABARITS, SITE["domaine"])
+    print("  %d pages de fiches pré-remplies" % len(FICHES))
+    build(PAGES + FICHES, DONNEES["jour"].isoformat() if DONNEES else MISE_A_JOUR, donnees.adresses_fiches(DONNEES, SITE["domaine"]))
     with open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "llms.txt"), "w",
               encoding="utf-8", newline="\n") as fh:
         fh.write(donnees.llms(DONNEES, SITE, PAGES))

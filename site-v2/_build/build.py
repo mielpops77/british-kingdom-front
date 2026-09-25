@@ -204,12 +204,14 @@ def head(page):
     title = page["title"]
     desc = page["desc"]
     slug = page["file"]
-    canon = SITE["domaine"] + "/" + ("" if slug == "index.html" else slug)
-    og_image = SITE["domaine"] + "/assets/og-image.jpg"
+    # Une page pré-remplie (f-chat-118.html…) est servie sous l'adresse publique de la fiche :
+    # elle porte donc son adresse de référence et sa photo, fournies par le constructeur.
+    canon = page.get("canon") or (SITE["domaine"] + "/" + ("" if slug == "index.html" else slug))
+    og_image = page.get("image") or (SITE["domaine"] + "/assets/og-image.jpg")
     jsonld = donnees_structurees(page, canon)
     # Une fiche ne déclare pas d'adresse de référence commune : js/pages.js pose la sienne (chat.html?id=116…)
     robots = page.get("robots", "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1")
-    reference = "" if slug in FICHES else (
+    reference = "" if (slug in FICHES and not page.get("canon")) else (
         '<link rel="canonical" href="%s">\n  <meta property="og:url" content="%s">' % (canon, canon))
     return """<!doctype html>
 <html lang="fr">
