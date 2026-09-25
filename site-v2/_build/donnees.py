@@ -741,7 +741,7 @@ def _photos_fiche(sources, alt):
         return ""
     return '<div class="grid grid-3">%s</div>' % "".join(
         '<figure class="arch">%s</figure>' % _arch(src, alt).replace('<div class="arch ">', '<div class="arch">')
-        for src in sources[:6])
+        for src in sources[:2])
 
 
 def _snap(contenu):

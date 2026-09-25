@@ -132,7 +132,7 @@ def ico(name, size=24, cls=""):
 
 def medallion(size_cls="", bow=False, alt=LOGO_ALT, eager=False):
     """Le logo de la chatterie dans son médaillon doré, avec ou sans nœud."""
-    return ('<span class="medallion%s%s"><img src="assets/logo.webp" alt="%s" width="512" height="512"%s></span>'
+    return ('<span class="medallion%s%s"><img src="assets/logo.webp" alt="%s" width="320" height="320"%s></span>'
             % (" " + size_cls if size_cls else "", " medallion--bow" if bow else "", alt,
                "" if eager else ' loading="lazy"'))
 
