@@ -1303,6 +1303,30 @@ CONTACT = page_head_block(
 # ==========================================================================
 # MENTIONS LÉGALES
 # ==========================================================================
+INTROUVABLE = page_head_block(
+    "Oups", "Cette page n'existe pas", "Elle a peut-être changé d'adresse, ou le lien comporte une coquille. "
+    "Voici par où continuer.",
+    [("index.html", "Accueil"), (None, "Page introuvable")],
+) + """
+<section class="tight" style="padding-top:0">
+  <div class="wrap wrap--narrow">
+    <div class="actions">
+      <a class="btn btn--primary" href="chatons.html">Voir les chatons</a>
+      <a class="btn btn--ghost" href="index.html">Revenir \u00e0 l'accueil</a>
+    </div>
+    <ul class="liens-secours">
+      <li><a href="males.html">Nos m\u00e2les</a></li>
+      <li><a href="femelles.html">Nos femelles</a></li>
+      <li><a href="retraites.html">Nos retrait\u00e9s</a></li>
+      <li><a href="le-british.html">Le British Shorthair</a></li>
+      <li><a href="conseils.html">Nos conseils</a></li>
+      <li><a href="liste-attente.html">La liste d'attente</a></li>
+      <li><a href="contact.html">Nous \u00e9crire</a></li>
+    </ul>
+  </div>
+</section>
+"""
+
 MENTIONS = page_head_block(
     "Informations légales", "Mentions légales", "",
     [("index.html", "Accueil"), (None, "Mentions légales")],
@@ -1429,12 +1453,12 @@ CONFIDENTIALITE = page_head_block(
 PAGES = [
     {"file": "index.html", "body": ACCUEIL, "freq": "weekly", "prio": "1.0",
      "title": "Chatterie British Kingdom — British Shorthair et Longhair LOOF à Othis (77)",
-     "desc": "Élevage familial de British Shorthair et Longhair LOOF à Othis (77), près de Roissy. Chatons élevés à la maison, départ vers 12 semaines, livraison France, Belgique, Suisse.",
+     "desc": "Élevage familial de British Shorthair et Longhair LOOF à Othis (77), près de Roissy. Chatons élevés à la maison, départ vers 12 semaines.",
      "scripts": '<script>BKPages.accueil();BKPages.temoignages("#testimonials",3);</script>'},
 
     {"file": "le-british.html", "body": LE_BRITISH, "prio": "0.7",
      "title": "Le British Shorthair et Longhair — caractère, physique, couleurs, entretien",
-     "desc": "Caractère, physique, Shorthair ou Longhair, robes et codes EMS, entretien : tout savoir sur le British avant de l'adopter, par un élevage familial LOOF de Seine-et-Marne."},
+     "desc": "Caractère, physique, Shorthair ou Longhair, robes et codes EMS : tout savoir sur le British avant de l'adopter, par un élevage familial de Seine-et-Marne."},
 
     {"file": "males.html", "body": MALES, "prio": "0.8",
      "title": "Mâles British Shorthair et Longhair LOOF — Chatterie British Kingdom",
@@ -1443,7 +1467,7 @@ PAGES = [
 
     {"file": "femelles.html", "body": FEMELLES, "prio": "0.8",
      "title": "Femelles British Shorthair et Longhair LOOF — Chatterie British Kingdom",
-     "desc": "Nos reproductrices British Shorthair et British Longhair : robe, couleur des yeux, âge, photos et portées. Élevage familial LOOF à Othis, en Seine-et-Marne (77).",
+     "desc": "Nos reproductrices British Shorthair et Longhair : robe, couleur des yeux, âge, photos et portées. Élevage familial LOOF à Othis, en Seine-et-Marne.",
      "scripts": '<script src="js/descriptions.js"></script>\n<script>BKPages.sexPage("female");</script>'},
 
     {"file": "chat.html", "body": FICHE_CHAT, "sitemap": False,
@@ -1453,7 +1477,7 @@ PAGES = [
 
     {"file": "chatons.html", "body": CHATONS, "freq": "weekly", "prio": "0.9",
      "title": "Chatons British Shorthair et Longhair à adopter — Seine-et-Marne (77)",
-     "desc": "Nos portées en cours : chatons British Shorthair et Longhair LOOF, leurs parents, leur âge et leur disponibilité. Départ vers 12 semaines depuis Othis, près de Roissy.",
+     "desc": "Nos portées du moment : chatons British Shorthair et Longhair LOOF, leurs parents, leur âge et leur disponibilité. Départ vers 12 semaines, à Othis (77).",
      "scripts": '<script src="js/vedettes.js"></script>\n<script>BKPages.chatons();</script>'},
 
     {"file": "chaton.html", "body": FICHE_CHATON, "sitemap": False, "nav": "chatons.html",
@@ -1468,7 +1492,7 @@ PAGES = [
 
     {"file": "retraites.html", "body": RETRAITES, "prio": "0.5",
      "title": "Nos retraités — Chatterie British Kingdom",
-     "desc": "Nos anciens reproducteurs, stérilisés, qui profitent d'une retraite tranquille et heureuse.",
+     "desc": "Nos anciens reproducteurs British Shorthair et Longhair, stérilisés, qui profitent d'une retraite tranquille à la maison, à Othis en Seine-et-Marne.",
      "scripts": '<script src="js/descriptions.js"></script>\n<script>BKPages.retraites();</script>'},
 
     {"file": "conseils.html", "body": CONSEILS, "prio": "0.6",
@@ -1483,17 +1507,22 @@ PAGES = [
 
     {"file": "liste-attente.html", "body": LISTE_ATTENTE, "prio": "0.8",
      "title": "Liste d'attente et réservation d'un chaton British — Chatterie British Kingdom",
-     "desc": "Réservez votre futur chaton British Shorthair ou Longhair : acompte de 200 € déduit du prix, étapes de l'adoption, santé, préparation et 14 questions fréquentes.",
+     "desc": "Réserver un chaton British Shorthair ou Longhair : acompte de 200 € déduit du prix, étapes de l'adoption et 14 questions fréquentes d'adoptants.",
      "scripts": '<script>BKPages.listeAttente();</script>'},
 
     {"file": "contact.html", "body": CONTACT, "prio": "0.6", "freq": "yearly",
      "title": "Contact et visites — Chatterie British Kingdom à Othis (77)",
-     "desc": "Téléphone, e-mail ou formulaire : une question, une visite sur rendez-vous ou un projet d'adoption. Remise du chaton à Othis, à la gare de Roissy ou de Saint-Mard.",
+     "desc": "Téléphone, e-mail ou formulaire : une question, une visite sur rendez-vous ou un projet d'adoption. Remise du chaton à Othis ou à la gare de Roissy.",
      "scripts": '<script>BKPages.prefillContact();</script>'},
 
     {"file": "mentions-legales.html", "body": MENTIONS, "prio": "0.2", "freq": "yearly",
      "title": "Mentions légales — Chatterie British Kingdom",
      "desc": "Éditeur, hébergeur, activité d'élevage et propriété intellectuelle du site de la Chatterie British Kingdom."},
+
+    {"file": "404.html", "body": INTROUVABLE, "sitemap": False, "nav": "index.html",
+     "robots": "noindex, follow",
+     "title": "Page introuvable — Chatterie British Kingdom",
+     "desc": "Cette adresse n'existe pas ou a changé. Retrouvez nos chatons, nos reproducteurs et nos conseils depuis cette page."},
 
     {"file": "politique-confidentialite.html", "body": CONFIDENTIALITE, "prio": "0.2", "freq": "yearly",
      "title": "Politique de confidentialité — Chatterie British Kingdom",

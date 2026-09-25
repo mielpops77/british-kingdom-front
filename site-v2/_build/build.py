@@ -208,6 +208,7 @@ def head(page):
     og_image = SITE["domaine"] + "/assets/og-image.jpg"
     jsonld = donnees_structurees(page, canon)
     # Une fiche ne déclare pas d'adresse de référence commune : js/pages.js pose la sienne (chat.html?id=116…)
+    robots = page.get("robots", "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1")
     reference = "" if slug in FICHES else (
         '<link rel="canonical" href="%s">\n  <meta property="og:url" content="%s">' % (canon, canon))
     return """<!doctype html>
@@ -233,7 +234,7 @@ def head(page):
   <title>%(title)s</title>
   <meta name="description" content="%(desc)s">
   %(reference)s
-  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="robots" content="%(robots)s">
   <meta name="geo.region" content="FR-77">
   <meta name="geo.placename" content="Othis">
   <meta name="theme-color" content="#fff8f5" media="(prefers-color-scheme: light)">
@@ -263,7 +264,7 @@ def head(page):
 </head>
 <body>
 """ % {
-        "title": title, "desc": desc, "reference": reference, "og": og_image,
+        "title": title, "desc": desc, "robots": robots, "reference": reference, "og": og_image,
         "nom": SITE["nom"], "fonts": FONTS, "ga": SITE["ga"], "jsonld": jsonld,
     }
 
