@@ -7,6 +7,8 @@ export interface Contact {
     email: string;
     num: string;
     vue : Boolean;
+    /** A-t-on déjà répondu ? Absent tant que le moteur ne le sait pas. */
+    repondu?: boolean;
     dateofCrea: string;
     hour: string;
 

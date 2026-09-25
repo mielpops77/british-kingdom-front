@@ -1,5 +1,11 @@
-/* Les messages reçus depuis le site : une carte par message, les non lus en évidence. */
-.unread-badge { font-size: .85rem; }
+/* Les messages reçus depuis le site : une carte par message, les non lus en évidence,
+   et ce qui attend une réponse séparé de ce qui est déjà fait. */
+.header-pills { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; font-size: .85rem; }
+
+.list-tools { display: flex; align-items: center; gap: .8rem; flex-wrap: wrap; margin-bottom: 1.2rem; }
+.list-tools .tabs { margin: 0; }
+.list-tools .search { margin-left: auto; }
+@media (max-width: 520px) { .list-tools .search { margin-left: 0; max-width: none; } }
 
 .message-list { display: grid; gap: .8rem; }
 
@@ -11,7 +17,8 @@
 }
 .message-row:hover { transform: translateY(-2px); box-shadow: var(--shadow-m); }
 .message-row.unread { border-color: color-mix(in srgb, var(--rose) 40%, transparent); background: linear-gradient(180deg, var(--rose-soft) 0%, var(--card) 40%); }
-.message-row.open { box-shadow: var(--shadow-m); }
+.message-row.repondu:not(.open) { opacity: .84; }
+.message-row.open { box-shadow: var(--shadow-m); opacity: 1; }
 
 .message-top { display: flex; align-items: center; justify-content: space-between; gap: .8rem; flex-wrap: wrap; }
 .message-who { display: flex; align-items: center; gap: .5rem; min-width: 0; }
@@ -19,18 +26,36 @@
 .message-name { font-family: var(--font-display); font-size: 1.1rem; font-weight: 600; }
 .message-date { font-size: .8rem; color: var(--ink-3); font-weight: 600; white-space: nowrap; }
 
+.message-subject-row { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
+.message-subject-row .message-subject { margin: 0; }
 .message-subject { font-weight: 700; color: var(--rose-ink); }
 .message-preview {
   color: var(--ink-3); font-size: .92rem;
   display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden;
 }
 
+/* « Répondu » : le seul vert de l'espace de gestion, pour qu'il se repère tout de suite */
+.pill--fait::before { display: none; }
+.pill--fait { background: #e9f5ec; color: #2f6b3c; border-color: #c2e0c9; }
+.pill--fait svg { width: .85em; height: .85em; flex: none; }
+
 .message-details { margin-top: .7rem; border-top: 1px dashed var(--line); padding-top: .9rem; cursor: default; }
 .message-body { margin: 0 0 1rem; white-space: pre-line; color: var(--ink-2); line-height: 1.65; }
+
+/* Les coordonnées, à portée de doigt */
+.message-coord { display: flex; gap: .5rem; flex-wrap: wrap; margin: 0 0 1rem; }
+.coord-btn {
+  display: inline-flex; align-items: center; gap: .45rem;
+  background: var(--paper); border: 1px solid var(--line-soft); border-radius: 999px;
+  padding: .4rem .85rem; font: inherit; font-size: .84rem; font-weight: 600; color: var(--ink-2);
+  text-decoration: none; cursor: pointer; transition: border-color .2s var(--ease), color .2s var(--ease);
+}
+.coord-btn:hover { border-color: var(--gold); color: var(--gold-ink); }
+.coord-btn svg { width: 15px; height: 15px; flex: none; }
+
 .message-actions { display: flex; gap: .5rem; flex-wrap: wrap; align-items: center; }
 .message-actions .delete-btn { margin-left: auto; }
-.message-mail { margin: .8rem 0 0; font-size: .82rem; color: var(--ink-3); }
 
-/* Le réseau par lequel la personne est arrivée */
-.message-subject-row { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
-.message-subject-row .message-subject { margin: 0; }
+@media (max-width: 560px) {
+  .message-actions .delete-btn { margin-left: 0; }
+}
