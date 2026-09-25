@@ -422,7 +422,9 @@ def typo_fr(html):
 
 
 _EMPREINTES = {}
-_FICHIER_SERVI = re.compile(r'(href|src)="((?:css|js)/[A-Za-z0-9_.-]+\.(?:css|js))"')
+# Les images du dossier assets sont versées elles aussi : Cloudflare les garde quatre heures,
+# et un logo allégé mettait tout ce temps à arriver chez les visiteurs.
+_FICHIER_SERVI = re.compile(r'(href|src)="((?:css|js)/[A-Za-z0-9_.-]+\.(?:css|js)|assets/[A-Za-z0-9_.-]+\.(?:webp|png|jpg|jpeg|svg|mp4))"')
 
 
 def _empreinte(rel):
@@ -437,7 +439,7 @@ def _empreinte(rel):
 
 
 def versionner(html):
-    """Ajoute l'empreinte du fichier aux styles et aux scripts (css/site.css?v=1a2b3c4d).
+    """Ajoute l'empreinte du fichier aux styles, aux scripts et aux images (css/site.css?v=1a2b3c4d).
 
     Sans cela, une page toute neuve peut être servie avec l'ancien CSS ou l'ancien JavaScript gardés
     en cache par Cloudflare (4 h) ou par le navigateur du visiteur. Le fichier change, l'adresse
