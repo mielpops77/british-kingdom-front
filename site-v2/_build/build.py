@@ -233,7 +233,7 @@ def head(page):
       if (bkShape && /^[a-z]{3,20}$/.test(bkShape)) bkRoot.setAttribute('data-shape', bkShape);
     } catch (e) { /* stockage indisponible : palette et thème par défaut */ }
   </script>
-  <title>%(title)s</title>
+  %(base)s<title>%(title)s</title>
   <meta name="description" content="%(desc)s">
   %(reference)s
   <meta name="robots" content="%(robots)s">
@@ -266,7 +266,10 @@ def head(page):
 </head>
 <body>
 """ % {
-        "title": title, "desc": desc, "robots": robots, "reference": reference, "og": og_image,
+        "title": title, "desc": desc, "robots": robots,
+        # La page servie par le serveur pour une adresse introuvable peut l'être sous n'importe
+        # quelle adresse (/dossier/page) : une adresse de base garde ses liens et ses images justes.
+        "base": ('<base href="%s/">\n  ' % SITE["domaine"]) if page.get("base_href") else "", "reference": reference, "og": og_image,
         "nom": SITE["nom"], "fonts": FONTS, "ga": SITE["ga"], "jsonld": jsonld,
     }
 

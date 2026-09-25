@@ -1520,7 +1520,7 @@ PAGES = [
      "desc": "Éditeur, hébergeur, activité d'élevage et propriété intellectuelle du site de la Chatterie British Kingdom."},
 
     {"file": "404.html", "body": INTROUVABLE, "sitemap": False, "nav": "index.html",
-     "robots": "noindex, follow",
+     "robots": "noindex, follow", "base_href": True,
      "title": "Page introuvable — Chatterie British Kingdom",
      "desc": "Cette adresse n'existe pas ou a changé. Retrouvez nos chatons, nos reproducteurs et nos conseils depuis cette page."},
 
