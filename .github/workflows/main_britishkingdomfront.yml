@@ -7,6 +7,12 @@ on:
   push:
     branches:
       - main
+  # Les pages publiques contiennent un instantané des données (chatons disponibles, âges, portées)
+  # pour les moteurs de recherche. Il est refait à chaque publication : sans cela, un chaton passé
+  # « réservé » dans l'espace de gestion restait « disponible » le temps que JavaScript corrige,
+  # ce qui se voyait au chargement. On republie donc toutes les quatre heures.
+  schedule:
+    - cron: "0 */4 * * *"
   workflow_dispatch:
 
 jobs:
