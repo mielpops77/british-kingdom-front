@@ -435,6 +435,12 @@ html.js .snapshot-note { display: none; }
 .pill--disponible, .pill--ok { background: var(--rose-soft); color: var(--rose-ink); border-color: color-mix(in srgb, var(--rose) 45%, transparent); }
 .pill--reserve, .pill--warn { background: var(--gold-soft); color: var(--gold-ink); border-color: color-mix(in srgb, var(--gold) 55%, transparent); }
 .pill--rester { background: var(--lilac-soft); color: var(--lilac-ink); border-color: color-mix(in srgb, var(--lilac) 45%, transparent); }
+/* En observation : la couleur de « reste à la chatterie », mais en pointillés, parce que rien n'est tranché */
+.pill--observation { background: var(--lilac-soft); color: var(--lilac-ink); border: 1px dashed color-mix(in srgb, var(--lilac) 65%, transparent); }
+.profile__note {
+  margin: -.2rem 0 1rem; padding: .7rem .95rem; font-size: .92rem; line-height: 1.55; color: var(--ink-2);
+  background: var(--lilac-soft); border-left: 3px solid var(--lilac); border-radius: 0 12px 12px 0;
+}
 .pill--vendu, .pill--muted, .pill--inconnu { background: var(--paper-2); color: var(--ink-3); border-color: var(--line); }
 .card__badges .pill { box-shadow: var(--shadow-s); }
 

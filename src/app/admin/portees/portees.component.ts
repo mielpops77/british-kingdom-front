@@ -47,6 +47,11 @@ export class AdminPorteesComponent implements OnInit {
     return (portee.chatons || []).filter(c => (c.status || '').toLowerCase().startsWith('dispo')).length;
   }
 
+  /** Combien de chatons attendent encore votre décision (« en observation »). */
+  enObservation(portee: Portee): number {
+    return (portee.chatons || []).filter(c => (c.status || '').toLowerCase().startsWith('observ')).length;
+  }
+
   get displayedPortees(): Portee[] {
     const q = this.recherche.trim().toLowerCase();
     if (!q) return this.onglet;

@@ -232,8 +232,9 @@ export class PorteeFormComponent implements OnInit {
 
     this.model.chatons.forEach(c => c.porteeName = this.model.name);
 
-    // Archive automatiquement la portée dès qu'il n'y a plus de chaton "disponible"
-    const hasAvailableChaton = this.model.chatons.some(c => c.status === 'disponible');
+    // Archive automatiquement la portée dès qu'il n'y a plus de chaton à suivre :
+    // un chaton « en observation » compte, puisque son sort n'est pas encore décidé.
+    const hasAvailableChaton = this.model.chatons.some(c => c.status === 'disponible' || c.status === 'observation');
     if (!hasAvailableChaton) {
       this.model.archivee = true;
     }

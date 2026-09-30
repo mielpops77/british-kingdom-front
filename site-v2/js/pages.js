@@ -892,6 +892,12 @@
             (wish ? '<p class="profile__wish">' + esc(wish) + '</p>' : '') +
             '<p class="profile__lede">' + esc(lede) + '</p>' +
             '<p class="profile__pills">' + pills + '</p>' +
+            // « En observation » pourrait se lire « en observation vétérinaire » : on dit ce que c'est.
+            (k.status === 'observation'
+              ? '<p class="profile__note">Nous prenons le temps de voir ' + (female ? 'si elle reste' : 's’il reste')
+                + ' à la chatterie : ' + (female ? 'elle n’est pas encore proposée' : 'il n’est pas encore proposé')
+                + ' à l’adoption.</p>'
+              : '') +
             (traits ? '<ul class="traits">' + traits + '</ul>' : '') +
             // Ce que vivent les chatons à son âge (les mêmes étapes que le journal de la portée)
             etapeLigne(weeks) +

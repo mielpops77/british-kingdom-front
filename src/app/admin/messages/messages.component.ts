@@ -31,7 +31,9 @@ export class AdminMessagesComponent implements OnInit {
   ngOnInit(): void {
     this.contactService.getAllContacts(environment.id).subscribe({
       next: (contacts) => {
-        this.contacts = contacts;
+        // Les inscriptions « Liste d'attente » ont leur propre page : on ne les
+        // mélange pas aux vrais messages (ni aux compteurs « à répondre »).
+        this.contacts = contacts.filter(c => !this.estAttente(c));
         this.loading = false;
         // Si tout est déjà traité, autant ouvrir sur la liste complète.
         if (!this.countARepondre) this.activeTab = 'tous';

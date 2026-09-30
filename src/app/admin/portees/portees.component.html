@@ -36,7 +36,8 @@
           <span class="row-card__pills">
             <span class="pill pill--muted">{{ portee.chatons.length || 0 }} chaton{{ portee.chatons.length > 1 ? 's' : '' }}</span>
             <span class="pill pill--ok" *ngIf="disponibles(portee)">{{ disponibles(portee) }} disponible{{ disponibles(portee) > 1 ? 's' : '' }}</span>
-            <span class="pill pill--warn" *ngIf="portee.chatons.length && !disponibles(portee)">Complète</span>
+            <span class="pill pill--lilac" *ngIf="enObservation(portee)">{{ enObservation(portee) }} en observation</span>
+            <span class="pill pill--warn" *ngIf="portee.chatons.length && !disponibles(portee) && !enObservation(portee)">Complète</span>
             <span class="pill pill--lilac" *ngIf="!portee.disponible">Pas sur le site</span>
           </span>
         </span>

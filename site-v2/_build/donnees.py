@@ -31,7 +31,8 @@ SITE_DIR = os.path.dirname(HERE)
 
 MOIS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août",
         "septembre", "octobre", "novembre", "décembre"]
-STATUTS = {"disponible": "Disponible", "reserve": "Réservé", "rester": "Reste à la chatterie", "vendu": "Adopté"}
+STATUTS = {"disponible": "Disponible", "reserve": "Réservé", "observation": "En observation",
+           "rester": "Reste à la chatterie", "vendu": "Adopté"}
 
 
 # --------------------------------------------------------------------------
@@ -225,7 +226,8 @@ def etape_ligne(sem, ico):
 def statut(v):
     s = str(v or "").lower()
     s = s.replace("é", "e").replace("è", "e")
-    for cle, debut in (("disponible", "dispo"), ("reserve", "reserv"), ("rester", "rest"), ("vendu", "vend"), ("vendu", "adopt")):
+    for cle, debut in (("disponible", "dispo"), ("reserve", "reserv"), ("observation", "observ"),
+                       ("rester", "rest"), ("vendu", "vend"), ("vendu", "adopt")):
         if s.startswith(debut):
             return cle
     return s or "inconnu"
@@ -780,7 +782,10 @@ def _fiche_chaton(k, p, cats, photo, jour, domaine):
     race = race_courte(k.get("breed")) or "Shorthair"
     fem = sexe(k.get("sex")) == "female"
     etat = statut(k.get("status"))
-    dit = {"disponible": "disponible", "reserve": "réservée" if fem else "réservé",
+    dit = {"disponible": "disponible",
+           "observation": "en observation : nous prenons le temps de voir %s à la chatterie"
+                          % ("si elle reste" if fem else "s'il reste"),
+           "reserve": "réservée" if fem else "réservé",
            "vendu": "adoptée" if fem else "adopté", "rester": "restée à la maison" if fem else "resté à la maison"}.get(etat, "")
     pere = nom((cats.get(str(p.get("idPapa"))) or {}).get("name") or p.get("externalFatherName") or "")
     mere = nom((cats.get(str(p.get("idMaman"))) or {}).get("name") or "")

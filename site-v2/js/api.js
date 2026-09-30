@@ -115,6 +115,7 @@
   const STATUS = {
     disponible: { key: 'disponible', label: 'Disponible', tone: 'ok' },
     reserve: { key: 'reserve', label: 'Réservé', tone: 'warn' },
+    observation: { key: 'observation', label: 'En observation', tone: 'lilac' },
     rester: { key: 'rester', label: 'Reste à la chatterie', tone: 'muted' },
     vendu: { key: 'vendu', label: 'Adopté', tone: 'muted' }
   };
@@ -122,6 +123,7 @@
     const s = String(v || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
     if (s.startsWith('dispo')) return STATUS.disponible;
     if (s.startsWith('reserv')) return STATUS.reserve;
+    if (s.startsWith('observ')) return STATUS.observation;
     if (s.startsWith('rest')) return STATUS.rester;
     if (s.startsWith('vend') || s.startsWith('adopt')) return STATUS.vendu;
     return { key: s || 'inconnu', label: v || '—', tone: 'muted' };
