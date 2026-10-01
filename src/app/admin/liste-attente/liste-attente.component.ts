@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DatePipe, NgFor, NgIf } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { environment } from 'src/environments/environment';
@@ -8,6 +8,8 @@ import { CatService } from '../../components/Services/catService';
 import { Contact } from '../../models/contact';
 import { Portee } from '../../models/portee';
 import { provenanceDe } from '../services/provenance';
+import { CompteursService } from '../services/compteurs.service';
+import { dateLisible } from '../services/dates';
 
 /** L'état d'une demande, rangé à la fin du sujet : « Liste d'attente · contacté ». */
 export type EtatAttente = 'nouvelle' | 'contactee' | 'reservee' | 'terminee';
@@ -44,7 +46,7 @@ interface Correspondance {
   templateUrl: './liste-attente.component.html',
   styleUrls: ['./liste-attente.component.css'],
   standalone: true,
-  imports: [NgFor, NgIf, DatePipe, RouterLink, FormsModule],
+  imports: [NgFor, NgIf, RouterLink, FormsModule],
 })
 export class AdminListeAttenteComponent implements OnInit {
   demandes: Demande[] = [];
@@ -68,7 +70,8 @@ export class AdminListeAttenteComponent implements OnInit {
   ajoutErreur = '';
   nouvelle = { name: '', num: '', email: '', sexe: 'Peu importe', robe: '', mot: '' };
 
-  constructor(private contactService: ContactService, private catService: CatService) { }
+  constructor(private contactService: ContactService, private catService: CatService,
+              private compteurs: CompteursService) { }
 
   ouvrirAjout(): void {
     this.ajoutOuvert = !this.ajoutOuvert;
@@ -107,6 +110,7 @@ export class AdminListeAttenteComponent implements OnInit {
         this.ajoutOuvert = false;
         this.ajoutEnCours = false;
         this.activeTab = 'encours';
+        this.compteurs.rafraichir();
       },
       error: () => {
         this.ajoutErreur = "L'enregistrement a échoué. Réessayez dans un instant.";
@@ -133,6 +137,11 @@ export class AdminListeAttenteComponent implements OnInit {
       },
       error: () => this.loading = false,
     });
+  }
+
+  /** « aujourd'hui à 22:35 », « hier à 09:12 »… pour savoir quand la famille a écrit. */
+  dateLisible(iso: string, heure?: string): string {
+    return dateLisible(iso, heure);
   }
 
   /** Une demande venue du formulaire « liste d'attente » du site. */
@@ -206,7 +215,7 @@ export class AdminListeAttenteComponent implements OnInit {
     this.expandedId = this.expandedId === demande.contact.id ? null : demande.contact.id;
     if (!demande.contact.vue) {
       demande.contact.vue = true;
-      this.contactService.updateContact(demande.contact.id, demande.contact).subscribe();
+      this.contactService.updateContact(demande.contact.id, demande.contact).subscribe(() => this.compteurs.rafraichir());
     }
   }
 
@@ -220,7 +229,7 @@ export class AdminListeAttenteComponent implements OnInit {
     demande.contact.subject = SUJET + SUFFIXES[etat];
     demande.contact.vue = true;
     this.contactService.updateContact(demande.contact.id, demande.contact).subscribe({
-      next: () => this.enregistrementId = null,
+      next: () => { this.enregistrementId = null; this.compteurs.rafraichir(); },
       error: () => {
         demande.etat = avant;
         demande.contact.subject = SUJET + SUFFIXES[avant];
@@ -242,6 +251,7 @@ export class AdminListeAttenteComponent implements OnInit {
       next: () => {
         this.demandes = this.demandes.filter(d => d.contact.id !== demande.contact.id);
         this.deletingId = null;
+        this.compteurs.rafraichir();
       },
       error: () => {
         alert('La suppression a échoué.');

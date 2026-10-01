@@ -51,7 +51,7 @@
           <span class="unread-dot" *ngIf="!contact.vue" aria-hidden="true"></span>
           <span class="message-name">{{ contact.name }}</span>
         </div>
-        <span class="message-date">{{ dateLisible(contact.dateofCrea) }}</span>
+        <span class="message-date">{{ dateLisible(contact.dateofCrea, contact.hour) }}</span>
       </div>
       <div class="message-subject-row">
         <span class="message-subject">{{ contact.subject }}</span>

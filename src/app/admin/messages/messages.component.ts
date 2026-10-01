@@ -4,6 +4,8 @@ import { environment } from 'src/environments/environment';
 import { ContactService } from '../../components/Services/contact.service';
 import { Contact } from '../../models/contact';
 import { provenanceDe, sansProvenance } from '../services/provenance';
+import { CompteursService, estAttente } from '../services/compteurs.service';
+import { dateLisible } from '../services/dates';
 
 /** Ce que l'on regarde : ce qui attend une réponse, ce qui est fait, ou tout. */
 type Onglet = 'arepondre' | 'repondus' | 'tous';
@@ -26,7 +28,7 @@ export class AdminMessagesComponent implements OnInit {
   activeTab: Onglet = 'arepondre';
   recherche = '';
 
-  constructor(private contactService: ContactService) { }
+  constructor(private contactService: ContactService, private compteurs: CompteursService) { }
 
   ngOnInit(): void {
     this.contactService.getAllContacts(environment.id).subscribe({
@@ -72,21 +74,9 @@ export class AdminMessagesComponent implements OnInit {
 
   // ---------------------------------------------------------------- affichage
 
-  /** « aujourd'hui à 22:35 », « hier à 09:12 », sinon « mer. 24 sept. à 22:35 » (heure de Paris). */
-  dateLisible(iso: string): string {
-    if (!iso) return '';
-    const d = new Date(iso);
-    if (isNaN(d.getTime())) return iso;
-
-    const jourDe = (x: Date) => new Intl.DateTimeFormat('fr-CA', { timeZone: 'Europe/Paris', year: 'numeric', month: '2-digit', day: '2-digit' }).format(x);
-    const heure = new Intl.DateTimeFormat('fr-FR', { timeZone: 'Europe/Paris', hour: '2-digit', minute: '2-digit' }).format(d);
-
-    const jour = jourDe(d);
-    if (jour === jourDe(new Date())) return "aujourd'hui à " + heure;
-    if (jour === jourDe(new Date(Date.now() - 86400000))) return 'hier à ' + heure;
-
-    const date = new Intl.DateTimeFormat('fr-FR', { timeZone: 'Europe/Paris', weekday: 'short', day: 'numeric', month: 'short' }).format(d);
-    return date + ' à ' + heure;
+  /** « aujourd'hui à 22:35 », « hier à 09:12 »… (code commun avec la liste d'attente). */
+  dateLisible(iso: string, heure?: string): string {
+    return dateLisible(iso, heure);
   }
 
   /** Le réseau par lequel la personne est arrivée sur le site, s'il est connu. */
@@ -99,9 +89,9 @@ export class AdminMessagesComponent implements OnInit {
     return sansProvenance(contact.message);
   }
 
-  /** Une inscription venue de la page « Liste d'attente » du site. */
+  /** Une inscription venue de la page « Liste d'attente » du site (même règle que le menu). */
   estAttente(contact: Contact): boolean {
-    return (contact.subject || '').trim().toLowerCase().startsWith("liste d'attente");
+    return estAttente(contact.subject);
   }
 
   // ---------------------------------------------------------------- actions
@@ -111,7 +101,7 @@ export class AdminMessagesComponent implements OnInit {
 
     if (!contact.vue) {
       contact.vue = true;
-      this.contactService.updateContact(contact.id, contact).subscribe();
+      this.contactService.updateContact(contact.id, contact).subscribe(() => this.compteurs.rafraichir());
     }
   }
 
@@ -169,6 +159,7 @@ export class AdminMessagesComponent implements OnInit {
       next: () => {
         this.contacts = this.contacts.filter(c => c.id !== contact.id);
         this.deletingId = null;
+        this.compteurs.rafraichir();
       },
       error: () => {
         alert('La suppression a échoué.');

@@ -94,7 +94,7 @@
           <span class="unread-dot" *ngIf="demande.etat === 'nouvelle'" aria-hidden="true"></span>
           <span class="attente-name">{{ demande.contact.name }}</span>
         </div>
-        <span class="attente-date">{{ demande.contact.dateofCrea | date: 'dd/MM/yyyy':'Europe/Paris' }}</span>
+        <span class="attente-date">{{ dateLisible(demande.contact.dateofCrea, demande.contact.hour) }}</span>
       </div>
 
       <div class="attente-souhaits">

@@ -67,6 +67,17 @@
 .admin-nav a.active .icon { transform: translateY(-1px) scale(1.08); }
 .admin-nav .label { font-size: .68rem; font-weight: 700; letter-spacing: .02em; }
 
+/* Le petit nombre : sur téléphone il se pose au coin du pictogramme, faute de place à côté du mot */
+.admin-nav a { position: relative; }
+.compteur {
+  position: absolute; top: .25rem; left: 50%; margin-left: .3rem;
+  min-width: 18px; height: 18px; padding: 0 5px;
+  display: grid; place-items: center;
+  background: var(--rose-deep); color: var(--on-accent);
+  border-radius: 999px; font-size: .68rem; font-weight: 700; line-height: 1;
+  box-shadow: 0 0 0 2px var(--card);
+}
+
 @media (min-width: 860px) {
   .admin-nav {
     position: sticky; top: 76px; bottom: auto; left: auto; right: auto;
@@ -77,6 +88,8 @@
     backdrop-filter: none;
   }
   .admin-nav a { flex-direction: row; justify-content: flex-start; gap: .7rem; padding: .7rem .9rem; }
+  /* Sur grand écran, le nombre se met au bout de la ligne */
+  .compteur { position: static; margin: 0 0 0 auto; box-shadow: none; }
   .admin-nav .label { font-size: .95rem; letter-spacing: 0; }
   .admin-content { padding-bottom: 2rem; }
 }
