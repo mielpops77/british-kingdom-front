@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { NgFor, NgIf } from '@angular/common';
+import { Component, HostListener, OnInit } from '@angular/core';
+import { NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { forkJoin } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { CatService } from '../../components/Services/catService';
 import { Cat } from '../../models/cats';
 import { Portee } from '../../models/portee';
@@ -20,6 +21,7 @@ interface ChatonSuivi {
   portee: string;
   naissance: string;
   ageJours: number;
+  photo: string;
   pesees: LigneSante[];
   derniere: LigneSante | null;
   avantDerniere: LigneSante | null;
@@ -32,6 +34,7 @@ interface ChatSuivi {
   nom: string;
   sexe: string;
   naissance: string;
+  photo: string;
   retraite: boolean;
   vaccins: LigneSante[];
   dernier: LigneSante | null;
@@ -42,27 +45,61 @@ interface ChatSuivi {
 
 /** Une courbe de croissance prête à dessiner. */
 interface Courbe {
+  id: number;
   nom: string;
   couleur: string;
+  photo: string;
+  dernier: string;
   trace: string;
   points: { x: number; y: number }[];
 }
 
-/** De quoi distinguer les courbes sans sortir des couleurs de la maison. */
+/** Quand la robe ne dit rien, on pioche ici. */
 const COULEURS = ['#b0244f', '#c29a4e', '#9277c9', '#5d8f7b', '#6f92c4', '#d2763f', '#3f8f94', '#8d4a7c'];
+
+/**
+ * La courbe d'un chaton prend la couleur de son poil : on reconnait le chocolat
+ * du lilac d'un coup d'oeil, sans chercher dans la legende.
+ */
+const ROBES: { motif: RegExp; teinte: string }[] = [
+  { motif: /chocolat|choco/i, teinte: '#7a4a33' },
+  { motif: /lilac|lilas/i, teinte: '#a68fae' },
+  { motif: /cinnamon|cannelle/i, teinte: '#a9663a' },
+  { motif: /fawn|faon/i, teinte: '#c3a083' },
+  { motif: /creme|cr\u00e8me|cream/i, teinte: '#d9a86c' },
+  { motif: /golden|dore|dor\u00e9/i, teinte: '#c9a227' },
+  { motif: /silver|argent/i, teinte: '#8d9aa2' },
+  { motif: /blanc|white/i, teinte: '#b4a49c' },
+  { motif: /bleu|blue/i, teinte: '#7d94a8' },
+  { motif: /noir|black|brown/i, teinte: '#4a3f46' },
+  { motif: /roux|red/i, teinte: '#cf7a46' },
+  { motif: /ecaille|\u00e9caille|tortie/i, teinte: '#9c5a53' },
+];
+
+/** Deux freres de meme robe : on eclaircit l'un, on fonce l'autre, la teinte reste. */
+function nuance(hex: string, rang: number): string {
+  if (!rang) return hex;
+  const n = parseInt(hex.slice(1), 16);
+  const k = rang % 2 ? 1 + Math.ceil(rang / 2) * 0.34 : 1 - (rang / 2) * 0.26;
+  const borne = (v: number) => Math.max(34, Math.min(216, Math.round(v * k)));
+  return '#' + [(n >> 16) & 255, (n >> 8) & 255, n & 255]
+    .map(v => borne(v).toString(16).padStart(2, '0')).join('');
+}
 
 /** Les noms de vaccins proposés à la saisie : des noms, rien de prescrit. */
 export const VACCINS_COURANTS = ['Typhus · coryza (RCP)', 'Leucose (FeLV)', 'Rage', 'Primo-vaccination', 'Rappel annuel'];
 
-/** Le dessin : une boîte fixe, mise à l'échelle par le navigateur. */
-const L = 720, H = 250, MG = 46, MD = 14, MH = 16, MB = 28;
+/** Le dessin : large sur ordinateur, plus ramassé sur téléphone — sinon les
+    repères, réduits avec l'image, deviendraient illisibles. */
+const GRAND = { L: 720, H: 250, MG: 46, MD: 14, MH: 16, MB: 28 };
+const PETIT = { L: 360, H: 235, MG: 42, MD: 10, MH: 14, MB: 26 };
 
 @Component({
   selector: 'app-admin-sante',
   templateUrl: './sante.component.html',
   styleUrls: ['./sante.component.css'],
   standalone: true,
-  imports: [NgFor, NgIf, FormsModule],
+  imports: [NgFor, NgIf, NgTemplateOutlet, FormsModule],
 })
 export class AdminSanteComponent implements OnInit {
   onglet: 'poids' | 'vaccins' = 'poids';
@@ -72,6 +109,11 @@ export class AdminSanteComponent implements OnInit {
   chatons: ChatonSuivi[] = [];
   chats: ChatSuivi[] = [];
   avecRetraites = false;
+
+  /** La courbe mise en avant quand on pointe une frimousse de la legende. */
+  survole: number | null = null;
+  /** Les chatons qu'on vient de peser : leur fiche fait un petit halo. */
+  justeEnregistres: number[] = [];
 
   ouvertChaton: number | null = null;
   ouvertChat: number | null = null;
@@ -90,12 +132,14 @@ export class AdminSanteComponent implements OnInit {
   readonly vaccinsCourants = VACCINS_COURANTS;
 
   /* le dessin */
-  readonly boite = `0 0 ${L} ${H}`;
+  boite = GRAND;
   courbes: Courbe[] = [];
   reperesY: { y: number; texte: string }[] = [];
   reperesX: { x: number; texte: string }[] = [];
-  readonly axeX = H - MB;
-  readonly finX = L - MD;
+  get cadre(): string { return `0 0 ${this.boite.L} ${this.boite.H}`; }
+  get axeX(): number { return this.boite.H - this.boite.MB; }
+  get debutX(): number { return this.boite.MG; }
+  get finX(): number { return this.boite.L - this.boite.MD; }
 
   private lignes: LigneSante[] = [];
   private portees: Portee[] = [];
@@ -105,7 +149,21 @@ export class AdminSanteComponent implements OnInit {
               private compteurs: CompteursService) { }
 
   ngOnInit(): void {
+    this.mesurer();
     this.charger();
+  }
+
+  /** L'écran a changé de taille : on redessine à la bonne échelle. */
+  @HostListener('window:resize')
+  auRedimensionnement(): void {
+    const avant = this.boite;
+    this.mesurer();
+    if (this.boite !== avant) this.dessiner();
+  }
+
+  private mesurer(): void {
+    const etroit = typeof window !== 'undefined' && window.innerWidth < 620;
+    this.boite = etroit ? PETIT : GRAND;
   }
 
   private charger(): void {
@@ -134,6 +192,7 @@ export class AdminSanteComponent implements OnInit {
     const aujourdhui = aujourdhuiISO();
 
     const pesees = this.lignes.filter(l => l.categorie === 'poids' && l.espece === 'chaton');
+    const dejaVues: Record<string, number> = {};   // combien de chatons portent deja cette robe
     let couleur = 0;
     this.chatons = [];
     this.portees.forEach(portee => {
@@ -149,10 +208,11 @@ export class AdminSanteComponent implements OnInit {
           portee: portee.name || k.porteeName || '',
           naissance: String(k.dateOfBirth || portee.dateOfBirth || '').slice(0, 10),
           ageJours: joursEntre(String(k.dateOfBirth || portee.dateOfBirth || '').slice(0, 10), aujourdhui),
+          photo: k.urlProfil ? environment.apiUrlImgChaton + k.urlProfil : '',
           pesees: siennes,
           derniere: siennes.length ? siennes[siennes.length - 1] : null,
           avantDerniere: siennes.length > 1 ? siennes[siennes.length - 2] : null,
-          couleur: COULEURS[couleur++ % COULEURS.length],
+          couleur: this.couleurDeRobe(k.robe, dejaVues, couleur++),
         });
       });
     });
@@ -168,6 +228,7 @@ export class AdminSanteComponent implements OnInit {
         nom: c.name,
         sexe: /f/i.test(c.sex || '') ? 'Femelle' : 'Mâle',
         naissance: String(c.dateOfBirth || '').slice(0, 10),
+        photo: c.urlProfil ? environment.apiUrlImgProfilCat + c.urlProfil : '',
         retraite: !!c.archivee,
         vaccins: siens,
         dernier: siens.length ? siens[0] : null,
@@ -178,6 +239,15 @@ export class AdminSanteComponent implements OnInit {
     }).sort((a, b) => this.rang(a) - this.rang(b) || a.nom.localeCompare(b.nom));
 
     this.dessiner();
+  }
+
+  /** La teinte du poil, nuancee si un frere porte la meme robe. */
+  private couleurDeRobe(robe: string | null | undefined, dejaVues: Record<string, number>, rangGeneral: number): string {
+    const trouvee = ROBES.find(r => r.motif.test(String(robe || '')));
+    if (!trouvee) return COULEURS[rangGeneral % COULEURS.length];
+    const rang = dejaVues[trouvee.teinte] || 0;
+    dejaVues[trouvee.teinte] = rang + 1;
+    return nuance(trouvee.teinte, rang);
   }
 
   /** Ce qui presse remonte en haut de la liste. */
@@ -199,6 +269,7 @@ export class AdminSanteComponent implements OnInit {
 
   /** Les courbes de croissance, en âge plutôt qu'en date : les portées se comparent. */
   private dessiner(): void {
+    const { L, H, MG, MD, MH, MB } = this.boite;
     const suivis = this.chatons.filter(c => c.pesees.length);
     this.courbes = [];
     this.reperesX = [];
@@ -218,7 +289,8 @@ export class AdminSanteComponent implements OnInit {
     this.courbes = suivis.map(c => {
       const pts = c.pesees.map(p => ({ x: x(joursEntre(c.naissance, p.dateFait)), y: y(p.poids || 0) }));
       return {
-        nom: c.nom, couleur: c.couleur, points: pts,
+        id: c.id, nom: c.nom, couleur: c.couleur, photo: c.photo, points: pts,
+        dernier: this.poidsLisible(c.derniere?.poids),
         trace: pts.map((p, i) => (i ? 'L' : 'M') + p.x.toFixed(1) + ' ' + p.y.toFixed(1)).join(' '),
       };
     });
@@ -256,6 +328,35 @@ export class AdminSanteComponent implements OnInit {
     const j = joursEntre(c.avantDerniere.dateFait, c.derniere.dateFait);
     const signe = g > 0 ? '+' : '';
     return `${signe}${g} g${j ? ` en ${j} jour${j > 1 ? 's' : ''}` : ''}`;
+  }
+
+  /**
+   * Le gain moyen par jour entre les deux dernieres pesees : le chiffre qu'on
+   * regarde vraiment quand on eleve une portee.
+   */
+  gainParJour(c: ChatonSuivi): string {
+    if (!c.derniere || !c.avantDerniere) return '';
+    const j = joursEntre(c.avantDerniere.dateFait, c.derniere.dateFait);
+    if (!j) return '';
+    const g = Math.round(((c.derniere.poids || 0) - (c.avantDerniere.poids || 0)) / j * 10) / 10;
+    return (g > 0 ? '+' : '') + String(g).replace('.', ',') + ' g/jour';
+  }
+
+  /**
+   * Pendant la saisie, l'ecart avec la derniere pesee s'affiche aussitot : un 78
+   * tape pour 780 saute aux yeux avant d'etre enregistre.
+   */
+  apercuEcart(c: ChatonSuivi): string {
+    const g = Number(this.peseeValeurs[c.id]);
+    if (!Number.isFinite(g) || g <= 0 || !c.derniere) return '';
+    const d = Math.round(g) - (c.derniere.poids || 0);
+    return (d > 0 ? '+' : d < 0 ? '-' : '\u00b1') + Math.abs(d) + ' g';
+  }
+
+  /** Le sens de l'ecart en cours de saisie, pour la couleur. */
+  apercuSens(c: ChatonSuivi): 'hausse' | 'baisse' | 'stable' {
+    const d = Math.round(Number(this.peseeValeurs[c.id])) - (c.derniere?.poids || 0);
+    return d > 0 ? 'hausse' : d < 0 ? 'baisse' : 'stable';
   }
 
   /** Vert quand ça monte, gris quand ça stagne, ambre quand ça descend. */
@@ -316,6 +417,8 @@ export class AdminSanteComponent implements OnInit {
         this.peseeMessage = `${ajoutees.length} pesée${ajoutees.length > 1 ? 's' : ''} enregistrée${ajoutees.length > 1 ? 's' : ''}.`;
         this.enregistrement = false;
         this.recomposer();
+        this.justeEnregistres = ajoutees.map(l => l.animalId);
+        setTimeout(() => this.justeEnregistres = [], 1800);
       },
       error: () => {
         this.peseeMessage = "L'enregistrement n'a pas abouti. Vérifiez votre connexion et réessayez.";

@@ -27,6 +27,7 @@
   <ng-container *ngIf="!loading && onglet === 'poids'">
 
     <div class="empty-card" *ngIf="!chatons.length">
+      <ng-container *ngTemplateOutlet="chatEndormi"></ng-container>
       <strong>Aucun chaton à suivre pour l'instant</strong>
       <span>Cette page suit les chatons des portées qui paraissent sur le site. Dès qu'une portée y est publiée,
         ses chatons apparaissent ici.</span>
@@ -39,27 +40,43 @@
           <h2>Courbe de croissance</h2>
           <span class="hint">{{ chatonsPeses }} chaton{{ chatonsPeses > 1 ? 's' : '' }} pesé{{ chatonsPeses > 1 ? 's' : '' }}</span>
         </div>
-        <svg class="courbe" [attr.viewBox]="boite" role="img"
+        <svg class="courbe" [attr.viewBox]="cadre" role="img"
              aria-label="Poids des chatons selon leur âge">
           <g class="grille">
-            <line *ngFor="let r of reperesY" x1="46" [attr.y1]="r.y" [attr.x2]="finX" [attr.y2]="r.y"/>
+            <line *ngFor="let r of reperesY" [attr.x1]="debutX" [attr.y1]="r.y" [attr.x2]="finX" [attr.y2]="r.y"/>
           </g>
           <g class="legende-y">
-            <text *ngFor="let r of reperesY" x="40" [attr.y]="r.y + 4" text-anchor="end">{{ r.texte }}</text>
+            <text *ngFor="let r of reperesY" [attr.x]="debutX - 6" [attr.y]="r.y + 4" text-anchor="end">{{ r.texte }}</text>
           </g>
           <g class="legende-x">
-            <text *ngFor="let r of reperesX" [attr.x]="r.x" [attr.y]="axeX + 18" text-anchor="middle">{{ r.texte }}</text>
+            <text *ngFor="let r of reperesX" [attr.x]="r.x" [attr.y]="axeX + 17" text-anchor="middle">{{ r.texte }}</text>
           </g>
-          <g *ngFor="let c of courbes">
-            <path [attr.d]="c.trace" fill="none" [attr.stroke]="c.couleur" stroke-width="2.4"
+          <g *ngFor="let c of courbes" class="courbe-chaton"
+             [attr.opacity]="survole === null || survole === c.id ? 1 : .18">
+            <path [attr.d]="c.trace" fill="none" [attr.stroke]="c.couleur"
+                  [attr.stroke-width]="survole === c.id ? 3.6 : 2.4"
                   stroke-linecap="round" stroke-linejoin="round"/>
             <circle *ngFor="let p of c.points" [attr.cx]="p.x" [attr.cy]="p.y" r="3.2" [attr.fill]="c.couleur"/>
+            <!-- la derniere pesee, un peu plus affirmee que les autres -->
+            <circle *ngIf="c.points.length" [attr.cx]="c.points[c.points.length - 1].x"
+                    [attr.cy]="c.points[c.points.length - 1].y" r="5.4" fill="#fff"
+                    [attr.stroke]="c.couleur" stroke-width="2.6"/>
           </g>
         </svg>
+        <!-- Chaque frimousse ramene sa courbe au premier plan : on isole un chaton du regard -->
         <div class="legende">
-          <span class="legende-item" *ngFor="let c of courbes">
-            <i [style.background]="c.couleur"></i>{{ c.nom }}
-          </span>
+          <button type="button" class="legende-item" *ngFor="let c of courbes"
+                  [class.efface]="survole !== null && survole !== c.id"
+                  (mouseenter)="survole = c.id" (mouseleave)="survole = null"
+                  (focus)="survole = c.id" (blur)="survole = null"
+                  (click)="survole = survole === c.id ? null : c.id"
+                  [attr.aria-label]="'Mettre en avant la courbe de ' + c.nom">
+            <ng-container *ngTemplateOutlet="frimousse; context: { src: c.photo, nom: c.nom, couleur: c.couleur }"></ng-container>
+            <span class="legende-texte">
+              <b>{{ c.nom }}</b>
+              <em>{{ c.dernier }}</em>
+            </span>
+          </button>
         </div>
       </section>
 
@@ -77,13 +94,14 @@
 
         <div class="pesee-grille">
           <div class="pesee-ligne" *ngFor="let c of chatons">
-            <span class="pastille" [style.background]="c.couleur" aria-hidden="true"></span>
+            <ng-container *ngTemplateOutlet="frimousse; context: { src: c.photo, nom: c.nom, couleur: c.couleur }"></ng-container>
             <span class="pesee-nom">
               <b>{{ c.nom }}<i *ngIf="plusieursPortees"> · {{ c.portee }}</i></b>
               <em *ngIf="c.derniere">dernière : {{ poidsLisible(c.derniere.poids) }} · {{ jour(c.derniere.dateFait) }}</em>
               <em *ngIf="!c.derniere">jamais pesé</em>
             </span>
             <span class="pesee-saisie">
+              <span class="apercu" [class]="'evolution--' + apercuSens(c)" *ngIf="apercuEcart(c)">{{ apercuEcart(c) }}</span>
               <input type="number" inputmode="numeric" min="1" max="12000" step="5"
                      [name]="'poids-' + c.id" [(ngModel)]="peseeValeurs[c.id]" placeholder="—"
                      [attr.aria-label]="'Poids de ' + c.nom + ' en grammes'">
@@ -103,9 +121,10 @@
       <!-- Un chaton, son dernier poids, son historique quand on l'ouvre -->
       <div class="suivi-liste">
         <article class="suivi-carte" *ngFor="let c of chatons"
-                 [class.open]="ouvertChaton === c.id" (click)="basculerChaton(c)">
+                 [class.open]="ouvertChaton === c.id"
+                 [class.frais]="justeEnregistres.includes(c.id)" (click)="basculerChaton(c)">
           <div class="suivi-tete">
-            <span class="pastille" [style.background]="c.couleur" aria-hidden="true"></span>
+            <ng-container *ngTemplateOutlet="frimousse; context: { src: c.photo, nom: c.nom, couleur: c.couleur, grande: true }"></ng-container>
             <span class="suivi-nom">{{ c.nom }}</span>
             <span class="suivi-poids" *ngIf="c.derniere">{{ poidsLisible(c.derniere.poids) }}</span>
             <span class="suivi-poids suivi-poids--vide" *ngIf="!c.derniere">—</span>
@@ -121,6 +140,10 @@
                   [class.pill--muted]="c.statut !== 'Disponible' && c.statut !== 'En observation'"
                   *ngIf="c.statut">{{ c.statut }}</span>
             <span class="evolution" [class]="'evolution--' + tendance(c)" *ngIf="progression(c)">{{ progression(c) }}</span>
+            <span class="patte" *ngIf="gainParJour(c)" title="Gain moyen par jour depuis la pesée précédente">
+              <svg viewBox="0 0 64 64" aria-hidden="true"><ellipse cx="32" cy="42" rx="15" ry="12"/><ellipse cx="14" cy="24" rx="7" ry="8.5"/><ellipse cx="30" cy="14" rx="7" ry="8.5"/><ellipse cx="47" cy="18" rx="7" ry="8.5"/><ellipse cx="54" cy="33" rx="6.5" ry="8"/></svg>
+              {{ gainParJour(c) }}
+            </span>
           </div>
 
           <div class="suivi-details" *ngIf="ouvertChaton === c.id" (click)="arreter($event)">
@@ -158,6 +181,7 @@
   <ng-container *ngIf="!loading && onglet === 'vaccins'">
 
     <div class="empty-card" *ngIf="!chatsAffiches.length">
+      <ng-container *ngTemplateOutlet="chatEndormi"></ng-container>
       <strong>Aucun reproducteur à suivre</strong>
       <span>Les chats de l'élevage apparaissent ici dès qu'ils sont enregistrés dans l'onglet « Chats ».</span>
     </div>
@@ -168,6 +192,7 @@
                [class.urgent]="c.urgence === 'retard'"
                (click)="basculerChat(c)">
         <div class="suivi-tete">
+          <ng-container *ngTemplateOutlet="frimousse; context: { src: c.photo, nom: c.nom, couleur: c.urgence === 'retard' ? '#b0244f' : c.urgence === 'prevu' ? '#5d8f7b' : '#c29a4e', grande: true }"></ng-container>
           <span class="suivi-nom">{{ c.nom }}</span>
           <span class="echeance"
                 [class.echeance--retard]="c.urgence === 'retard'"
@@ -182,9 +207,13 @@
             Dernier : {{ c.dernier.libelle }} · {{ jour(c.dernier.dateFait) }}
           </span>
           <span class="pill pill--muted" *ngIf="!c.dernier">Aucun vaccin noté</span>
+          <span class="bouclier" *ngIf="c.urgence === 'prevu'" title="Le prochain rappel est encore loin">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v6c0 4.4-3 8.1-7 9-4-.9-7-4.6-7-9V6Z"/><path d="m9 12 2 2 4-4"/></svg>
+            À jour
+          </span>
           <span class="pill" *ngIf="c.rappel"
                 [class.pill--warn]="c.urgence === 'retard' || c.urgence === 'bientot'"
-                [class.pill--ok]="c.urgence === 'prevu'">Prochain : {{ jour(c.rappel) }}</span>
+                [class.pill--muted]="c.urgence === 'prevu'">Prochain : {{ jour(c.rappel) }}</span>
         </div>
 
         <div class="suivi-details" *ngIf="ouvertChat === c.id" (click)="arreter($event)">
@@ -258,3 +287,30 @@
     </p>
   </ng-container>
 </div>
+
+<!-- Une frimousse ronde, cerclée de la couleur de l'animal. Sans photo : un coussinet. -->
+<ng-template #frimousse let-src="src" let-nom="nom" let-couleur="couleur" let-grande="grande">
+  <span class="frimousse" [class.frimousse--grande]="grande" [style.border-color]="couleur">
+    <img *ngIf="src" [src]="src" [alt]="nom" loading="lazy">
+    <span *ngIf="!src" class="photo-placeholder">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><ellipse cx="32" cy="42" rx="15" ry="12"/><ellipse cx="14" cy="24" rx="7" ry="8.5"/><ellipse cx="30" cy="14" rx="7" ry="8.5"/><ellipse cx="47" cy="18" rx="7" ry="8.5"/><ellipse cx="54" cy="33" rx="6.5" ry="8"/></svg>
+    </span>
+  </span>
+</ng-template>
+
+<!-- Le carnet est vide : un chat dort en attendant -->
+<ng-template #chatEndormi>
+  <svg class="dessin-chat" viewBox="0 0 130 86" aria-hidden="true">
+    <ellipse cx="66" cy="70" rx="46" ry="9" fill="currentColor" opacity=".10"/>
+    <path d="M30 68c-6-20 8-34 30-34s34 12 32 29c-1 4-4 5-8 5H36c-3 0-5-1-6-3Z" fill="currentColor" opacity=".26"/>
+    <circle cx="38" cy="48" r="16" fill="currentColor" opacity=".42"/>
+    <path d="M26 37l-3-12 13 7ZM50 37l4-12-13 7Z" fill="currentColor" opacity=".42"/>
+    <path d="M30 47q4 4 8 0M43 47q4 4 8 0" stroke="#fff" stroke-width="2" stroke-linecap="round" fill="none" opacity=".85"/>
+    <path d="M92 64q14-2 11-14" stroke="currentColor" stroke-width="5" stroke-linecap="round" fill="none" opacity=".26"/>
+    <g fill="currentColor" opacity=".45" font-family="Quicksand, sans-serif" font-weight="700">
+      <text x="62" y="30" font-size="11">z</text>
+      <text x="73" y="20" font-size="14">z</text>
+      <text x="87" y="11" font-size="17">z</text>
+    </g>
+  </svg>
+</ng-template>
