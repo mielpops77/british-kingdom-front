@@ -21,6 +21,7 @@ export const environment = {
   apiUrlCats: '/api/cats/',
   apiUrlPorte: '/api/portee/',
   apiUrlChaton: '/api/chaton/',
+  apiUrlSante: '/api/sante',
 
   apiUrlLivreOr: '/api/livreOr/',
   apiUrlContact: '/api/contact/',

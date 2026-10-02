@@ -20,6 +20,7 @@ export class AdminShellComponent implements OnInit {
   /** Les chiffres affichés à côté de « Messages » et « Attente ». */
   nonLus = 0;
   attenteEnCours = 0;
+  rappelsVaccins = 0;
 
   constructor(
     private authService: AuthService,
@@ -31,7 +32,9 @@ export class AdminShellComponent implements OnInit {
   ngOnInit(): void {
     this.compteurs.nonLus.subscribe(n => this.nonLus = n);
     this.compteurs.attenteEnCours.subscribe(n => this.attenteEnCours = n);
+    this.compteurs.rappelsVaccins.subscribe(n => this.rappelsVaccins = n);
     this.compteurs.rafraichir();
+    this.compteurs.rafraichirSante();
 
     // Passer par l'espace de gestion suffit : ce navigateur est le vôtre, ses visites ne comptent plus.
     if (!isPlatformBrowser(this.platformId)) return;

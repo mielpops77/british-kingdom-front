@@ -20,6 +20,7 @@ export const environment = {
   apiUrlCats: 'https://british-kingdom-back.azurewebsites.net/api/cats/',
   apiUrlPorte: 'https://british-kingdom-back.azurewebsites.net/api/portee/',
   apiUrlChaton: 'https://british-kingdom-back.azurewebsites.net/api/chaton/',
+  apiUrlSante: 'https://british-kingdom-back.azurewebsites.net/api/sante',
 
 
   apiUrlStatistique: "https://british-kingdom-back.azurewebsites.net/api/statistique",

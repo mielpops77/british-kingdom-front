@@ -1,0 +1,103 @@
+/* --------------------------------------------------------------------------
+   Le carnet de santé : la courbe, la pesée de la portée, les fiches.
+   Les classes communes (.admin-page, .pill, .tab-btn, .form-card…) viennent
+   de styles.css : on ne redéfinit ici que ce qui est propre à cette page.
+   -------------------------------------------------------------------------- */
+
+/* ------------------------------------------------------------ la courbe */
+.carte-courbe {
+  background: var(--card); border: 1px solid var(--line-soft); border-radius: var(--radius);
+  padding: 1.1rem 1.2rem 1rem; box-shadow: var(--shadow-s); margin-bottom: 1rem;
+}
+.carte-tete { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.carte-tete h2 { font-family: var(--font-display); font-size: 1.12rem; margin: 0 0 .2rem; color: var(--ink); }
+
+.courbe { width: 100%; height: auto; display: block; margin-top: .4rem; overflow: visible; }
+.courbe .grille line { stroke: var(--line-soft); stroke-width: 1; }
+.courbe text { font-family: var(--font-body); font-size: 11px; fill: var(--ink-3); }
+
+.legende { display: flex; flex-wrap: wrap; gap: .4rem .9rem; margin-top: .7rem; }
+.legende-item { display: inline-flex; align-items: center; gap: .35rem; font-size: .82rem; color: var(--ink-2); }
+.legende-item i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+
+/* ------------------------------------------------------------ peser la portée */
+.pesee-card { margin-bottom: 1rem; }
+.pesee-date { max-width: 260px; margin: .6rem 0 .9rem; }
+.pesee-date input { width: 100%; }
+
+.pesee-grille { display: grid; gap: .45rem; }
+.pesee-ligne {
+  display: grid; grid-template-columns: 12px 1fr auto; align-items: center; gap: .7rem;
+  padding: .5rem .7rem; border: 1px solid var(--line-soft); border-radius: var(--radius-s);
+  background: var(--paper);
+}
+.pastille { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+.pesee-nom { display: flex; flex-direction: column; min-width: 0; }
+.pesee-nom b { color: var(--ink); font-size: .95rem; }
+.pesee-nom b i { font-style: normal; font-weight: 500; color: var(--ink-3); }
+.pesee-nom em { font-style: normal; font-size: .76rem; color: var(--ink-3); }
+
+.pesee-saisie { display: inline-flex; align-items: center; gap: .35rem; }
+.pesee-saisie input { width: 92px; text-align: right; padding: .45rem .6rem; }
+.pesee-saisie .unite { font-size: .85rem; color: var(--ink-3); }
+
+.pesee-actions { display: flex; align-items: center; gap: .9rem; flex-wrap: wrap; margin-top: 1rem; }
+.pesee-actions .btn-gold, .vaccin-form .btn-gold { width: auto; }
+.pesee-message { font-size: .86rem; color: var(--ink-2); }
+
+/* ------------------------------------------------------------ les fiches */
+.suivi-liste { display: grid; gap: .6rem; }
+.suivi-carte {
+  background: var(--card); border: 1px solid var(--line-soft); border-radius: var(--radius);
+  padding: .85rem 1rem; box-shadow: var(--shadow-s); cursor: pointer;
+  transition: box-shadow .18s var(--ease), transform .18s var(--ease);
+}
+.suivi-carte:hover { box-shadow: var(--shadow-m); transform: translateY(-1px); }
+.suivi-carte.open { cursor: default; box-shadow: var(--shadow-m); }
+.suivi-carte.urgent { border-color: color-mix(in srgb, var(--gold) 55%, transparent); background: var(--gold-soft); }
+
+.suivi-tete { display: flex; align-items: center; gap: .55rem; }
+.suivi-nom { font-family: var(--font-display); font-size: 1.05rem; color: var(--ink); font-weight: 600; }
+.suivi-poids { margin-left: auto; font-size: 1.05rem; font-weight: 700; color: var(--rose-ink); }
+.suivi-poids--vide { color: var(--ink-3); font-weight: 500; }
+
+.suivi-pills { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .5rem; align-items: center; }
+
+.evolution { font-size: .8rem; font-weight: 700; padding: .1rem .2rem; }
+.evolution--hausse { color: #3f7d55; }
+.evolution--baisse { color: var(--gold-ink); }
+.evolution--stable { color: var(--ink-3); }
+
+.echeance { margin-left: auto; font-size: .84rem; font-weight: 700; color: var(--ink-2); }
+.echeance--retard { color: var(--rose-ink); }
+.echeance--bientot { color: var(--gold-ink); }
+.echeance--aucun { color: var(--ink-3); font-weight: 500; }
+
+/* ------------------------------------------------------------ le détail ouvert */
+.suivi-details { margin-top: .9rem; border-top: 1px solid var(--line-soft); padding-top: .9rem; cursor: default; }
+
+.carnet { width: 100%; border-collapse: collapse; font-size: .88rem; }
+.carnet th {
+  text-align: left; font-size: .72rem; letter-spacing: .04em; text-transform: uppercase;
+  color: var(--ink-3); font-weight: 700; padding: 0 .5rem .4rem 0;
+}
+.carnet td { padding: .4rem .5rem .4rem 0; border-top: 1px solid var(--line-soft); vertical-align: top; }
+.carnet .discret { color: var(--ink-3); }
+.carnet .note { display: block; font-style: normal; font-size: .78rem; color: var(--ink-3); }
+.carnet-action { text-align: right; width: 1%; white-space: nowrap; }
+
+.delete-btn.petite, .ghost-btn.petite { padding: .3rem .7rem; font-size: .78rem; }
+
+.vaccin-form { margin-top: 1rem; background: var(--paper); border-radius: var(--radius-s); padding: .9rem; }
+.vaccin-form h3 { font-family: var(--font-display); font-size: .98rem; margin: 0 0 .7rem; color: var(--ink); }
+.champ-avec-bouton { display: flex; gap: .4rem; align-items: center; }
+.champ-avec-bouton input { flex: 1; min-width: 0; }
+
+.retraites-ligne { margin-top: .9rem; }
+
+@media (max-width: 560px) {
+  .pesee-ligne { grid-template-columns: 12px 1fr; row-gap: .4rem; }
+  .pesee-saisie { grid-column: 2; justify-self: start; }
+  .carnet .col-age { display: none; }
+  .suivi-poids, .echeance { margin-left: auto; }
+}

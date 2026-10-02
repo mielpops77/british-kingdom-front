@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, forkJoin } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ContactService } from '../../components/Services/contact.service';
+import { CatService } from '../../components/Services/catService';
+import { SanteService, rappelQuiCompte, urgenceRappel } from './sante.service';
 
 /**
  * Les chiffres affichés dans le menu : messages non lus, demandes d'attente en cours.
@@ -36,8 +38,11 @@ export class CompteursService {
   readonly nonLus = new BehaviorSubject<number>(0);
   /** Demandes de la liste d'attente qui attendent encore quelque chose de vous. */
   readonly attenteEnCours = new BehaviorSubject<number>(0);
+  /** Reproducteurs dont le rappel de vaccin est dépassé ou tombe dans le mois. */
+  readonly rappelsVaccins = new BehaviorSubject<number>(0);
 
-  constructor(private contactService: ContactService) { }
+  constructor(private contactService: ContactService, private catService: CatService,
+              private sante: SanteService) { }
 
   rafraichir(): void {
     this.contactService.getAllContacts(environment.id).subscribe({
@@ -53,6 +58,24 @@ export class CompteursService {
         }).length);
       },
       // L'API est injoignable : on garde les derniers chiffres connus plutôt que d'afficher zéro.
+      error: () => { },
+    });
+  }
+
+  /**
+   * Les rappels de vaccin à prévoir. À part du reste : deux requêtes de plus, qu'on
+   * ne relance qu'à l'ouverture de l'espace et quand le carnet change.
+   */
+  rafraichirSante(): void {
+    forkJoin({ chats: this.catService.getAllCats(), vaccins: this.sante.lister('vaccin') }).subscribe({
+      next: ({ chats, vaccins }) => {
+        const actifs = ((chats || []) as any[]).filter((c: any) => !c.archivee);
+        const compte = actifs.filter((c: any) => {
+          const urgence = urgenceRappel(rappelQuiCompte((vaccins || []).filter(v => v.animalId === c.id)));
+          return urgence === 'retard' || urgence === 'bientot';
+        }).length;
+        this.rappelsVaccins.next(compte);
+      },
       error: () => { },
     });
   }
