@@ -291,7 +291,9 @@
 <!-- Une frimousse ronde, cerclée de la couleur de l'animal. Sans photo : un coussinet. -->
 <ng-template #frimousse let-src="src" let-nom="nom" let-couleur="couleur" let-grande="grande">
   <span class="frimousse" [class.frimousse--grande]="grande" [style.border-color]="couleur">
-    <img *ngIf="src" [src]="src" [alt]="nom" loading="lazy">
+    <!-- Pas de chargement differe : Chrome laisse alors des frimousses vides sur cette page,
+         et le reste de l'espace de gestion affiche ses photos de la meme facon. -->
+    <img *ngIf="src" [src]="src" [alt]="nom" decoding="async" width="46" height="46">
     <span *ngIf="!src" class="photo-placeholder">
       <svg viewBox="0 0 64 64" aria-hidden="true"><ellipse cx="32" cy="42" rx="15" ry="12"/><ellipse cx="14" cy="24" rx="7" ry="8.5"/><ellipse cx="30" cy="14" rx="7" ry="8.5"/><ellipse cx="47" cy="18" rx="7" ry="8.5"/><ellipse cx="54" cy="33" rx="6.5" ry="8"/></svg>
     </span>
