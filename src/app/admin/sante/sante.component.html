@@ -135,10 +135,7 @@
             <span class="pill pill--breed" *ngIf="c.robe">{{ c.robe }}</span>
             <span class="pill pill--muted" *ngIf="c.ageJours >= 0">{{ ageLisible(c.ageJours) }}</span>
             <span class="pill pill--muted" *ngIf="c.portee">{{ c.portee }}</span>
-            <span class="pill" [class.pill--ok]="c.statut === 'Disponible'"
-                  [class.pill--warn]="c.statut === 'En observation'"
-                  [class.pill--muted]="c.statut !== 'Disponible' && c.statut !== 'En observation'"
-                  *ngIf="c.statut">{{ c.statut }}</span>
+            <span class="pill" [class]="'pill ' + tonStatut(c)" *ngIf="c.statut">{{ c.statut }}</span>
             <span class="evolution" [class]="'evolution--' + tendance(c)" *ngIf="progression(c)">{{ progression(c) }}</span>
             <span class="patte" *ngIf="gainParJour(c)" title="Gain moyen par jour depuis la pesée précédente">
               <svg viewBox="0 0 64 64" aria-hidden="true"><ellipse cx="32" cy="42" rx="15" ry="12"/><ellipse cx="14" cy="24" rx="7" ry="8.5"/><ellipse cx="30" cy="14" rx="7" ry="8.5"/><ellipse cx="47" cy="18" rx="7" ry="8.5"/><ellipse cx="54" cy="33" rx="6.5" ry="8"/></svg>

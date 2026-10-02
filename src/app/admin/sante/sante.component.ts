@@ -255,14 +255,29 @@ export class AdminSanteComponent implements OnInit {
     return c.retraite ? 9 : { retard: 0, bientot: 1, aucun: 2, prevu: 3 }[c.urgence];
   }
 
+  /** Les mêmes mots et les mêmes couleurs que sur le site (js/api.js). */
   private libelleStatut(statut: string | null | undefined): string {
+    return ({
+      disponible: 'Disponible', reserve: 'Réservé', observation: 'En observation',
+      rester: 'Reste à la chatterie', vendu: 'Adopté',
+    } as Record<string, string>)[this.cleStatut(statut)] || String(statut || '');
+  }
+
+  private cleStatut(statut: string | null | undefined): string {
     const s = String(statut || '').toLowerCase();
-    return s.startsWith('dispo') ? 'Disponible'
-      : s.startsWith('reserv') || s.startsWith('réserv') ? 'Réservé'
-      : s.startsWith('observ') ? 'En observation'
-      : s.startsWith('vendu') ? 'Parti'
-      : s.startsWith('garde') ? 'Gardé'
-      : String(statut || '');
+    return s.startsWith('dispo') ? 'disponible'
+      : s.startsWith('reserv') || s.startsWith('réserv') ? 'reserve'
+      : s.startsWith('observ') ? 'observation'
+      : s.startsWith('rest') ? 'rester'
+      : s.startsWith('vend') || s.startsWith('adopt') ? 'vendu'
+      : '';
+  }
+
+  /** La pastille prend le ton du site : vert-rose dispo, doré réservé, lilas en observation. */
+  tonStatut(c: { statut: string }): string {
+    return ({
+      Disponible: 'pill--ok', 'Réservé': 'pill--warn', 'En observation': 'pill--lilac',
+    } as Record<string, string>)[c.statut] || 'pill--muted';
   }
 
   /* ------------------------------------------------------------------ le dessin */
