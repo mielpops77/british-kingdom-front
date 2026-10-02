@@ -119,6 +119,8 @@
   color: var(--ink-3); font-weight: 700; padding: 0 .5rem .4rem 0;
 }
 .carnet td { padding: .4rem .5rem .4rem 0; border-top: 1px solid var(--line-soft); vertical-align: top; }
+/* Deuxième injection d'une même visite : pas de trait, elle appartient à la ligne du dessus */
+.carnet tr.suite td { border-top: none; padding-top: 0; }
 .carnet .discret { color: var(--ink-3); }
 .carnet .note { display: block; font-style: normal; font-size: .78rem; color: var(--ink-3); }
 .carnet-action { text-align: right; width: 1%; white-space: nowrap; }
@@ -127,6 +129,10 @@
 
 .vaccin-form { margin-top: 1rem; background: var(--paper); border-radius: var(--radius-s); padding: .9rem; }
 .vaccin-form h3 { font-family: var(--font-display); font-size: .98rem; margin: 0 0 .7rem; color: var(--ink); }
+/* Les vaccins de la visite : on en coche autant qu'il en a été fait */
+.choix-vaccins { display: flex; flex-wrap: wrap; gap: .35rem; margin-bottom: .5rem; }
+.autre-vaccin { max-width: 420px; }
+
 .champ-avec-bouton { display: flex; gap: .4rem; align-items: center; }
 .champ-avec-bouton input { flex: 1; min-width: 0; }
 

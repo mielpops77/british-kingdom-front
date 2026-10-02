@@ -37,10 +37,18 @@ interface ChatSuivi {
   photo: string;
   retraite: boolean;
   vaccins: LigneSante[];
+  visites: Visite[];
   dernier: LigneSante | null;
+  dernierJour: LigneSante[];
   rappel: string | null;
   joursAvantRappel: number | null;
   urgence: UrgenceRappel;
+}
+
+/** Une visite chez le vétérinaire : un jour, parfois plusieurs injections. */
+interface Visite {
+  date: string;
+  lignes: LigneSante[];
 }
 
 /** Une courbe de croissance prête à dessiner. */
@@ -125,8 +133,12 @@ export class AdminSanteComponent implements OnInit {
   peseeValeurs: Record<number, number | null> = {};
   peseeMessage = '';
 
-  /** Le vaccin qu'on est en train de noter, pour le chat ouvert. */
-  vaccin = { date: aujourdhuiISO(), libelle: '', rappel: '', note: '' };
+  /** La visite qu'on est en train de noter, pour le chat ouvert. */
+  vaccin = { date: aujourdhuiISO(), rappel: '', note: '' };
+  /** Les vaccins faits ce jour-là : souvent deux ou trois d'un coup. */
+  vaccinsChoisis: string[] = [];
+  /** Un vaccin qui n'est pas dans la liste proposée. */
+  autreVaccin = '';
   /** Vrai dès qu'il a choisi lui-même une date de rappel : on cesse alors de la calculer. */
   rappelTouche = false;
   readonly vaccinsCourants = VACCINS_COURANTS;
@@ -223,6 +235,13 @@ export class AdminSanteComponent implements OnInit {
         .sort((a, b) => b.dateFait.localeCompare(a.dateFait));
       const rappel = rappelQuiCompte(siens);
       const jours = rappel ? joursEntre(aujourdhui, rappel) : null;
+      // Les injections d'un même jour forment une visite : on les montre ensemble.
+      const visites: Visite[] = [];
+      siens.forEach(l => {
+        const derniere = visites[visites.length - 1];
+        if (derniere && derniere.date === l.dateFait) derniere.lignes.push(l);
+        else visites.push({ date: l.dateFait, lignes: [l] });
+      });
       return {
         id: c.id,
         nom: c.name,
@@ -231,7 +250,9 @@ export class AdminSanteComponent implements OnInit {
         photo: c.urlProfil ? environment.apiUrlImgProfilCat + c.urlProfil : '',
         retraite: !!c.archivee,
         vaccins: siens,
+        visites,
         dernier: siens.length ? siens[0] : null,
+        dernierJour: visites.length ? visites[0].lignes : [],
         rappel,
         joursAvantRappel: jours,
         urgence: urgenceRappel(rappel),
@@ -478,8 +499,46 @@ export class AdminSanteComponent implements OnInit {
 
   private nouveauVaccin(): void {
     const date = aujourdhuiISO();
-    this.vaccin = { date, libelle: '', rappel: dansDesAnnees(date, 1), note: '' };
+    this.vaccin = { date, rappel: dansDesAnnees(date, 1), note: '' };
+    this.vaccinsChoisis = [];
+    this.autreVaccin = '';
     this.rappelTouche = false;
+  }
+
+  /** La liste proposée, plus les vaccins que vous avez ajoutés vous-même. */
+  get vaccinsProposes(): string[] {
+    return [...VACCINS_COURANTS, ...this.vaccinsChoisis.filter(v => !VACCINS_COURANTS.includes(v))];
+  }
+
+  estChoisi(nom: string): boolean {
+    return this.vaccinsChoisis.includes(nom);
+  }
+
+  basculerVaccin(nom: string): void {
+    this.vaccinsChoisis = this.estChoisi(nom)
+      ? this.vaccinsChoisis.filter(v => v !== nom)
+      : [...this.vaccinsChoisis, nom];
+  }
+
+  /** Un vaccin absent de la liste : il rejoint les autres, coché. */
+  ajouterAutre(): void {
+    const nom = this.autreVaccin.trim();
+    if (nom && !this.estChoisi(nom)) this.vaccinsChoisis = [...this.vaccinsChoisis, nom];
+    this.autreVaccin = '';
+  }
+
+  /** Ce que dira le bouton : il annonce combien de lignes il va écrire. */
+  get libelleEnregistrer(): string {
+    if (this.enregistrement) return 'Enregistrement…';
+    const n = this.vaccinsChoisis.length + (this.autreVaccin.trim() ? 1 : 0);
+    return n > 1 ? `Enregistrer les ${n} vaccins` : 'Enregistrer';
+  }
+
+  /** Les vaccins de la dernière visite, dits en une ligne. */
+  resumeDerniereVisite(c: ChatSuivi): string {
+    const noms = c.dernierJour.map(l => l.libelle || '').filter(Boolean);
+    if (noms.length <= 2) return noms.join(' + ');
+    return `${noms[0]} + ${noms.length - 1} autres`;
   }
 
   /** Un rappel à un an est la suite habituelle : proposé, jamais imposé. */
@@ -492,20 +551,24 @@ export class AdminSanteComponent implements OnInit {
     this.rappelTouche = false;
   }
 
+  /** Toute la visite d'un coup : une ligne par injection, même date, même rappel. */
   enregistrerVaccin(c: ChatSuivi): void {
-    if (!this.vaccin.libelle.trim()) {
-      this.erreur = 'Dites quel vaccin a été fait.';
+    this.ajouterAutre();                       // ce qui est tapé mais pas encore ajouté compte aussi
+    if (!this.vaccinsChoisis.length) {
+      this.erreur = 'Choisissez au moins un vaccin.';
       return;
     }
+
     this.enregistrement = true;
     this.erreur = '';
-    this.sante.ajouter({
+    const note = this.vaccin.note.trim() || null;
+    forkJoin(this.vaccinsChoisis.map(libelle => this.sante.ajouter({
       espece: 'chat', animalId: c.id, categorie: 'vaccin',
-      dateFait: this.vaccin.date, libelle: this.vaccin.libelle.trim(),
-      rappel: this.vaccin.rappel || null, note: this.vaccin.note.trim() || null,
-    }).subscribe({
-      next: (ligne) => {
-        this.lignes = [...this.lignes, ligne];
+      dateFait: this.vaccin.date, libelle,
+      rappel: this.vaccin.rappel || null, note,
+    }))).subscribe({
+      next: (ajoutees) => {
+        this.lignes = [...this.lignes, ...ajoutees];
         this.nouveauVaccin();
         this.enregistrement = false;
         this.recomposer();

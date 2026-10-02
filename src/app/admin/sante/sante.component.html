@@ -201,7 +201,7 @@
           <span class="pill pill--lilac">{{ c.sexe }}</span>
           <span class="pill pill--muted" *ngIf="c.retraite">Retraité</span>
           <span class="pill pill--breed" *ngIf="c.dernier">
-            Dernier : {{ c.dernier.libelle }} · {{ jour(c.dernier.dateFait) }}
+            Dernier : {{ resumeDerniereVisite(c) }} · {{ jour(c.dernier.dateFait) }}
           </span>
           <span class="pill pill--muted" *ngIf="!c.dernier">Aucun vaccin noté</span>
           <span class="bouclier" *ngIf="c.urgence === 'prevu'" title="Le prochain rappel est encore loin">
@@ -214,16 +214,17 @@
         </div>
 
         <div class="suivi-details" *ngIf="ouvertChat === c.id" (click)="arreter($event)">
+          <!-- Une visite = un jour : ses injections se suivent sous la même date -->
           <table class="carnet" *ngIf="c.vaccins.length">
             <thead>
               <tr><th>Fait le</th><th>Vaccin</th><th>Rappel prévu</th><th></th></tr>
             </thead>
-            <tbody>
-              <tr *ngFor="let v of c.vaccins">
-                <td>{{ jour(v.dateFait) }}</td>
+            <tbody *ngFor="let visite of c.visites">
+              <tr *ngFor="let v of visite.lignes; let i = index" [class.suite]="i > 0">
+                <td>{{ i ? '' : jour(visite.date) }}</td>
                 <td>
                   <b>{{ v.libelle }}</b>
-                  <em class="note" *ngIf="v.note">{{ v.note }}</em>
+                  <em class="note" *ngIf="v.note && !i">{{ v.note }}</em>
                 </td>
                 <td class="discret">{{ v.rappel ? jour(v.rappel) : '—' }}</td>
                 <td class="carnet-action">
@@ -235,20 +236,28 @@
           </table>
 
           <div class="vaccin-form">
-            <h3>Noter un vaccin</h3>
+            <h3>Noter une visite</h3>
             <div class="form-grid">
               <div class="field">
                 <label class="field-label" [attr.for]="'vaccin-date-' + c.id">Fait le</label>
                 <input [id]="'vaccin-date-' + c.id" type="date" name="vaccinDate"
                        [(ngModel)]="vaccin.date" (ngModelChange)="dateChangee()">
               </div>
-              <div class="field">
-                <label class="field-label" [attr.for]="'vaccin-nom-' + c.id">Vaccin</label>
-                <input [id]="'vaccin-nom-' + c.id" type="text" name="vaccinNom" list="vaccins-courants"
-                       [(ngModel)]="vaccin.libelle" placeholder="Typhus · coryza (RCP)">
-                <datalist id="vaccins-courants">
-                  <option *ngFor="let v of vaccinsCourants" [value]="v"></option>
-                </datalist>
+              <!-- Une visite comporte souvent deux ou trois injections : on les coche toutes -->
+              <div class="field wide">
+                <span class="field-label">Vaccins faits ce jour-là</span>
+                <div class="choix-vaccins">
+                  <button type="button" class="toggle-btn" *ngFor="let v of vaccinsProposes"
+                          [class.active]="estChoisi(v)" [attr.aria-pressed]="estChoisi(v)"
+                          (click)="basculerVaccin(v)">{{ v }}</button>
+                </div>
+                <div class="champ-avec-bouton autre-vaccin">
+                  <input [id]="'vaccin-autre-' + c.id" type="text" name="vaccinAutre"
+                         [(ngModel)]="autreVaccin" placeholder="Un autre vaccin…"
+                         (keydown.enter)="ajouterAutre()">
+                  <button type="button" class="ghost-btn petite" (click)="ajouterAutre()"
+                          [disabled]="!autreVaccin.trim()">Ajouter</button>
+                </div>
               </div>
               <div class="field">
                 <label class="field-label" [attr.for]="'vaccin-rappel-' + c.id">Prochain rappel</label>
@@ -259,13 +268,13 @@
                 </div>
               </div>
               <div class="field wide">
-                <label class="field-label" [attr.for]="'vaccin-note-' + c.id">Note</label>
+                <label class="field-label" [attr.for]="'vaccin-note-' + c.id">Note (pour toute la visite)</label>
                 <input [id]="'vaccin-note-' + c.id" type="text" name="vaccinNote" [(ngModel)]="vaccin.note"
                        placeholder="Vétérinaire, numéro de lot, réaction…">
               </div>
             </div>
             <button type="button" class="btn-gold" (click)="enregistrerVaccin(c)" [disabled]="enregistrement">
-              {{ enregistrement ? 'Enregistrement…' : 'Enregistrer' }}
+              {{ libelleEnregistrer }}
             </button>
           </div>
         </div>
